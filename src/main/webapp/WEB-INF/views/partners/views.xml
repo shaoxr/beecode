@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+	<definition extends="default" name="partners/list">
+		<put-attribute name="body" value="/WEB-INF/views/partners/list.jspx" />
+	</definition>
+	<definition extends="default" name="partners/show">
+		<put-attribute name="body" value="/WEB-INF/views/partners/show.jspx" />
+	</definition>
+	<definition extends="default" name="partners/create">
+		<put-attribute name="body"
+			value="/WEB-INF/views/partners/create.jspx" />
+	</definition>
+	<definition extends="default" name="partners/update">
+		<put-attribute name="body"
+			value="/WEB-INF/views/partners/update.jspx" />
+	</definition>
+	<definition extends="window" name="partners/report">
+		<put-attribute name="body"
+			value="/WEB-INF/views/partners/statistics.jspx" />
+	</definition>
+</tiles-definitions>

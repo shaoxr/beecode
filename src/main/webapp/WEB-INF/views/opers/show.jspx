@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show create="false" id="ps_com_newland_beecode_domain_Oper"  delete="false" object="${oper}" path="/opers" update="false" z="zHvOaW5/EDHtrJ6JndI/Q8Gyi4w=">
+        <field:display id="s_com_newland_beecode_domain_Oper_operNo" object="${oper}" field="operNo"></field:display>
+        <field:display field="operName" id="s_com_newland_beecode_domain_Oper_operName" object="${oper}" z="SIzHVcU72sWENkz9Qw/P19tKEMI="/>
+        <field:display field="operPwd" id="s_com_newland_beecode_domain_Oper_operPwd" object="${oper}" z="Pkg/yLvUgdQtEA7TxneHe9rWado="/>
+        <field:display field="enabled" id="s_com_newland_beecode_domain_Oper_enabled" object="${oper}" z="lBtmhGyRVvkupOSko5JB1dWJdBY="/>
+        <field:display date="true" dateTimePattern="${oper_gentime_date_format}" field="genTime" id="s_com_newland_beecode_domain_Oper_genTime" object="${oper}" z="51jcJmk/eodOVOR4QRjT77axtRM="/>
+        <field:display field="roles" id="s_com_newland_beecode_domain_Oper_role1" object="${oper}" z="X2s+u3OVA3VfiaFh+21omv0PBMg="/>
+    </page:show>
+</div>

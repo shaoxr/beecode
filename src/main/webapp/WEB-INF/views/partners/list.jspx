@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_newland_beecode_domain_Partner" items="${partners}" z="9AK+68cosEEmUb95ZM2mPgcQr3k=">
+        <table:table data="${partners}" id="l_com_newland_beecode_domain_Partner" path="/partners" update="false" z="X2fixvMipqo42xKNycdTlM2+UW0=">
+            <table:column id="c_com_newland_beecode_domain_Partner_partnerNo" maxLength="15" property="partnerNo" z="user-managed"/>
+            <table:column id="c_com_newland_beecode_domain_Partner_partnerName" property="partnerName" z="KtnPFm0ZKsAKJPnPYeuDerWg3Pc="/>
+        <table:column id="c_com_newland_beecode_domain_Partner_partnerCatalog" property="partnerCatalog" itemLabel="catalogName" z="x3hXPmEfEbWRJwFLtORzsezYkmg=" maxLength="50"/>
+        </table:table>
+    </page:list>
+</div>

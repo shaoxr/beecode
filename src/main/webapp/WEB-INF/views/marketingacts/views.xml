@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<tiles-definitions>
+	<definition extends="default" name="marketingacts/list">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/list.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/show">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/show.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/create">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/create.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/update">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/update.jspx" />
+	</definition>
+	<definition extends="default"
+		name="marketingacts/findMarketingActsByCondition">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/findMarketingActsByCondition.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/list/check">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/checklist.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/check/form">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/check.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/list/send">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/sendList.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/send/form">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/send.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/append/form">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/append.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/list/append">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/appendlist.jspx" />
+	</definition>
+	<definition extends="window" name="marketingacts/report">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/statistics.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/checkTip">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/checkTip.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/sendTip">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/sendTip.jspx" />
+	</definition>
+	
+</tiles-definitions>

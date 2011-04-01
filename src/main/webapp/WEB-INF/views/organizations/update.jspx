@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_newland_beecode_domain_Organization" modelAttribute="organization" path="/organizations" z="XuOoYOIkT/JP1oJbkfeWV7Afi/E=">
+        <field:input field="organizationDN" id="c_com_newland_beecode_domain_Organization_organizationDN" max="16" required="true" z="DxHVOydHtcAzr6KmacNbq/iFZdc="/>
+        <field:textarea field="organizationCN" id="c_com_newland_beecode_domain_Organization_organizationCN" required="true" z="AFQW1y4o4QiPdw5bujSxXvpgsR0="/>
+    </form:update>
+</div>

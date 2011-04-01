@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+        <bean id="detailExcelService" class="com.newland.beecode.service.impl.XPathExcelTemplateService">
+        <property name="title"><value>礼券兑换详细报表</value></property>
+        <property name="sheetName"><value>礼券兑换详细报表</value></property>
+        <property name="countLine"><value>总计</value></property>
+        <property name="cellList">
+        	<list>
+        		 <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>使用日期</value></property>
+                    <property name="path"><value>checkDay</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>活动名称</value></property>
+                    <property name="path"><value>actName</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>合作商户</value></property>
+                    <property name="path"><value>parterName</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>商户号</value></property>
+                    <property name="path"><value>parterNo</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>礼券编号</value></property>
+                    <property name="path"><value>couponId</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>客户手机</value></property>
+                    <property name="path"><value>acctMobile</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>礼券类型</value></property>
+                    <property name="path"><value>bizName</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>礼券价值</value></property>
+                    <property name="path"><value>cost</value></property>
+                    <property name="align"><value>center</value></property>
+                    <property name="count"><value>true</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>原始金额</value></property>
+                    <property name="path"><value>originalAmount</value></property>
+                    <property name="align"><value>center</value></property>
+                    <property name="count"><value>true</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>折扣率</value></property>
+                    <property name="path"><value>rebateRate</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>折扣金额</value></property>
+                    <property name="path"><value>rebateAmount</value></property>
+                    <property name="align"><value>center</value></property>
+                    <property name="count"><value>true</value></property>
+                    </bean>
+        	</list>
+        </property>
+    </bean>
+    <bean id="countExcelService" class="com.newland.beecode.service.impl.XPathExcelTemplateService">
+        <property name="title"><value>礼券兑换统计报表</value></property>
+        <property name="sheetName"><value>礼券兑换统计报表</value></property>
+        <property name="countLine"><value>总计</value></property>
+        <property name="cellList">
+        	<list>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>活动名称</value></property>
+                    <property name="path"><value>actName</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>合作商户</value></property>
+                    <property name="path"><value>partnerName</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>礼券类型</value></property>
+                    <property name="path"><value>bizName</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+               <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>使用次数</value></property>
+                    <property name="path"><value>count</value></property>
+                    <property name="align"><value>center</value></property>
+                    <property name="count"><value>true</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>礼券价值</value></property>
+                    <property name="path"><value>exchangeAmount</value></property>
+                    <property name="align"><value>center</value></property>
+                    <property name="count"><value>true</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>折扣金额</value></property>
+                    <property name="path"><value>rebateAmount</value></property>
+                    <property name="align"><value>center</value></property>
+                    <property name="count"><value>true</value></property>
+                    </bean>
+        	</list>
+        </property>
+    </bean>
+    
+</beans>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_newland_beecode_domain_Organization" object="${organization}" path="/organizations" z="d54HUsjItq7MKBus2KpIhPgo/00=">
+        <field:display field="organizationDN" id="s_com_newland_beecode_domain_Organization_organizationDN" object="${organization}" z="L9U10oUWJrp7YWM97XDaJ5kNCdo="/>
+        <field:display field="organizationCN" id="s_com_newland_beecode_domain_Organization_organizationCN" object="${organization}" z="mfEF+Ywk81VgAm2lEI5fWox7xGs="/>
+    </page:show>
+</div>

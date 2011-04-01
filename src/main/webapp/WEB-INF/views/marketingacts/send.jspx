@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:spring="http://www.springframework.org/tags"  xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show update="false" create="false" delete="false" list="false" id="s_com_newland_beecode_domain_send" object="${marketingact}" path="/marketingacts">
+        <field:display  field="catalogName" id="s_com_newland_beecode_domain_MarketingAct_actName" object="${marketingact.marketingCatalog}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI=" />
+        <field:display field="actName" id="s_com_newland_beecode_domain_MarketingAct_actName" object="${marketingact}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI="/>
+        <field:display date="true" dateTimePattern="${date_format}" field="startDate" id="s_com_newland_beecode_domain_MarketingAct_startDate" object="${marketingact}" z="user-managed"/>
+        <field:display date="true" dateTimePattern="${date_format}" field="endDate" id="s_com_newland_beecode_domain_MarketingAct_endDate" object="${marketingact}" z="user-managed"/>
+        <field:display field="actDetail" id="s_com_newland_beecode_domain_MarketingAct_actDetail" object="${marketingact}" z="2WpcBBhBZTaSRmjsEBwZd8QbPos="/>
+        <field:display date="true" dateTimePattern="${datetime_format}" field="genTime" id="s_com_newland_beecode_domain_MarketingAct_genTime" object="${marketingact}" z="user-managed"/>
+        <field:display field="bizName" id="s_com_newland_beecode_domain_marketingact_businesstype" object="${marketingact}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
+        <field:display field="times" id="s_com_newland_beecode_domain_MarketingAct_times" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
+        <c:if test="${marketingact.bizNo eq '01'}">
+          <field:display field="rebateRate" id="s_com_newland_beecode_domain_MarketingAct_rebateRate" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        </c:if>
+        <c:if test="${marketingact.bizNo eq '00'}">
+          <field:display field="amount" id="s_com_newland_beecode_domain_MarketingAct_amount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        </c:if>
+        <field:display field="actStatusDesc" id="s_com_newland_beecode_domain_MarketingAct_actStatusDesc" object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
+        <!--  field:display field="partners" id="s_com_newland_beecode_domain_MarketingAct_partners" object="${marketingact}" z="+bo3mVX7w04Ps2EgE3Ju7ydfBis="/>
+        -->
+        <field:select disableFormBinding="true" id="s_com_newland_beecode_domain_MarketingAct_partners" itemLabel="allName" itemValue="partnerNo" multiple="true" disabled="true" items="${marketingact.partners}" field="partner" path=""></field:select>
+        <c:if test="${statistics}">
+        <field:display field="summary" itemLabel="joinCount" id="s_com_newland_beecode_domain_marketingact_summary_joincount" object="${marketingact}" />
+        <field:display field="summary" itemLabel="usedTimes" id="s_com_newland_beecode_domain_marketingact_summary_usedtimes" object="${marketingact}" />
+        <field:display field="summary" itemLabel="remainTimes" id="s_com_newland_beecode_domain_marketingact_summary_remaintimes" object="${marketingact}" />
+        </c:if>
+        <field:display field="couponSum" id="s_com_newland_beecode_domain_MarketingAct_couponsum" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
+    	<br/>
+    	<form action="../../marketingacts/send" method="post">
+          <input type="hidden" value="${marketingact.actNo}" name="actNo"/>
+          <c:if test="${marketingact.actStatus eq '3'}">
+            <input type="submit" value="礼券发放" />
+            </c:if>
+        </form>
+    </page:show>
+    
+</div>

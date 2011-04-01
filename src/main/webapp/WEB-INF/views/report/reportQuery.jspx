@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:find finderName="ByCondition" id="ff_com_newland_beecode_domain_MarketingAct_report_detail" path="/report/detail" z="uQvOariY7UCY7nnpMbpIahApMc4=">
+        <field:datetime disableFormBinding="true" dateTimePattern="${date_format}"  field="minEndDate" id="f_com_newland_beecode_domain_MarketingAct_report_minEndTime" required="true"/>
+        <field:datetime disableFormBinding="true" dateTimePattern="${date_format}"  field="maxEndDate" id="f_com_newland_beecode_domain_MarketingAct_report_maxEndTime" required="true"/>
+     <field:select disableFormBinding="true" field="marketingCatalogId" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_marketingcatalog" itemValue="id" itemLabel="catalogName" items="${marketingCatalogs}" multiple="false" path="/marketingCatalogs"/>
+     <field:selectBlank disableFormBinding="true" field="actNo" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_marketingact_actname" itemValue="actNo" itemLabel="actName" items="${actList}" multiple="false" path="/businesstypes"/>
+    <field:select disableFormBinding="true" field="partnerCatalogId" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_partner_partnercatalog" itemValue="id" itemLabel="catalogName" items="${partnerCatalogs}" multiple="false" path="/partnerCatalogs" />
+     <field:selectBlank disableFormBinding="true" field="parterNo" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_partner_plural" itemValue="partnerNo" itemLabel="partnerName" items="${parterList}" multiple="false" path="/businesstypes" />
+    </form:find>
+    <c:if test="${emptyNo}">
+     <div> ${minEndDate}到${maxEndDate}</div>
+    </c:if>
+    <div style="float: none;">
+    <page:list id="c_com_newland_beecode_domain_MarketingAct_report" items="${rptDetail}" z="U3nb+I8gG2r3o6O8Ze3fZUqBX6Y=" >
+        <table:table data="${rptDetail}" id="l_com_newland_beecode_domain_Coupon" create="false" delete="false" update="false" path="/report" show="false">
+            <table:column id="c_com_newland_beecode_domain_marketingact_checkDay" property="checkDay" maxLength="18"/>
+            <table:column id="c_com_newland_beecode_domain_marketingact_actname" property="actName" maxLength="21" z="Pi2IMxFd9QnYwb7EBMbiZ2ud/lo="/>
+            <table:column id="c_com_newland_beecode_domain_partner_partnername" maxLength="20" property="parterName" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
+            <table:column id="c_com_newland_beecode_domain_marketingact_businesstype" maxLength="20" property="bizName" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
+            <table:column id="c_com_newland_beecode_domain_marketingact_amount" property="cost" />
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_originalAmount" property="originalAmount" />
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_rebateAmount" property="rebateAmount" />
+        </table:table>
+    </page:list>
+    </div>
+     <c:if test="${emptyNo}">
+       <form action="/beecode/report/detailExcel" >
+          <input type="hidden" name="minEndDate" value="${minEndDate}"/>
+          <input type="hidden" name="maxEndDate" value="${maxEndDate}"/>
+          <input type="hidden" name="actNo"  value="${actNo}"/>
+          <input type="hidden" name="parterNo" value="${parterNo}"/>
+          <input type="submit" value="Excel下载"  style="height: 25px; "/>
+       </form>
+       
+     </c:if>
+       <script type="text/javascript">
+    	dojo.require("dojo.data.ItemFileReadStore");
+    	var dataStore = new dojo.data.ItemFileReadStore({data: {
+    		identifier: "value",
+    		label:"name",
+    		items: [
+            {name: "全部", value: "99999"},
+    		]
+    		}});
+    	var item={name: "全部", value: "99999"};
+		dojo.addOnLoad(function(){
+			dojo.connect(dijit.byId("_marketingCatalogId_id"), "onChange", function(evt) {
+				if(dijit.byId("_marketingCatalogId_id").value!='99999'){
+					var url='../ajax/marketingAct?id='+dijit.byId("_marketingCatalogId_id");
+					var obj=dijit.byId("_actNo_id");
+					send(url,obj);
+				}else{
+					dijit.byId("_actNo_id").store=dataStore;
+					dijit.byId("_actNo_id").attr("displayedValue", "全部");
+				}
+			})
+			
+			dojo.connect(dijit.byId("_partnerCatalogId_id"), "onChange", function(evt) {
+				if(dijit.byId("_partnerCatalogId_id").value!='99999'){
+					var url='../ajax/partner?id='+dijit.byId("_partnerCatalogId_id");
+					var obj=dijit.byId("_parterNo_id");
+					send(url,obj);
+				}else{
+					dijit.byId("_parterNo_id").store=dataStore;
+					dijit.byId("_parterNo_id").attr("displayedValue", "全部");
+				}
+			})
+		});
+		function send(url,obj){
+               dojo.xhrGet({
+               url: url,
+               handleAs:"text",
+               load:function(datas){
+            	     var json=eval('('+datas+')');
+            	     var selectE=addHeader(json);
+            	     obj.store=new dojo.data.ItemFileReadStore({data: selectE});
+	          	}
+               });
+		   }
+		function insertAt( index, value ,array) {
+	        var part1 = array.slice( 0, index );
+	        var part2 = array.slice( index );
+	        part1.push( value );
+	        return( part1.concat( part2 ) );
+		}
+		function addHeader(json){
+			json.items=insertAt(0,item,json.items);
+			return json;
+		}
+		
+		
+       </script>
+</div>

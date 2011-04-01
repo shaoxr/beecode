@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:create id="fc_com_newland_beecode_domain_MarketingCatalog" modelAttribute="marketingCatalog" path="/marketingCatalog" render="${empty dependencies}" z="TTE3A+DylTnUq/iHoNZknNY8eCc=">
+        <field:input max="16" field="catalogName" id="c_com_newland_beecode_domain_MarketingCatalog_catalogName" required="true" z="Saea3pJi2EZZJADJGJbLzi9SPaw="/>
+    </form:create>
+    <form:dependency dependencies="${dependencies}" id="d_com_newland_beecode_domain_MarketingCatalog" render="${not empty dependencies}" z="vM4faJ6upq1AwPuuuosuWo4WKZ4="/>
+</div>

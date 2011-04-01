@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_newland_beecode_domain_MarketingAct"  items="${marketingacts}" z="sFCbrOVGxWJl4YkClga8MCMB8GE=">
+        <table:acttable data="${marketingacts}" check="true" id="label_com_newland_beecode_domain_MarketingAct" path="/marketingacts" typeIdFieldName="actNo" z="user-managed">
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_actName" property="actName" z="GnYCjbtwHcjvxbxNMAn0j6eJmmM="/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_startDate" property="startDate" z="ycv72nkx9eKie1sUGfK7Hy/MfiU="/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_endDate" property="endDate" z="flUS8dAyZR6iy/uGpq43G3snXhA="/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_actDetail" property="actDetail" z="S1H1sstjydxkaBEuOitfgwm2VQ4="/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_actStatusDesc" property="actStatusDesc" z="6V2aJ3KqDBApsVzK7EPL4fYFfZc="/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_genTime" pattern="${datetime_format}" property="genTime" z="ajEgWH7WWfp+i1N+CaEClGNPxik="/>
+        </table:acttable>
+    </page:list>
+</div>

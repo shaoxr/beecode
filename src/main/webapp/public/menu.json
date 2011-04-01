@@ -1,0 +1,24 @@
+{
+    identifier: 'id',
+    label: 'name',
+    items: [
+            { id: 'QSYSTEM', name:'查询系统参数', type:'main',
+                children:[{_reference:'QBIZ'},{_reference:'QDEP'},{_reference:'QPARTNER'},{_reference:'QOPER'},{_reference:'QROLE'}] },
+                {id:'QBIZ', name:'查询业务种类', type : 'sub', path : '/businesstype', role : 'ROLE_ADMIN'},
+                {id:'QDEP', name:'查询机构代码', type : 'sub', path : '/organization', role : 'ROLE_ADMIN'},
+                {id:'QPARTNER', name:'查询合作商户', type : 'sub', path : '/partner', role : 'ROLE_ADMIN'},
+                {id:'QOPER', name:'查询操作员', type : 'sub', path : '/oper', role : 'ROLE_ADMIN'},
+                {id:'QROLE', name:'查询角色', type : 'sub', path : '/roles', role : 'ROLE_ADMIN'},
+             { id: 'MSYSTEM', name:'管理系统参数', type:'main',
+                children:[{_reference:'APARTNER'},{_reference:'AOPER'},{_reference:'AROLE'}] },
+                {id:'APARTNER', name:'添加合作商户', type : 'sub', path : '/partner/form', role : 'ROLE_ADMIN'},
+                {id:'AOPER', name:'添加操作员', type : 'sub', path : '/oper/form', role : 'ROLE_ADMIN'},
+                {id:'AROLE', name:'添加角色', type : 'sub', path : '/roles/form', role : 'ROLE_ADMIN'},
+             { id: 'MBIZ', name:'管理业务活动', type:'main',
+                children:[{_reference:'APPLY'},{_reference:'CAPPLY'},{_reference:'GAPPLY'},{_reference:'QAPPLY'},{_reference:'QTICKET'}] },
+                {id:'APPLY', name:'申请营销活动', type : 'sub', path : '/marketingact/apply/form', role : 'ROLE_ADMIN'},
+                {id:'CAPPLY', name:'审核营销活动', type : 'sub', path : '/marketingact/find/list/uncheck', role : 'ROLE_ADMIN'},
+                {id:'GAPPLY', name:'发放礼券', type : 'sub', path : '/marketingact/find/list/ungive', role : 'ROLE_ADMIN'},
+                {id:'QAPPLY', name:'查询营销活动', type : 'sub', path : '/marketingact/find/ByCompositeCondition/form', role : 'ROLE_ADMIN'},
+                {id:'QTICKET', name:'查询礼券', type : 'sub', path : '/ticket/find/ByCompositeCondition/form', role : 'ROLE_ADMIN'}
+]}

@@ -1,0 +1,135 @@
+<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:spring="http://www.springframework.org/tags" xmlns:form="http://www.springframework.org/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+  <jsp:directive.tag import="java.util.ArrayList" />
+  <jsp:output omit-xml-declaration="yes" />
+
+  <jsp:directive.attribute name="id" type="java.lang.String" required="true" description="The identifier for this tag (do not change!)" />
+  <jsp:directive.attribute name="data" type="java.util.Collection" required="true" description="The collection to be displayed in the table" />
+  <jsp:directive.attribute name="path" type="java.lang.String" required="true" description="Specify the URL path" />
+  <jsp:directive.attribute name="typeIdFieldName" type="java.lang.String" required="false" description="The identifier field name for the type (defaults to 'id')" />
+  <jsp:directive.attribute name="check" type="java.lang.Boolean" required="false" description="Include 'check' link into table (default true)" />
+  <jsp:directive.attribute name="send" type="java.lang.Boolean" required="false" description="Include 'give' link into table (default true)" />
+  <jsp:directive.attribute name="append" type="java.lang.Boolean" required="false" description="Include 'append' link into table (default true)" />
+  <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
+  <c:if test="${empty render or render}">
+
+    <c:set var="columnProperties" scope="request" />
+    <c:set var="columnLabels" scope="request" />
+    <c:set var="columnMaxLengths" scope="request" />
+    <c:set var="columnPatterns" scope="request" />
+    <c:set var="columnItemLabels" scope="request" />
+    <jsp:doBody />
+
+    <c:if test="${empty typeIdFieldName}">
+      <c:set var="typeIdFieldName" value="id" />
+    </c:if>
+	<c:if test="${empty check}">
+      <c:set var="check" value="false" />
+    </c:if>
+    <c:if test="${empty send}">
+      <c:set var="send" value="false" />
+    </c:if>
+    <c:if test="${empty append}">
+      <c:set var="append" value="false" />
+    </c:if>
+
+	<spring:message code="label_${fn:toLowerCase(fn:substringAfter(id,'_'))}" var="typeName" htmlEscape="false" />
+    <c:set var="lengths" value="${fn:split(columnMaxLengths, ',')}" scope="request" />
+    <c:set var="patterns" value="${fn:split(columnPatterns, ',')}" scope="request" />
+    <c:set var="itemLabels" value="${fn:split(columnItemLabels, ',')}" scope="request" />
+
+    <table>
+      <thead>
+        <tr>
+          <c:forTokens items="${columnLabels}" delims="," var="columnHeading">
+            <th>
+              <c:out value="${columnHeading}" />
+            </th>
+          </c:forTokens>
+          <c:if test="${check}">
+            <th></th>
+          </c:if>
+          <c:if test="${send}">
+            <th></th>
+          </c:if>
+          <c:if test="${append}">
+            <th></th>
+          </c:if>
+        </tr>
+      </thead>
+      <c:forEach items="${data}" var="item">
+        <tr>
+          <c:forTokens items="${columnProperties}" delims="," var="column" varStatus="num">
+            <c:set var="columnMaxLength" value="${lengths[num.count-1]}" scope="request" />
+            <c:set var="pattern" value="${patterns[num.count-1]}" scope="request" />
+            <c:set var="itemLabel" value="${itemLabels[num.count-1]}" scope="request" />
+            <td>
+              <c:choose>
+                <c:when test="${columnMaxLength lt 0}">
+                  <spring:eval expression="item[column]" var="col"/>
+                </c:when>
+                <c:otherwise>
+                  <spring:eval expression="item[column]" var="colTxt" />
+                  <c:if test="${itemLabel != '-'}">
+                  	<spring:eval expression="item[column][itemLabel]" var="colTxt" />
+                  </c:if>
+                  <c:choose>
+	                  <c:when test="${pattern eq '-'}">
+	                  	<c:out value="${fn:substring(colTxt, 0, columnMaxLength)}"/>
+	                  </c:when>
+	                  <c:otherwise>
+	                  	<fmt:formatDate pattern="${pattern}" value="${colTxt}"/>
+	                  </c:otherwise>
+                  </c:choose>
+                </c:otherwise>
+              </c:choose>
+            </td>
+          </c:forTokens>
+          <c:if test="${check}">
+            <td>
+              <spring:url value="${path}/check/${item[typeIdFieldName]}" var="check_form_url">
+              </spring:url>
+              <spring:url value="/resources/images/update.png" var="check_image_url" />
+              <spring:message arguments="${typeName}[${item[typeIdFieldName]}]" code="entity_check" var="check_label" />
+              <a href="${fn:escapeXml(check_form_url)}" alt="${fn:escapeXml(check_label)}" title="${fn:escapeXml(check_label)}">
+                <img alt="${fn:escapeXml(check_label)}" class="image" src="${fn:escapeXml(check_image_url)}" title="${fn:escapeXml(check_label)}" />
+              </a>
+            </td>
+          </c:if>
+          <c:if test="${send}">
+            <td>
+              <spring:url value="${path}/send/${item[typeIdFieldName]}" var="send_form_url">
+                <spring:param name="form" />
+              </spring:url>
+              <spring:url value="/resources/images/update.png" var="send_image_url" />
+              <spring:message arguments="${typeName}[${item[typeIdFieldName]}]" code="entity_send" var="send_label" />
+              <a href="${fn:escapeXml(send_form_url)}" alt="${fn:escapeXml(send_label)}" title="${fn:escapeXml(send_label)}">
+                <img alt="${fn:escapeXml(send_label)}" class="image" src="${fn:escapeXml(send_image_url)}" title="${fn:escapeXml(send_label)}" />
+              </a>
+            </td>
+          </c:if>
+          <c:if test="${append}">
+            <td>
+              <spring:url value="${path}/append/${item[typeIdFieldName]}" var="append_form_url">
+                <spring:param name="form" />
+              </spring:url>
+              <spring:url value="/resources/images/update.png" var="append_image_url" />
+              <spring:message arguments="${typeName}[${item[typeIdFieldName]}]" code="entity_append" var="append_label" />
+              <a href="${fn:escapeXml(append_form_url)}" alt="${fn:escapeXml(append_label)}" title="${fn:escapeXml(append_label)}">
+                <img alt="${fn:escapeXml(append_label)}" class="image" src="${fn:escapeXml(append_image_url)}" title="${fn:escapeXml(append_label)}" />
+              </a>
+            </td>
+          </c:if>
+        </tr>
+      </c:forEach>
+      <tr class="footer">
+        <td colspan="10">
+          <c:if test="${not empty maxPages}">
+            <util:pagination maxPages="${maxPages}" page="${param.page}" size="${param.size}" />
+          </c:if>
+        </td>
+      </tr>
+    </table>
+
+  </c:if>
+
+</jsp:root>

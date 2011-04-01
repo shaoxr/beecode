@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:form="http://www.springframework.org/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <util:panel id="title" title="客户列表检查">
+      <form:form action="checkcustomer" method="post" enctype="multipart/form-data">
+         <div><label>客户列表:</label> <input type="file" style="width: 200px; height: 25px;" id="file" name="file" dojoType="dijit.form.ValidationTextBox" required="true"/></div><br />
+         <input type="submit" value="检查"/>
+      </form:form>
+    </util:panel>
+    <util:panel id="tip" title="提示信息">
+    <p>
+      <table>
+       ${message}
+      </table>
+    </p>
+    </util:panel>
+</div>

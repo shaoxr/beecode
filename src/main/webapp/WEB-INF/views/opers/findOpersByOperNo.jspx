@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:find finderName="ByOperNo" id="ff_com_newland_beecode_domain_Oper" path="/opers" z="7BD7Kx7iPwgpxPP39RjQ0fF1xzc=">
+        <field:input disableFormBinding="true" field="operNo" id="f_com_newland_beecode_domain_Oper_operNo" validationMessageCode="field_invalid_integer" z="CiL5ht7wj2+FNeHPB29amoPTKx0="/>
+    </form:find>
+</div>

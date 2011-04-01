@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_newland_beecode_domain_Roles" items="${roleses}" z="QOzT9YtcY/s5WNxnrCjF0nJsmDw=">
+        <table:table data="${roleses}" id="l_com_newland_beecode_domain_Roles" path="/roleses" z="/yiu9ZsjNxc0TpOyW5zsGGMqwH4=">
+            
+            <table:column id="c_com_newland_beecode_domain_Roles_roleName" property="roleName" z="2ovVpsb5kJUTmQBB7Nl+lEDnCrQ="/>
+            
+        <table:column id="c_com_newland_beecode_domain_Roles_roleNo" property="roleNo" z="Fxb9p7YvMCc8+Fw065bqKuwE2dE="/>
+        </table:table>
+    </page:list>
+</div>

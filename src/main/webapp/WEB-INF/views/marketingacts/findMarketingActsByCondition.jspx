@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:find finderName="ByCondition" id="c_com_newland_beecode_domain_MarketingAct" path="/marketingacts" z="uQvOariY7UCY7nnpMbpIahApMc4=">
+        <field:datetime disableFormBinding="true" dateTimePattern="${date_format}"  field="minEndDate" id="f_com_newland_beecode_domain_MarketingAct_minEndTime"/>
+        <field:datetime disableFormBinding="true" dateTimePattern="${date_format}"  field="maxEndDate" id="f_com_newland_beecode_domain_MarketingAct_maxEndTime"/>
+        <field:select disableFormBinding="true" headerKey="99999" headerValue="全部" field="marketingCatalog" id="c_com_newland_beecode_domain_marketingcatalog" itemValue="id" itemLabel="catalogName" items="${marketingCatalogs}"  path="/marketingCatalog"/>
+        <field:selectBlank  disableFormBinding="true" headerKey="99999" headerValue="全部" field="actNo" id="c_com_newland_beecode_domain_marketingact" itemValue="actNo" itemLabel="actName" items="${marketingsBlank}"  path="/marketingCatalogs"/>
+        <field:select disableFormBinding="true" field="bizNo" id="c_com_newland_beecode_domain_marketingact_businesstype" itemValue="keyValue" itemLabel="keyDesc" items="${bizTypes}" multiple="false" path=""/>
+        <field:select disableFormBinding="true" headerKey="99999" headerValue="全部" field="actStatus" id="c_com_newland_beecode_domain_marketingact_actstatusdesc" itemValue="keyValue" itemLabel="keyDesc" items="${marketingstatusList}"  path="/businesstypes"/>
+    </form:find>
+    <page:list id="pl_com_newland_beecode_domain_MarketingAct" items="${marketingacts}" z="sFCbrOVGxWJl4YkClga8MCMB8GE=">
+        <table:table data="${marketingacts}"  id="label_com_newland_beecode_domain_MarketingAct" path="/marketingacts" update="false" delete="false" invalid="true" create="false" typeIdFieldName="actNo" z="user-managed">
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_actName" property="actName" z="GnYCjbtwHcjvxbxNMAn0j6eJmmM="/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_startDate" property="startDate" z="ycv72nkx9eKie1sUGfK7Hy/MfiU="/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_endDate" property="endDate" z="flUS8dAyZR6iy/uGpq43G3snXhA="/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_actDetail" property="actDetail" z="S1H1sstjydxkaBEuOitfgwm2VQ4="/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_actStatusDesc" property="actStatusDesc" z="6V2aJ3KqDBApsVzK7EPL4fYFfZc="/>
+            <!--  table:column id="c_com_newland_beecode_domain_MarketingAct_genTime" pattern="${datetime_format}" property="genTime" z="ajEgWH7WWfp+i1N+CaEClGNPxik="/>
+        -->
+        </table:table>
+    </page:list>
+    	<script type="text/javascript">
+    	dojo.require("dojo.data.ItemFileReadStore");
+    	var dataStore = new dojo.data.ItemFileReadStore({data: {
+    		identifier: "value",
+    		label:"name",
+    		items: [
+            {name: "全部", value: "99999"},
+    		]
+    		}});
+    	var item={name: "全部", value: "99999"};
+		dojo.addOnLoad(function(){
+			dojo.connect(dijit.byId("_marketingCatalog_id"), "onChange", function(evt) {
+				if(dijit.byId("_marketingCatalog_id").value!='99999'){
+					send();
+				}else{
+					dijit.byId("_actNo_id").store=dataStore;
+					dijit.byId("_actNo_id").attr("displayedValue", "全部");
+				}
+			})
+		});
+		function send(){
+               dojo.xhrGet({
+               url: 'ajax/marketingAct?id='+dijit.byId("_marketingCatalog_id"),
+               handleAs:"text",
+               load:function(datas){
+            	     var json=eval('('+datas+')');
+            	     var selectE=addHeader(json);
+	          		 dijit.byId("_actNo_id").store=new dojo.data.ItemFileReadStore({data: selectE});
+	          	}
+               });
+		   }
+		function insertAt( index, value ,array) {
+	        var part1 = array.slice( 0, index );
+	        var part2 = array.slice( index );
+	        part1.push( value );
+	        return( part1.concat( part2 ) );
+		}
+		function addHeader(json){
+			json.items=insertAt(0,item,json.items);
+			return json;
+		}
+		
+		
+       </script>
+</div>

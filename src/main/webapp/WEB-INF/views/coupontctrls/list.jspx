@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_newland_beecode_domain_CoupontCtrl" items="${coupontctrls}" z="8j4SeVbWXUqd3lODMeqHRTBox30=">
+        <table:table data="${coupontctrls}" id="l_com_newland_beecode_domain_CoupontCtrl" path="/coupontctrls" z="FhMjKWqlplKKm+B8x36T7NCpef8=">
+            
+            
+            <table:column id="c_com_newland_beecode_domain_CoupontCtrl_encodeVersion" property="encodeVersion" z="n3baK68sm/cw5am+GnJWBW8ywl4="/>
+            <table:column id="c_com_newland_beecode_domain_CoupontCtrl_deviceNo" property="deviceNo" z="XrYKlpAUb4BZzlF1RiqyJWc7Aoc="/>
+            
+            
+        <table:column id="c_com_newland_beecode_domain_CoupontCtrl_couponId" property="couponId" z="sNpRlKxTWVwVhLEswecA/6mwKDI="/>
+            <table:column id="c_com_newland_beecode_domain_CoupontCtrl_serialNo" property="serialNo" z="G6nJSJSvmTrz9ZW2/1qDXbNitoY="/>
+            
+        
+        <table:column id="c_com_newland_beecode_domain_CoupontCtrl_traceNo" property="traceNo" z="n1IZlaY3IQUDm3sFqhsCyPKmL/A="/>
+            <table:column id="c_com_newland_beecode_domain_CoupontCtrl_batchNo" property="batchNo" z="a7G3lqG/G28XcQ6mV9kx1IHfsGg="/>
+        </table:table>
+    </page:list>
+</div>

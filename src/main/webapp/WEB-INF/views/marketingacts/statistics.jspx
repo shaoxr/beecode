@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:spring="http://www.springframework.org/tags" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:mylist id="actSummary" title="活动摘要">
+        <table>
+        	<thead>
+        		<tr>
+	        		<th>商户名称</th>
+	        		<th>优惠次数</th>
+	        		<th>兑换总额</th>
+	        		<th>折扣总额</th>
+        		</tr>
+        	</thead>
+        	<c:forEach items="${rpt.summaryPartners}" var="item">
+        	<tr>
+        		<td>${item.partnerName}</td>
+        		<td>${item.count}</td>
+        		<td>${item.exchangeAmount}</td>
+        		<td>${item.rebateAmount}</td>
+        	</tr>
+        	</c:forEach>
+        </table>
+        <hr/>
+        <table>
+        	<thead>
+        		<tr>
+	        		<tr>
+	        		<th>活动日期</th>
+	        		<th>优惠次数</th>
+	        		<th>兑换总额</th>
+	        		<th>折扣总额</th>
+        		</tr>
+        		</tr>
+        	</thead>
+        	<c:forEach items="${rpt.summaryDays}" var="day">
+        	<tr>
+        		<td>${day.day}</td>
+        		<td>${day.count}</td>
+        		<td>${day.exchangeAmount}</td>
+        		<td>${day.rebateAmount}</td>
+        	</tr>
+        	</c:forEach>
+        </table>
+    </page:mylist>
+    <page:mylist id="allSummary" title="活动详细统计" openPane="false">
+        <table>
+        	<thead>
+        		<tr>
+	        		<th>商户名称</th>
+	        		<th>优惠日期</th>
+	        		<th>优惠次数</th>
+	        		<th>兑换总额</th>
+	        		<th>折扣总额</th>
+        		</tr>
+        	</thead>
+        	<c:forEach items="${rpt.summary}" var="detail">
+        	<tr>
+        		<td>${detail.partnerName}</td>
+        		<td>${detail.day}</td>
+        		<td>${detail.count}</td>
+        		<td>${detail.exchangeAmount}</td>
+        		<td>${detail.rebateAmount}</td>
+        	</tr>
+        	</c:forEach>
+        </table>
+    </page:mylist>
+</div>

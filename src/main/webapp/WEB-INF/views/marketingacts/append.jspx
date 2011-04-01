@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:append id="fu_com_newland_beecode_domain_MarketingAct" idField="actNo" modelAttribute="marketingAct" path="/marketingacts/append" z="kcVVh3Dr4Hohbg3mh1Yc7660eGY=">
+        <field:input disabled="true" field="marketingCatalog.catalogName" id="c_com_newland_beecode_domain_marketingcatalog" max="30" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
+        <field:input disabled="true" field="actName" id="c_com_newland_beecode_domain_MarketingAct_actName" max="30" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
+        <field:datetime disabled="true" dateTimePattern="${date_format}" field="startDate" id="c_com_newland_beecode_domain_MarketingAct_startDate" required="true" z="user-managed"/>
+        <field:datetime disabled="true" dateTimePattern="${date_format}" field="endDate" id="c_com_newland_beecode_domain_MarketingAct_endDate" required="true" z="user-managed"/>
+        <field:textarea disabled="true" field="actDetail" id="c_com_newland_beecode_domain_MarketingAct_actDetail" required="true" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>
+        <field:input disabled="true" field="times" id="c_com_newland_beecode_domain_MarketingAct_times" required="true" validationMessageCode="field_invalid_integer" z="t6HH8qJDiogoSsgcDZi6CHlFSe8="/>
+        <field:input disabled="true" field="amount" id="c_com_newland_beecode_domain_MarketingAct_amount" required="true" validationMessageCode="field_invalid_number" />
+        <field:input disabled="true" field="rebateRate" id="c_com_newland_beecode_domain_MarketingAct_rebateRate" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="/>
+        <field:input disabled="true" field="bizName" id="c_com_newland_beecode_domain_MarketingAct_bizNo" max="2" required="true" z="vdOGgQc2lVCkoPV5zUp70H8B8FM="/>
+        <field:select field="partners" id="c_com_newland_beecode_domain_MarketingAct_partners" itemValue="id" itemLabel="partnerName" items="${partners}" multiple="true" path="/partners" required="true"/>
+        <div><label>客户列表:</label> <input type="file" style="width: 200px; height: 25px;" id="file" name="file" dojoType="dijit.form.ValidationTextBox" required="true" /></div><br />
+    </form:append>
+</div>

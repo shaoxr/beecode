@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_newland_beecode_domain_DictView" items="${dictviews}" z="gwsWrDX8zUhePjgNnHDocqx+Yg4=">
+        <table:table data="${dictviews}" id="l_com_newland_beecode_domain_DictView" path="/dictviews" z="6QY+PMYAr0mxuH/WMJtbJgbcX+I=">
+            <table:column id="c_com_newland_beecode_domain_DictView_keyName" property="keyName" z="xtTKCo8Uin7BhK9vqlCU+ZDdfc8="/>
+            <table:column id="c_com_newland_beecode_domain_DictView_keyValue" property="keyValue" z="6Ox4HHovcC0Am+V9KXUFu6QSUC0="/>
+            <table:column id="c_com_newland_beecode_domain_DictView_keyDesc" property="keyDesc" z="U5mCf4nnpIhwrBBg5VoqWf7sUCw="/>
+        </table:table>
+    </page:list>
+</div>

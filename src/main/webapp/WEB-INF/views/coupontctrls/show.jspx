@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show id="ps_com_newland_beecode_domain_CoupontCtrl" object="${coupontctrl}" path="/coupontctrls" z="iMEPedofTCPX6G0i8SQ+YLCYINY=">
+        
+        
+        <field:display field="encodeVersion" id="s_com_newland_beecode_domain_CoupontCtrl_encodeVersion" object="${coupontctrl}" z="KmDHROqHGlHcFSvunlqTttkh//M="/>
+        <field:display field="deviceNo" id="s_com_newland_beecode_domain_CoupontCtrl_deviceNo" object="${coupontctrl}" z="sKiamN5rOgfmPymbnyJTDJ/tUjY="/>
+        
+        <field:display date="true" dateTimePattern="${coupontCtrl_checkdate_date_format}" field="checkDate" id="s_com_newland_beecode_domain_CoupontCtrl_checkDate" object="${coupontctrl}" z="Vt0boW4ONDIHJ9uWWD7CvtTHlDE="/>
+        <field:display field="amount" id="s_com_newland_beecode_domain_CoupontCtrl_amount" object="${coupontctrl}" z="pptZOmY/6MRnr5Rwb5SuLpv0zBE="/>
+        <field:display field="rebateRate" id="s_com_newland_beecode_domain_CoupontCtrl_rebateRate" object="${coupontctrl}" z="M90ObzF6jXpQr7Ex754rph0Kb1U="/>
+    <field:display field="businessType" id="s_com_newland_beecode_domain_CoupontCtrl_businessType" object="${coupontctrl}" z="lTX0iVhVUdhh032LBEkBGBiYRhA="/>
+    <field:display field="couponId" id="s_com_newland_beecode_domain_CoupontCtrl_couponId" object="${coupontctrl}" z="vNPvBywVnbM0Lxt+hBur3cYfmOo="/>
+        <field:display field="serialNo" id="s_com_newland_beecode_domain_CoupontCtrl_serialNo" object="${coupontctrl}" z="+2N7MIdCS6dZRnhO29Wvd0JsFTM="/>
+        <field:display field="partnerNo" id="s_com_newland_beecode_domain_CoupontCtrl_partnerNo" object="${coupontctrl}" z="mpa97iL4pfBPxEanz807a9e82Zo="/>
+    <field:display date="true" dateTimePattern="${coupontCtrl_checkday_date_format}" field="checkDay" id="s_com_newland_beecode_domain_CoupontCtrl_checkDay" object="${coupontctrl}" z="7J91tRK5+reVLBBlJlSY/u0ey7Q="/>
+    <field:display field="traceNo" id="s_com_newland_beecode_domain_CoupontCtrl_traceNo" object="${coupontctrl}" z="8OR5kmCCeVsPIpPGJFYpoybDdfY="/>
+        <field:display field="batchNo" id="s_com_newland_beecode_domain_CoupontCtrl_batchNo" object="${coupontctrl}" z="YhDuuKhc0c+2+hW9wyNNK6hXtvk="/>
+    <field:display field="voidFlag" id="s_com_newland_beecode_domain_CoupontCtrl_voidFlag" object="${coupontctrl}" z="xo0zHSwQsirH59mQ7H7ae17NNBE="/>
+    </page:show>
+</div>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:list id="pl_com_newland_beecode_domain_Organization" items="${organizations}" z="beAE/Lojr8f8FB+d1HhPYvxgq90=">
+        <table:table data="${organizations}" id="l_com_newland_beecode_domain_Organization" path="/organizations" z="1lWxzPeG+PwHYhNUVbjrt+Wx5Bs=">
+            <table:column id="c_com_newland_beecode_domain_Organization_organizationDN" property="organizationDN" z="eBxBHjWp6vSFncjGKshCHr+INkU="/>
+            <table:column id="c_com_newland_beecode_domain_Organization_organizationCN" property="organizationCN" z="kl1mt+PhJ5soucLF/b7rPqb4KBY="/>
+        </table:table>
+    </page:list>
+</div>
