@@ -28,19 +28,23 @@ import com.newland.beecode.service.MarketingActService;
 import com.newland.utils.FilesHelper;
 import com.newland.utils.NewlandUtil;
 import com.newland.utils.UuidHelper;
+import com.ws.util.service.SMSService;
 
 @Service(value = "marketingActService")
 public class MarketingActServiceImpl implements MarketingActService {
     
 	private Log logger = LogFactory.getLog(MarketingActServiceImpl.class);
 	private List<MarketingAct> giveActs = new LinkedList<MarketingAct>();
+	private List<MarketingAct> giveActsSms=new LinkedList<MarketingAct>();
 	@Autowired
 	private BarCodeService barCodeService;
 	@Autowired
 	private MMSService mmsService;
 	@Autowired
 	private CheckService checkService;
-	private Thread worker = new Thread() {
+	@Autowired
+	private SMSService smsService;
+	private Thread mmsWorker = new Thread() {
 		public void run() {
 
 			while (true) {
@@ -53,9 +57,10 @@ public class MarketingActServiceImpl implements MarketingActService {
 					MarketingAct act=giveActs.remove(0);
 					/**
 					 * 彩信发送
-					 */
-					long count=sendMMS(act);
-					act.setSendSum(count);
+					 */ 
+					long[] count=sendMMS(act);
+					act.setMmsSendSum(count[0]);
+					act.setSmsSendSum(count[1]);
 					act.setActStatus(MarketingAct.STATUS_AFTER_GIVE);
 					act.merge();
 				} catch (Exception e) {
@@ -66,9 +71,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 
 		};
 	};
-
 	public MarketingActServiceImpl() {
-		worker.start();
+		mmsWorker.start();
 	}
 
 	/**
@@ -165,36 +169,48 @@ public class MarketingActServiceImpl implements MarketingActService {
 	 */
 	public void genTxtFile(Coupon coupon,MarketingAct marketingAct){
 		String content=marketingAct.getMmsContent();
-		content.replaceAll(MmsTemplate.COUPONID, coupon.getCouponId().toString());
-		content.replaceAll(MmsTemplate.START_DATE,NewlandUtil.dataToString(marketingAct.getStartDate(), "yyyy-MM-dd"));
-		content.replaceAll(MmsTemplate.END_DATE,NewlandUtil.dataToString(marketingAct.getEndDate(), "yyyy-MM-dd"));
-		content.replaceAll(MmsTemplate.NAME, coupon.getAcctMobile());
+		content=content.replaceAll(MmsTemplate.COUPONID, coupon.getCouponId().toString());
+		content=content.replaceAll(MmsTemplate.START_DATE,NewlandUtil.dataToString(marketingAct.getStartDate(), "yyyy-MM-dd"));
+		content=content.replaceAll(MmsTemplate.END_DATE,NewlandUtil.dataToString(marketingAct.getEndDate(), "yyyy-MM-dd"));
+		content=content.replaceAll(MmsTemplate.NAME, coupon.getAcctName());
 		FilesHelper.genTextFile(content, coupon.getCouponId());
 	}
-    public long sendMMS(MarketingAct act){
+    public long[] sendMMS(MarketingAct act){
     	List<Coupon> list=Coupon.findByActNo(act.getActNo());
     	System.out.println("send ... count:"+list.size());
     	long time=System.currentTimeMillis();
-    	long count=0;
+    	long mmsCount=0;
+    	long smsCount=0;
     	for(Coupon coupon:list){
           try {
 			byte[] bytes=FilesHelper.getZIPByte(coupon.getCouponId());
 			  String[] str=mmsService.sendMMS("GD-ltwx", "l123", coupon.getAcctMobile(), act.getMmsTitle(), bytes);
+			  System.out.println("--------->"+str[0]);
 			  if(str[0].indexOf("OK")>=0){
-				count++;
+				  mmsCount++;
 				coupon.setMmsStatus(Coupon.MMS_STATUS_SNED);
 				coupon.setMmsId(str[1]);
 			  }else{
 				 coupon.setMmsStatus(Coupon.MMS_STATUS_SEND_ERROR);
 				 coupon.setMmsDesc(str[0]);
 			  }
+			  String content=FilesHelper.getTextContent(coupon.getCouponId().toString());
+			  System.out.println(content);
+			  int resp=smsService.sendSMS("2SDK-EMY-6688-JBVTN", "123456", null, new String[]{coupon.getAcctMobile()}, act.getMmsTitle(), content, "gbk",5, coupon.getCouponId());
+			 System.out.println("---------------> sms:"+resp);
+			  if(resp==0){
+				  smsCount++;
+					coupon.setSmsStatus(Coupon.SMS_STATUS_SNED);
+				  }else{
+					 coupon.setSmsStatus(Coupon.SMS_STATUS_SEND_ERROR);
+				  }
 			  coupon.merge();
 		   }catch (Exception e) {
 			 logger.error("", e);
 		   }
        }
     	System.out.println("total times -------->"+(System.currentTimeMillis()-time));
-		return count;
+		return new long[]{mmsCount,smsCount};
     	
     }
 	@Transactional

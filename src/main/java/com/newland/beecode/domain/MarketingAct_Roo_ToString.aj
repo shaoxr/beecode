@@ -9,7 +9,6 @@ privileged aspect MarketingAct_Roo_ToString {
     
     public String MarketingAct.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("SendErrSum: ").append(getSendErrSum()).append(", ");
         sb.append("BizName: ").append(getBizName()).append(", ");
         sb.append("ActStatusDesc: ").append(getActStatusDesc()).append(", ");
         sb.append("Summary: ").append(getSummary()).append(", ");
@@ -26,7 +25,9 @@ privileged aspect MarketingAct_Roo_ToString {
         sb.append("Amount: ").append(getAmount()).append(", ");
         sb.append("ActStatus: ").append(getActStatus()).append(", ");
         sb.append("CouponSum: ").append(getCouponSum()).append(", ");
-        sb.append("SendSum: ").append(getSendSum()).append(", ");
+        sb.append("MmsSendSum: ").append(getMmsSendSum()).append(", ");
+        sb.append("SmsSendSum: ").append(getSmsSendSum()).append(", ");
+        sb.append("SendErrSum: ").append(getSendErrSum()).append(", ");
         sb.append("BizNo: ").append(getBizNo()).append(", ");
         sb.append("Partners: ").append(getPartners() == null ? "null" : getPartners().size()).append(", ");
         sb.append("MarketingCatalog: ").append(getMarketingCatalog()).append(", ");

@@ -69,7 +69,8 @@ public class PartnerCatalogController extends BaseController{
     }
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String show(Model model,@PathVariable("id") Long id){
-		model.addAttribute("partnerCatalog", PartnerCatalog.findPartnerCatalog(id));
+		PartnerCatalog partnerCatalog=PartnerCatalog.findPartnerCatalog(id);
+		model.addAttribute("partnerCatalog", partnerCatalog);
 		return "partnerCatalog/show";
 	}
 }

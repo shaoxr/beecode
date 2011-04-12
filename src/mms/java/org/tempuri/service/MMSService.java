@@ -13,6 +13,6 @@ public interface MMSService {
 	 */
 	public String[] sendMMS(String user,String password,String mobile,String title,byte[] mmsContent)throws Exception;
 	
-	public int getBalance(String user,String password,int sendType)throws Exception;
+	public long getBalance(String user,String password,int sendType)throws Exception;
 
 }

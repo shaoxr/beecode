@@ -19,5 +19,7 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/mms/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/mms/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/sms/resouces"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/sms/java"/>
   </wb-module>
 </project-modules>

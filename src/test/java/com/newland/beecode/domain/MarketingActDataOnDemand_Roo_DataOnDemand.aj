@@ -47,7 +47,8 @@ privileged aspect MarketingActDataOnDemand_Roo_DataOnDemand {
         obj.setAmount(new java.math.BigDecimal(index));
         obj.setActStatus(new Integer(index));
         obj.setCouponSum(new Integer(index).longValue());
-        obj.setSendSum(new Integer(index).longValue());
+        obj.setMmsSendSum(new Integer(index).longValue());
+        obj.setSmsSendSum(new Integer(index).longValue());
         java.lang.String bizNo = "_" + index;
         if (bizNo.length() > 2) {
             bizNo  = bizNo.substring(0, 2);

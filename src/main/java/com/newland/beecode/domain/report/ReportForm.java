@@ -57,7 +57,7 @@ public class ReportForm {
 	}
 
 	public String getActNo() {
-		if(GlobalConstant.ALL_STRING.equals(this.parterNo)){
+		if(GlobalConstant.ALL_STRING.equals(this.actNo)){
 			return null;
 		}
 		return actNo;

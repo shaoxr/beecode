@@ -3,6 +3,7 @@ package com.newland.utils;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,6 +25,7 @@ public class FilesHelper {
 	public static String IMAGE_PATH="D:\\beecode\\images\\";
 	
 	public static String ZIP_PATH="D:\\beecode\\zip\\";
+	public static String SMIL_PATH="D:\\beecode\\smil\\";
 	
 	public static final int BUFFER = 2048;
 
@@ -43,6 +45,29 @@ public class FilesHelper {
 		return new FileReader(file);
 		
 	}
+	public static String getTextContent(String fileName)throws IOException{
+		  File file = new File(TEXT_PATH+fileName+".txt");
+	        BufferedReader reader = null;
+	        StringBuffer sb=new StringBuffer();
+	        try {
+	            reader = new BufferedReader(new FileReader(file));
+	            String tempString = null;
+	            while ((tempString = reader.readLine()) != null) {
+	            	sb.append(tempString);
+	            }
+	            reader.close();
+	        } catch (IOException e) {
+	            throw new IOException("",e);
+	        } finally {
+	            if (reader != null) {
+	                try {
+	                    reader.close();
+	                } catch (IOException e1) {
+	                }
+	            }
+	        }
+	        return sb.toString();
+	}
 	public static String getPath(String fileName){
 		return path+fileName;
 	}
@@ -60,7 +85,7 @@ public class FilesHelper {
 		
 	}
 	public static byte[] getZIPByte(Long couponId)throws Exception{
-		File files[] = {new File(TEXT_PATH+couponId+".txt"),new File(IMAGE_PATH+couponId+".gif")};
+		File files[] = {new File(TEXT_PATH+couponId+".txt"),new File(IMAGE_PATH+couponId+".gif"),new File(SMIL_PATH+"beecode.smil")};
 		String zipPath=ZIP_PATH+"beecode.zip";
 		doZip(files,zipPath);
 		

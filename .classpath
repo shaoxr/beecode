@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" output="target/classes" path="src/main/java"/>
+	<classpathentry kind="src" path="src/sms/resouces"/>
+	<classpathentry kind="src" path="src/sms/java"/>
 	<classpathentry kind="src" path="src/mms/java"/>
 	<classpathentry kind="src" path="src/mms/resources"/>
 	<classpathentry kind="src" output="target/classes" path="src/posp/java"/>

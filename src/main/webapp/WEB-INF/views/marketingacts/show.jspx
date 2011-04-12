@@ -22,7 +22,9 @@
         -->
         <field:select disableFormBinding="true" id="s_com_newland_beecode_domain_MarketingAct_partners" itemLabel="allName" itemValue="partnerNo" multiple="true" disabled="true" items="${marketingact.partners}" field="partner" path=""></field:select>
         <c:if test="${statistics}">
-        <field:display field="summary" itemLabel="joinCount" id="s_com_newland_beecode_domain_marketingact_summary_joincount" object="${marketingact}" />
+        <field:display field="couponSum"  id="s_com_newland_beecode_domain_marketingact_summary_joincount" object="${marketingact}" />
+        <field:display field="mmsSendSum" id="s_com_newland_beecode_domain_marketingact_mms_sendsum" object="${marketingact}" />
+         <field:display field="smsSendSum" id="s_com_newland_beecode_domain_marketingact_sms_sendsum" object="${marketingact}" />
         <field:display field="summary" itemLabel="usedTimes" id="s_com_newland_beecode_domain_marketingact_summary_usedtimes" object="${marketingact}" />
         <field:display field="summary" itemLabel="remainTimes" id="s_com_newland_beecode_domain_marketingact_summary_remaintimes" object="${marketingact}" />
         <spring:url value="${marketingact.actNo}/detail" var="rpt_url"/>

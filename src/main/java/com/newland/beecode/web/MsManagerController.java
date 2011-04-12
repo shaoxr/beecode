@@ -29,7 +29,7 @@ public class MsManagerController extends BaseController{
 			@RequestParam(value = "userName", required = false) String userName,
 			@RequestParam(value = "passWord", required = false) String passWord,
 			@RequestParam(value = "msType", required = false) String msType){
-		int count=0;
+		long count=0;
 		try {
 			count = mmsService.getBalance(userName, passWord, 1);
 		} catch (Exception e) {

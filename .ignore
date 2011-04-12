@@ -1,5 +1,5 @@
 .classpath
 .project
 log.roo
-.settings
+.settings/**
 fuck.zip

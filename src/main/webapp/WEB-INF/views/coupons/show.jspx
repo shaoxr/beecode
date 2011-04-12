@@ -5,7 +5,7 @@
     <page:show id="ps_com_newland_beecode_domain_Coupon" create="false" delete="false" update="false" list="false" object="${coupon}" path="/coupons" z="sE4D5Fogz4UDSgJgKxHAtkJ3Fi4=">
         <field:display itemLabel="actName" field="marketingAct" id="s_com_newland_beecode_domain_marketingact_actname" object="${coupon}" z="OTcnwH7tegAJoH6kVS3HbkOYLg8="/>
         <field:display dateTimePattern="${datetime_format}" field="genTime" id="s_com_newland_beecode_domain_Coupon_genTime" object="${coupon}" z="hShHq2kchPDI9PWyY7E3ZhG/ttA="/>
-        <field:display field="acctNo" id="s_com_newland_beecode_domain_Coupon_acctNO" object="${coupon}" z="OTcnwH7tegAJoH6kVS3HbkOYLg8="/>
+        <field:display field="acctName" id="s_com_newland_beecode_domain_marketingact_acctname" object="${coupon}" z="OTcnwH7tegAJoH6kVS3HbkOYLg8="/>
         <field:display field="acctMobile" id="s_com_newland_beecode_domain_Coupon_acctMobile" object="${coupon}" z="EcdgK+BplWi0jzBP+urBZxOTj20="/>
         <field:display field="couponId" id="s_com_newland_beecode_domain_Coupon_couponNo" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
     	<field:display field="serialNo" id="s_com_newland_beecode_domain_Coupon_serialNo" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
@@ -33,4 +33,18 @@
 	   		</form>
    		</util:panel>
    	</c:if>
+   		<util:panel title="重新发送短信" id="cancel2" openPane="false">
+	   		<spring:url value="/coupons/reversal/${coupon.couponId}" var="url"></spring:url>
+	   		<form method="post" action="${url}">
+	   		<field:input disableFormBinding="true" id="s_com_newland_beecode_domain_Coupon_acctMobile" field="mobile"></field:input>
+	   		<input type="submit" value="重新发送短信" onclick="javascript:return window.confirm('请确认重新发送短信！');"/>
+	   		</form>
+   		</util:panel>
+   		<util:panel title="重新发送彩信" id="cancel3" openPane="false">
+	   		<spring:url value="/coupons/reversal/${coupon.couponId}" var="url"></spring:url>
+	   		<form method="post" action="${url}">
+	   		<field:input disableFormBinding="true" id="s_com_newland_beecode_domain_Coupon_acctMobile" field="mobile"></field:input>
+	   		<input type="submit" value="重新发送彩信" onclick="javascript:return window.confirm('请确认重新发送彩信！');"/>
+	   		</form>
+   		</util:panel>
 </div>

@@ -91,7 +91,7 @@ public class MmsTemplate {
 		buf.append(this.getPart4());
 		buf.append(MmsTemplate.START_DATE);
 		buf.append("-----");
-		buf.append(MmsTemplate.START_DATE);
+		buf.append(MmsTemplate.END_DATE);
 		buf.append(this.getPart5());
 		return buf.toString();
 	}

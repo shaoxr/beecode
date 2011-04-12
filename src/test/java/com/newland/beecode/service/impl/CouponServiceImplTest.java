@@ -2,6 +2,7 @@ package com.newland.beecode.service.impl;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -20,14 +21,13 @@ import com.newland.beecode.service.CouponService;
 import com.newland.utils.NewlandUtil;
 import com.newland.utils.UuidHelper;
 
-@ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext.xml")
+//@ContextConfiguration(locations = "classpath:/META-INF/spring/applicationContext.xml")
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionConfiguration(defaultRollback = false)
 public class CouponServiceImplTest {
 
-	@Resource(name = "couponService")
 	CouponService couponService;
-
+    
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -42,7 +42,7 @@ public class CouponServiceImplTest {
 		//consume(6011038074l, "269c53a4-3b26-11e0-8fae-11c58f3d853e", "000-001");
 		//backoff();
 		//report();
-		genCtrl();
+		fuck();
 	}
 
 	public void consume(Long couponId, String serialNO, String partnerNo)
@@ -82,12 +82,12 @@ public class CouponServiceImplTest {
 			coupon.setSerialNo(UuidHelper.generateUUID());
 			coupon.setTimes(1);
 			coupon.setVersion(0);
-			coupon.persist();
+			//coupon.persist();
 			
 			CoupontCtrl ct=new CoupontCtrl();
 			ct.setBatchNo("000001");
 			
-			ct.setBusinessType("01");
+			ct.setBusinessType("00");
 			ct.setCheckDate(new Date());
 			if(i<49){
 				
@@ -113,6 +113,35 @@ public class CouponServiceImplTest {
 		}
 		
 		
+	}
+	public void fuck(){
+		List<Coupon> list=Coupon.findAllCoupons();
+		int i=0;
+		for(Coupon c:list){
+				CoupontCtrl ct=new CoupontCtrl();
+				ct.setBatchNo("000001");
+				
+				ct.setBusinessType("00");
+				ct.setCheckDate(new Date());
+				if(Math.random()<0.5){
+					
+				   ct.setCheckDay(NewlandUtil.string2Date("2011-03-05", "yyyy-MM-dd"));
+				}
+				else{
+					ct.setCheckDay(NewlandUtil.string2Date("2011-03-04", "yyyy-MM-dd"));
+					
+				}
+				ct.setPartnerNo("104110058120006");
+				ct.setCouponId(c.getCouponId());
+				ct.setDeviceNo("11000007");
+				ct.setEncodeVersion("2");
+				ct.setAmount(new BigDecimal(1000));
+				ct.setSerialNo(c.getSerialNo());
+				ct.setTraceNo(String.valueOf(100000+(i++)));
+				ct.setVersion(0);
+				ct.persist();
+			
+		}
 	}
 
 }

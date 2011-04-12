@@ -2,6 +2,6 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
 <!--  彩信服务 -->
-	<bean id="mmsService" class="org.tempuri.service.impl.MMSServiceImpl">
+	<bean id="smsService" class="com.ws.util.service.impl.SMSServiceImpl">
 	</bean>
 </beans>

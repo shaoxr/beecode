@@ -124,12 +124,24 @@ privileged aspect MarketingAct_Roo_JavaBean {
         this.couponSum = couponSum;
     }
     
-    public Long MarketingAct.getSendSum() {
-        return this.sendSum;
+    public Long MarketingAct.getMmsSendSum() {
+        return this.mmsSendSum;
     }
     
-    public void MarketingAct.setSendSum(Long sendSum) {
-        this.sendSum = sendSum;
+    public void MarketingAct.setMmsSendSum(Long mmsSendSum) {
+        this.mmsSendSum = mmsSendSum;
+    }
+    
+    public Long MarketingAct.getSmsSendSum() {
+        return this.smsSendSum;
+    }
+    
+    public void MarketingAct.setSmsSendSum(Long smsSendSum) {
+        this.smsSendSum = smsSendSum;
+    }
+    
+    public Long MarketingAct.getSendErrSum() {
+        return this.sendErrSum;
     }
     
     public void MarketingAct.setSendErrSum(Long sendErrSum) {

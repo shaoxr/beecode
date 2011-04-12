@@ -78,25 +78,25 @@ public class MarketingAct {
 	 * 待发放
 	 */
 	public static final Integer STATUS_BEFORE_GIVE = 3;
+	/**
+	 * 发放中
+	 */
+	public static final Integer STATUS_SENDNG=4;
 
 	/**
-	 * 已开放
+	 * 已发放
 	 */
-	public static final Integer STATUS_AFTER_GIVE = 4;
+	public static final Integer STATUS_AFTER_GIVE = 5;
 
 	/**
 	 * 已过期
 	 */
-	public static final Integer STATUS_EXPIRED = 5;
+	public static final Integer STATUS_EXPIRED = 6;
 
 	/**
 	 * 已关闭
 	 */
-	public static final Integer STATUS_CLOSED = 6;
-	/**
-	 * 发放中
-	 */
-	public static final Integer STATUS_SENDNG=7;
+	public static final Integer STATUS_CLOSED = 7;
 	/**
 	 * 绑定银行卡 
 	 */
@@ -164,9 +164,13 @@ public class MarketingAct {
 	 */
 	private Long couponSum;
 	/**
-	 * 发放数量
+	 * 彩信发放数量
 	 */
-	private Long sendSum;
+	private Long mmsSendSum;
+	/**
+	 * 短信发放数量
+	 */
+	private Long smsSendSum;
 	
 	@Transient
 	private Long sendErrSum;
@@ -212,17 +216,6 @@ public class MarketingAct {
 	private MmsTemplate mmsTemplate;
     
 	
-	public Long getSendErrSum(){
-		if(this.couponSum!=null && this.sendSum!=null){
-			this.sendErrSum=this.couponSum-this.sendSum;
-			if(this.sendErrSum<=0){
-				return new Long(0);
-			}
-			return sendErrSum ;
-		}
-		return null;
-		
-	}
 	public String getBizName() {
 		if(this.bizNo==null){
 			return "";
