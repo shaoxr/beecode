@@ -15,11 +15,5 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/qmarker/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp/WEB-INF/i18n"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/mms/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/mms/resources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/sms/resouces"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/sms/java"/>
   </wb-module>
 </project-modules>
