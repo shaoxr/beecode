@@ -164,7 +164,8 @@ public class XPathExcelTemplateService implements ExcelService {
 			}
 			cellValue = title + "  " + cellValue;
 			HSSFCell cell = row.createCell((short) 0);
-			cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			//cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+                        //TODO 无此接口
 			cell.setCellValue(cellValue);
 		}
 	}
@@ -217,7 +218,8 @@ public class XPathExcelTemplateService implements ExcelService {
 					style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 					cell.setCellStyle(style);
 					cell.setCellType(HSSFCell.CELL_TYPE_FORMULA);
-					cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+					//cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+                                        //TODO 无此接口
 					cell.setCellFormula("SUM(" + str[i] + "3:" + str[i]
 							+ (rowIndex - 1) + ")");
 				}
@@ -249,7 +251,8 @@ public class XPathExcelTemplateService implements ExcelService {
 		// 确定值
 		if (value instanceof String) {
 			cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-			cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			//cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+                        //TODO 无此接口
 			cell.setCellValue((String) value);
 
 		} else if (value instanceof java.util.Date) {
@@ -260,7 +263,8 @@ public class XPathExcelTemplateService implements ExcelService {
 			cell.setCellValue(((Number) value).doubleValue());
 		} else {
 			cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-			cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			//cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+                        //TODO 无此接口
 			cell.setCellValue(value.toString());
 
 		}
@@ -320,7 +324,8 @@ public class XPathExcelTemplateService implements ExcelService {
 		// 确定值
 		if (value instanceof String) {
 			cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-			cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			//cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+                        //TODO 无此接口
 			cell.setCellValue((String) value);
 
 		} else if (value instanceof java.util.Date) {
@@ -331,7 +336,8 @@ public class XPathExcelTemplateService implements ExcelService {
 			cell.setCellValue(((Number) value).doubleValue());
 		} else {
 			cell.setCellType(HSSFCell.CELL_TYPE_STRING);
-			cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+			//cell.setEncoding(HSSFCell.ENCODING_UTF_16);
+                        //TODO 无此接口
 			cell.setCellValue(value.toString());
 
 		}

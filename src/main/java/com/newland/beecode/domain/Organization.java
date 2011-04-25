@@ -1,24 +1,55 @@
 package com.newland.beecode.domain;
 
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-
 import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Version;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
 public class Organization {
 
-    @NotNull
-    @Size(max = 16)
-    @Column(unique=true)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Version
+    @Column(name = "version")
+    private Integer version;
+    @Column(unique = true)
     private String organizationDN;
-
-    @NotNull
-    @Size(max = 32)
+    @Column
     private String organizationCN;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getOrganizationCN() {
+        return organizationCN;
+    }
+
+    public void setOrganizationCN(String organizationCN) {
+        this.organizationCN = organizationCN;
+    }
+
+    public String getOrganizationDN() {
+        return organizationDN;
+    }
+
+    public void setOrganizationDN(String organizationDN) {
+        this.organizationDN = organizationDN;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
 }

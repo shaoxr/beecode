@@ -1,5 +1,7 @@
 package com.newland.beecode.service.impl;
 
+import com.newland.beecode.dao.CouponDao;
+import com.newland.beecode.dao.MarketingActDao;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,9 +31,16 @@ import com.newland.utils.FilesHelper;
 import com.newland.utils.NewlandUtil;
 import com.newland.utils.UuidHelper;
 import com.ws.util.service.SMSService;
+import javax.annotation.Resource;
 
 @Service(value = "marketingActService")
 public class MarketingActServiceImpl implements MarketingActService {
+    
+    @Resource(name = "marketingActDao")
+    private MarketingActDao actDao;
+    
+    @Resource(name = "couponDao")
+    private CouponDao couponDao;
     
 	private Log logger = LogFactory.getLog(MarketingActServiceImpl.class);
 	private List<MarketingAct> giveActs = new LinkedList<MarketingAct>();
@@ -62,7 +71,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 					act.setMmsSendSum(count[0]);
 					act.setSmsSendSum(count[1]);
 					act.setActStatus(MarketingAct.STATUS_AFTER_GIVE);
-					act.merge();
+					//act.merge();
+                                        actDao.update(act);
 				} catch (Exception e) {
 					e.printStackTrace();
 					
@@ -83,7 +93,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 		long count=0;
 		MarketingAct act;
 		synchronized(this){
-			act = MarketingAct.findMarketingAct(actNo);
+			//act = MarketingAct.findMarketingAct(actNo);
+                        act = actDao.findUniqueByProperty("actNo", actNo);
 			if(!act.getActStatus().equals(MarketingAct.STATUS_BEFORE_RECHECK)){
 				throw new AppException(ErrorsCode.BIZ_COUPON_CHECKED,"");
 			}
@@ -92,14 +103,16 @@ public class MarketingActServiceImpl implements MarketingActService {
 			  count=genCoupons(act);
 			  act.setActStatus(MarketingAct.STATUS_BEFORE_GIVE);
 			}
-			act.merge();
+			//act.merge();
+                        actDao.update(act);
 		}
 		return count;
 	}
     public void marketingActSend(Long actNo)throws AppException{
     	
     	synchronized(this){
-    	  MarketingAct act=MarketingAct.findMarketingAct(actNo);
+    	  //MarketingAct act=MarketingAct.findMarketingAct(actNo);
+            MarketingAct act= actDao.findUniqueByProperty("actNo", actNo);
     	  if(!act.getActStatus().equals(MarketingAct.STATUS_BEFORE_GIVE)){
     		 throw new AppException(ErrorsCode.BIZ_MARKETING_GIVED,"");
     	  }
@@ -113,7 +126,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 				//throw new AppException(ErrorsCode.BIZ_MS_BALANCE_UN_LESS,"");
 			}
     	  act.setActStatus(MarketingAct.STATUS_SENDNG);
-    	  act=act.merge();
+    	  //act=act.merge();
+          act = actDao.update(act);
     	  synchronized(giveActs){
       	    giveActs.add(act);
       	    giveActs.notifyAll();
@@ -140,12 +154,14 @@ public class MarketingActServiceImpl implements MarketingActService {
 				coupon.setGenTime(new Date());
 				coupon.setMmsStatus(Coupon.MMS_STATUS_WAIT);
 				coupon.setSmsStatus(Coupon.SMS_STATUS_WAIT);
-				coupon.persist();
+				//coupon.persist();
+                                couponDao.save(coupon);
 				this.genCode(coupon,act);
 				this.genTxtFile(coupon, act);
 			}
 			act.setCouponSum(count);
-			act.merge();
+			//act.merge();
+                        actDao.update(act);
 		} catch (Exception e) {
 			throw new AppException(ErrorsCode.BIZ_COUPON_GEN_ERROR,"",e);
 		}
@@ -176,7 +192,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 		FilesHelper.genTextFile(content, coupon.getCouponId());
 	}
     public long[] sendMMS(MarketingAct act){
-    	List<Coupon> list=Coupon.findByActNo(act.getActNo());
+    	//List<Coupon> list=Coupon.findByActNo(act.getActNo());
+        List<Coupon> list = couponDao.findByActNo(act.getActNo());
     	System.out.println("send ... count:"+list.size());
     	long time=System.currentTimeMillis();
     	long mmsCount=0;
@@ -204,7 +221,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 				  }else{
 					 coupon.setSmsStatus(Coupon.SMS_STATUS_SEND_ERROR);
 				  }
-			  coupon.merge();
+			  //coupon.merge();
+                          couponDao.update(coupon);
 		   }catch (Exception e) {
 			 logger.error("", e);
 		   }
@@ -224,23 +242,27 @@ public class MarketingActServiceImpl implements MarketingActService {
 		act.setGenTime(new Date());
 		act.setActStatus(MarketingAct.STATUS_BEFORE_RECHECK);
 		act.setMmsContent(act.getMmsTemplate().getTemplateContent());
-		act.persist();
+		//act.persist();
+                actDao.save(act);
 	}
 
 	@Transactional
 	public void invalidMarketingAct(Long actNo)throws AppException {
-		MarketingAct act = MarketingAct.findMarketingAct(actNo);
+		//MarketingAct act = MarketingAct.findMarketingAct(actNo);
+            MarketingAct act = actDao.findUniqueByProperty("actNo", actNo);
 		if (act.getActStatus() != MarketingAct.STATUS_BEFORE_RECHECK) {
 			throw new AppException(ErrorsCode.BIZ_MARKETACT_DONOT_DELETE,"do not delete");
 		} else {
 			act.setActStatus(MarketingAct.STAUS_DELETE);
-			act.merge();
+			//act.merge();
+                        actDao.update(act);
 		}
 	}
 
 	@Override
 	public void append(Long actNo, MultipartFile file) throws AppException {
-		MarketingAct act = MarketingAct.findMarketingAct(actNo);
+		//MarketingAct act = MarketingAct.findMarketingAct(actNo);
+            MarketingAct act = actDao.findUniqueByProperty("actNo", actNo);
 		try {
 			FilesHelper.storeFile(file, String.valueOf(actNo));
 		} catch (IOException e) {
@@ -267,7 +289,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 		} catch (ParseException e) {
 			//不可能发生异常
 		}
-		MarketingAct.expired(date);
+		//MarketingAct.expired(date);
+                actDao.expired(date);
 	}
 
 }

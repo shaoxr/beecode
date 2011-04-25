@@ -25,6 +25,9 @@ import com.newland.beecode.domain.condition.SelectForm;
 @RequestMapping("/ajax")
 @Controller
 public class AjaxRequestController {
+    
+    private 
+    
 	@RequestMapping(value="/marketingAct", method=RequestMethod.GET)
 	public void getMarketingAct(@RequestParam String id,Model model,HttpServletResponse response){
 		List<MarketingAct> list=MarketingAct.findByCatalog(new Long(id));

@@ -1,13 +1,10 @@
 package com.newland.beecode.domain;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,26 +14,16 @@ import javax.persistence.Query;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.validation.constraints.Size;
+import javax.persistence.Version;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
-import com.newland.beecode.domain.condition.CouponCondition;
-import com.newland.beecode.domain.condition.QueryResult;
-import com.newland.beecode.domain.report.ConsumeDetail;
-import com.newland.beecode.domain.report.CouponSummaryItem;
-import com.newland.beecode.domain.report.PartnerSummaryItem;
-import com.newland.beecode.domain.report.ReportForm;
-import com.newland.beecode.domain.report.ReportResult;
 
-@RooJavaBean
-@RooToString
-@RooEntity(identifierField = "couponId")
+
+@Entity
 public class Coupon {
 	private static final Log logger = LogFactory.getLog(Coupon.class);
 	/**
@@ -130,50 +117,57 @@ public class Coupon {
 	@GenericGenerator(name = "tableGen", strategy = "com.newland.utils.RandomLoMultipleHiLoPerTableGenerator", parameters = { @Parameter(name = "max_lo", value = "3000") })
 	private Long couponId;
 
-	@Size(max = 24)
+	@Column
 	private String acctNo;
 
-	@Size(max = 16)
+	@Column
 	private String acctMobile;
 
-	@Size(max = 16)
+	@Column
 	private String checkCode;
 
-	@Size(max = 36)
+	@Column
 	private String serialNo;
 
+	@Column
 	private Integer couponStatus;
 	
+	@Column
 	private Integer mmsStatus;
 	
-	@Size(max = 100)
+	@Column
 	private String mmsDesc;
 	
-	@Size(max = 100)
+	@Column
 	private String smsDesc;
 	
+	@Column
 	private Integer smsStatus;
 
 	@Transient
 	private String couponStatusDesc;
 
+	@Column
 	private Float rebateRate;
 
+	@Column
 	private Integer times;
 	
-	@Size(max = 10)
+	@Column
 	private String acctName;
 	
-	@Size(max = 20)
+	@Column
 	private String mmsId;
 
+	@Column
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date genTime;
 
-	@Size(max = 2)
+	@Column
 	private String businessType;
 
+	@Column
 	private Integer remainTimes;
 
 	@ManyToOne
@@ -185,266 +179,197 @@ public class Coupon {
 	@Transient
 	private String smsStatusDesc;
 	
-	public String getMmsStatusDesc(){
-		return DictView.getDescByKeyName(MMS_SMS_STATUS_KEY_NAME, this.getMmsStatus().toString());
-		
+	@Column
+	@Version
+	private Integer version;
+	
+	//start getter/setter
+	
+
+	public Long getCouponId() {
+		return couponId;
+	}
+
+	public void setCouponId(Long couponId) {
+		this.couponId = couponId;
+	}
+
+	public String getAcctNo() {
+		return acctNo;
+	}
+
+	public void setAcctNo(String acctNo) {
+		this.acctNo = acctNo;
+	}
+
+	public String getAcctMobile() {
+		return acctMobile;
+	}
+
+	public void setAcctMobile(String acctMobile) {
+		this.acctMobile = acctMobile;
+	}
+
+	public String getCheckCode() {
+		return checkCode;
+	}
+
+	public void setCheckCode(String checkCode) {
+		this.checkCode = checkCode;
+	}
+
+	public String getSerialNo() {
+		return serialNo;
+	}
+
+	public void setSerialNo(String serialNo) {
+		this.serialNo = serialNo;
+	}
+
+	public Integer getCouponStatus() {
+		return couponStatus;
+	}
+
+	public void setCouponStatus(Integer couponStatus) {
+		this.couponStatus = couponStatus;
+	}
+
+	public Integer getMmsStatus() {
+		return mmsStatus;
+	}
+
+	public void setMmsStatus(Integer mmsStatus) {
+		this.mmsStatus = mmsStatus;
+	}
+
+	public String getMmsDesc() {
+		return mmsDesc;
+	}
+
+	public void setMmsDesc(String mmsDesc) {
+		this.mmsDesc = mmsDesc;
+	}
+
+	public String getSmsDesc() {
+		return smsDesc;
+	}
+
+	public void setSmsDesc(String smsDesc) {
+		this.smsDesc = smsDesc;
+	}
+
+	public Integer getSmsStatus() {
+		return smsStatus;
+	}
+
+	public void setSmsStatus(Integer smsStatus) {
+		this.smsStatus = smsStatus;
+	}
+
+	public Float getRebateRate() {
+		return rebateRate;
+	}
+
+	public void setRebateRate(Float rebateRate) {
+		this.rebateRate = rebateRate;
+	}
+
+	public Integer getTimes() {
+		return times;
+	}
+
+	public void setTimes(Integer times) {
+		this.times = times;
+	}
+
+	public String getAcctName() {
+		return acctName;
+	}
+
+	public void setAcctName(String acctName) {
+		this.acctName = acctName;
+	}
+
+	public String getMmsId() {
+		return mmsId;
+	}
+
+	public void setMmsId(String mmsId) {
+		this.mmsId = mmsId;
+	}
+
+	public Date getGenTime() {
+		return genTime;
+	}
+
+	public void setGenTime(Date genTime) {
+		this.genTime = genTime;
+	}
+
+	public String getBusinessType() {
+		return businessType;
+	}
+
+	public void setBusinessType(String businessType) {
+		this.businessType = businessType;
+	}
+
+	public Integer getRemainTimes() {
+		return remainTimes;
+	}
+
+	public void setRemainTimes(Integer remainTimes) {
+		this.remainTimes = remainTimes;
+	}
+
+	public MarketingAct getMarketingAct() {
+		return marketingAct;
+	}
+
+	public void setMarketingAct(MarketingAct marketingAct) {
+		this.marketingAct = marketingAct;
+	}
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public void setCouponStatusDesc(String couponStatusDesc) {
+		this.couponStatusDesc = couponStatusDesc;
+	}
+
+	public void setMmsStatusDesc(String mmsStatusDesc) {
+		this.mmsStatusDesc = mmsStatusDesc;
+	}
+
+	public void setSmsStatusDesc(String smsStatusDesc) {
+		this.smsStatusDesc = smsStatusDesc;
 	}
 	
-	public String getSmsStatusDesc(){
-		return DictView.getDescByKeyName(MMS_SMS_STATUS_KEY_NAME, this.getSmsStatus().toString());
-	}
-
-	public String getCouponStatusDesc() {
-		return DictView.getValuesByKeyName(DICT_KEY_NAME).get(
-				couponStatus.toString());
-	}
-
-	public void clearAndFlushEntityManager() {
-		entityManager.flush();
-		entityManager.clear();
-	}
-	public static List<Coupon> findByActNo(Long actNo){
-		EntityManager em = entityManager();
-		Query q = em.createQuery("from Coupon as coupon where coupon.marketingAct.actNo= :actNo");
-		q.setParameter("actNo",actNo);
-		return q.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	public static QueryResult findCouponsByCondition(CouponCondition cc) {
-		HashMap<String, Object> conditions = new HashMap<String, Object>();
-		StringBuffer buf = new StringBuffer();
-		StringBuffer countBuf=new StringBuffer();
-		StringBuffer queryBuf=new StringBuffer();
-		countBuf.append("SELECT count(coupon) FROM Coupon AS coupon ,MarketingAct as ma WHERE coupon.marketingAct.actNo=ma.actNo ");
-		queryBuf.append("SELECT coupon FROM Coupon AS coupon ,MarketingAct as ma WHERE coupon.marketingAct.actNo=ma.actNo ");
-		if (cc.getMinGenTime() != null && cc.getMaxGenTime() != null
-				&& cc.getMinGenTime().compareTo(cc.getMaxGenTime() ) < 1) {
-			buf.append(" and coupon.genTime >= :minGenTime and coupon.genTime <= :maxGenTime");
-			conditions.put("minGenTime", cc.getMinGenTime());
-			conditions.put("maxGenTime", cc.getMaxGenTime() );
-		}
-		if (cc.getCouponId() != null) {
-				buf.append(" and coupon.couponId = :couponId");
-			conditions.put("couponId", cc.getCouponId());
-		}
-		if (cc.getCouponStatus() != null ) {
-				buf.append(" and coupon.couponStatus = :couponStatus");
-			conditions.put("couponStatus", cc.getCouponStatus());
-		}
-
-		if (cc.getMobile() != null && cc.getMobile().length()>0) {
-				buf.append(" and coupon.acctMobile = :mobile");
-			conditions.put("mobile", cc.getMobile());
-		}
-
-		if (cc.getActNo() != null ) {
-				buf.append(" and coupon.marketingAct.actNo = :acctNo");
-			conditions.put("acctNo", cc.getActNo());
-		}
-		if(cc.getMarketingCatalogId()!=null){
-			buf.append(" and ma.marketingCatalog.id = :id");
-			conditions.put("id", cc.getMarketingCatalogId());
-		}
-		QueryResult qr=new QueryResult(); 
-		EntityManager em = entityManager();
-		String queryStr=queryBuf.append(buf).toString();
-		Query q = em.createQuery(queryStr);
-		for (Iterator<String> it = conditions.keySet().iterator(); it.hasNext();) {
-			String cond = it.next();
-			q.setParameter(cond, conditions.get(cond));
-		}
-		if(cc.isPagination()){
-			qr.setResultList(q.setFirstResult((cc.getPage() - 1) * cc.getSize()).setMaxResults(cc.getSize()).getResultList());
-			q=em.createQuery(countBuf.append(buf).toString());
-			for (Iterator<String> it = conditions.keySet().iterator(); it.hasNext();) {
-				String cond = it.next();
-				q.setParameter(cond, conditions.get(cond));
-			}
-			qr.setCount(((Long)q.getSingleResult()).intValue());
-		}else{
-			qr.setResultList(q.getResultList());
-		}
-		return qr;
-	}
-
-	public static Coupon findBySerialNo(String serialNo) {
-		Query q = entityManager()
-				.createQuery(
-						"select coupon from Coupon as coupon where coupon.serialNo=:serialNo");
-		q.setParameter("serialNo", serialNo);
-		
-        List list=q.getResultList();
-        if(list.size()!=0)
-        	return (Coupon) list.get(0);
-        return null;
-        
-	}
 	
-    @SuppressWarnings("unchecked")
-	public static List<CouponSummaryItem> summaryPartnerByAct(Long actNo){
-    	StringBuffer buf = new StringBuffer();
-    	buf.append("select pt.partner_name, ctrl.check_day, count(*), sum(act.amount) exchange, sum(ctrl.amount) ");
-    	buf.append("from coupon cp, marketing_act act, coupont_ctrl ctrl, marketing_act_partners mp, partner pt ");
-    	buf.append("where cp.marketing_act=? and cp.marketing_act=act.act_no and ctrl.coupon_id=cp.coupon_id and ");
-    	buf.append("mp.partners=pt.id and mp.marketing_act=act.act_no ");
-    	buf.append("group by pt.partner_name, ctrl.check_day");
-    	Query q = entityManager().createNativeQuery(buf.toString());
-    	q.setParameter(1, actNo);
-    	List l = q.getResultList();
-    	List<CouponSummaryItem> result = new LinkedList<CouponSummaryItem>();
-    	for (Iterator it = l.iterator(); it.hasNext();) {
-			Object[] obj = (Object[]) it.next();
-			CouponSummaryItem cs = new CouponSummaryItem();
-			cs.setPartnerName((String)obj[0]);
-			cs.setDay((Date)obj[1]);
-			cs.setCount(((BigInteger)obj[2]).intValue());
-			cs.setExchangeAmount((BigDecimal)obj[3]);
-			cs.setRebateAmount((BigDecimal)obj[4]);
-			result.add(cs);
-		}
-    	
-    	return result;
-    }
-    public static ReportResult reportDetail(ReportForm reportForm){
-    	StringBuffer buf = new StringBuffer();
-    	StringBuffer CountBuf = new StringBuffer();
-    	HashMap<String, Object> conditions = new HashMap<String, Object>();
-    	buf.append("select ctrl.check_day, act.act_name, pt.partner_name ,pt.partner_no,cp.coupon_id,cp.acct_mobile, " +
-    			"ctrl.rebate_rate,abs(act.amount) ,bt.biz_name, (ctrl.amount*(10-ctrl.rebate_rate))/10,ctrl.amount ");
-    	buf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act,business_type bt ");
-    	buf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
-    	buf.append(" and bt.biz_no=act.biz_no and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
-    	CountBuf.append("select count(*) ");
-    	CountBuf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act,business_type bt ");
-    	CountBuf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
-    	CountBuf.append(" and bt.biz_no=act.biz_no and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
-    	
-    	if(reportForm.getStartDateByString()!= null){
-    		buf.append(" and ctrl.check_day >='"+reportForm.getStartDateByString()+"'");
-    		CountBuf.append(" and ctrl.check_day >='"+reportForm.getStartDateByString()+"'");
-    	}
-    	if(reportForm.getEndDate()!= null){
-    		buf.append(" and ctrl.check_day <='"+reportForm.getEndDateByString()+"'");
-    		CountBuf.append(" and ctrl.check_day <='"+reportForm.getEndDateByString()+"'");
-    	}
-    	if(reportForm.getActNo()!=null ){
-    		buf.append(" and act.act_no = '"+reportForm.getActNo()+"'" );
-    		CountBuf.append(" and act.act_no = '"+reportForm.getActNo()+"'" );
-    	}
-    	if(reportForm.getParterNo()!=null ){
-    		buf.append(" and pt.partner_no ='"+reportForm.getParterNo()+"' " );
-    		CountBuf.append(" and pt.partner_no ='"+reportForm.getParterNo()+"' " );
-    	}
-    	if(reportForm.getPartnerCatalogId()!=null  ){
-    		buf.append(" and pt.partner_catalog ='"+reportForm.getPartnerCatalogId()+"' " );
-    		CountBuf.append(" and pt.partner_catalog ='"+reportForm.getPartnerCatalogId()+"' " );
-    	}
-    	if(reportForm.getMarketingCatalogId()!=null ){
-    		buf.append(" and act.marketing_catalog = '"+reportForm.getMarketingCatalogId()+"'" );
-    		CountBuf.append(" and act.marketing_catalog = '"+reportForm.getMarketingCatalogId()+"'" );
-    	}
-    	buf.append(" order by ctrl.check_day,act.act_name, pt.partner_name ");
-    	EntityManager em = entityManager();
-    	
-    	Query countQ = em.createNativeQuery(CountBuf.toString());
-		ReportResult rr=new ReportResult();
-		BigInteger count=(BigInteger)countQ.getSingleResult();
-		if(count==null){
-			rr.setCount(0);
-		}else{
-			rr.setCount(count.longValue());
-		}
-		
-		
-		Query q = em.createNativeQuery(buf.toString());
-		List list;
-		if(reportForm.isPagination()){
-			   list=q.setFirstResult((reportForm.getPage() - 1) * reportForm.getSize()).setMaxResults(reportForm.getSize()).getResultList();
-			}else{
-				list=q.getResultList();
-			}
-		List result=new ArrayList();
-		for (Iterator it = list.iterator(); it.hasNext();) {
-			Object[] obj = (Object[]) it.next();
-			
-			ConsumeDetail cd=new ConsumeDetail();
-			cd.setCheckDay((Date)obj[0]);
-			cd.setActName((String)obj[1]);
-			cd.setParterName((String)obj[2]);
-			cd.setParterNo((String)obj[3]);
-			cd.setCouponId(((BigInteger)obj[4]).toString());
-			cd.setAcctMobile((String)obj[5]);
-			cd.setRebateRate((BigDecimal)obj[6]);
-			cd.setCost((BigDecimal)obj[7]);
-			cd.setBizName((String)obj[8]);
-			cd.setRebateAmount((BigDecimal)obj[9]);
-			cd.setOriginalAmount((BigDecimal)obj[10]);
-			//PartnerSummaryItem ps = new PartnerSummaryItem();
-			//ps.setCheckDay((Date)obj[0]);
-			//ps.setActName((String)obj[1]);
-			//ps.setPartnerName((String)obj[2]);
-			//ps.setBizName((String)obj[4]);
-			//ps.setExchangeAmount((BigDecimal)obj[3]);
-			//ps.setRebateAmount((BigDecimal)obj[5]);
-			result.add(cd);
-		}
-		rr.setResultList(result);
-    	return rr;
-    }
-    public static ReportResult reportCount(ReportForm reportForm){
-    	StringBuffer buf = new StringBuffer();
-    	StringBuffer countBuf = new StringBuffer();
-    	
-    	HashMap<String, Object> conditions = new HashMap<String, Object>();
-    	buf.append("select act.act_name, pt.partner_name , count(*), sum(act.amount)  ,bt.biz_name, sum(ctrl.amount) ,sum((ctrl.amount*(10-ctrl.rebate_rate))/10) ");
-    	buf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act,business_type bt ");
-    	buf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
-    	buf.append(" and bt.biz_no=act.biz_no and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
-    	
-    	if(reportForm.getStartDateByString()!= null){
-    		buf.append(" and ctrl.check_day >='"+reportForm.getStartDateByString()+"'");
-    	}
-    	if(reportForm.getEndDate()!= null){
-    		buf.append(" and ctrl.check_day <='"+reportForm.getEndDateByString()+"'");
-    	}
-    	if(reportForm.getActNo()!=null ){
-    		buf.append(" and act.act_no = '"+reportForm.getActNo()+"'" );
-    	}
-    	if(reportForm.getParterNo()!=null  ){
-    		buf.append(" and pt.partner_no ='"+reportForm.getParterNo()+"' " );
-    	}
-    	if(reportForm.getPartnerCatalogId()!=null  ){
-    		buf.append(" and pt.partner_catalog ='"+reportForm.getPartnerCatalogId()+"' " );
-    	}
-    	if(reportForm.getMarketingCatalogId()!=null ){
-    		buf.append(" and act.marketing_catalog = '"+reportForm.getMarketingCatalogId()+"'" );
-    	}
-    	buf.append(" group by act.act_name, pt.partner_name ");
-    	EntityManager em = entityManager();
-		Query q = em.createNativeQuery(buf.toString());
-		ReportResult rr=new ReportResult();
-		rr.setCount(q.getResultList().size());
-		List list;
-		if(reportForm.isPagination()){
-		   list=q.setFirstResult((reportForm.getPage() - 1) * reportForm.getSize()).setMaxResults(reportForm.getSize()).getResultList();
-		}else{
-			list=q.getResultList();
-		}
-		List result=new ArrayList();
-		for (Iterator it = list.iterator(); it.hasNext();) {
-			Object[] obj = (Object[]) it.next();
-			PartnerSummaryItem ps = new PartnerSummaryItem();
-			ps.setActName((String)obj[0]);
-			ps.setPartnerName((String)obj[1]);
-			ps.setCount(((BigInteger)obj[2]).intValue());
-			ps.setBizName((String)obj[4]);
-			ps.setOriginalAmount((BigDecimal)obj[5]);
-			ps.setExchangeAmount((BigDecimal)obj[3]);
-			ps.setRebateAmount((BigDecimal)obj[6]);
-			result.add(ps);
-		}
-		rr.setResultList(result);
-    	return rr;
-    }
+	//end getter/setter
+	//TODO 改成公共的数据字典服务提供
+//	public String getMmsStatusDesc(){
+//		return DictView.getDescByKeyName(MMS_SMS_STATUS_KEY_NAME, this.getMmsStatus().toString());
+//		
+//	}
+//	
+//
+//	public String getSmsStatusDesc(){
+//		return DictView.getDescByKeyName(MMS_SMS_STATUS_KEY_NAME, this.getSmsStatus().toString());
+//	}
+//
+//	public String getCouponStatusDesc() {
+//		return DictView.getValuesByKeyName(DICT_KEY_NAME).get(
+//				couponStatus.toString());
+//	}
+
+	
+
+
+
 }

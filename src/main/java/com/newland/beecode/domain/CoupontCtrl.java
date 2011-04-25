@@ -2,122 +2,194 @@ package com.newland.beecode.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
-import javax.persistence.Query;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.roo.addon.entity.RooEntity;
-import org.springframework.roo.addon.javabean.RooJavaBean;
-import org.springframework.roo.addon.tostring.RooToString;
 
-@RooJavaBean
-@RooToString
-@RooEntity
+@Entity
 public class CoupontCtrl {
 
-	/**
-	 * 已冲正
-	 */
-	public static final String VOID_FLAG_BACKOFF = "0";
-	
-	/**
-	 * 正常
-	 */
-	public static final String VOID_FLAG_NORMAL = "1";
-	
-	/**
-	 * 礼券编号
-	 */
+    /**
+     * 已冲正
+     */
+    public static final String VOID_FLAG_BACKOFF = "0";
+    /**
+     * 正常
+     */
+    public static final String VOID_FLAG_NORMAL = "1";
+    /**
+     * 礼券编号
+     */
+    @Id
+    @Column
     private Long couponId;
-
     /**
      * 随机串号（二维码文本）
      */
-    @Size(max = 45)
+    @Column
     private String serialNo;
-    
     /**
      * 终端流水号
      */
+    @Column
     private String traceNo;
-    
     /**
      * 批次号
      */
+    @Column
     private String batchNo;
-
     /**
      * 编码版本号（二维码文本编码格式版本）
      */
-    @NotNull
-    @Size(max = 2)
+    @Column
     private String encodeVersion;
-
     /**
      * 商户终端编号
      */
-    @NotNull
-    @Size(max = 16)
+    @Column
     private String deviceNo;
-
     /**
      * 商户编号
      */
-    @NotNull
-    @Size(max = 32)
+    @Column
     private String partnerNo;
-    
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(style = "S-")
     private Date checkDay;
-
     /**
      * 检验日期
      */
-    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "S-")
     private Date checkDate;
-
     /**
      * 折扣金额或兑换物品价值
      */
+    @Column
     private BigDecimal amount;
-
     /**
      * 折扣率
      */
+    @Column
     private BigDecimal rebateRate;
-    
     /**
      * 业务代码
      */
-    @NotNull
-    @Size(max = 2)
+    @Column
     private String businessType;
-    
     /**
      * 冲正标志 
      * 0 - 冲正  
      * 1 - 未冲正
      */
+    @Column
     private String voidFlag;
-    /**
-     * 
-     * @param serialNo
-     * @return
-     */
-    public static List findBySerialNo(String serialNo) {
-    	Query q = entityManager()
-		.createQuery(
-				"select couponCtrl from CoupontCtrl as couponCtrl where couponCtrl.serialNo=:serialNo");
-        q.setParameter("serialNo", serialNo);
-        return (List) q.getResultList();
+
+    public BigDecimal getAmount() {
+        return amount;
     }
-    
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
+    public Date getCheckDate() {
+        return checkDate;
+    }
+
+    public void setCheckDate(Date checkDate) {
+        this.checkDate = checkDate;
+    }
+
+    public Date getCheckDay() {
+        return checkDay;
+    }
+
+    public void setCheckDay(Date checkDay) {
+        this.checkDay = checkDay;
+    }
+
+    public Long getCouponId() {
+        return couponId;
+    }
+
+    public void setCouponId(Long couponId) {
+        this.couponId = couponId;
+    }
+
+    public String getDeviceNo() {
+        return deviceNo;
+    }
+
+    public void setDeviceNo(String deviceNo) {
+        this.deviceNo = deviceNo;
+    }
+
+    public String getEncodeVersion() {
+        return encodeVersion;
+    }
+
+    public void setEncodeVersion(String encodeVersion) {
+        this.encodeVersion = encodeVersion;
+    }
+
+    public String getPartnerNo() {
+        return partnerNo;
+    }
+
+    public void setPartnerNo(String partnerNo) {
+        this.partnerNo = partnerNo;
+    }
+
+    public BigDecimal getRebateRate() {
+        return rebateRate;
+    }
+
+    public void setRebateRate(BigDecimal rebateRate) {
+        this.rebateRate = rebateRate;
+    }
+
+    public String getSerialNo() {
+        return serialNo;
+    }
+
+    public void setSerialNo(String serialNo) {
+        this.serialNo = serialNo;
+    }
+
+    public String getTraceNo() {
+        return traceNo;
+    }
+
+    public void setTraceNo(String traceNo) {
+        this.traceNo = traceNo;
+    }
+
+    public String getVoidFlag() {
+        return voidFlag;
+    }
+
+    public void setVoidFlag(String voidFlag) {
+        this.voidFlag = voidFlag;
+    }
 }

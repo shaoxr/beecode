@@ -3,7 +3,6 @@ package com.newland.beecode.domain.report;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.newland.beecode.domain.DictView;
 
 public class PartnerSummaryItem {
 	
