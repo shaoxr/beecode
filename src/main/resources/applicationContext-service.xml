@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+<!-- POS货单管理service -->
+	<bean id="invokePosService" class="com.newlandcomputer.posp.txn.InvokePosServiceImpl">
+		<property name="beecodeService" ref="beecodeService"/>
+	</bean>
+	<bean id="beecodeService" class="com.newland.beecode.service.impl.BeecodeServiceImpl">
+	</bean>
+</beans>
