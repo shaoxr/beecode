@@ -17,11 +17,8 @@ public class MarketingCatalogDao extends SimpleHibernateTemplate<MarketingCatalo
 
     public List<MarketingCatalog> findMarketingCatalogEntries(int firstResult, int maxResults) {
 
-        Query query = createQuery("select o from MarketingCatalog o");
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
 
-        return query.list();
+        return findListByQuery("select o from MarketingCatalog o", firstResult, maxResults);
 
     }
 

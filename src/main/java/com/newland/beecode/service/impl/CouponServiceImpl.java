@@ -37,7 +37,7 @@ public class CouponServiceImpl implements CouponService {
     @Resource(name = "couponDao")
     private CouponDao couponDao;
     
-    @Resource(name = "couponCtrlDao")
+    @Resource(name = "couponCtlDao")
     private CouponCtrlDao ctrlDao;
     
     @Autowired

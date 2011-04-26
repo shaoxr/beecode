@@ -19,13 +19,8 @@ public class OrganizationDao extends SimpleHibernateTemplate<Organization, Long>
  
     
         public List<Organization> findOrganizationEntries(int firstResult, int maxResults) {
-        //return entityManager().createQuery("select o from Organization o", Organization.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-            
-                    Query query = createQuery("select o from Organization o");
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
 
-        return query.list();
+                return findListByQuery("select o from Organization o", firstResult, maxResults);
     }  
         
             public long countOrganizations() {

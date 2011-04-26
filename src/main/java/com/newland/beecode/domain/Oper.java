@@ -1,6 +1,5 @@
 package com.newland.beecode.domain;
 
-import com.sun.istack.internal.NotNull;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;

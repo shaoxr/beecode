@@ -17,13 +17,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository("operDao")
 public class OperDao extends SimpleHibernateTemplate<Oper, Long> {
-        public List<MarketingAct> findOperEntries(int firstResult, int maxResults) {
+        public List<Oper> findOperEntries(int firstResult, int maxResults) {
 
-        Query query = createQuery("select o from Oper o");
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
-
-        return query.list();
+                        return findListByQuery("select o from Oper o", firstResult, maxResults);
 
     }
 

@@ -23,13 +23,8 @@ public class CouponCtrlDao extends SimpleHibernateTemplate<CoupontCtrl, Long> {
     }
 
     public List<CoupontCtrl> findCoupontCtrlEntries(int firstResult, int maxResults) {
-        //return entityManager().createQuery("select o from CoupontCtrl o", CoupontCtrl.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
 
-        Query query = createQuery("select o from CoupontCtrl o");
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
-
-        return query.list();
+        return findListByQuery("select o from CoupontCtrl o", firstResult, maxResults);
     }
 
     public long countCoupontCtrls() {

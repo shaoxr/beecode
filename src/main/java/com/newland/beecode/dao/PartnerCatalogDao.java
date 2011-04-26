@@ -26,14 +26,9 @@ public class PartnerCatalogDao extends SimpleHibernateTemplate<PartnerCatalog, L
     }
     
        public  List<PartnerCatalog> findPartnerCatalogEntries(int firstResult, int maxResults) {
-        //return entityManager().createQuery("select o from PartnerCatalog o", PartnerCatalog.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
-           
-           
-        Query query = createQuery("select o from PartnerCatalog o");
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
 
-        return query.list();
+        
+        return findListByQuery("select o from PartnerCatalog o", firstResult, maxResults);
     }  
     
        

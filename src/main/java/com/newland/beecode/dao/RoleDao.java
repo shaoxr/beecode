@@ -19,11 +19,7 @@ public class RoleDao extends SimpleHibernateTemplate<Roles, Long> {
 
     public List<Roles> findRolesEntries(int firstResult, int maxResults) {
 
-        Query query = createQuery("select o from MarketingAct o");
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
-
-        return query.list();
+        return findListByQuery("select o from MarketingAct o", firstResult, maxResults);
 
     }
     public long countRoleses() {

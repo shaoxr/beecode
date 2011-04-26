@@ -138,11 +138,8 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
 
     public List<MarketingAct> findMarketingActEntries(int firstResult, int maxResults) {
 
-        Query query = createQuery("select o from MarketingAct o");
-        query.setFirstResult(firstResult);
-        query.setMaxResults(maxResults);
-
-        return query.list();
+        
+                return findListByQuery("select o from MarketingAct o", firstResult, maxResults);
 
     }
 

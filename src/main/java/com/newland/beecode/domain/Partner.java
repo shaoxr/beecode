@@ -36,7 +36,7 @@ public class Partner {
     private String partnerNo;
     @Column
     private String partnerName;
-    @Column
+    
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private PartnerCatalog partnerCatalog;
     

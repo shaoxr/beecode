@@ -24,7 +24,7 @@ import org.springframework.web.util.WebUtils;
 @Controller
 public class CoupontCtrlController {
     
-    @Resource(name = "couponCtrlDao")
+    @Resource(name = "couponCtlDao")
     private CouponCtrlDao coupontCtrlDao;
     
     

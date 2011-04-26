@@ -1,5 +1,8 @@
 package com.newland.beecode.domain;
 
+import javax.persistence.Entity;
+
+
 public class Customer {
 	/**
 	 * 姓名
