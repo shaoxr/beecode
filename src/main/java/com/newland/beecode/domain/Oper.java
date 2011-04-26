@@ -43,4 +43,54 @@ public class Oper {
 
     @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
     private Set<Roles> roles = new HashSet<Roles>();
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Date getGenTime() {
+        return genTime;
+    }
+
+    public void setGenTime(Date genTime) {
+        this.genTime = genTime;
+    }
+
+    public String getOperName() {
+        return operName;
+    }
+
+    public void setOperName(String operName) {
+        this.operName = operName;
+    }
+
+    public Long getOperNo() {
+        return operNo;
+    }
+
+    public void setOperNo(Long operNo) {
+        this.operNo = operNo;
+    }
+
+    public String getOperPwd() {
+        return operPwd;
+    }
+
+    public void setOperPwd(String operPwd) {
+        this.operPwd = operPwd;
+    }
+
+    public Set<Roles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Roles> roles) {
+        this.roles = roles;
+    }
+    
+    
 }

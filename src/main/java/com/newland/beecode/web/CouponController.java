@@ -1,8 +1,8 @@
 package com.newland.beecode.web;
 
+import com.intensoft.base.Dictionary;
+import com.intensoft.formater.DictViewFormatter;
 import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,19 +18,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.newland.beecode.domain.Coupon;
-import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.MarketingCatalog;
 import com.newland.beecode.domain.condition.CouponCondition;
 import com.newland.beecode.domain.condition.QueryResult;
 import com.newland.beecode.service.CouponService;
-import com.newland.beecode.service.MarketingActService;
 import com.newland.beecode.service.MarketingCatalogService;
 import com.newland.utils.PaginationHelper;
+
+import javax.annotation.Resource;
 
 @RequestMapping("/coupons")
 @Controller
 public class CouponController {
 
+    @Resource(name = "dictViewService")
+    private DictViewFormatter dictView;
+    
 	@Autowired
 	private CouponService couponService;
 	@Autowired
@@ -103,14 +106,20 @@ public class CouponController {
 	public Collection<MarketingCatalog> populateMarketingCatalogs() {
 		return this.marketingCatalogService.findAll();
 	}
+        
 	@ModelAttribute("cuoponstatusList")
-	public Collection<DictView> populateCuoponstatusList() {
-		return DictView.getListByKeyName(Coupon.DICT_KEY_NAME);
+	public Collection<Dictionary> populateCuoponstatusList() {
+		//return DictView.getListByKeyName(Coupon.DICT_KEY_NAME);
+            return dictView.getSelectModelCollection(Coupon.DICT_KEY_NAME);
 	}
+        
 	@ModelAttribute("mmsstatusList")
-	public Collection<DictView> populateMmsstatusList() {
-		return DictView.getListByKeyName(Coupon.MMS_SMS_STATUS_KEY_NAME);
+	public Collection<Dictionary> populateMmsstatusList() {
+		//return DictView.getListByKeyName(Coupon.MMS_SMS_STATUS_KEY_NAME);
+            return dictView.getSelectModelCollection(Coupon.MMS_SMS_STATUS_KEY_NAME);
 	}
+        
+        
 	void addDateTimeFormatPatterns(Model model) {
 		model.addAttribute("date_format", "yyyy-MM-dd");
 		model.addAttribute("datetime_format", "yyyy-MM-dd HH:mm");

@@ -4,6 +4,7 @@
  */
 package com.newland.beecode.dao;
 
+import com.intensoft.dao.hibernate.Page;
 import com.intensoft.dao.hibernate.SimpleHibernateTemplate;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.condition.MarketingActCondition;
@@ -78,22 +79,22 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
         }
         QueryResult qr = new QueryResult();
 
-        Query q = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(countBuf.append(buf).toString()); 
-        
+        Query q = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(countBuf.append(buf).toString());
+
         for (Iterator<String> it = conditions.keySet().iterator(); it.hasNext();) {
             String cond = it.next();
             q.setParameter(cond, conditions.get(cond));
         }
-       
+
         List list = q.list();
-        if(!list.isEmpty()){
+        if (!list.isEmpty()) {
             Object[] obj = (Object[]) list.get(0);
-            Long count = new Long((String)obj[0]);
+            Long count = new Long((String) obj[0]);
             qr.setCount(count.intValue());
         }
-        
-        Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(countBuf.append(buf).toString()); 
-        
+
+        Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(countBuf.append(buf).toString());
+
         for (Iterator<String> it = conditions.keySet().iterator(); it.hasNext();) {
             String cond = it.next();
             query.setParameter(cond, conditions.get(cond));
@@ -133,5 +134,37 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
 
     public List<MarketingAct> findByCatalog(Long id) {
         return find("select MarketingAct from  MarketingAct marketingAct where marketingAct.marketingCatalog.id=:id", id);
+    }
+
+    public List<MarketingAct> findMarketingActEntries(int firstResult, int maxResults) {
+
+        Query query = createQuery("select o from MarketingAct o");
+        query.setFirstResult(firstResult);
+        query.setMaxResults(maxResults);
+
+        return query.list();
+
+    }
+
+    public long countMarketingActs() {
+        //return entityManager().createQuery("select count(o) from MarketingAct o", Long.class).getSingleResult();
+
+        return this.findLong("select count(o) from MarketingAct o");
+
+    }
+
+    public List<MarketingAct> findMarketingActsByActStatus(Integer actStatus) {
+        if (actStatus == null) {
+            throw new IllegalArgumentException("The actStatus argument is required");
+        }
+
+        return find("SELECT MarketingAct FROM MarketingAct AS marketingact WHERE marketingact.actStatus = :actStatus", actStatus);
+    }
+
+    public MarketingAct findMarketingAct(Long id) {
+        if (id == null) {
+            return null;
+        }
+        return this.findUniqueByProperty("id", id);
     }
 }

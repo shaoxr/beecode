@@ -192,4 +192,6 @@ public class CoupontCtrl {
     public void setVoidFlag(String voidFlag) {
         this.voidFlag = voidFlag;
     }
+    
+    
 }

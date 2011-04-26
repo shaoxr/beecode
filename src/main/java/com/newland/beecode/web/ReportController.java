@@ -1,48 +1,49 @@
 package com.newland.beecode.web;
 
+import com.newland.beecode.dao.CouponDao;
+import com.newland.beecode.dao.MarketingCatalogDao;
+import com.newland.beecode.dao.PartnerCatalogDao;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 
-import net.sf.json.JSONObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.AbstractController;
 
-import com.newland.beecode.domain.Coupon;
-import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.MarketingCatalog;
-import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.PartnerCatalog;
 import com.newland.beecode.domain.report.ReportForm;
 import com.newland.beecode.domain.report.ReportResult;
 import com.newland.beecode.service.ExcelService;
-import com.newland.beecode.service.ReportService;
 import com.newland.utils.NewlandUtil;
 import com.newland.utils.PaginationHelper;
+import javax.annotation.Resource;
 
 @RequestMapping("/report")
 @Controller
 public class ReportController {
 	
-	
+
+    @Resource(name = "couponDao")
+    private CouponDao couponDao;
+    
+    @Resource(name = "marketingCatalogDao")
+    private MarketingCatalogDao catalogDao;
+    
+    @Resource(name = "partnerCatalogDao")
+    private PartnerCatalogDao partnerCatalogDao;
+    
 	@Autowired
 	private ExcelService detailExcelService;
 	@Autowired
@@ -83,7 +84,8 @@ public class ReportController {
 		reportForm.setSize(size);
 		reportForm.setPagination(true);
 		
-		ReportResult rr=Coupon.reportCount(reportForm);
+		//ReportResult rr=Coupon.reportCount(reportForm);
+                ReportResult rr = couponDao.reportCount(reportForm);
 		int maxPages = PaginationHelper.calcMaxPages(size, rr.getCount());
 		model.addAttribute("rptDetail",rr.getResultList());
 		addDateTimeFormatPatterns(model);
@@ -137,7 +139,8 @@ public class ReportController {
 		reportForm.setSize(size);
 		reportForm.setPagination(true);
 		
-		ReportResult rr=Coupon.reportDetail(reportForm);
+		//ReportResult rr=Coupon.reportDetail(reportForm);
+                ReportResult rr = couponDao.reportDetail(reportForm);
 		int maxPages = PaginationHelper.calcMaxPages(size, rr.getCount());
 		model.addAttribute("rptDetail",rr.getResultList());
 		addDateTimeFormatPatterns(model);
@@ -171,7 +174,7 @@ public class ReportController {
 		    FileInputStream nStream;
 		try {
 			nStream = new FileInputStream(this.detailExcelService.generateExcelFile(
-					Coupon.reportDetail(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
+					couponDao.reportDetail(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
 			response.setContentType("application/vnd.ms-excel");
 			response.addHeader("Content-Disposition", "attachment;filename=" +"reportDetailExcel");
 			int l=0;
@@ -204,7 +207,7 @@ public class ReportController {
 		    FileInputStream nStream;
 		try {
 			nStream = new FileInputStream(this.countExcelService.generateExcelFile(
-					Coupon.reportCount(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
+					couponDao.reportCount(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
 			response.setContentType("application/vnd.ms-excel");
 			response.addHeader("Content-Disposition", "attachment;filename=" + "reportCountExcel");
 			int l=0;
@@ -226,10 +229,10 @@ public class ReportController {
 	}
 	@ModelAttribute("marketingCatalogs")
 	public Collection<MarketingCatalog> populateMarketingCatalogs() {
-		return MarketingCatalog.findAllMarketingCatalogs();
+		return catalogDao.findAll();
 	}
 	@ModelAttribute("partnerCatalogs")
     public Collection<PartnerCatalog> populatePartnerCatalogs() {
-        return PartnerCatalog.findAllPartnerCatalogs();
+        return partnerCatalogDao.findAll();
     }
 }

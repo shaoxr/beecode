@@ -1,8 +1,11 @@
 package com.newland.beecode.web;
 
+import com.newland.beecode.dao.RoleDao;
 import com.newland.beecode.domain.Roles;
 import java.io.UnsupportedEncodingException;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,67 +20,76 @@ import org.springframework.web.util.WebUtils;
 @Controller
 public class RolesController {
     
+    @Resource(name = "roleDao")
+    private RoleDao roleDao;
+    
+    
         @RequestMapping(method = RequestMethod.POST)
     public String create(@Valid Roles roles, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("roles", roles);
             return "roleses/create";
         }
-        roles.persist();
+        //roles.persist();
+        roleDao.save(roles);
+        
         return "redirect:/roleses/" + encodeUrlPathSegment(roles.getId().toString(), request);
     }
     
     @RequestMapping(params = "form", method = RequestMethod.GET)
-    public String RolesController.createForm(Model model) {
+    public String createForm(Model model) {
         model.addAttribute("roles", new Roles());
         return "roleses/create";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public String RolesController.show(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("roles", Roles.findRoles(id));
+    public String show(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("roles", roleDao.findUniqueByProperty("id", id));
         model.addAttribute("itemId", id);
         return "roleses/show";
     }
     
     @RequestMapping(method = RequestMethod.GET)
-    public String RolesController.list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model model) {
+    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model model) {
         if (page != null || size != null) {
             int sizeNo = size == null ? 10 : size.intValue();
-            model.addAttribute("roleses", Roles.findRolesEntries(page == null ? 0 : (page.intValue() - 1) * sizeNo, sizeNo));
-            float nrOfPages = (float) Roles.countRoleses() / sizeNo;
+            model.addAttribute("roleses", roleDao.findRolesEntries(page == null ? 0 : (page.intValue() - 1) * sizeNo, sizeNo));
+            float nrOfPages = (float) roleDao.countRoleses() / sizeNo;
             model.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
         } else {
-            model.addAttribute("roleses", Roles.findAllRoleses());
+            model.addAttribute("roleses", roleDao.findAll());
         }
         return "roleses/list";
     }
     
     @RequestMapping(method = RequestMethod.PUT)
-    public String RolesController.update(@Valid Roles roles, BindingResult result, Model model, HttpServletRequest request) {
+    public String update(@Valid Roles roles, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("roles", roles);
             return "roleses/update";
         }
-        roles.merge();
+        //roles.merge();
+        roleDao.update(roles);
         return "redirect:/roleses/" + encodeUrlPathSegment(roles.getId().toString(), request);
     }
     
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.GET)
-    public String RolesController.updateForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("roles", Roles.findRoles(id));
+    public String updateForm(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("roles", roleDao.findUniqueByProperty("id", id));
         return "roleses/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public String RolesController.delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model model) {
-        Roles.findRoles(id).remove();
+    public String delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model model) {
+        //Roles.findRoles(id).remove();
+        roleDao.delete(id);
+        
         model.addAttribute("page", (page == null) ? "1" : page.toString());
         model.addAttribute("size", (size == null) ? "10" : size.toString());
         return "redirect:/roleses?page=" + ((page == null) ? "1" : page.toString()) + "&size=" + ((size == null) ? "10" : size.toString());
     }
     
-    String RolesController.encodeUrlPathSegment(String pathSegment, HttpServletRequest request) {
+    public String encodeUrlPathSegment(String pathSegment, HttpServletRequest request) {
         String enc = request.getCharacterEncoding();
         if (enc == null) {
             enc = WebUtils.DEFAULT_CHARACTER_ENCODING;
