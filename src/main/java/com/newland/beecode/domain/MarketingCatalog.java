@@ -12,9 +12,35 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class MarketingCatalog {
-
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getCatalogName() {
+		return catalogName;
+	}
+	public void setCatalogName(String catalogName) {
+		this.catalogName = catalogName;
+	}
+	public Date getCreateTime() {
+		return createTime;
+	}
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+	@Id
+	@Column(name="id")
+    private Long id;
     @Column
-    @Id
     private String catalogName;
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "MM")

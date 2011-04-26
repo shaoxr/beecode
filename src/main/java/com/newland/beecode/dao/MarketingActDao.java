@@ -30,7 +30,7 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
 
         QueryResult qr = new QueryResult();
 
-        List list = this.find("from MarketingAct ma where ma.actStatus= :actStatus", actStatus);
+        List<MarketingAct> list = this.find("from MarketingAct ma where ma.actStatus= :actStatus", actStatus);
 
         List counts = this.find("select count(ma) from MarketingAct ma where ma.actStatus= :actStatus", actStatus);
 
@@ -40,7 +40,6 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
             qr.setCount(Integer.valueOf(o[0].toString()));
         }
 
-        //TODO 还不明白为什么这么写，先这样.
         qr.setResultList(list);
         return qr;
 

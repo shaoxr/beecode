@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,16 +22,19 @@ import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.MarketingCatalog;
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.condition.SelectForm;
+import com.newland.beecode.service.MarketingActService;
+import com.newland.beecode.service.PartnerService;
 
 @RequestMapping("/ajax")
 @Controller
 public class AjaxRequestController {
-    
-    private 
-    
+    @Autowired
+    private MarketingActService marketingActService;
+    @Autowired
+    private PartnerService partnerService;
 	@RequestMapping(value="/marketingAct", method=RequestMethod.GET)
-	public void getMarketingAct(@RequestParam String id,Model model,HttpServletResponse response){
-		List<MarketingAct> list=MarketingAct.findByCatalog(new Long(id));
+	public void getMarketingAct(@RequestParam Long id,Model model,HttpServletResponse response){
+		List<MarketingAct> list=marketingActService.findByCatalog(id);
 		List<SelectForm> list2=new ArrayList<SelectForm>();
 		for (MarketingAct marketingAct :list){
 			SelectForm sf=new SelectForm();
@@ -50,8 +54,8 @@ public class AjaxRequestController {
 		}
 	}
 	@RequestMapping(value="/partner", method=RequestMethod.GET)
-	public void getPartner(@RequestParam String id,Model model,HttpServletResponse response){
-		List<Partner> list=Partner.findByCatalog(new Long(id));
+	public void getPartner(@RequestParam Long id,Model model,HttpServletResponse response){
+		List<Partner> list=this.partnerService.findByCatalog(id);
 		List<SelectForm> list2=new ArrayList<SelectForm>();
 		for (Partner partner :list){
 			SelectForm sf=new SelectForm();

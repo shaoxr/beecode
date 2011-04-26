@@ -16,7 +16,6 @@ import javax.persistence.Transient;
 
 
 import com.newland.beecode.domain.report.PartnerSummaryItem;
-import com.sun.tools.javac.resources.version;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

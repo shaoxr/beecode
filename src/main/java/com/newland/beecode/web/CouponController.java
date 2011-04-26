@@ -18,12 +18,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.newland.beecode.domain.Coupon;
-import com.newland.beecode.domain.DictView;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.MarketingCatalog;
 import com.newland.beecode.domain.condition.CouponCondition;
 import com.newland.beecode.domain.condition.QueryResult;
 import com.newland.beecode.service.CouponService;
+import com.newland.beecode.service.MarketingActService;
+import com.newland.beecode.service.MarketingCatalogService;
 import com.newland.utils.PaginationHelper;
 
 @RequestMapping("/coupons")
@@ -32,11 +33,13 @@ public class CouponController {
 
 	@Autowired
 	private CouponService couponService;
+	@Autowired
+	private MarketingCatalogService marketingCatalogService;
 	
 	@RequestMapping(value = "/{couponId}", method = RequestMethod.GET)
 	public String show(@PathVariable(value = "couponId") Long couponId,
 			Model model) {
-		model.addAttribute("coupon", Coupon.findCoupon(couponId));
+		model.addAttribute("coupon", this.couponService.findByCoupon(couponId));
 		addDateTimeFormatPatterns(model);
 		return "coupons/show";
 	}
@@ -85,7 +88,7 @@ public class CouponController {
 		cc.setPagination(true);
 		cc.setPage(page);
 		cc.setSize(size);
-		QueryResult qr=Coupon.findCouponsByCondition(cc);
+		QueryResult qr=this.couponService.findByCondition(cc);
 		model.addAttribute("coupons",qr.getResultList());
 		int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
 		model.addAttribute("maxPages", maxPages);
@@ -98,7 +101,7 @@ public class CouponController {
 
 	@ModelAttribute("marketingCatalogs")
 	public Collection<MarketingCatalog> populateMarketingCatalogs() {
-		return MarketingCatalog.findAllMarketingCatalogs();
+		return this.marketingCatalogService.findAll();
 	}
 	@ModelAttribute("cuoponstatusList")
 	public Collection<DictView> populateCuoponstatusList() {

@@ -18,7 +18,7 @@ import org.springframework.web.util.WebUtils;
 public class RolesController {
     
         @RequestMapping(method = RequestMethod.POST)
-    public String RolesController.create(@Valid Roles roles, BindingResult result, Model model, HttpServletRequest request) {
+    public String create(@Valid Roles roles, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("roles", roles);
             return "roleses/create";

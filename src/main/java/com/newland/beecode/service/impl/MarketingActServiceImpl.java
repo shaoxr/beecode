@@ -1,7 +1,5 @@
 package com.newland.beecode.service.impl;
 
-import com.newland.beecode.dao.CouponDao;
-import com.newland.beecode.dao.MarketingActDao;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,11 +15,17 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.tempuri.service.MMSService;
+
+import com.newland.beecode.dao.CouponDao;
+import com.newland.beecode.dao.MarketingActDao;
 import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.Customer;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.MmsTemplate;
 import com.newland.beecode.domain.condition.CheckResult;
+import com.newland.beecode.domain.condition.MarketingActCondition;
+import com.newland.beecode.domain.condition.QueryResult;
+import com.newland.beecode.domain.report.MarketingActSummary;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.BarCodeService;
@@ -31,6 +35,7 @@ import com.newland.utils.FilesHelper;
 import com.newland.utils.NewlandUtil;
 import com.newland.utils.UuidHelper;
 import com.ws.util.service.SMSService;
+
 import javax.annotation.Resource;
 
 @Service(value = "marketingActService")
@@ -291,6 +296,33 @@ public class MarketingActServiceImpl implements MarketingActService {
 		}
 		//MarketingAct.expired(date);
                 actDao.expired(date);
+	}
+
+	@Override
+	public List<MarketingAct> findByCatalog(Long id) {
+		return this.actDao.findByProperty("marketingCatalog.id", id);
+	}
+
+	@Override
+	public MarketingAct findByActNo(Long actNo) {
+		List<MarketingAct> list= this.actDao.findByProperty("actNo", actNo);
+		return list.size()>0?list.get(0):null;
+	}
+
+	@Override
+	public QueryResult findByCondition(MarketingActCondition mac) {
+		return this.actDao.findMarketingActsByCondition(mac);
+	}
+
+	@Override
+	public MarketingActSummary marketingSummary(Long actNo) {
+		return this.actDao.marketingSummary(actNo);
+	}
+
+	@Override
+	public QueryResult findMarketingActEntriesByActStatus(Integer actStatus,
+			Integer page, Integer size) {
+		return this.actDao.findMarketingActEntriesByActStatus(actStatus, page, size);
 	}
 
 }

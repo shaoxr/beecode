@@ -33,10 +33,8 @@ public class BarCodeServiceImpl implements BarCodeService{
 			
 			MatrixToImageWriter.writeToFile(bitMatrix, subfix, f);
 		} catch (WriterException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			  e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

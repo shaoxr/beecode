@@ -1,7 +1,5 @@
 package com.newland.beecode.service.impl;
 
-import com.newland.beecode.dao.CouponCtrlDao;
-import com.newland.beecode.dao.CouponDao;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -14,10 +12,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.newland.beecode.dao.CouponCtrlDao;
+import com.newland.beecode.dao.CouponDao;
 import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.CoupontCtrl;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.Partner;
+import com.newland.beecode.domain.condition.CouponCondition;
+import com.newland.beecode.domain.condition.QueryResult;
 import com.newland.beecode.domain.report.CouponSumaryReport;
 import com.newland.beecode.domain.report.CouponSumaryReport.CouponSummaryDayItem;
 import com.newland.beecode.domain.report.CouponSumaryReport.CouponSummaryPartnerItem;
@@ -287,4 +289,15 @@ public class CouponServiceImpl implements CouponService {
         return this.checkCoupon(req);
 
     }
+
+	@Override
+	public Coupon findByCoupon(Long couponId) {
+		List<Coupon> list=this.couponDao.findByProperty("couponId", couponId);
+		return list.size()>0?list.get(0):null;
+	}
+
+	@Override
+	public QueryResult findByCondition(CouponCondition cc) {
+		return this.couponDao.findCouponsByCondition(cc);
+	}
 }

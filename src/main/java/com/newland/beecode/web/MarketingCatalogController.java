@@ -12,14 +12,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.web.mvc.controller.RooWebScaffold;
 
 import com.newland.beecode.domain.MarketingCatalog;
+import com.newland.beecode.service.MarketingCatalogService;
 import com.newland.utils.PaginationHelper;
 //@RooWebScaffold(path = "marketingCatalog", formBackingObject = MarketingCatalog.class, create=true,update=false)
 @RequestMapping("/marketingCatalog")
 @Controller
 public class MarketingCatalogController {
+	@Autowired
+	private MarketingCatalogService marketingCatalogService;
 	@RequestMapping(params = "form", method = RequestMethod.GET)
 	public String create(Model model){
 		model.addAttribute("marketingCatalog", new MarketingCatalog());
@@ -30,7 +34,7 @@ public class MarketingCatalogController {
 		marketingCatalog.setCreateTime(new Date());
 		marketingCatalog.setUpdateTime(new Date());
 		marketingCatalog.persist();
-		model.addAttribute("marketingCatalog", MarketingCatalog.findAllMarketingCatalogs());
+		model.addAttribute("marketingCatalog", this.marketingCatalogService.findAll());
 		return "redirect:/marketingCatalog";
 	}
 	@RequestMapping(method = RequestMethod.GET)

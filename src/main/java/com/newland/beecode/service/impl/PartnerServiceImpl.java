@@ -1,14 +1,13 @@
 package com.newland.beecode.service.impl;
 
-import com.newland.beecode.dao.PartnerDao;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.stereotype.Service;
 
+import com.newland.beecode.dao.PartnerDao;
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.report.PartnerSummaryItem;
 import com.newland.beecode.domain.report.PartnerSummaryReport;
@@ -72,4 +71,14 @@ public class PartnerServiceImpl implements PartnerService {
 
         return rpt;
     }
+
+	@Override
+	public List<Partner> findByCatalog(Long catalogId) {
+		return this.partnerDao.findByProperty("partnerCatalog.id", catalogId);
+	}
+
+	@Override
+	public List<Partner> findAll() {
+		return this.partnerDao.findAll();
+	}
 }

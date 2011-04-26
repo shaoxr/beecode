@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<!--
+		This makes it possible to specify java.net.SocketAddress values (e.g.
+		:1234 below) as Strings. They will be converted into
+		java.net.InetSocketAddress objects by Spring.
+	-->
+	<bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+		<property name="customEditors">
+			<map>
+				<entry key="java.net.SocketAddress">
+					<bean class="org.apache.mina.integration.spring.InetSocketAddressEditor" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="depotPosProtocolCodecFactory" class="com.newland.posp.mina.boc.PosProtocolCodecFactory">
+		<constructor-arg>
+			<bean class="com.newland.posp.mina.boc.DepotPosProtocolEncoder" />
+		</constructor-arg>
+		<constructor-arg>
+			<bean class="com.newland.posp.mina.boc.DepotPosProtocolDecoder" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="istPosProtocolCodecFactory" class="com.newland.posp.mina.boc.PosProtocolCodecFactory">
+		<constructor-arg>
+			<bean class="com.newland.posp.mina.boc.IstPosProtocolEncoder" />
+		</constructor-arg>
+		<constructor-arg>
+			<bean class="com.newland.posp.mina.boc.IstPosProtocolDecoder" />
+		</constructor-arg>
+	</bean>
+
+	<!-- The filter chain. a BillPos and a LoggingFilter -->
+	<bean id="depotFilterChainBuilder"
+		class="org.apache.mina.integration.spring.DefaultIoFilterChainBuilderFactoryBean">
+		<property name="filters">
+			<list>
+				<bean class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+					<constructor-arg ref="depotPosProtocolCodecFactory" />
+				</bean>
+				<bean class="org.apache.mina.filter.LoggingFilter" />
+			</list>
+		</property>
+	</bean>
+	<bean id="isoFilterChainBuilder"
+		class="org.apache.mina.integration.spring.DefaultIoFilterChainBuilderFactoryBean">
+		<property name="filters">
+			<list>
+				<bean class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+					<constructor-arg ref="istPosProtocolCodecFactory" />
+				</bean>
+				<bean class="org.apache.mina.filter.LoggingFilter" />
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- The filter chain. a BillPos and a LoggingFilter -->
+	<bean id="istFilterChainBuilder"
+		class="org.apache.mina.integration.spring.DefaultIoFilterChainBuilderFactoryBean">
+		<property name="filters">
+			<list>
+				<bean class="org.apache.mina.filter.codec.ProtocolCodecFilter">
+					<constructor-arg ref="istPosProtocolCodecFactory" />
+				</bean>
+				<bean class="org.apache.mina.filter.LoggingFilter" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- The IoAcceptor which binds to port 1234 -->
+	<bean id="istChannel" class="com.newland.posp.channel.mina.MinaNacChannel">
+		<property name="socketAddress" value="localhost:6666" />
+		<property name="socketConnectorConfig">
+			<bean class="org.apache.mina.transport.socket.nio.SocketConnectorConfig">
+				<property name="filterChainBuilder" ref="isoFilterChainBuilder" />
+			</bean>
+		</property>
+		<property name="messageKeyGenerator">
+			<bean class="com.newland.iso.ISOTerminalKeyGenerator">
+				<property name="terminalIdField" value="11"/>
+				<property name="traceNumberField" value="41"/>
+			</bean>
+		</property>
+	</bean>
+</beans>

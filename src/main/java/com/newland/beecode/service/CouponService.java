@@ -1,6 +1,10 @@
 package com.newland.beecode.service;
 
+import java.util.List;
+
 import com.newland.beecode.domain.Coupon;
+import com.newland.beecode.domain.condition.CouponCondition;
+import com.newland.beecode.domain.condition.QueryResult;
 import com.newland.beecode.domain.report.CouponSumaryReport;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.service.impl.CouponBackoffRequest;
@@ -47,4 +51,10 @@ public interface CouponService {
 	 * @throws AppException 
 	 */
 	public Coupon queryCoupon(CouponCheckRequest req) throws AppException;
+	
+	
+	public Coupon findByCoupon(Long couponId);
+	
+	
+	public QueryResult findByCondition(CouponCondition cc);
 }

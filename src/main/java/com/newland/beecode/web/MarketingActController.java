@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
-import com.newland.beecode.domain.DictView;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.MarketingCatalog;
 import com.newland.beecode.domain.Partner;
@@ -37,6 +35,9 @@ import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.CheckService;
 import com.newland.beecode.service.CouponService;
 import com.newland.beecode.service.MarketingActService;
+import com.newland.beecode.service.MarketingCatalogService;
+import com.newland.beecode.service.PartnerCatalogService;
+import com.newland.beecode.service.PartnerService;
 import com.newland.utils.PaginationHelper;
 
 @RequestMapping("/marketingacts")
@@ -48,6 +49,12 @@ public class MarketingActController {
 	
 	@Autowired
 	private CouponService couponService;
+	@Autowired
+	private PartnerService partnerService;
+	@Autowired
+	private PartnerCatalogService partnerCatalogService;
+	@Autowired
+	private MarketingCatalogService marketingCatalogService;
 	
 	@RequestMapping(value = "/append", method = RequestMethod.POST)
 	public String append(
@@ -67,7 +74,7 @@ public class MarketingActController {
 	@RequestMapping(value = "/append/{actNo}", method = RequestMethod.GET)
 	public String appendForm(@PathVariable("actNo") Long actNo, Model model) {
 		addDateTimeFormatPatterns(model);
-		MarketingAct marketingAct= MarketingAct.findMarketingAct(actNo);
+		MarketingAct marketingAct= marketingActService.findByActNo(actNo);
 		model.addAttribute("marketingAct",marketingAct);
 		if(marketingAct.getBizNo().equals("00")){
 			model.addAttribute("fuck", true);
@@ -98,7 +105,7 @@ public class MarketingActController {
 		mac.setPage(page);
 		mac.setSize(size);
 		mac.setPagination(true);
-		QueryResult qr=MarketingAct.findMarketingActsByCondition(mac);
+		QueryResult qr=this.marketingActService.findByCondition(mac);
 		int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
 		model.addAttribute("maxPages",maxPages);
 		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
@@ -147,9 +154,9 @@ public class MarketingActController {
 	@RequestMapping(value = "/{actNo}", method = RequestMethod.GET)
 	public String show(@PathVariable("actNo") Long actNo, Model model) {
 		addDateTimeFormatPatterns(model);
-		MarketingAct act = MarketingAct.findMarketingAct(actNo);
+		MarketingAct act = this.marketingActService.findByActNo(actNo);
 		if (act.getActStatus() > MarketingAct.STATUS_BEFORE_GIVE) {
-			MarketingActSummary marketingSummary = MarketingAct.marketingSummary(actNo);
+			MarketingActSummary marketingSummary = this.marketingActService.marketingSummary(actNo);
 			act.setSummary(marketingSummary);
 			model.addAttribute("statistics",true);
 		}
@@ -258,7 +265,7 @@ public class MarketingActController {
 				page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
 				size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
 				String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
-				QueryResult qr=MarketingAct.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_GIVE, page, size);
+				QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_GIVE, page, size);
 		    model.addAttribute("marketingacts",qr.getResultList());
 		    model.addAttribute("maxPages",qr.getCount());
 		    model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
@@ -270,7 +277,7 @@ public class MarketingActController {
 	public String sendMarketingActForm(@PathVariable("actNo") Long actNo,
 			Model model) {
 		addDateTimeFormatPatterns(model);
-		model.addAttribute("marketingact", MarketingAct.findMarketingAct(actNo));
+		model.addAttribute("marketingact", this.marketingActService.findByActNo(actNo));
 		model.addAttribute("itemId", actNo);
 		return "marketingacts/send/form";
 	}
@@ -323,7 +330,7 @@ public class MarketingActController {
 		mac.setPage(page);
 		mac.setSize(size);
 		mac.setPagination(true);
-		QueryResult qr=MarketingAct.findMarketingActsByCondition(mac);
+		QueryResult qr=this.marketingActService.findByCondition(mac);
 		int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
 		model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
 		model.addAttribute("maxPages",maxPages);
@@ -342,15 +349,15 @@ public class MarketingActController {
 	
 	@ModelAttribute("partners")
 	public Collection<Partner> populatePartners() {
-		return Partner.findAllPartners();
+		return this.partnerService.findAll();
 	}
 	@ModelAttribute("partnerCatalogs")
 	public Collection<PartnerCatalog> populatePartnerCatalogs() {
-		return PartnerCatalog.findAllPartnerCatalogs();
+		return this.partnerCatalogService.findAll();
 	}
 	@ModelAttribute("marketingCatalogs")
 	public Collection<MarketingCatalog> populateMarketingCatalogs() {
-		return MarketingCatalog.findAllMarketingCatalogs();
+		return this.marketingCatalogService.findAll();
 	}
 	@ModelAttribute("marketingsBlank")
 	public Collection<MarketingAct> populateMarketingsBlank() {

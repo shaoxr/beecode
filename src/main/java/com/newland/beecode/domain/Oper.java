@@ -1,6 +1,5 @@
 package com.newland.beecode.domain;
 
-import apple.laf.CoreUIConstants.Size;
 import com.sun.istack.internal.NotNull;
 import java.util.Date;
 import java.util.HashSet;

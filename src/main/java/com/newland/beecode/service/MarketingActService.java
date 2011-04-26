@@ -2,6 +2,7 @@ package com.newland.beecode.service;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Query;
 
@@ -9,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.MarketingAct;
+import com.newland.beecode.domain.condition.MarketingActCondition;
+import com.newland.beecode.domain.condition.QueryResult;
 import com.newland.beecode.domain.report.MarketingActSummary;
 import com.newland.beecode.exception.AppException;
 
@@ -64,4 +67,14 @@ public interface MarketingActService {
 	 * @param act
 	 */
 	public void genCode(Coupon coupon,MarketingAct act);
+	 
+	public List<MarketingAct> findByCatalog(Long id);
+	
+	public MarketingAct findByActNo(Long actNo);
+	
+	public QueryResult findByCondition(MarketingActCondition mac);
+	
+	public MarketingActSummary marketingSummary(Long actNo);
+	
+	public QueryResult findMarketingActEntriesByActStatus(Integer actStatus,Integer page,Integer size);
 }
