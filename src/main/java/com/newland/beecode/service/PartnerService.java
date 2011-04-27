@@ -12,4 +12,14 @@ public interface PartnerService {
 	public List<Partner> findByCatalog(Long catalogId);
 	
 	public List<Partner> findAll();
+	
+	public void save(Partner partner);
+	
+	public Partner findById(Long id);
+	
+	public List<Partner> findPartnerEntries(Integer start,Integer end);
+	
+	public long countPartners();
+	
+	public void delete(Long id);
 }

@@ -77,4 +77,12 @@ public interface MarketingActService {
 	public MarketingActSummary marketingSummary(Long actNo);
 	
 	public QueryResult findMarketingActEntriesByActStatus(Integer actStatus,Integer page,Integer size);
+	
+	public List<MarketingAct> findMarketingActEntries(Integer firstResult,Integer maxResults);
+	
+	public long countMarketingActs();
+	
+	public List<MarketingAct> findAll();
+	
+	public List<MarketingAct> findMarketingActsByActStatus(Integer actStatus);
 }

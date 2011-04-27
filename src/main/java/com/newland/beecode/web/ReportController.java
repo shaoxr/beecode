@@ -25,7 +25,10 @@ import com.newland.beecode.domain.MarketingCatalog;
 import com.newland.beecode.domain.PartnerCatalog;
 import com.newland.beecode.domain.report.ReportForm;
 import com.newland.beecode.domain.report.ReportResult;
+import com.newland.beecode.service.CouponService;
 import com.newland.beecode.service.ExcelService;
+import com.newland.beecode.service.MarketingCatalogService;
+import com.newland.beecode.service.PartnerCatalogService;
 import com.newland.utils.NewlandUtil;
 import com.newland.utils.PaginationHelper;
 import javax.annotation.Resource;
@@ -34,16 +37,12 @@ import javax.annotation.Resource;
 @Controller
 public class ReportController {
 	
-
-    @Resource(name = "couponDao")
-    private CouponDao couponDao;
-    
-    @Resource(name = "marketingCatalogDao")
-    private MarketingCatalogDao catalogDao;
-    
-    @Resource(name = "partnerCatalogDao")
-    private PartnerCatalogDao partnerCatalogDao;
-    
+    @Autowired
+    private CouponService couponService;
+    @Autowired
+    private MarketingCatalogService marketingCatalogService;
+    @Autowired
+    private PartnerCatalogService partnerCatalogService;
 	@Autowired
 	private ExcelService detailExcelService;
 	@Autowired
@@ -85,7 +84,7 @@ public class ReportController {
 		reportForm.setPagination(true);
 		
 		//ReportResult rr=Coupon.reportCount(reportForm);
-                ReportResult rr = couponDao.reportCount(reportForm);
+                ReportResult rr = this.couponService.reportCount(reportForm);
 		int maxPages = PaginationHelper.calcMaxPages(size, rr.getCount());
 		model.addAttribute("rptDetail",rr.getResultList());
 		addDateTimeFormatPatterns(model);
@@ -140,7 +139,7 @@ public class ReportController {
 		reportForm.setPagination(true);
 		
 		//ReportResult rr=Coupon.reportDetail(reportForm);
-                ReportResult rr = couponDao.reportDetail(reportForm);
+                ReportResult rr = this.couponService.reportDetail(reportForm);
 		int maxPages = PaginationHelper.calcMaxPages(size, rr.getCount());
 		model.addAttribute("rptDetail",rr.getResultList());
 		addDateTimeFormatPatterns(model);
@@ -174,7 +173,7 @@ public class ReportController {
 		    FileInputStream nStream;
 		try {
 			nStream = new FileInputStream(this.detailExcelService.generateExcelFile(
-					couponDao.reportDetail(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
+					this.couponService.reportDetail(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
 			response.setContentType("application/vnd.ms-excel");
 			response.addHeader("Content-Disposition", "attachment;filename=" +"reportDetailExcel");
 			int l=0;
@@ -207,7 +206,7 @@ public class ReportController {
 		    FileInputStream nStream;
 		try {
 			nStream = new FileInputStream(this.countExcelService.generateExcelFile(
-					couponDao.reportCount(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
+					this.couponService.reportCount(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
 			response.setContentType("application/vnd.ms-excel");
 			response.addHeader("Content-Disposition", "attachment;filename=" + "reportCountExcel");
 			int l=0;
@@ -229,10 +228,10 @@ public class ReportController {
 	}
 	@ModelAttribute("marketingCatalogs")
 	public Collection<MarketingCatalog> populateMarketingCatalogs() {
-		return catalogDao.findAll();
+		return this.marketingCatalogService.findAll();
 	}
 	@ModelAttribute("partnerCatalogs")
     public Collection<PartnerCatalog> populatePartnerCatalogs() {
-        return partnerCatalogDao.findAll();
+        return this.partnerCatalogService.findAll();
     }
 }

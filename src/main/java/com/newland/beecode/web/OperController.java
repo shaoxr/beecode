@@ -3,6 +3,7 @@ package com.newland.beecode.web;
 import com.newland.beecode.dao.OperDao;
 import com.newland.beecode.domain.Oper;
 import com.newland.beecode.domain.Roles;
+import com.newland.beecode.service.OperService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
@@ -24,9 +25,7 @@ import org.springframework.web.util.WebUtils;
 @Controller
 public class OperController {
 
-    @Resource(name = "operDao")
-    private OperDao operDao;
-    
+    private OperService operService;    
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Oper oper, BindingResult result, Model model,
 			HttpServletRequest request) {
@@ -36,8 +35,7 @@ public class OperController {
 			return "opers/create";
 		}
 		oper.setGenTime(new Date());
-		//oper.persist();
-                operDao.save(oper);
+                this.operService.save(oper);
 		return "redirect:/opers/"
 				+ encodeUrlPathSegment(oper.getOperNo().toString(), request);
 	}
@@ -45,13 +43,13 @@ public class OperController {
 	@RequestMapping(params = "form", method = RequestMethod.GET)
 	public String createForm(Model model) {
 		model.addAttribute("oper", new Oper());
-		model.addAttribute("roleses", operDao.findAll());
+		model.addAttribute("roleses", this.operService.findAll());
 		return "opers/create";
 	}
 
 	@RequestMapping(value = "/{operNo}", method = RequestMethod.GET)
 	public String show(@PathVariable("operNo") Long operNo, Model model) {
-		model.addAttribute("oper", operDao.get(operNo));
+		model.addAttribute("oper", this.operService.findById(operNo));
 		model.addAttribute("itemId", operNo);
 		
 		return "opers/show";
@@ -65,15 +63,15 @@ public class OperController {
 		addDateTimeFormatPatterns(model);
 		if (page != null || size != null) {
 			int sizeNo = size == null ? 10 : size.intValue();
-			model.addAttribute("opers", operDao.findOperEntries(page == null ? 0
+			model.addAttribute("opers", this.operService.findOperEntries(page == null ? 0
 					: (page.intValue() - 1) * sizeNo, sizeNo));
-			float nrOfPages = (float) operDao.countOpers() / sizeNo;
+			float nrOfPages = (float) this.operService.countOpers() / sizeNo;
 			model.addAttribute(
 					"maxPages",
 					(int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
 							: nrOfPages));
 		} else {
-			model.addAttribute("opers", operDao.findAll());
+			model.addAttribute("opers", this.operService.findAll());
 		}
 		return "opers/list";
 	}
@@ -86,13 +84,13 @@ public class OperController {
 			addDateTimeFormatPatterns(model);
 			return "opers/update";
 		}
-		Oper dboper = operDao.get(oper.getOperNo());
+		Oper dboper = this.operService.findById(oper.getOperNo());
 
 		dboper.setEnabled(oper.isEnabled());
 		dboper.setOperName(oper.getOperName());
 		dboper.setRoles(oper.getRoles());
 		//dboper.persist();
-                operDao.save(dboper);
+                this.operService.save(dboper);
 
 		return "redirect:/opers/"
 				+ encodeUrlPathSegment(oper.getOperNo().toString(), request);
@@ -100,8 +98,8 @@ public class OperController {
 
 	@RequestMapping(value = "/{operNo}", params = "form", method = RequestMethod.GET)
 	public String updateForm(@PathVariable("operNo") Long operNo, Model model) {
-		model.addAttribute("oper", operDao.get(operNo));
-		model.addAttribute("roleses", operDao.findAll());
+		model.addAttribute("oper", this.operService.findById(operNo));
+		model.addAttribute("roleses", this.operService.findAll());
 		return "opers/update";
 	}
 
@@ -110,13 +108,13 @@ public class OperController {
 			@RequestParam(required = true, value = "oldPassword") String oldPassword,
 			@RequestParam(required = true, value = "operNo") Long operNo,
 			Model model, HttpServletRequest request) {
-		Oper oper = operDao.get(operNo);
+		Oper oper = this.operService.findById(operNo);
 		if(oper == null || oper.getOperPwd().equals(oldPassword) == false){
 			//TODO throw exec, forward to error page
 		}
 		oper.setOperPwd(newPassword);
 		//oper.merge();
-                operDao.update(oper);
+                this.operService.update(oper);
 		return "redirect:";
 	}
 
@@ -133,7 +131,7 @@ public class OperController {
 			@RequestParam(value = "size", required = false) Integer size,
 			Model model) {
 		//Oper.findOper(operNo).remove();
-                operDao.delete(operNo);
+                this.operService.delete(operNo);
 		model.addAttribute("page", (page == null) ? "1" : page.toString());
 		model.addAttribute("size", (size == null) ? "10" : size.toString());
 		return "redirect:/opers?page="

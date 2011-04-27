@@ -14,5 +14,13 @@ public interface MarketingCatalogService {
 	public List<MarketingCatalog> findAll();
 	
 	public List<MarketingCatalog> findMarketingCatalogEntries(Integer page,Integer size);
+	
+	public void save(MarketingCatalog marketingCatalog);
+	
+	public long countMarketingCatalogs();
+	
+	public void delete(Long id);
+	
+	public MarketingCatalog findById(Long id);
 
 }

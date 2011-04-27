@@ -325,4 +325,24 @@ public class MarketingActServiceImpl implements MarketingActService {
 		return this.actDao.findMarketingActEntriesByActStatus(actStatus, page, size);
 	}
 
+	@Override
+	public List<MarketingAct> findMarketingActEntries(Integer firstResult, Integer maxResults) {
+		return this.actDao.findMarketingActEntries(firstResult, maxResults);
+	}
+
+	@Override
+	public long countMarketingActs() {
+		return this.actDao.countMarketingActs();
+	}
+
+	@Override
+	public List<MarketingAct> findAll() {
+	    return this.actDao.findAll();
+	}
+
+	@Override
+	public List<MarketingAct> findMarketingActsByActStatus(Integer actStatus) {
+		return this.actDao.findMarketingActsByActStatus(actStatus);
+	}
+
 }

@@ -52,8 +52,6 @@ public class MarketingActController {
     private DictViewFormatter dictView;
     
     //在View层应该调用service，不应调用dao.待再次重构,//TODO
-    @Resource(name = "marketingActDao")
-    private MarketingActDao actDao;
 
 	@Autowired
 	private MarketingActService marketingActService;
@@ -189,11 +187,10 @@ public class MarketingActController {
 			Model model) {
 		if (page != null || size != null) {
 			int sizeNo = size == null ? 10 : size.intValue();
-			model.addAttribute("marketingacts", actDao
-					.findMarketingActEntries(
+			model.addAttribute("marketingacts", this.marketingActService.findMarketingActEntries(
 							page == null ? 0 : (page.intValue() - 1) * sizeNo,
 							sizeNo));
-			float nrOfPages = (float) actDao.countMarketingActs()
+			float nrOfPages = (float) this.marketingActService.countMarketingActs()
 					/ sizeNo;
 			model.addAttribute(
 					"maxPages",
@@ -202,7 +199,7 @@ public class MarketingActController {
 		} else {
 			model.addAttribute("marketingacts",
 					
-                                actDao.findAll());
+                                this.marketingActService.findAll());
 		}
 		addDateTimeFormatPatterns(model);
 		return "marketingacts/list";
@@ -236,11 +233,22 @@ public class MarketingActController {
 	}
     
 	@RequestMapping(value = "/find/check", method = RequestMethod.GET)
-	public String findMarketingAct4Check(Model model) {
-		model.addAttribute(
-				"marketingacts",
-				actDao.findMarketingActsByActStatus(
-						MarketingAct.STATUS_BEFORE_RECHECK));
+	public String findMarketingAct4Check(Model model,
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "size", required = false) Integer size,
+			@RequestParam(value = "query", required = false) String query,
+			HttpServletRequest request) {
+		        Map<String, String> queryParams = PaginationHelper.makeParameters(
+				request.getParameterMap(), request.getQueryString());
+				page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+				size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+				String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
+				QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_RECHECK, page, size);
+		    model.addAttribute("marketingacts",qr.getResultList());
+		    model.addAttribute("maxPages",qr.getCount());
+		    model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
+		    model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
 		return "marketingacts/list/check";
 	}
 
@@ -248,7 +256,7 @@ public class MarketingActController {
 	public String checkMarketingActForm(@PathVariable("actNo") Long actNo,
 			Model model) {
 		addDateTimeFormatPatterns(model);
-		model.addAttribute("marketingAct", actDao.findMarketingAct(actNo));
+		model.addAttribute("marketingAct",this.marketingActService.findByActNo(actNo));
 		model.addAttribute("itemId", actNo);
 		return "marketingacts/check/form";
 	}

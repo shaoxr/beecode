@@ -31,14 +31,14 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
 
         QueryResult qr = new QueryResult();
 
-        List<MarketingAct> list = this.find("from MarketingAct ma where ma.actStatus= :actStatus", actStatus);
+        List<MarketingAct> list = this.find("from MarketingAct ma where ma.actStatus=?", actStatus);
 
-        List counts = this.find("select count(ma) from MarketingAct ma where ma.actStatus= :actStatus", actStatus);
+        List counts = this.find("select count(ma) from MarketingAct ma where ma.actStatus=?", actStatus);
 
         if (!counts.isEmpty()) {
 
-            Object[] o = (Object[]) counts.get(0);
-            qr.setCount(Integer.valueOf(o[0].toString()));
+        	Long o = (Long) counts.get(0);
+            qr.setCount(o.intValue());
         }
 
         qr.setResultList(list);
@@ -133,7 +133,7 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
     }
 
     public List<MarketingAct> findByCatalog(Long id) {
-        return find("select MarketingAct from  MarketingAct marketingAct where marketingAct.marketingCatalog.id=:id", id);
+        return find("select MarketingAct from  MarketingAct marketingAct where marketingAct.marketingCatalog.id=?", id);
     }
 
     public List<MarketingAct> findMarketingActEntries(int firstResult, int maxResults) {
@@ -155,7 +155,7 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
             throw new IllegalArgumentException("The actStatus argument is required");
         }
 
-        return find("SELECT MarketingAct FROM MarketingAct AS marketingact WHERE marketingact.actStatus = :actStatus", actStatus);
+        return find("SELECT marketingact FROM MarketingAct AS marketingact WHERE marketingact.actStatus =?", actStatus);
     }
 
     public MarketingAct findMarketingAct(Long id) {

@@ -24,6 +24,8 @@ import com.newland.beecode.domain.report.CouponSumaryReport;
 import com.newland.beecode.domain.report.CouponSumaryReport.CouponSummaryDayItem;
 import com.newland.beecode.domain.report.CouponSumaryReport.CouponSummaryPartnerItem;
 import com.newland.beecode.domain.report.CouponSummaryItem;
+import com.newland.beecode.domain.report.ReportForm;
+import com.newland.beecode.domain.report.ReportResult;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.CouponService;
@@ -299,5 +301,15 @@ public class CouponServiceImpl implements CouponService {
 	@Override
 	public QueryResult findByCondition(CouponCondition cc) {
 		return this.couponDao.findCouponsByCondition(cc);
+	}
+
+	@Override
+	public ReportResult reportCount(ReportForm reportForm) {
+		return this.couponDao.reportCount(reportForm);
+	}
+
+	@Override
+	public ReportResult reportDetail(ReportForm reportForm) {
+		return this.couponDao.reportDetail(reportForm);
 	}
 }

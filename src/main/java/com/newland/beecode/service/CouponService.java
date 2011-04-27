@@ -6,6 +6,8 @@ import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.condition.CouponCondition;
 import com.newland.beecode.domain.condition.QueryResult;
 import com.newland.beecode.domain.report.CouponSumaryReport;
+import com.newland.beecode.domain.report.ReportForm;
+import com.newland.beecode.domain.report.ReportResult;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.service.impl.CouponBackoffRequest;
 import com.newland.beecode.service.impl.CouponCheckRequest;
@@ -57,4 +59,8 @@ public interface CouponService {
 	
 	
 	public QueryResult findByCondition(CouponCondition cc);
+	
+	public ReportResult reportCount(ReportForm reportForm);
+	
+	public ReportResult reportDetail(ReportForm reportForm);
 }

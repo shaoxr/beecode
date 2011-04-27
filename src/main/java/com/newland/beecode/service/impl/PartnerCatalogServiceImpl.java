@@ -23,5 +23,33 @@ public class PartnerCatalogServiceImpl implements PartnerCatalogService{
 	public List<PartnerCatalog> findAll() {
 		return this.partnerCatalogDao.findAll();
 	}
+	@Override
+	public PartnerCatalog findPartnerCatalogsByCatalogName(String catalogName) {
+		List<PartnerCatalog> list= this.partnerCatalogDao.findPartnerCatalogsByCatalogName(catalogName);
+		return list.size()>0?list.get(0):null;
+	}
+	@Override
+	public void save(PartnerCatalog partnerCatalog) {
+		this.partnerCatalogDao.save(partnerCatalog);
+		
+	}
+	@Override
+	public List<PartnerCatalog> findPartnerCatalogEntries(Integer start,
+			Integer end) {
+		return this.partnerCatalogDao.findPartnerCatalogEntries(start, end);
+	}
+	@Override
+	public long countPartnerCatalogs() {
+		return this.partnerCatalogDao.countPartnerCatalogs();
+	}
+	@Override
+	public void delete(Long id) {
+		this.partnerCatalogDao.delete(id);
+		
+	}
+	@Override
+	public PartnerCatalog findById(Long id) {
+		return this.partnerCatalogDao.get(id);
+	}
 
 }

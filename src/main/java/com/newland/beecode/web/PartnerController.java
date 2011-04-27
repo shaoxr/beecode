@@ -1,13 +1,12 @@
 package com.newland.beecode.web;
 
-import com.newland.beecode.dao.PartnerCatalogDao;
-import com.newland.beecode.dao.PartnerDao;
 import java.util.Collection;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.PartnerCatalog;
+import com.newland.beecode.service.PartnerCatalogService;
+import com.newland.beecode.service.PartnerService;
 import com.newland.utils.PaginationHelper;
 import javax.annotation.Resource;
 
@@ -26,11 +27,11 @@ import javax.annotation.Resource;
 @Controller
 public class PartnerController {
 	
-    @Resource(name = "partnerDao")
-    private PartnerDao partnerDao;
     
-    @Resource(name = "partnerCatalogDao")
-    private PartnerCatalogDao partnerCatalogDao;
+    @Autowired
+    private PartnerCatalogService partnerCatalogService;
+    @Autowired
+    private PartnerService partnerService;
     
 	@RequestMapping(params = "form", method = RequestMethod.GET)
 	public String create(Model model){
@@ -40,12 +41,12 @@ public class PartnerController {
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Partner partner,Model model){
 		//partner.persist();
-            partnerDao.save(partner);
+            partnerService.save(partner);
 		return "redirect:/partners";
 	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String show(Model model,@PathVariable("id") Long id){
-		model.addAttribute("partner", partnerDao.findUniqueByProperty("id", id));
+		model.addAttribute("partner", this.partnerService.findById(id));
 		return "partners/show";
 	}
 	@RequestMapping(method = RequestMethod.GET)
@@ -56,8 +57,8 @@ public class PartnerController {
 		request.getParameterMap(), "");
 		page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
 		size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-		model.addAttribute("partners", partnerDao.findPartnerEntries((page.intValue() - 1) * size, size));
-		int maxPages = PaginationHelper.calcMaxPages(size,partnerDao.countPartners());
+		model.addAttribute("partners", this.partnerService.findPartnerEntries((page.intValue() - 1) * size, size));
+		int maxPages = PaginationHelper.calcMaxPages(size,this.partnerService.countPartners());
 		model.addAttribute("maxPages",maxPages);
 		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
 		model.addAttribute(PaginationHelper.PARAM_SIZE, size);
@@ -68,7 +69,7 @@ public class PartnerController {
     		@RequestParam(value = "page", required = false) Integer page, 
     		@RequestParam(value = "size", required = false) Integer size, Model model) {
 		//Partner.findPartner(id).remove();
-            partnerDao.delete(id);
+            this.partnerService.delete(id);
         model.addAttribute("page", (page == null) ? "1" : page.toString());
         model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
         return "redirect:/partners";
@@ -77,7 +78,7 @@ public class PartnerController {
     public Collection<PartnerCatalog> populatePartnerCatalogs() {
         //return PartnerCatalog.findAllPartnerCatalogs();
             
-        return partnerCatalogDao.findAll();    
+        return this.partnerCatalogService.findAll();    
     }
 	
 }

@@ -28,5 +28,23 @@ public class MarketingCatalogServiceImpl implements MarketingCatalogService{
 			Integer size) {
 		return null;
 	}
+	@Override
+	public void save(MarketingCatalog marketingCatalog) {
+		this.marketingCatalogDao.save(marketingCatalog);
+		
+	}
+	@Override
+	public long countMarketingCatalogs() {
+		return this.marketingCatalogDao.countMarketingCatalogs();
+	}
+	@Override
+	public void delete(Long id) {
+		this.marketingCatalogDao.delete(id);
+		
+	}
+	@Override
+	public MarketingCatalog findById(Long id) {
+		return this.marketingCatalogDao.get(id);
+	}
 
 }

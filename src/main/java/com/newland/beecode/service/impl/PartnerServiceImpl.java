@@ -81,4 +81,31 @@ public class PartnerServiceImpl implements PartnerService {
 	public List<Partner> findAll() {
 		return this.partnerDao.findAll();
 	}
+
+	@Override
+	public void save(Partner partner) {
+		this.partnerDao.save(partner);
+		
+	}
+
+	@Override
+	public Partner findById(Long id) {
+		return this.partnerDao.get(id);
+	}
+
+	@Override
+	public List<Partner> findPartnerEntries(Integer start, Integer end) {
+		return this.partnerDao.findPartnerEntries(start, end);
+	}
+
+	@Override
+	public long countPartners() {
+		return this.countPartners();
+	}
+
+	@Override
+	public void delete(Long id) {
+		this.partnerDao.delete(id);
+		
+	}
 }
