@@ -3,9 +3,13 @@ package com.newland.beecode.service.impl;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +26,7 @@ import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.Customer;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.MmsTemplate;
+import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.condition.CheckResult;
 import com.newland.beecode.domain.condition.MarketingActCondition;
 import com.newland.beecode.domain.condition.QueryResult;
@@ -31,6 +36,7 @@ import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.BarCodeService;
 import com.newland.beecode.service.CheckService;
 import com.newland.beecode.service.MarketingActService;
+import com.newland.beecode.service.PartnerService;
 import com.newland.utils.FilesHelper;
 import com.newland.utils.NewlandUtil;
 import com.newland.utils.UuidHelper;
@@ -46,6 +52,8 @@ public class MarketingActServiceImpl implements MarketingActService {
     
     @Resource(name = "couponDao")
     private CouponDao couponDao;
+    @Autowired
+    private PartnerService partnerService;
     
 	private Log logger = LogFactory.getLog(MarketingActServiceImpl.class);
 	private List<MarketingAct> giveActs = new LinkedList<MarketingAct>();
@@ -165,8 +173,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 				this.genTxtFile(coupon, act);
 			}
 			act.setCouponSum(count);
-			//act.merge();
-                        actDao.update(act);
+            actDao.update(act);
 		} catch (Exception e) {
 			throw new AppException(ErrorsCode.BIZ_COUPON_GEN_ERROR,"",e);
 		}
@@ -237,7 +244,7 @@ public class MarketingActServiceImpl implements MarketingActService {
     	
     }
 	@Transactional
-	public void createMarketingAct(MarketingAct act, MultipartFile file)throws AppException {
+	public void createMarketingAct(MarketingAct act,Long[] partners, MultipartFile file)throws AppException {
 		String fileName=String.valueOf(System.currentTimeMillis());
 		CheckResult cr=this.checkService.customerCheck(file, fileName);
 		if(!cr.isPass()){
@@ -247,8 +254,16 @@ public class MarketingActServiceImpl implements MarketingActService {
 		act.setGenTime(new Date());
 		act.setActStatus(MarketingAct.STATUS_BEFORE_RECHECK);
 		act.setMmsContent(act.getMmsTemplate().getTemplateContent());
-		//act.persist();
-                actDao.save(act);
+		act.setPartners(this.genPartners(partners));
+        actDao.save(act);
+	}
+	private  Set<Partner> genPartners(Long[] partners){
+		Set<Partner> partnerList=new HashSet<Partner>();
+		for(Long id:partners){
+			Partner partner=this.partnerService.findById(id);
+			partnerList.add(partner);
+		}
+		return partnerList;
 	}
 
 	@Transactional
@@ -310,8 +325,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 	}
 
 	@Override
-	public QueryResult findByCondition(MarketingActCondition mac) {
-		return this.actDao.findMarketingActsByCondition(mac);
+	public List<MarketingAct> findByCondition(MarketingActCondition mac,Integer start,Integer end) {
+		return this.actDao.excuteSimpleQuery(mac,start,end);
 	}
 
 	@Override
@@ -343,6 +358,11 @@ public class MarketingActServiceImpl implements MarketingActService {
 	@Override
 	public List<MarketingAct> findMarketingActsByActStatus(Integer actStatus) {
 		return this.actDao.findMarketingActsByActStatus(actStatus);
+	}
+
+	@Override
+	public int countByCondition(MarketingActCondition mac) {
+		return this.actDao.countSimpleQuery(mac);
 	}
 
 }

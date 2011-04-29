@@ -129,15 +129,39 @@ public class ErrorsCode {
 	 * 创建活动时，客户资料检查不通过
 	 */
 	public static final String BIZ_CUSTOMER_CREATE_ERROR="BIZ.021";
+	/**
+	 * 商户类别名称已经存在
+	 */
+	public static final String BIZ_PARTNERCATALOG_NAME_EXITS="BIZ.PARTNERCATALOG.001";
+	/**
+	 * 商户类别下已经存在商户，无法删除
+	 */
+	public static final String BIZ_PARTNERCATALOG_DONOT_DELETE="BIZ.PARTNERCATALOG.002";
 	
 	
 	
+	
+	
+	/**
+	 * 商户名已经存在
+	 */
+	public static final String BIZ_PARTNER_NAME_EXITS="BIZ.PARTNER.001";
+	
+	/**
+	 * 商户号已经存在
+	 */
+	public static final String BIZ_PARTNER_NO_EXITS="BIZ.PARTNER.002";
 	
 	/**
 	 * 
 	 * 
 	 * 
 	 */
+	
+	/**
+	 * 活动类别下已经存在活动，无法删除
+	 */
+	public static final String BIZ_MARKINGCATALOG_DONOT_DELETE="BIZ.MARKETINGCATALOG.001";
 	
 	
 }

@@ -23,77 +23,12 @@ import java.util.LinkedList;
 import org.hibernate.Query;
 
 @Repository("couponDao")
-public class CouponDao extends SimpleHibernateTemplate<Coupon, Integer> {
+public class CouponDao extends BaseDao<Coupon,Long> {
 
     public List<Coupon> findByActNo(Long actNo) {
         return this.find("from Coupon as coupon where coupon.marketingAct.actNo= :actNo", actNo);
     }
 
-    @SuppressWarnings("unchecked")
-    public QueryResult findCouponsByCondition(CouponCondition cc) {
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        StringBuffer buf = new StringBuffer();
-        StringBuffer countBuf = new StringBuffer();
-        StringBuffer queryBuf = new StringBuffer();
-        countBuf.append("SELECT count(coupon) FROM Coupon AS coupon ,MarketingAct as ma WHERE coupon.marketingAct.actNo=ma.actNo ");
-        queryBuf.append("SELECT coupon FROM Coupon AS coupon ,MarketingAct as ma WHERE coupon.marketingAct.actNo=ma.actNo ");
-        if (cc.getMinGenTime() != null && cc.getMaxGenTime() != null
-                && cc.getMinGenTime().compareTo(cc.getMaxGenTime()) < 1) {
-            buf.append(" and coupon.genTime >= :minGenTime and coupon.genTime <= :maxGenTime");
-            conditions.put("minGenTime", cc.getMinGenTime());
-            conditions.put("maxGenTime", cc.getMaxGenTime());
-        }
-        if (cc.getCouponId() != null) {
-            buf.append(" and coupon.couponId = :couponId");
-            conditions.put("couponId", cc.getCouponId());
-        }
-        if (cc.getCouponStatus() != null) {
-            buf.append(" and coupon.couponStatus = :couponStatus");
-            conditions.put("couponStatus", cc.getCouponStatus());
-        }
-
-        if (cc.getMobile() != null && cc.getMobile().length() > 0) {
-            buf.append(" and coupon.acctMobile = :mobile");
-            conditions.put("mobile", cc.getMobile());
-        }
-
-        if (cc.getActNo() != null) {
-            buf.append(" and coupon.marketingAct.actNo = :acctNo");
-            conditions.put("acctNo", cc.getActNo());
-        }
-        if (cc.getMarketingCatalogId() != null) {
-            buf.append(" and ma.marketingCatalog.id = :id");
-            conditions.put("id", cc.getMarketingCatalogId());
-        }
-
-        QueryResult qr = new QueryResult();
-        Query q = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(qr.toString());
-
-        for (Iterator<String> it = conditions.keySet().iterator(); it.hasNext();) {
-            String cond = it.next();
-            q.setParameter(cond, conditions.get(cond));
-        }
-        if (cc.isPagination()) {
-
-            q = q.setFirstResult((cc.getPage() - 1) * cc.getSize());
-            q = q.setMaxResults(cc.getSize());
-            List result = q.list();
-            qr.setResultList(result);
-            for (Iterator<String> it = conditions.keySet().iterator(); it.hasNext();) {
-                String cond = it.next();
-                q.setParameter(cond, conditions.get(cond));
-            }
-            //qr.setCount(((Long) q.getSingleResult()).intValue());
-            if (!result.isEmpty()) {
-                Object[] o = (Object[]) result.get(0);
-                qr.setCount(Integer.valueOf(o[0].toString()));
-            }
-
-        } else {
-            qr.setResultList(q.list());
-        }
-        return qr;
-    }
 
     public Coupon findBySerialNo(String serialNo) {
 
@@ -133,17 +68,15 @@ public class CouponDao extends SimpleHibernateTemplate<Coupon, Integer> {
     public ReportResult reportDetail(ReportForm reportForm) {
         StringBuffer buf = new StringBuffer();
         StringBuffer CountBuf = new StringBuffer();
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
+        StringBuffer whereBuf=new StringBuffer();
         buf.append("select ctrl.check_day, act.act_name, pt.partner_name ,pt.partner_no,cp.coupon_id,cp.acct_mobile, "
-                + "ctrl.rebate_rate,abs(act.amount) ,bt.biz_name, (ctrl.amount*(10-ctrl.rebate_rate))/10,ctrl.amount ");
-        buf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act,business_type bt ");
-        buf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
-        buf.append(" and bt.biz_no=act.biz_no and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
+                + "ctrl.rebate_rate,abs(act.amount) ,act.biz_no, (ctrl.amount*(10-ctrl.rebate_rate))/10,ctrl.amount ");
+        whereBuf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act ");
+        whereBuf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
+        whereBuf.append("  and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
         CountBuf.append("select count(*) ");
-        CountBuf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act,business_type bt ");
-        CountBuf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
-        CountBuf.append(" and bt.biz_no=act.biz_no and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
-
+        buf=buf.append(whereBuf);
+        CountBuf.append(whereBuf);
         if (reportForm.getStartDateByString() != null) {
             buf.append(" and ctrl.check_day >='" + reportForm.getStartDateByString() + "'");
             CountBuf.append(" and ctrl.check_day >='" + reportForm.getStartDateByString() + "'");
@@ -170,28 +103,18 @@ public class CouponDao extends SimpleHibernateTemplate<Coupon, Integer> {
         }
         buf.append(" order by ctrl.check_day,act.act_name, pt.partner_name ");
 
-        Query countQ = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(CountBuf.toString());
 
         ReportResult rr = new ReportResult();
         rr.setCount(0);
-
-        for (Iterator it = countQ.list().iterator(); it.hasNext();) {
-            Object[] obj = (Object[]) it.next();
-            rr.setCount(Long.valueOf(obj[0].toString()));
-            break;
-        }
-
-
-        Query q = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(buf.toString());
-
-        List list;
+        List<Object[]> list;
         if (reportForm.isPagination()) {
-            list = q.setFirstResult((reportForm.getPage() - 1) * reportForm.getSize()).setMaxResults(reportForm.getSize()).list();
+            list = this.findBySqlByLimit(buf.toString(), (reportForm.getPage() - 1) * reportForm.getSize(), reportForm.getSize());
+            rr.setCount(this.countBySql(CountBuf.toString()));
         } else {
-            list = q.list();
+            list = this.findBySql(buf.toString());
         }
-        List result = new ArrayList();
-        for (Iterator it = list.iterator(); it.hasNext();) {
+        List<ConsumeDetail> result = new ArrayList<ConsumeDetail>();
+        for (Iterator<Object[]> it = list.iterator(); it.hasNext();) {
             Object[] obj = (Object[]) it.next();
 
             ConsumeDetail cd = new ConsumeDetail();
@@ -206,13 +129,6 @@ public class CouponDao extends SimpleHibernateTemplate<Coupon, Integer> {
             cd.setBizName((String) obj[8]);
             cd.setRebateAmount((BigDecimal) obj[9]);
             cd.setOriginalAmount((BigDecimal) obj[10]);
-            //PartnerSummaryItem ps = new PartnerSummaryItem();
-            //ps.setCheckDay((Date)obj[0]);
-            //ps.setActName((String)obj[1]);
-            //ps.setPartnerName((String)obj[2]);
-            //ps.setBizName((String)obj[4]);
-            //ps.setExchangeAmount((BigDecimal)obj[3]);
-            //ps.setRebateAmount((BigDecimal)obj[5]);
             result.add(cd);
         }
         rr.setResultList(result);
@@ -222,45 +138,54 @@ public class CouponDao extends SimpleHibernateTemplate<Coupon, Integer> {
     public ReportResult reportCount(ReportForm reportForm) {
         StringBuffer buf = new StringBuffer();
         StringBuffer countBuf = new StringBuffer();
+        StringBuffer whereBuf=new StringBuffer();
 
         HashMap<String, Object> conditions = new HashMap<String, Object>();
-        buf.append("select act.act_name, pt.partner_name , count(*), sum(act.amount)  ,bt.biz_name, sum(ctrl.amount) ,sum((ctrl.amount*(10-ctrl.rebate_rate))/10) ");
-        buf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act,business_type bt ");
-        buf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
-        buf.append(" and bt.biz_no=act.biz_no and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
+        buf.append("select act.act_name, pt.partner_name , count(*), sum(act.amount)  ,act.biz_no, sum(ctrl.amount) ,sum((ctrl.amount*(10-ctrl.rebate_rate))/10) ");
+        countBuf.append(" select count(*) ");
+        whereBuf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act ");
+        whereBuf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
+        whereBuf.append("  and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
 
+        buf.append(whereBuf);
+        countBuf.append(whereBuf);
         if (reportForm.getStartDateByString() != null) {
             buf.append(" and ctrl.check_day >='" + reportForm.getStartDateByString() + "'");
+            countBuf.append(" and ctrl.check_day >='" + reportForm.getStartDateByString() + "'");
         }
         if (reportForm.getEndDate() != null) {
             buf.append(" and ctrl.check_day <='" + reportForm.getEndDateByString() + "'");
+            countBuf.append(" and ctrl.check_day <='" + reportForm.getEndDateByString() + "'");
         }
         if (reportForm.getActNo() != null) {
             buf.append(" and act.act_no = '" + reportForm.getActNo() + "'");
+            countBuf.append(" and act.act_no = '" + reportForm.getActNo() + "'");
         }
         if (reportForm.getParterNo() != null) {
             buf.append(" and pt.partner_no ='" + reportForm.getParterNo() + "' ");
+            countBuf.append(" and pt.partner_no ='" + reportForm.getParterNo() + "' ");
         }
         if (reportForm.getPartnerCatalogId() != null) {
             buf.append(" and pt.partner_catalog ='" + reportForm.getPartnerCatalogId() + "' ");
+            countBuf.append(" and pt.partner_catalog ='" + reportForm.getPartnerCatalogId() + "' ");
         }
         if (reportForm.getMarketingCatalogId() != null) {
             buf.append(" and act.marketing_catalog = '" + reportForm.getMarketingCatalogId() + "'");
+            countBuf.append(" and act.marketing_catalog = '" + reportForm.getMarketingCatalogId() + "'");
         }
         buf.append(" group by act.act_name, pt.partner_name ");
 
-        Query q = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(buf.toString());
 
         ReportResult rr = new ReportResult();
-        rr.setCount(q.list().size());
-        List list;
+        List<Object[]> list;
         if (reportForm.isPagination()) {
-            list = q.setFirstResult((reportForm.getPage() - 1) * reportForm.getSize()).setMaxResults(reportForm.getSize()).list();
+            list = this.findBySqlByLimit(buf.toString(), (reportForm.getPage() - 1) * reportForm.getSize(), reportForm.getSize());
+            rr.setCount(this.countBySql(countBuf.toString()));
         } else {
-            list = q.list();
+            list = this.findBySql(buf.toString());
         }
-        List result = new ArrayList();
-        for (Iterator it = list.iterator(); it.hasNext();) {
+        List<PartnerSummaryItem> result = new ArrayList<PartnerSummaryItem>();
+        for (Iterator<Object[]> it = list.iterator(); it.hasNext();) {
             Object[] obj = (Object[]) it.next();
             PartnerSummaryItem ps = new PartnerSummaryItem();
             ps.setActName((String) obj[0]);

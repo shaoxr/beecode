@@ -3,6 +3,7 @@ package com.newland.beecode.web;
 import com.intensoft.base.Dictionary;
 import com.intensoft.formater.DictViewFormatter;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -88,12 +89,9 @@ public class CouponController {
 		cc.setMarketingCatalogId(marketingCatalogId);
 		cc.setMmsStatus(mmsStatus);
 		cc.setSmsStatus(smsStatus);
-		cc.setPagination(true);
-		cc.setPage(page);
-		cc.setSize(size);
-		QueryResult qr=this.couponService.findByCondition(cc);
-		model.addAttribute("coupons",qr.getResultList());
-		int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
+		List<Coupon> coupons=this.couponService.findByCondition(cc,(page-1)*size,size);
+		model.addAttribute("coupons",coupons);
+		int maxPages = PaginationHelper.calcMaxPages(size, this.couponService.countByCondition(cc));
 		model.addAttribute("maxPages", maxPages);
 		model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
 		model.addAttribute(PaginationHelper.PARAM_PAGE, page);

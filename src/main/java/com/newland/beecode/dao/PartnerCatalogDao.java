@@ -22,7 +22,7 @@ public class PartnerCatalogDao extends SimpleHibernateTemplate<PartnerCatalog, L
             throw new IllegalArgumentException("The catalogName argument is required");
         }
 
-        return this.find("SELECT PartnerCatalog FROM PartnerCatalog AS partnercatalog WHERE partnercatalog.catalogName = :catalogName", catalogName);
+        return this.find("FROM PartnerCatalog AS partnercatalog WHERE partnercatalog.catalogName = ?", catalogName);
     }
     
        public  List<PartnerCatalog> findPartnerCatalogEntries(int firstResult, int maxResults) {

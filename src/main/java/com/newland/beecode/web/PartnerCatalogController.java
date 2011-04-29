@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.newland.beecode.domain.PartnerCatalog;
 import com.newland.beecode.exception.AppException;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerCatalogService;
 import com.newland.utils.PaginationHelper;
-import javax.annotation.Resource;
 @RequestMapping("/partnerCatalog")
 @Controller
 public class PartnerCatalogController extends BaseController{
@@ -34,16 +34,15 @@ public class PartnerCatalogController extends BaseController{
 	public String create(@Valid PartnerCatalog partnerCatalog,Model model){
 		try {
 			if(this.partnerCatalogService.findPartnerCatalogsByCatalogName(partnerCatalog.getCatalogName())!=null){
-				throw new AppException("","");
+				throw new AppException(ErrorsCode.BIZ_PARTNERCATALOG_NAME_EXITS,"");
 			}
 			partnerCatalog.setCreateTime(new Date());
 			partnerCatalog.setUpdateTime(new Date());
-			//partnerCatalog.persist();
-                        this.partnerCatalogService.save(partnerCatalog);
-                        
+            this.partnerCatalogService.save(partnerCatalog);
 			model.addAttribute("partnercatalogs", this.partnerCatalogService.findAll());
 		} catch (Exception e) {
-			model.addAttribute("", this.getMessage(e));
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
 		}
 		return "redirect:/partnerCatalog";
 	}
@@ -66,8 +65,12 @@ public class PartnerCatalogController extends BaseController{
     public String delete(@PathVariable("id") Long id,
     		@RequestParam(value = "page", required = false) Integer page, 
     		@RequestParam(value = "size", required = false) Integer size, Model model) {
-		//PartnerCatalog.findPartnerCatalog(id).remove();
-                    this.partnerCatalogService.delete(id);
+            try {
+				this.partnerCatalogService.delete(id);
+			} catch (Exception e) {
+				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+				return "prompt";
+			}
         model.addAttribute("page", (page == null) ? "1" : page.toString());
         model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
         return "redirect:/partnerCatalog";

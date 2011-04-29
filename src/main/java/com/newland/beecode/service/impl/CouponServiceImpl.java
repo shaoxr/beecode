@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.intensoft.dao.hibernate.SimpleQueryCondition;
 import com.newland.beecode.dao.CouponCtrlDao;
 import com.newland.beecode.dao.CouponDao;
 import com.newland.beecode.domain.Coupon;
@@ -299,8 +300,13 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public QueryResult findByCondition(CouponCondition cc) {
-		return this.couponDao.findCouponsByCondition(cc);
+	public QueryResult _findByCondition(CouponCondition cc) {
+		//return this.couponDao.findCouponsByCondition(cc);
+		//this.couponDao.excuteSimpleQuery(condition)
+		return null;
+	}
+	public List<Coupon> findByCondition(SimpleQueryCondition condition,Integer start,Integer end){
+		return this.couponDao.excuteSimpleQuery(condition, start, end);
 	}
 
 	@Override
@@ -311,5 +317,10 @@ public class CouponServiceImpl implements CouponService {
 	@Override
 	public ReportResult reportDetail(ReportForm reportForm) {
 		return this.couponDao.reportDetail(reportForm);
+	}
+
+	@Override
+	public int countByCondition(SimpleQueryCondition condition) {
+		return this.couponDao.countSimpleQuery(condition);
 	}
 }

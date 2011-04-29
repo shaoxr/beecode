@@ -17,15 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.PartnerCatalog;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerCatalogService;
 import com.newland.beecode.service.PartnerService;
 import com.newland.utils.PaginationHelper;
-import javax.annotation.Resource;
 
 //@RooWebScaffold(path = "partners", formBackingObject = Partner.class, create=true,update=false)
 @RequestMapping("/partners")
 @Controller
-public class PartnerController {
+public class PartnerController extends BaseController{
 	
     
     @Autowired
@@ -40,8 +40,12 @@ public class PartnerController {
 	}
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Partner partner,Model model){
-		//partner.persist();
-            partnerService.save(partner);
+            try {
+				partnerService.save(partner);
+			} catch (Exception e) {
+				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+				return "prompt";
+			}
 		return "redirect:/partners";
 	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

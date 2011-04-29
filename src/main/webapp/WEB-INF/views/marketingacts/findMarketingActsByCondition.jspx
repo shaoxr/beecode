@@ -7,8 +7,8 @@
         <field:datetime disableFormBinding="true" dateTimePattern="${date_format}"  field="maxEndDate" id="f_com_newland_beecode_domain_MarketingAct_maxEndTime"/>
         <field:select disableFormBinding="true" headerKey="99999" headerValue="全部" field="marketingCatalog" id="c_com_newland_beecode_domain_marketingcatalog" itemValue="id" itemLabel="catalogName" items="${marketingCatalogs}"  path="/marketingCatalog"/>
         <field:selectBlank  disableFormBinding="true" headerKey="99999" headerValue="全部" field="actNo" id="c_com_newland_beecode_domain_marketingact" itemValue="actNo" itemLabel="actName" items="${marketingsBlank}"  path="/marketingCatalogs"/>
-        <field:select disableFormBinding="true" field="bizNo" id="c_com_newland_beecode_domain_marketingact_businesstype" itemValue="keyValue" itemLabel="keyDesc" items="${bizTypes}" multiple="false" path=""/>
-        <field:select disableFormBinding="true" headerKey="99999" headerValue="全部" field="actStatus" id="c_com_newland_beecode_domain_marketingact_actstatusdesc" itemValue="keyValue" itemLabel="keyDesc" items="${marketingstatusList}"  path="/businesstypes"/>
+        <field:select disableFormBinding="true" field="bizNo" id="c_com_newland_beecode_domain_marketingact_businesstype" itemValue="key" itemLabel="value" items="${bizTypes}" multiple="false" path=""/>
+        <field:select disableFormBinding="true" headerKey="99999" headerValue="全部" field="actStatus" id="c_com_newland_beecode_domain_marketingact_actstatusdesc" itemValue="key" itemLabel="value" items="${marketingstatusList}"  path=""/>
     </form:find>
     <page:list id="pl_com_newland_beecode_domain_MarketingAct" items="${marketingacts}" z="sFCbrOVGxWJl4YkClga8MCMB8GE=">
         <table:table data="${marketingacts}"  id="label_com_newland_beecode_domain_MarketingAct" path="/marketingacts" update="false" delete="false" invalid="true" create="false" typeIdFieldName="actNo" z="user-managed">
@@ -16,7 +16,7 @@
             <table:column id="c_com_newland_beecode_domain_MarketingAct_startDate" property="startDate" z="ycv72nkx9eKie1sUGfK7Hy/MfiU="/>
             <table:column id="c_com_newland_beecode_domain_MarketingAct_endDate" property="endDate" z="flUS8dAyZR6iy/uGpq43G3snXhA="/>
             <table:column id="c_com_newland_beecode_domain_MarketingAct_actDetail" property="actDetail" z="S1H1sstjydxkaBEuOitfgwm2VQ4="/>
-            <table:column id="c_com_newland_beecode_domain_MarketingAct_actStatusDesc" property="actStatusDesc" z="6V2aJ3KqDBApsVzK7EPL4fYFfZc="/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_actStatus" pattern="dictView" className="ACT_STATUS" property="actStatus" z="6V2aJ3KqDBApsVzK7EPL4fYFfZc="/>
             <!--  table:column id="c_com_newland_beecode_domain_MarketingAct_genTime" pattern="${datetime_format}" property="genTime" z="ajEgWH7WWfp+i1N+CaEClGNPxik="/>
         -->
         </table:table>

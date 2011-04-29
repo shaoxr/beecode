@@ -2,6 +2,7 @@ package com.newland.beecode.service;
 
 import java.util.List;
 
+import com.intensoft.dao.hibernate.SimpleQueryCondition;
 import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.condition.CouponCondition;
 import com.newland.beecode.domain.condition.QueryResult;
@@ -58,9 +59,12 @@ public interface CouponService {
 	public Coupon findByCoupon(Long couponId);
 	
 	
-	public QueryResult findByCondition(CouponCondition cc);
+	public QueryResult _findByCondition(CouponCondition cc);
 	
 	public ReportResult reportCount(ReportForm reportForm);
 	
 	public ReportResult reportDetail(ReportForm reportForm);
+	public List<Coupon> findByCondition(SimpleQueryCondition condition,Integer start,Integer end);
+	
+	public int countByCondition(SimpleQueryCondition condition);
 }

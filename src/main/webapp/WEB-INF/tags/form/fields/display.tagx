@@ -3,7 +3,8 @@
 	xmlns:fmt="http://java.sun.com/jsp/jstl/fmt"
 	xmlns:spring="http://www.springframework.org/tags"
 	xmlns:form="http://www.springframework.org/tags/form"
-	xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+	xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0" 
+	xmlns:nl="http://www.intensoft.com/taglibs">
 	<jsp:output omit-xml-declaration="yes" />
 
 	<jsp:directive.attribute name="id" type="java.lang.String"
@@ -34,6 +35,12 @@
 	<jsp:directive.attribute name="z" type="java.lang.String"
 		required="false"
 		description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
+    <jsp:directive.attribute name="pattern" type="java.lang.String"
+		required="false"
+		description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
+    <jsp:directive.attribute name="className" type="java.lang.String"
+		required="false"
+		description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
 
 	<c:if test="${empty render or render}">
 		<c:if test="${not empty object and empty label}">
@@ -53,26 +60,35 @@
 			for="_${fn:escapeXml(field)}_id"> <c:out value="${label}" />
 		: </label>
 		<div class="box" id="_${fn:escapeXml(id)}_${fn:escapeXml(field)}_id">
-		<c:choose>
+			<spring:eval expression="object[field]" var="colTxt" />
+              <c:if test="${not empty itemLabel}">
+                  	<spring:eval expression="object[field][itemLabel]" var="colTxt" />
+                  </c:if>
+		  <c:choose>
+		  <c:when test="${ pattern eq 'dictView'}">
+		       <nl:springFormate className="${className}" value="${colTxt}"/>
+		  </c:when>
+		  <c:otherwise>
+		  <c:choose>
 			<c:when test="${date}">
 				<spring:escapeBody>
-					<fmt:formatDate value="${object[field]}"
+					<fmt:formatDate value="${colTxt}"
 						pattern="${fn:escapeXml(dateTimePattern)}" />
 				</spring:escapeBody>
 			</c:when>
 			<c:when test="${calendar}">
 				<spring:escapeBody>
-					<fmt:formatDate value="${object[field].time}"
+					<fmt:formatDate value="${colTxt.time}"
 						pattern="${fn:escapeXml(dateTimePattern)}" />
 				</spring:escapeBody>
 			</c:when>
-			<c:when test="${not empty itemLabel}">
-				<spring:eval expression="object[field][itemLabel]" />
-			</c:when>
 			<c:otherwise>
-				<spring:eval expression="object[field]" />
+				<c:out value="${colTxt}"/>
 			</c:otherwise>
-		</c:choose></div>
+		</c:choose>
+		</c:otherwise>
+		</c:choose>
+		</div>
 		</div>
 		<br />
 	</c:if>

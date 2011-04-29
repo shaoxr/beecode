@@ -42,7 +42,7 @@ public interface MarketingActService {
 	 * @param act
 	 * @param file
 	 */
-	public void createMarketingAct(MarketingAct act, MultipartFile file) throws AppException;
+	public void createMarketingAct(MarketingAct act,Long[] partners, MultipartFile file) throws AppException;
 	
 	/**
 	 * 作废营销活动
@@ -72,7 +72,9 @@ public interface MarketingActService {
 	
 	public MarketingAct findByActNo(Long actNo);
 	
-	public QueryResult findByCondition(MarketingActCondition mac);
+	public List<MarketingAct> findByCondition(MarketingActCondition mac,Integer start,Integer end);
+	
+	public int countByCondition(MarketingActCondition mac);
 	
 	public MarketingActSummary marketingSummary(Long actNo);
 	

@@ -4,8 +4,6 @@
  */
 package com.newland.beecode.dao;
 
-import com.intensoft.dao.hibernate.Page;
-import com.intensoft.dao.hibernate.SimpleHibernateTemplate;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.condition.MarketingActCondition;
 import com.newland.beecode.domain.condition.QueryResult;
@@ -24,7 +22,7 @@ import org.springframework.stereotype.Repository;
  * @author skylai
  */
 @Repository("marketingActDao")
-public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integer> {
+public class MarketingActDao extends BaseDao<MarketingAct, Long> {
 
     public QueryResult findMarketingActEntriesByActStatus(Integer actStatus, Integer page, Integer size) {
 
@@ -47,16 +45,15 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
 
 
     }
-
-    public QueryResult findMarketingActsByCondition(MarketingActCondition mac) {
+    public QueryResult _findMarketingActsByCondition(MarketingActCondition mac) {
         HashMap<String, Object> conditions = new HashMap<String, Object>();
         StringBuffer queryBuf = new StringBuffer();
         StringBuffer buf = new StringBuffer();
         StringBuffer countBuf = new StringBuffer();
         countBuf.append("SELECT count(*) FROM MarketingAct AS marketingact WHERE 1=1");
-        queryBuf.append("SELECT MarketingAct FROM MarketingAct AS marketingact WHERE 1=1  ");
+        queryBuf.append(" FROM MarketingAct AS marketingact WHERE 1=1  ");
         if (mac.getStartGenDate() != null && mac.getEndGenDate() != null) {
-            buf.append(" and  marketingact.genTime >= :minGenTime and marketingact.genTime <= :maxGenTime");
+            buf.append(" and  marketingact.genTime >= "+mac.getStartGenDate()+" and marketingact.genTime <= :maxGenTime");
             conditions.put("minGenTime", mac.getStartGenDate());
             conditions.put("maxGenTime", mac.getEndGenDate());
         }
@@ -95,15 +92,17 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
 
         Query query = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(countBuf.append(buf).toString());
 
+        
         for (Iterator<String> it = conditions.keySet().iterator(); it.hasNext();) {
             String cond = it.next();
             query.setParameter(cond, conditions.get(cond));
         }
-        if (mac.isPagination()) {
-            qr.setResultList(query.setFirstResult((mac.getPage() - 1) * mac.getSize()).setMaxResults(mac.getSize()).list());
-        } else {
-            qr.setResultList(query.list());
-        }
+       // if (mac.isPagination()) {
+        //    qr.setResultList(query.setFirstResult((mac.getPage() - 1) * mac.getSize()).setMaxResults(mac.getSize()).list());
+       //     this.findListByQuery(hql, firstReult, maxResult)
+      //  } else {
+      //      qr.setResultList(query.list());
+      //  }
 
         return qr;
     }
@@ -114,15 +113,10 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
 
     public MarketingActSummary marketingSummary(Long actNo) {
 
-        MarketingAct act = findUniqueByProperty("actNo", actNo);
-
-        Query q = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery("select sum(remain_times) remainTimes, sum(times-remain_times) usedTimes, count(marketing_act) joinCount from coupon where marketing_act=?");
-        q.setParameter(1, actNo);
-        List list = q.list();
+       String sql="select sum(remain_times) remainTimes, sum(times-remain_times) usedTimes, count(marketing_act) joinCount from coupon where marketing_act="+actNo;
+       List<Object[]> list=this.findBySql(sql);
         if (!list.isEmpty()) {
-
             Object[] obj = (Object[]) list.get(0);
-
             MarketingActSummary mas = new MarketingActSummary();
             mas.setRemainTimes(((BigDecimal) obj[0]).intValue());
             mas.setUsedTimes(((BigDecimal) obj[1]).intValue());
@@ -133,7 +127,7 @@ public class MarketingActDao extends SimpleHibernateTemplate<MarketingAct, Integ
     }
 
     public List<MarketingAct> findByCatalog(Long id) {
-        return find("select MarketingAct from  MarketingAct marketingAct where marketingAct.marketingCatalog.id=?", id);
+        return find(" from  MarketingAct marketingAct where marketingAct.marketingCatalog.id=?", id);
     }
 
     public List<MarketingAct> findMarketingActEntries(int firstResult, int maxResults) {

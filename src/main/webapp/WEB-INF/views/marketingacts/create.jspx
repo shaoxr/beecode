@@ -3,19 +3,19 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:create id="fc_com_newland_beecode_domain_MarketingAct" enctype="multipart/form-data" modelAttribute="marketingAct" path="/marketingacts" render="${empty dependencies}" z="2vbvsgVQ2WIPikydh13iqo5IHiA=">
-        <field:select field="marketingCatalog" id="c_com_newland_beecode_domain_MarketingCatalog" itemValue="id" itemLabel="catalogName" items="${marketingCatalogs}" path="marketingCatalogs" required="true" z="10abxlZqDLa7n1Wvs1o/oQRqEcg="/>
+        <field:select field="marketingCatalog.id" id="c_com_newland_beecode_domain_MarketingCatalog" itemValue="id" itemLabel="catalogName" items="${marketingCatalogs}" path="marketingCatalogs" required="true" z="10abxlZqDLa7n1Wvs1o/oQRqEcg="/>
         <field:input field="actName" id="c_com_newland_beecode_domain_MarketingAct_actName" max="30" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
         <field:datetime dateTimePattern="${date_format}" field="startDate" id="c_com_newland_beecode_domain_MarketingAct_startDate" required="true" z="f55n8FxO61VcBD3GNwWJrrEsFDg="/>
         <field:datetime dateTimePattern="${date_format}" field="endDate" id="c_com_newland_beecode_domain_MarketingAct_endDate" required="true" z="K+8B/MhbkEv3d+ATO5wDa18HjPY="/>
         <field:textarea  field="actDetail" id="c_com_newland_beecode_domain_MarketingAct_actDetail" required="true" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>
-        <field:select field="bizNo"  id="c_com_newland_beecode_domain_marketingact_businesstype"  itemValue="keyValue" itemLabel="keyDesc" items="${bizTypes}" multiple="false" path="" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>
+        <field:select field="bizNo"  id="c_com_newland_beecode_domain_marketingact_businesstype"  itemValue="key" itemLabel="value" items="${bizTypes}" multiple="false" path="" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>
         <field:number field="times" id="c_com_newland_beecode_domain_MarketingAct_times" required="true" validationMessageCode="field_invalid_integer" z="t6HH8qJDiogoSsgcDZi6CHlFSe8="/>
         <field:number field="rebateRate" id="c_com_newland_beecode_domain_MarketingAct_rebateRate" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="/>
         <field:input field="amount" id="c_com_newland_beecode_domain_MarketingAct_amount" required="true" validationMessageCode="field_invalid_number" />
-        <field:select   field="partners" id="c_com_newland_beecode_domain_MarketingAct_partners" itemValue="id" itemLabel="partnerName" items="${partners}" multiple="true" path="/partners" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>
+        <field:select  disableFormBinding="true" field="partners"  id="c_com_newland_beecode_domain_MarketingAct_partners" itemValue="id" itemLabel="partnerName" items="${partners}" multiple="true" path="/partners" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>
         <div><label>客户列表:</label> <input type="file" style="width: 200px; height: 25px;" id="file" name="file" dojoType="dijit.form.ValidationTextBox" required="true" /></div><br />
         <field:datetime  dateTimePattern="yyyy-MM-dd" field="sendTime" id="c_com_newland_beecode_domain_MarketingAct_sendTime" required="true" z="f55n8FxO61VcBD3GNwWJrrEsFDg="/>
-        <field:select field="bindCard"  id="c_com_newland_beecode_domain_marketingact_checkCard"  itemValue="keyValue" itemLabel="keyDesc" items="${checkCards}" multiple="false" path="/businesstypes" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>
+        <field:select field="bindCard"  id="c_com_newland_beecode_domain_marketingact_checkCard"  itemValue="key" itemLabel="value" items="${checkCards}" multiple="false" path="/businesstypes" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>
         <field:input  field="mmsTitle" id="c_com_newland_beecode_domain_MarketingAct_mmsTitle" max="20" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
         <field:mmsinput field1="mmsTemplate.part1" field5="mmsTemplate.part5" field4="mmsTemplate.part4" field3="mmsTemplate.part3" field2="mmsTemplate.part2" disableFormBinding="true" id="c_com_newland_beecode_domain_MarketingAct_mmsContent" max="20" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
        <!--   <field:input disableFormBinding="true" type="hidden" field="mmsContent" id="c_com_newland_beecode_domain_MarketingAct_mmsContent" required="true" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>

@@ -52,18 +52,14 @@ public class PartnerDao extends SimpleHibernateTemplate<Partner, Long>{
     }
 
     public  List<Partner> findByCatalog(Long id) {
-        
-        return this.find("select Partner from  Partner partner where partner.partnerCatalog.id=:id", id);
+        return this.find("from  Partner partner where partner.partnerCatalog.id=?", id);
     }
     
     public  List<Partner> findPartnerEntries(int firstResult, int maxResults) {
-
-        
        return findListByQuery("select o from Partner o", firstResult, maxResults);
-        
     } 
     
-        public long countPartners() {
+    public long countPartners() {
         return this.findLong("select count(o) from Partner o");
           
     }

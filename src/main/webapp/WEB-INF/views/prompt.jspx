@@ -6,5 +6,6 @@
     <p>
       <spring:message code="${message}" />
     </p>
+    <button onclick="javascript:history.go(-1);">返回</button>
     </util:panel>
 </div>

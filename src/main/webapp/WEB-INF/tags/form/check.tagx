@@ -36,8 +36,8 @@
         <input type="hidden" id="actStatus" name="actStatus" value="3" />
         <form:hidden id="_${fn:escapeXml(idField)}_id" path="${fn:escapeXml(idField)}" />
         <c:if test="${versionField ne 'none'}">
-          <form:hidden id="_${fn:escapeXml(versionField)}_id" path="${fn:escapeXml(versionField)}" />
-        </c:if>
+          <!--<form:hidden id="_${fn:escapeXml(versionField)}_id" path="${fn:escapeXml(versionField)}" />
+        --></c:if>
       </form:form>
     </util:panel>
   </c:if>

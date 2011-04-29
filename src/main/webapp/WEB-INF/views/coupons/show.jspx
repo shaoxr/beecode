@@ -9,8 +9,8 @@
         <field:display field="acctMobile" id="s_com_newland_beecode_domain_Coupon_acctMobile" object="${coupon}" z="EcdgK+BplWi0jzBP+urBZxOTj20="/>
         <field:display field="couponId" id="s_com_newland_beecode_domain_Coupon_couponNo" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
     	<field:display field="serialNo" id="s_com_newland_beecode_domain_Coupon_serialNo" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
-        <field:display field="couponStatusDesc" id="s_com_newland_beecode_domain_Coupon_cuoponStatus" object="${coupon}" z="3YPr2hh6UwwNN+S/2Wx/pKnHMAQ="/>
-        <field:display itemLabel="bizName" field="marketingAct" id="s_com_newland_beecode_domain_Coupon_businessType" object="${coupon}" z="wNn/7w3P0hjGnVPbZAEcFpMVNDg="/>
+        <field:display itemLabel="bizName" field="marketingAct"  id="s_com_newland_beecode_domain_Coupon_businessType" object="${coupon}" z="wNn/7w3P0hjGnVPbZAEcFpMVNDg="/>
+        <field:display field="couponStatus" id="s_com_newland_beecode_domain_Coupon_cuoponStatus" pattern="dictView"  className="COUPON_STATUS" object="${coupon}" z="3YPr2hh6UwwNN+S/2Wx/pKnHMAQ="/>
         <c:if test="${coupon.businessType=='00'}">
           <field:display itemLabel="amount" field="marketingAct" id="s_com_newland_beecode_domain_MarketingAct_amount" object="${coupon}" z="KvHSAJyVpzfMAoE0IVI5flSdvC4="/>
         </c:if>
@@ -19,9 +19,9 @@
         </c:if>
         <field:display field="times" id="s_com_newland_beecode_domain_Coupon_times" object="${coupon}" z="oggOKeBzQI7nzNPX9DvJiT5yWjs="/>
          <field:display field="remainTimes" id="s_com_newland_beecode_domain_Coupon_remainTimes" object="${coupon}" z="uCyI1oxgWZ5Us8LA47NfOjGZQSU="/>
-    	<field:display field="mmsStatusDesc" id="s_com_newland_beecode_domain_coupon_mmsstatus" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
+    	<field:display field="mmsStatus" id="s_com_newland_beecode_domain_coupon_mmsstatus" pattern="dictView" className="COUPON_MMS_STATUS" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
     	<field:display field="mmsDesc" id="s_com_newland_beecode_domain_coupon_mmsstatus_desc" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
-    	<field:display field="smsStatusDesc" id="s_com_newland_beecode_domain_coupon_smsstatus" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
+    	<field:display field="smsStatus" id="s_com_newland_beecode_domain_coupon_smsstatus" pattern="dictView" className="COUPON_MMS_STATUS" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
     	<field:display field="smsDesc" id="s_com_newland_beecode_domain_coupon_smsstatus_desc" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
     </page:show>
     <c:if test="${coupon.couponStatus == 1}">

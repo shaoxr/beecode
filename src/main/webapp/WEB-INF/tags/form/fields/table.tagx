@@ -1,6 +1,7 @@
-<jsp:root xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:spring="http://www.springframework.org/tags" xmlns:form="http://www.springframework.org/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<jsp:root xmlns:nl="http://www.intensoft.com/taglibs" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:fmt="http://java.sun.com/jsp/jstl/fmt" xmlns:fn="http://java.sun.com/jsp/jstl/functions" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:spring="http://www.springframework.org/tags" xmlns:form="http://www.springframework.org/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
   <jsp:directive.tag import="java.util.ArrayList" />
   <jsp:output omit-xml-declaration="yes" />
+  
 
   <jsp:directive.attribute name="id" type="java.lang.String" required="true" description="The identifier for this tag (do not change!)" />
   <jsp:directive.attribute name="data" type="java.util.Collection" required="true" description="The collection to be displayed in the table" />
@@ -20,6 +21,7 @@
     <c:set var="columnMaxLengths" scope="request" />
     <c:set var="columnPatterns" scope="request" />
     <c:set var="columnItemLabels" scope="request" />
+    <c:set var="className" scope="request"/>
     <jsp:doBody />
 
     <c:if test="${empty typeIdFieldName}">
@@ -85,6 +87,9 @@
                   <c:choose>
 	                  <c:when test="${pattern eq '-'}">
 	                  	<c:out value="${fn:substring(colTxt, 0, columnMaxLength)}"/>
+	                  </c:when>
+	                  <c:when test="${pattern eq 'dictView'}">
+	                    <nl:springFormate className="${className}" value="${colTxt}"/>
 	                  </c:when>
 	                  <c:otherwise>
 	                  	<fmt:formatDate pattern="${pattern}" value="${colTxt}"/>

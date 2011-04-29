@@ -17,6 +17,7 @@
         <c:if test="${marketingact.bizNo eq '00'}">
           <field:display field="amount" id="s_com_newland_beecode_domain_MarketingAct_amount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
         </c:if>
+        
         <field:display field="actStatusDesc" id="s_com_newland_beecode_domain_MarketingAct_actStatusDesc" object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
         <!--  field:display field="partners" id="s_com_newland_beecode_domain_MarketingAct_partners" object="${marketingact}" z="+bo3mVX7w04Ps2EgE3Ju7ydfBis="/>
         -->

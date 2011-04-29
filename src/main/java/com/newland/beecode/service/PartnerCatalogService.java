@@ -3,6 +3,7 @@ package com.newland.beecode.service;
 import java.util.List;
 
 import com.newland.beecode.domain.PartnerCatalog;
+import com.newland.beecode.exception.AppException;
 
 /**
  * @author shaoxr:
@@ -21,7 +22,7 @@ public interface PartnerCatalogService {
 	
 	public long countPartnerCatalogs();
 	
-	public void delete(Long id);
+	public void delete(Long id)throws AppException;
 	
 	public PartnerCatalog findById(Long id);
 

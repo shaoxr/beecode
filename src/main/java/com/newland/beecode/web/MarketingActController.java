@@ -8,6 +8,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,8 +52,6 @@ public class MarketingActController {
     @Resource(name = "dictViewService")
     private DictViewFormatter dictView;
     
-    //在View层应该调用service，不应调用dao.待再次重构,//TODO
-
 	@Autowired
 	private MarketingActService marketingActService;
 	
@@ -111,15 +110,15 @@ public class MarketingActController {
 		mac.setEndGenDate(maxEndDate);
 		mac.setActName(actName);
 		mac.setActStatus(actStatus);
-		mac.setPage(page);
-		mac.setSize(size);
-		mac.setPagination(true);
-		QueryResult qr=this.marketingActService.findByCondition(mac);
-		int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
+		//mac.setPage(page);
+		//mac.setSize(size);
+		//mac.setPagination(true);
+		List<MarketingAct> marketingActs=this.marketingActService.findByCondition(mac,(page-1)*size,size);
+		int maxPages = PaginationHelper.calcMaxPages(size, this.marketingActService.countByCondition(mac));
 		model.addAttribute("maxPages",maxPages);
 		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
 		model.addAttribute(PaginationHelper.PARAM_SIZE, size);
-		model.addAttribute("marketingacts",qr.getResultList());
+		model.addAttribute("marketingacts",marketingActs);
 		addDateTimeFormatPatterns(model);
 		return "marketingacts/list/append";
 	}
@@ -132,16 +131,10 @@ public class MarketingActController {
 	public String create(
 			@RequestParam(value = "file", required = true) MultipartFile file,
 			@Valid MarketingAct marketingAct, BindingResult result,
+			@RequestParam("partners") Long[] partners,
 			Model model, HttpServletRequest request) throws IOException {
-		if (result.hasErrors()) {
-			model.addAttribute("marketingAct", marketingAct);
-			//model.addAttribute("checkCards", DictView.getListByKeyName(MarketingAct.DICT_KEY_NAME_CHECK_CARD));
-                        model.addAttribute("checkCards", dictView.getSelectModelCollection(MarketingAct.DICT_KEY_NAME_CHECK_CARD));
-			addDateTimeFormatPatterns(model);
-			return "marketingacts/create";
-		}
 		try {
-			marketingActService.createMarketingAct(marketingAct, file);
+			marketingActService.createMarketingAct(marketingAct,partners, file);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE,this.getMessage(e));
 			e.printStackTrace();
@@ -347,16 +340,16 @@ public class MarketingActController {
 		mac.setStartGenDate(minEndDate);
 		mac.setEndGenDate(maxEndDate);
 		mac.setActStatus(actStatus);
-		mac.setPage(page);
-		mac.setSize(size);
-		mac.setPagination(true);
-		QueryResult qr=this.marketingActService.findByCondition(mac);
-		int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
+		//mac.setPage(page);
+		//mac.setSize(size);
+		//mac.setPagination(true);
+		List<MarketingAct> marketingActs=this.marketingActService.findByCondition(mac,(page-1)*size,size);
+		int maxPages = PaginationHelper.calcMaxPages(size, this.marketingActService.countByCondition(mac));
 		model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
 		model.addAttribute("maxPages",maxPages);
 		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
 		model.addAttribute(PaginationHelper.PARAM_SIZE, size);
-		model.addAttribute("marketingacts",qr.getResultList());
+		model.addAttribute("marketingacts",marketingActs);
 		addDateTimeFormatPatterns(model);
 		return "marketingacts/findMarketingActsByCondition";
 	}
@@ -385,12 +378,10 @@ public class MarketingActController {
 	}
 	@ModelAttribute("bizTypes")
 	public Collection<Dictionary> populateBizTypes() {
-		//return DictView.getListByKeyName(MarketingAct.BUSINESS_TYPE);
             return dictView.getSelectModelCollection(MarketingAct.BUSINESS_TYPE);
 	}
 	@ModelAttribute("marketingstatusList")
 	public Collection<Dictionary> populateMarketingstatusList() {
-		//return DictView.getListByKeyName(MarketingAct.DICT_KEY_NAME);
             return dictView.getSelectModelCollection(MarketingAct.DICT_KEY_NAME);
 	}
 	void addDateTimeFormatPatterns(Model model) {

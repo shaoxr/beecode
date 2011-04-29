@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -175,7 +176,8 @@ public class MarketingAct {
 	private Set<Partner> partners = new HashSet<Partner>();
     
 	
-	@ManyToOne(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+	@ManyToOne
+	@JoinColumn(name="marketing_catalog")
 	private MarketingCatalog marketingCatalog;
 	
 	@Column

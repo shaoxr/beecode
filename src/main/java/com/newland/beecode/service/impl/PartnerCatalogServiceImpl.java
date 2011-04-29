@@ -7,7 +7,11 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import com.newland.beecode.dao.PartnerCatalogDao;
+import com.newland.beecode.dao.PartnerDao;
+import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.PartnerCatalog;
+import com.newland.beecode.exception.AppException;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerCatalogService;
 
 /**
@@ -19,6 +23,8 @@ import com.newland.beecode.service.PartnerCatalogService;
 public class PartnerCatalogServiceImpl implements PartnerCatalogService{
 	@Resource(name="partnerCatalogDao")
     private PartnerCatalogDao partnerCatalogDao;
+	@Resource(name="partnerDao")
+	private PartnerDao partnerDao;
 	@Override
 	public List<PartnerCatalog> findAll() {
 		return this.partnerCatalogDao.findAll();
@@ -43,7 +49,11 @@ public class PartnerCatalogServiceImpl implements PartnerCatalogService{
 		return this.partnerCatalogDao.countPartnerCatalogs();
 	}
 	@Override
-	public void delete(Long id) {
+	public void delete(Long id) throws AppException{
+		List<Partner> partners=this.partnerDao.findByProperty("partnerCatalog.id", id);
+		if(partners.size()>0){
+			throw new AppException(ErrorsCode.BIZ_PARTNERCATALOG_DONOT_DELETE,"");
+		}
 		this.partnerCatalogDao.delete(id);
 		
 	}

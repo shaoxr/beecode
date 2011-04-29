@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-modules id="moduleCoreId" project-version="1.5.0">
   <wb-module deploy-name="beecode">
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/core-base/core-base">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
     <property name="context-root" value="beecode"/>
         <property name="java-output-path" value="/beecode/target/classes"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/java"/>

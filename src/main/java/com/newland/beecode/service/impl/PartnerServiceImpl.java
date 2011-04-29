@@ -7,10 +7,14 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Service;
 
+import com.newland.beecode.dao.PartnerCatalogDao;
 import com.newland.beecode.dao.PartnerDao;
 import com.newland.beecode.domain.Partner;
+import com.newland.beecode.domain.PartnerCatalog;
 import com.newland.beecode.domain.report.PartnerSummaryItem;
 import com.newland.beecode.domain.report.PartnerSummaryReport;
+import com.newland.beecode.exception.AppException;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerService;
 import javax.annotation.Resource;
 
@@ -19,6 +23,8 @@ public class PartnerServiceImpl implements PartnerService {
 
     @Resource(name = "partnerDao")
     private PartnerDao partnerDao;
+    @Resource(name = "partnerCatalogDao")
+    private PartnerCatalogDao partnerCatalogDao;
 
     @Override
     public PartnerSummaryReport summaryReport(Long id) {
@@ -83,7 +89,18 @@ public class PartnerServiceImpl implements PartnerService {
 	}
 
 	@Override
-	public void save(Partner partner) {
+	public void save(Partner partner) throws AppException{
+		
+		List<Partner> partners=this.partnerDao.findByProperty("partnerName", partner.getPartnerName());
+		if(partners.size()>0){
+			throw new AppException(ErrorsCode.BIZ_PARTNERCATALOG_NAME_EXITS,"");
+		}
+		partners=this.partnerDao.findByProperty("partnerNo", partner.getPartnerNo());
+		if(partners.size()>0){
+			throw new AppException(ErrorsCode.BIZ_PARTNER_NO_EXITS,"");
+		}
+		PartnerCatalog partnerCatalog=this.partnerCatalogDao.get(partner.getPartnerCatalog().getId());
+		partner.setPartnerCatalog(partnerCatalog);
 		this.partnerDao.save(partner);
 		
 	}
@@ -100,7 +117,7 @@ public class PartnerServiceImpl implements PartnerService {
 
 	@Override
 	public long countPartners() {
-		return this.countPartners();
+		return this.partnerDao.countPartners();
 	}
 
 	@Override
