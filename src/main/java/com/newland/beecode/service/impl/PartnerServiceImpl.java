@@ -125,4 +125,21 @@ public class PartnerServiceImpl implements PartnerService {
 		this.partnerDao.delete(id);
 		
 	}
+
+	@Override
+	public void update(Partner partner) throws AppException{
+		List<Partner> partners=this.partnerDao.findByProperty("partnerName", partner.getPartnerName());
+		if(partners.size()>0){
+			throw new AppException(ErrorsCode.BIZ_PARTNERCATALOG_NAME_EXITS,"");
+		}
+		partners=this.partnerDao.findByProperty("partnerNo", partner.getPartnerNo());
+		if(partners.size()>0){
+			throw new AppException(ErrorsCode.BIZ_PARTNER_NO_EXITS,"");
+		}
+		
+		PartnerCatalog partnerCatalog=this.partnerCatalogDao.get(partner.getPartnerCatalog().getId());
+		partner.setPartnerCatalog(partnerCatalog);
+		this.partnerDao.update(partner);
+		
+	}
 }

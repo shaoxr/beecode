@@ -1,5 +1,6 @@
 package com.newland.beecode.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -60,6 +61,10 @@ public class PartnerCatalogServiceImpl implements PartnerCatalogService{
 	@Override
 	public PartnerCatalog findById(Long id) {
 		return this.partnerCatalogDao.get(id);
+	}
+	@Override
+	public void update(PartnerCatalog partnerCatalog) {
+		this.partnerCatalogDao.update(partnerCatalog);
 	}
 
 }

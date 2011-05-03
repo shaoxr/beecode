@@ -59,5 +59,9 @@ public class MarketingCatalogServiceImpl implements MarketingCatalogService{
 	public MarketingCatalog findById(Long id) {
 		return this.marketingCatalogDao.get(id);
 	}
+	@Override
+	public void update(MarketingCatalog marketingCatalog) {
+		this.marketingCatalogDao.update(marketingCatalog);
+	}
 
 }

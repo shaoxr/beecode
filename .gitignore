@@ -1,3 +1,5 @@
 .classpath
+.externalToolBuilders/**
+.springBeans
 .settings/**
 target/**

@@ -4,9 +4,10 @@
     <jsp:output omit-xml-declaration="yes"/>
     
 <page:list id="pl_com_newland_beecode_domain_PartnerCatalog" items="${partnercatalogs}" z="i346yd2UzE1gpevvvduTcGeHDt4=">
-        <table:table data="${partnercatalogs}" id="l_com_newland_beecode_domain_PartnerCatalog" path="/partnerCatalog" update="false" z="ccaHs64Fsv/dMKIcbPSVXG0k+qg=">
+        <table:table data="${partnercatalogs}" id="l_com_newland_beecode_domain_PartnerCatalog" path="/partnerCatalog" update="true" z="ccaHs64Fsv/dMKIcbPSVXG0k+qg=">
             <table:column  id="c_com_newland_beecode_domain_PartnerCatalog_catalogName" property="catalogName" z="NOm7CCFFOUL3GYu3UCEkALQYEYE="/>
             <table:column  property="createTime" id="c_com_newland_beecode_domain_partnercatalog_createdate" pattern="yyyy-MM-dd" z="NOm7CCFFOUL3GYu3UCEkALQYEYE="/>
+        	<table:column  property="updateTime" id="c_com_newland_beecode_domain_partnercatalog_updatedate" pattern="yyyy-MM-dd"/>
         </table:table>
     </page:list>
 </div>

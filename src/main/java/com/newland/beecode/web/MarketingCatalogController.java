@@ -68,4 +68,13 @@ public class MarketingCatalogController extends BaseController{
 		model.addAttribute("marketingCatalog", this.marketingCatalogService.findById(id));
 		return "marketingCatalog/show";
 	}
+	
+	@RequestMapping(value="/{id}",params = "form",method=RequestMethod.GET)
+	public String update(@PathVariable("id") Long id,Model model){
+		MarketingCatalog marketingCatalog=this.marketingCatalogService.findById(id);
+		//marketingCatalog.setUpdateTime(new Date());
+		model.addAttribute("marketingCatalog", marketingCatalog);
+		return "marketingCatalog/update";
+	}
+	
 }

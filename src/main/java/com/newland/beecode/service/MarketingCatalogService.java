@@ -23,5 +23,7 @@ public interface MarketingCatalogService {
 	public void delete(Long id)throws AppException;
 	
 	public MarketingCatalog findById(Long id);
+	
+	public void update(MarketingCatalog marketingCatalog);
 
 }
