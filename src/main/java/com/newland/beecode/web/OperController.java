@@ -1,16 +1,15 @@
 package com.newland.beecode.web;
 
-import com.newland.beecode.dao.OperDao;
 import com.newland.beecode.domain.Oper;
-import com.newland.beecode.domain.Roles;
 import com.newland.beecode.service.OperService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
-import javax.annotation.Resource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +23,7 @@ import org.springframework.web.util.WebUtils;
 @RequestMapping("/opers")
 @Controller
 public class OperController {
-
+    @Autowired
     private OperService operService;    
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Oper oper, BindingResult result, Model model,
@@ -43,7 +42,7 @@ public class OperController {
 	@RequestMapping(params = "form", method = RequestMethod.GET)
 	public String createForm(Model model) {
 		model.addAttribute("oper", new Oper());
-		model.addAttribute("roleses", this.operService.findAll());
+		model.addAttribute("roleses", this.operService.findRoleAll());
 		return "opers/create";
 	}
 

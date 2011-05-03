@@ -4,37 +4,64 @@ import com.newland.beecode.service.BaseService;
 
 public class BaseServiceImpl implements BaseService{
 	
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	private String userName;
+	private String MMSUserName;
 	
-	private String passWord;
+	private String MMSPassword;
 	
-	private String path;
+	private String filePath;
+	
+	private String SMSUserName;
+	
+	private String SMSPassword;
+	
+	private String SMSKey;
 
-	@Override
-	public String getUserName() {
-		return this.userName;
+	public String getMMSUserName() {
+		return MMSUserName;
 	}
 
-	@Override
-	public String getPassWord() {
-		return this.passWord;
+	public String getMMSPassword() {
+		return MMSPassword;
 	}
 
-	@Override
-	public String getPath() {
-		return this.path;
+	public String getFilePath() {
+		return filePath;
+	}
+
+	public String getSMSUserName() {
+		return SMSUserName;
+	}
+
+	public String getSMSPassword() {
+		return SMSPassword;
+	}
+
+	public String getSMSKey() {
+		return SMSKey;
+	}
+
+	public void setMMSUserName(String mMSUserName) {
+		MMSUserName = mMSUserName;
+	}
+
+	public void setMMSPassword(String mMSPassword) {
+		MMSPassword = mMSPassword;
+	}
+
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
+	}
+
+	public void setSMSUserName(String sMSUserName) {
+		SMSUserName = sMSUserName;
+	}
+
+	public void setSMSPassword(String sMSPassword) {
+		SMSPassword = sMSPassword;
+	}
+
+	public void setSMSKey(String sMSKey) {
+		SMSKey = sMSKey;
 	}
 
 }

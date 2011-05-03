@@ -3,11 +3,15 @@ package com.newland.beecode.service.impl;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.management.relation.Role;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.newland.beecode.dao.OperDao;
+import com.newland.beecode.dao.RoleDao;
 import com.newland.beecode.domain.Oper;
+import com.newland.beecode.domain.Roles;
 import com.newland.beecode.service.OperService;
 
 /**
@@ -20,6 +24,8 @@ public class OperServiceImpl implements OperService{
 	
 	@Resource(name="operDao")
 	private OperDao operDao;
+	@Autowired
+	private RoleDao roleDao;
 
 	@Override
 	public void save(Oper oper) {
@@ -57,6 +63,11 @@ public class OperServiceImpl implements OperService{
 	public void delete(Long id) {
 		this.operDao.delete(id);
 		
+	}
+
+	@Override
+	public List<Roles> findRoleAll() {
+		return this.roleDao.findAll();
 	}
 	
 	

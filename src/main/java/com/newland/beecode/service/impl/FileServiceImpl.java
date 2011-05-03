@@ -1,5 +1,4 @@
-package com.newland.utils;
-
+package com.newland.beecode.service.impl;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -14,23 +13,36 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-public class FilesHelper {
+import com.newland.beecode.service.BaseService;
+import com.newland.beecode.service.FileService;
 
-	public static String path = "c://temp//";
+/**
+ * @author shaoxr:
+ * @version 2011-4-29 下午04:23:09
+ * 
+ */
+@Service(value="fileService")
+public class FileServiceImpl implements FileService{
+	@Autowired
+	private BaseService baseService;
 	
-	public static String TEXT_PATH="D:\\beecode\\text\\";
+	public static final String TEMP="temp/";
 	
-	public static String IMAGE_PATH="D:\\beecode\\images\\";
+    public static final String TEXT_PATH="text/";
 	
-	public static String ZIP_PATH="D:\\beecode\\zip\\";
-	public static String SMIL_PATH="D:\\beecode\\smil\\";
+	public static final String IMAGE_PATH="images/";
+	
+	public static final String ZIP_PATH="zip/";
+	
+	public static final String SMIL_PATH="smil/";
 	
 	public static final int BUFFER = 2048;
-
-	public static void storeFile(MultipartFile file, String fileName) throws IOException {
-		File nf = new File(path + fileName);
+	public void storeFile(MultipartFile file, String fileName) throws IOException {
+		File nf = new File(baseService.getFilePath()+TEMP + fileName);
 		if (nf.exists()) {
 			nf.delete();
 		}
@@ -40,13 +52,13 @@ public class FilesHelper {
 		fos.close();
 	}
 
-	public static FileReader getActFile(String fileName) throws FileNotFoundException{
-		File file = new File(path + fileName);
+	public FileReader getActFile(String fileName) throws FileNotFoundException{
+		File file = new File(this.baseService.getFilePath()+TEMP + fileName);
 		return new FileReader(file);
 		
 	}
-	public static String getTextContent(String fileName)throws IOException{
-		  File file = new File(TEXT_PATH+fileName+".txt");
+	public String getTextContent(String fileName)throws IOException{
+		  File file = new File(this.baseService.getFilePath()+TEXT_PATH+fileName+".txt");
 	        BufferedReader reader = null;
 	        StringBuffer sb=new StringBuffer();
 	        try {
@@ -68,13 +80,13 @@ public class FilesHelper {
 	        }
 	        return sb.toString();
 	}
-	public static String getPath(String fileName){
-		return path+fileName;
+	public String getPath(String fileName){
+		return this.baseService.getFilePath()+TEMP+fileName;
 	}
-	public static void genTextFile(String content,Long couponId){
+	public void genTextFile(String content,Long couponId){
 		FileWriter fw ;
 		try {
-			fw=new FileWriter(TEXT_PATH+couponId+".txt");
+			fw=new FileWriter(this.baseService.getFilePath()+TEXT_PATH+couponId+".txt");
 			fw.write(content);
 			fw.close();
 		} catch (IOException e) {
@@ -84,9 +96,9 @@ public class FilesHelper {
 		}
 		
 	}
-	public static byte[] getZIPByte(Long couponId)throws Exception{
-		File files[] = {new File(TEXT_PATH+couponId+".txt"),new File(IMAGE_PATH+couponId+".gif"),new File(SMIL_PATH+"beecode.smil")};
-		String zipPath=ZIP_PATH+"beecode.zip";
+	public  byte[] getZIPByte(Long couponId)throws Exception{
+		File files[] = {new File(this.baseService.getFilePath()+TEXT_PATH+couponId+".txt"),new File(this.baseService.getFilePath()+IMAGE_PATH+couponId+".gif"),new File(this.baseService.getFilePath()+SMIL_PATH+"beecode.smil")};
+		String zipPath=this.baseService.getFilePath()+ZIP_PATH+"beecode.zip";
 		doZip(files,zipPath);
 		
 		FileInputStream fs;
@@ -98,7 +110,7 @@ public class FilesHelper {
 		
 		return Content;
 	}
-	public static void doZip(File[] files,String zipPath) throws Exception{
+	public void doZip(File[] files,String zipPath) throws Exception{
 			BufferedInputStream bufStr = null;
 			FileOutputStream dest = new FileOutputStream(zipPath);
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
@@ -125,4 +137,5 @@ public class FilesHelper {
 			}
 			out.close();
 	}
+
 }

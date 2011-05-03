@@ -299,12 +299,6 @@ public class CouponServiceImpl implements CouponService {
 		return list.size()>0?list.get(0):null;
 	}
 
-	@Override
-	public QueryResult _findByCondition(CouponCondition cc) {
-		//return this.couponDao.findCouponsByCondition(cc);
-		//this.couponDao.excuteSimpleQuery(condition)
-		return null;
-	}
 	public List<Coupon> findByCondition(SimpleQueryCondition condition,Integer start,Integer end){
 		return this.couponDao.excuteSimpleQuery(condition, start, end);
 	}

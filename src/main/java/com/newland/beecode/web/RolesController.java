@@ -50,7 +50,8 @@ public class RolesController {
     }
     
     @RequestMapping(method = RequestMethod.GET)
-    public String list(@RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model model) {
+    public String list(@RequestParam(value = "page", required = false) Integer page, 
+    		@RequestParam(value = "size", required = false) Integer size, Model model) {
         if (page != null || size != null) {
             int sizeNo = size == null ? 10 : size.intValue();
             model.addAttribute("roleses", roleDao.findRolesEntries(page == null ? 0 : (page.intValue() - 1) * sizeNo, sizeNo));

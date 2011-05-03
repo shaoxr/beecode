@@ -2,7 +2,9 @@ package com.newland.beecode.service;
 
 import java.util.List;
 
+
 import com.newland.beecode.domain.Oper;
+import com.newland.beecode.domain.Roles;
 
 /**
  * @author shaoxr:
@@ -15,6 +17,8 @@ public interface OperService {
 	
 	
 	public List<Oper> findAll();
+	
+	public List<Roles> findRoleAll();
 	
 	public Oper findById(Long id);
 	
