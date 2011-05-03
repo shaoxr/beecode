@@ -78,6 +78,22 @@ public class PartnerController extends BaseController{
         model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
         return "redirect:/partners";
     }
+	@RequestMapping(value="/{id}",params = "form",method=RequestMethod.GET)
+	public String update(@PathVariable("id") Long id,Model model){
+		Partner partner=this.partnerService.findById(id);
+		model.addAttribute("partner", partner);
+		return "partners/update";
+	}
+	@RequestMapping(method=RequestMethod.PUT)
+	public String updateSubmit(@Valid Partner partner,Model model){
+		try{
+			this.partnerService.update(partner);
+		}catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		return "redirect:/partners"; 
+	}
 	@ModelAttribute("partnercatalogs")
     public Collection<PartnerCatalog> populatePartnerCatalogs() {
         //return PartnerCatalog.findAllPartnerCatalogs();

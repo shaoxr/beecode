@@ -2,7 +2,7 @@
 <div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:spring="http://www.springframework.org/tags" version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    <page:show id="ps_com_newland_beecode_domain_Partner" object="${partner}" path="/partners" update="false" z="La/K35bQYAIeHugAAvHv6BSqZZU=">
+    <page:show id="ps_com_newland_beecode_domain_Partner" object="${partner}" path="/partners" update="false" delete="false" z="La/K35bQYAIeHugAAvHv6BSqZZU=">
         <field:display field="partnerNo" id="s_com_newland_beecode_domain_Partner_partnerNo" object="${partner}" z="SpbQ0UDKWOgK+7/2jb+s25tHWjQ="/>
         <field:display field="partnerName" id="s_com_newland_beecode_domain_Partner_partnerName" object="${partner}" z="YWA+qBhFSjV/avklX3zZNtSxz5I="/>
     

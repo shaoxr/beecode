@@ -23,4 +23,6 @@ public interface PartnerService {
 	public long countPartners();
 	
 	public void delete(Long id);
+	
+	public void update(Partner partner ) throws AppException;
 }

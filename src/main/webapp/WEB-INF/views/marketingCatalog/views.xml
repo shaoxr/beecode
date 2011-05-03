@@ -10,4 +10,7 @@
 <definition extends="default" name="marketingCatalog/create">
         <put-attribute name="body" value="/WEB-INF/views/marketingCatalog/create.jspx"/>
     </definition>
+<definition extends="default" name="marketingCatalog/update">
+        <put-attribute name="body" value="/WEB-INF/views/marketingCatalog/update.jspx"/>
+    </definition>
 </tiles-definitions>

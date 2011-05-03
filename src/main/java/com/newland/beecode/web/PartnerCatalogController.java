@@ -81,4 +81,25 @@ public class PartnerCatalogController extends BaseController{
 		model.addAttribute("partnerCatalog", partnerCatalog);
 		return "partnerCatalog/show";
 	}
+	
+	@RequestMapping(value="/{id}",params = "form",method=RequestMethod.GET)
+	public String update(@PathVariable("id") Long id,Model model){
+		PartnerCatalog partnerCatalog=this.partnerCatalogService.findById(id);
+		partnerCatalog.setUpdateTime(new Date());
+		model.addAttribute("partnerCatalog", partnerCatalog);
+		return "partnerCatalog/update";
+	}
+	@RequestMapping(method=RequestMethod.PUT)
+	public String updateSubmit(@Valid PartnerCatalog partnerCatalog,Model model){	
+		try {
+			if(this.partnerCatalogService.findPartnerCatalogsByCatalogName(partnerCatalog.getCatalogName())!=null){
+				throw new AppException(ErrorsCode.BIZ_PARTNERCATALOG_NAME_EXITS,"");
+			}
+            this.partnerCatalogService.update(partnerCatalog);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		return "redirect:/partnerCatalog";
+	}
 }

@@ -25,5 +25,7 @@ public interface PartnerCatalogService {
 	public void delete(Long id)throws AppException;
 	
 	public PartnerCatalog findById(Long id);
+	
+	public void update(PartnerCatalog partnerCatalog);
 
 }
