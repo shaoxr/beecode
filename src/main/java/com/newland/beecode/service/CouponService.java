@@ -59,8 +59,6 @@ public interface CouponService {
 	public Coupon findByCoupon(Long couponId);
 	
 	
-	public QueryResult _findByCondition(CouponCondition cc);
-	
 	public ReportResult reportCount(ReportForm reportForm);
 	
 	public ReportResult reportDetail(ReportForm reportForm);

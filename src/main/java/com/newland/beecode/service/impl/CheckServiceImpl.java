@@ -23,19 +23,21 @@ import com.newland.beecode.domain.condition.CheckResult;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.CheckService;
-import com.newland.utils.FilesHelper;
+import com.newland.beecode.service.FileService;
 @Service("checkService")
 public class CheckServiceImpl implements CheckService{
 	@Autowired
 	private MessageSource messageSource;
+	@Autowired
+	private FileService fileService;
 	@Override
 	public CheckResult customerCheck(MultipartFile file,String fileName)throws AppException {
 		StringBuffer tempError = new StringBuffer();
 		CheckResult cr=new CheckResult();
 		cr.setPass(true);
 		try {
-			FilesHelper.storeFile(file,fileName);
-			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(FilesHelper.getPath(fileName)));
+			this.fileService.storeFile(file,fileName);
+			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(this.fileService.getPath(fileName)));
 			HSSFWorkbook wb = new HSSFWorkbook(fs);
 			HSSFSheet sheet = wb.getSheet("customer");
 			if(sheet==null){
@@ -81,7 +83,7 @@ public class CheckServiceImpl implements CheckService{
 		POIFSFileSystem fs;
 		List<Customer> list=new ArrayList<Customer>();
 		try {
-			fs = new POIFSFileSystem(new FileInputStream(FilesHelper.getPath(fileName)));
+			fs = new POIFSFileSystem(new FileInputStream(this.fileService.getPath(fileName)));
 			HSSFWorkbook wb = new HSSFWorkbook(fs);
 			HSSFSheet sheet = wb.getSheet("customer");
 			HSSFRow row;

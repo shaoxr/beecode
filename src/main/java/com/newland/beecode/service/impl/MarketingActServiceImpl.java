@@ -34,10 +34,11 @@ import com.newland.beecode.domain.report.MarketingActSummary;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.BarCodeService;
+import com.newland.beecode.service.BaseService;
 import com.newland.beecode.service.CheckService;
+import com.newland.beecode.service.FileService;
 import com.newland.beecode.service.MarketingActService;
 import com.newland.beecode.service.PartnerService;
-import com.newland.utils.FilesHelper;
 import com.newland.utils.NewlandUtil;
 import com.newland.utils.UuidHelper;
 import com.ws.util.service.SMSService;
@@ -52,12 +53,12 @@ public class MarketingActServiceImpl implements MarketingActService {
     
     @Resource(name = "couponDao")
     private CouponDao couponDao;
+    
     @Autowired
     private PartnerService partnerService;
     
 	private Log logger = LogFactory.getLog(MarketingActServiceImpl.class);
 	private List<MarketingAct> giveActs = new LinkedList<MarketingAct>();
-	private List<MarketingAct> giveActsSms=new LinkedList<MarketingAct>();
 	@Autowired
 	private BarCodeService barCodeService;
 	@Autowired
@@ -66,29 +67,34 @@ public class MarketingActServiceImpl implements MarketingActService {
 	private CheckService checkService;
 	@Autowired
 	private SMSService smsService;
+	@Autowired
+	private FileService fileService;
+	@Autowired
+	private BaseService baseService;
 	private Thread mmsWorker = new Thread() {
 		public void run() {
 
 			while (true) {
+				MarketingAct act=null;
 				try {
 					synchronized (giveActs) {
 						if (giveActs.isEmpty()) {
 							giveActs.wait();
 						}
 					}
-					MarketingAct act=giveActs.remove(0);
+					act=giveActs.remove(0);
 					/**
 					 * 彩信发送
 					 */ 
 					long[] count=sendMMS(act);
 					act.setMmsSendSum(count[0]);
 					act.setSmsSendSum(count[1]);
-					act.setActStatus(MarketingAct.STATUS_AFTER_GIVE);
-					//act.merge();
-                                        actDao.update(act);
 				} catch (Exception e) {
 					e.printStackTrace();
 					
+				}finally{
+					act.setActStatus(MarketingAct.STATUS_AFTER_GIVE);
+                    actDao.update(act);
 				}
 			}
 
@@ -106,8 +112,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		long count=0;
 		MarketingAct act;
 		synchronized(this){
-			//act = MarketingAct.findMarketingAct(actNo);
-                        act = actDao.findUniqueByProperty("actNo", actNo);
+            act = actDao.findUniqueByProperty("actNo", actNo);
 			if(!act.getActStatus().equals(MarketingAct.STATUS_BEFORE_RECHECK)){
 				throw new AppException(ErrorsCode.BIZ_COUPON_CHECKED,"");
 			}
@@ -116,15 +121,13 @@ public class MarketingActServiceImpl implements MarketingActService {
 			  count=genCoupons(act);
 			  act.setActStatus(MarketingAct.STATUS_BEFORE_GIVE);
 			}
-			//act.merge();
-                        actDao.update(act);
+            actDao.update(act);
 		}
 		return count;
 	}
     public void marketingActSend(Long actNo)throws AppException{
     	
     	synchronized(this){
-    	  //MarketingAct act=MarketingAct.findMarketingAct(actNo);
             MarketingAct act= actDao.findUniqueByProperty("actNo", actNo);
     	  if(!act.getActStatus().equals(MarketingAct.STATUS_BEFORE_GIVE)){
     		 throw new AppException(ErrorsCode.BIZ_MARKETING_GIVED,"");
@@ -139,7 +142,6 @@ public class MarketingActServiceImpl implements MarketingActService {
 				//throw new AppException(ErrorsCode.BIZ_MS_BALANCE_UN_LESS,"");
 			}
     	  act.setActStatus(MarketingAct.STATUS_SENDNG);
-    	  //act=act.merge();
           act = actDao.update(act);
     	  synchronized(giveActs){
       	    giveActs.add(act);
@@ -167,8 +169,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 				coupon.setGenTime(new Date());
 				coupon.setMmsStatus(Coupon.MMS_STATUS_WAIT);
 				coupon.setSmsStatus(Coupon.SMS_STATUS_WAIT);
-				//coupon.persist();
-                                couponDao.save(coupon);
+                couponDao.save(coupon);
 				this.genCode(coupon,act);
 				this.genTxtFile(coupon, act);
 			}
@@ -201,10 +202,9 @@ public class MarketingActServiceImpl implements MarketingActService {
 		content=content.replaceAll(MmsTemplate.START_DATE,NewlandUtil.dataToString(marketingAct.getStartDate(), "yyyy-MM-dd"));
 		content=content.replaceAll(MmsTemplate.END_DATE,NewlandUtil.dataToString(marketingAct.getEndDate(), "yyyy-MM-dd"));
 		content=content.replaceAll(MmsTemplate.NAME, coupon.getAcctName());
-		FilesHelper.genTextFile(content, coupon.getCouponId());
+		this.fileService.genTextFile(content, coupon.getCouponId());
 	}
     public long[] sendMMS(MarketingAct act){
-    	//List<Coupon> list=Coupon.findByActNo(act.getActNo());
         List<Coupon> list = couponDao.findByActNo(act.getActNo());
     	System.out.println("send ... count:"+list.size());
     	long time=System.currentTimeMillis();
@@ -212,8 +212,8 @@ public class MarketingActServiceImpl implements MarketingActService {
     	long smsCount=0;
     	for(Coupon coupon:list){
           try {
-			byte[] bytes=FilesHelper.getZIPByte(coupon.getCouponId());
-			  String[] str=mmsService.sendMMS("GD-ltwx", "l123", coupon.getAcctMobile(), act.getMmsTitle(), bytes);
+			byte[] bytes=this.fileService.getZIPByte(coupon.getCouponId());
+			  String[] str=mmsService.sendMMS(this.baseService.getMMSUserName(), this.baseService.getMMSPassword(), coupon.getAcctMobile(), act.getMmsTitle(), bytes);
 			  System.out.println("--------->"+str[0]);
 			  if(str[0].indexOf("OK")>=0){
 				  mmsCount++;
@@ -223,7 +223,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 				 coupon.setMmsStatus(Coupon.MMS_STATUS_SEND_ERROR);
 				 coupon.setMmsDesc(str[0]);
 			  }
-			  String content=FilesHelper.getTextContent(coupon.getCouponId().toString());
+			  String content=this.fileService.getTextContent(coupon.getCouponId().toString());
 			  System.out.println(content);
 			  int resp=smsService.sendSMS("2SDK-EMY-6688-JBVTN", "123456", null, new String[]{coupon.getAcctMobile()}, act.getMmsTitle(), content, "gbk",5, coupon.getCouponId());
 			 System.out.println("---------------> sms:"+resp);
@@ -268,23 +268,20 @@ public class MarketingActServiceImpl implements MarketingActService {
 
 	@Transactional
 	public void invalidMarketingAct(Long actNo)throws AppException {
-		//MarketingAct act = MarketingAct.findMarketingAct(actNo);
             MarketingAct act = actDao.findUniqueByProperty("actNo", actNo);
 		if (act.getActStatus() != MarketingAct.STATUS_BEFORE_RECHECK) {
 			throw new AppException(ErrorsCode.BIZ_MARKETACT_DONOT_DELETE,"do not delete");
 		} else {
 			act.setActStatus(MarketingAct.STAUS_DELETE);
-			//act.merge();
-                        actDao.update(act);
+            actDao.update(act);
 		}
 	}
 
 	@Override
 	public void append(Long actNo, MultipartFile file) throws AppException {
-		//MarketingAct act = MarketingAct.findMarketingAct(actNo);
             MarketingAct act = actDao.findUniqueByProperty("actNo", actNo);
 		try {
-			FilesHelper.storeFile(file, String.valueOf(actNo));
+			this.fileService.storeFile(file, String.valueOf(actNo));
 		} catch (IOException e) {
 			throw new AppException(ErrorsCode.BIZ_FILE_UPLOAD_ERROR,"");
 		}

@@ -70,9 +70,12 @@
         <property name="useCodeAsDefaultMessage" value="true" />         
     </bean> 
     <bean id="baseService" class="com.newland.beecode.service.impl.BaseServiceImpl">                   
-        <property name="userName" value="GD-ltwx" />
-        <property name="passWord" value="l123" /> 
-        <property name="path" value="D:\\beecode\\" />       
+        <property name="MMSUserName" value="GD-ltwx" />
+        <property name="MMSPassword" value="l123" /> 
+        <property name="filePath" value="D:/beecode/" />
+        <property name="SMSUserName" value=""/>
+        <property name="SMSPassword" value=""/>
+        <property name="SMSKey" value=""/>  
     </bean> 
     <!--
     <bean name="viewResolver" 
