@@ -65,7 +65,7 @@ public class CouponController {
 	@RequestMapping(params = { "find=ByCondition" }, method = RequestMethod.GET)
 	public String findMarketingActsByCondition(
 			@RequestParam("mobile") String mobile,
-			@RequestParam("couponId") Integer couponId,
+			@RequestParam("couponId") Long couponId,
 			@RequestParam("couponStatus") Integer couponStatus,
 			@RequestParam("marketingCatalogId") Long marketingCatalogId,
 			@RequestParam("actNo") Long actNo, 

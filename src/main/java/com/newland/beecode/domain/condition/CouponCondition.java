@@ -28,7 +28,7 @@ public class CouponCondition extends SimpleQueryCondition{
 	
     private String mobile;
 	
-	private Integer couponId;
+	private Long couponId;
 	
 	private Integer couponStatus;
 	
@@ -91,11 +91,11 @@ public class CouponCondition extends SimpleQueryCondition{
 		this.mobile = mobile;
 	}
 	@SimpleQueryProperty(operator = OperatorType.LIKE,property = "couponId")
-	public Integer getCouponId() {
+	public Long getCouponId() {
 		return couponId;
 	}
 
-	public void setCouponId(Integer couponId) {
+	public void setCouponId(Long couponId) {
 		this.couponId = couponId;
 	}
 	@SimpleQueryProperty(operator = OperatorType.EQ,property = "couponStatus")
