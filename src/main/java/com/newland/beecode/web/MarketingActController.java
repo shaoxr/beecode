@@ -238,7 +238,8 @@ public class MarketingActController {
 				String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
 				QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_RECHECK, page, size);
 		    model.addAttribute("marketingacts",qr.getResultList());
-		    model.addAttribute("maxPages",qr.getCount());
+		    int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
+		    model.addAttribute("maxPages",maxPages);
 		    model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
 		    model.addAttribute(PaginationHelper.PARAM_PAGE, page);
 			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
@@ -280,7 +281,8 @@ public class MarketingActController {
 				String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
 				QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_GIVE, page, size);
 		    model.addAttribute("marketingacts",qr.getResultList());
-		    model.addAttribute("maxPages",qr.getCount());
+		    int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
+		    model.addAttribute("maxPages",maxPages);
 		    model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
 		    model.addAttribute(PaginationHelper.PARAM_PAGE, page);
 			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
