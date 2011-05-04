@@ -44,11 +44,14 @@ public class MarketingCatalog {
 	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+	
     @Column
     private String catalogName;
+    
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "MM")
     private Date createTime;
+    
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "MM")
     private Date updateTime;
