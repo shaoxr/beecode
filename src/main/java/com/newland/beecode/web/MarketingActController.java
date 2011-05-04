@@ -261,7 +261,7 @@ public class MarketingActController {
 			@RequestParam(value = "actStatus", required = true) Integer actStatus,
 			Model model) {
 		try {
-			model.addAttribute("count", marketingActService.checkMarketingAct(actNo, actStatus));
+			model.addAttribute("count", marketingActService.checkMarketingAct(actNo, actStatus));		
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
@@ -308,7 +308,7 @@ public class MarketingActController {
 		return "marketingacts/sendTip";
 	}
 	/**
-	 * 组合条件查询，至少输入一个条件
+	 * 组合条件查询，至少输入一个条
 	 * 
 	 * @param minGenTime
 	 * @param maxGenTime
