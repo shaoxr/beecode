@@ -237,7 +237,8 @@ public class MarketingActController {
 				String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
 				QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_RECHECK, page, size);
 		    model.addAttribute("marketingacts",qr.getResultList());
-		    model.addAttribute("maxPages",qr.getCount());
+		    int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
+		    model.addAttribute("maxPages",maxPages);
 		    model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
 		    model.addAttribute(PaginationHelper.PARAM_PAGE, page);
 			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
@@ -259,7 +260,7 @@ public class MarketingActController {
 			@RequestParam(value = "actStatus", required = true) Integer actStatus,
 			Model model) {
 		try {
-			model.addAttribute("count", marketingActService.checkMarketingAct(actNo, actStatus));
+			model.addAttribute("count", marketingActService.checkMarketingAct(actNo, actStatus));		
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
@@ -279,7 +280,8 @@ public class MarketingActController {
 				String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
 				QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_GIVE, page, size);
 		    model.addAttribute("marketingacts",qr.getResultList());
-		    model.addAttribute("maxPages",qr.getCount());
+		    int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
+		    model.addAttribute("maxPages",maxPages);
 		    model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
 		    model.addAttribute(PaginationHelper.PARAM_PAGE, page);
 			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
@@ -305,7 +307,7 @@ public class MarketingActController {
 		return "marketingacts/sendTip";
 	}
 	/**
-	 * 组合条件查询，至少输入一个条件
+	 * 组合条件查询，至少输入一个条
 	 * 
 	 * @param minGenTime
 	 * @param maxGenTime
