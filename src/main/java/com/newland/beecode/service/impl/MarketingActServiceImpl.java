@@ -84,7 +84,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 					}
 					act=giveActs.remove(0);
 					/**
-					 * 彩信发送
+					 * 彩信发�?
 					 */ 
 					long[] count=sendMMS(act);
 					act.setMmsSendSum(count[0]);
@@ -112,16 +112,16 @@ public class MarketingActServiceImpl implements MarketingActService {
 		long count=0;
 		MarketingAct act;
 		synchronized(this){
-            act = actDao.findUniqueByProperty("actNo", actNo);
-			if(!act.getActStatus().equals(MarketingAct.STATUS_BEFORE_RECHECK)){
+			act = actDao.findUniqueByProperty("actNo", actNo);
+            if(!act.getActStatus().equals(MarketingAct.STATUS_BEFORE_RECHECK)){
 				throw new AppException(ErrorsCode.BIZ_COUPON_CHECKED,"");
 			}
 			act.setActStatus(actStatus);
 			if (actStatus .equals( MarketingAct.STATUS_BEFORE_GIVE)) {
-			  count=genCoupons(act);
+				count=genCoupons(act);
 			  act.setActStatus(MarketingAct.STATUS_BEFORE_GIVE);
 			}
-            actDao.update(act);
+			actDao.update(act);
 		}
 		return count;
 	}
@@ -176,12 +176,13 @@ public class MarketingActServiceImpl implements MarketingActService {
 			act.setCouponSum(count);
             actDao.update(act);
 		} catch (Exception e) {
+			act.setActStatus(MarketingAct.STATUS_BEFORE_RECHECK);
 			throw new AppException(ErrorsCode.BIZ_COUPON_GEN_ERROR,"",e);
 		}
 		return count;
 	}
 	/**
-	 * 二维码生成
+	 * 二维码生�?
 	 * @param coupon
 	 */
 	public void genCode(Coupon coupon,MarketingAct act){
@@ -269,11 +270,11 @@ public class MarketingActServiceImpl implements MarketingActService {
 	@Transactional
 	public void invalidMarketingAct(Long actNo)throws AppException {
             MarketingAct act = actDao.findUniqueByProperty("actNo", actNo);
-		if (act.getActStatus() != MarketingAct.STATUS_BEFORE_RECHECK) {
-			throw new AppException(ErrorsCode.BIZ_MARKETACT_DONOT_DELETE,"do not delete");
-		} else {
-			act.setActStatus(MarketingAct.STAUS_DELETE);
-            actDao.update(act);
+            if (act.getActStatus().equals(MarketingAct.STATUS_BEFORE_RECHECK)) {
+				act.setActStatus(MarketingAct.STAUS_DELETE);
+				actDao.update(act);;
+			} else {
+				throw new AppException(ErrorsCode.BIZ_MARKETACT_DONOT_DELETE,"do not delete");
 		}
 	}
 
@@ -292,7 +293,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 	}
 	
 	/**
-	 * 每天零点开始执行批量过期处理任务
+	 * 每天零点�?��执行批量过期处理任务
 	 */
 	@Override
 	@Transactional
@@ -304,7 +305,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		try {
 			date = sdf.parse(dateStr);
 		} catch (ParseException e) {
-			//不可能发生异常
+			//不可能发生异�?
 		}
 		//MarketingAct.expired(date);
                 actDao.expired(date);

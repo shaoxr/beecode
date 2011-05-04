@@ -138,10 +138,6 @@ public class ErrorsCode {
 	 */
 	public static final String BIZ_PARTNERCATALOG_DONOT_DELETE="BIZ.PARTNERCATALOG.002";
 	
-	
-	
-	
-	
 	/**
 	 * 商户名已经存在
 	 */
@@ -152,16 +148,15 @@ public class ErrorsCode {
 	 */
 	public static final String BIZ_PARTNER_NO_EXITS="BIZ.PARTNER.002";
 	
-	/**
-	 * 
-	 * 
-	 * 
-	 */
 	
 	/**
 	 * 活动类别下已经存在活动，无法删除
 	 */
 	public static final String BIZ_MARKINGCATALOG_DONOT_DELETE="BIZ.MARKETINGCATALOG.001";
 	
+	/**
+	 * 活动类别已经存在
+	 */
+	public static final String BIZ_MARKINGCATALOG_NAME_EXITS="BIZ.MARKETINGCATALOG.002";
 	
 }

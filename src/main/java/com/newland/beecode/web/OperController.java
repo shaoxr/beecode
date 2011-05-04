@@ -26,15 +26,17 @@ public class OperController {
     @Autowired
     private OperService operService;    
 	@RequestMapping(method = RequestMethod.POST)
-	public String create(@Valid Oper oper, BindingResult result, Model model,
+	public String create(@Valid Oper oper,@RequestParam(value="roleIds") Long[] roleIds,  Model model,
 			HttpServletRequest request) {
-		if (result.hasErrors()) {
+		/*if (result.hasErrors()) {
+			System.out.println("---result.hasErrors()-------------");
+			System.out.println("--------------"+result);
 			model.addAttribute("oper", oper);
 			addDateTimeFormatPatterns(model);
 			return "opers/create";
-		}
+		}*/
 		oper.setGenTime(new Date());
-                this.operService.save(oper);
+        this.operService.save(oper,roleIds);
 		return "redirect:/opers/"
 				+ encodeUrlPathSegment(oper.getOperNo().toString(), request);
 	}
@@ -76,21 +78,21 @@ public class OperController {
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
-	public String update(Oper oper, BindingResult result, Model model,
+	public String update(Oper oper,@RequestParam(value="roleIds") Long[] roleIds, Model model,
 			HttpServletRequest request) {
-		if (result.hasErrors()) {
-			model.addAttribute("oper", oper);
-			addDateTimeFormatPatterns(model);
-			return "opers/update";
-		}
-		Oper dboper = this.operService.findById(oper.getOperNo());
+//		if (result.hasErrors()) {
+//			model.addAttribute("oper", oper);
+//			addDateTimeFormatPatterns(model);
+//			return "opers/update";
+//		}
+		//Oper dboper = this.operService.findById(oper.getOperNo());
 
-		dboper.setEnabled(oper.isEnabled());
-		dboper.setOperName(oper.getOperName());
-		dboper.setRoles(oper.getRoles());
+		//dboper.setEnabled(oper.isEnabled());
+		//dboper.setOperName(oper.getOperName());
+		//dboper.setRoles(oper.getRoles());
 		//dboper.persist();
-                this.operService.save(dboper);
-
+		
+        this.operService.update(oper,roleIds);
 		return "redirect:/opers/"
 				+ encodeUrlPathSegment(oper.getOperNo().toString(), request);
 	}
@@ -113,7 +115,7 @@ public class OperController {
 		}
 		oper.setOperPwd(newPassword);
 		//oper.merge();
-                this.operService.update(oper);
+                this.operService.update(oper,null);
 		return "redirect:";
 	}
 
