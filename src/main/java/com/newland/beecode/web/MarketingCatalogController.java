@@ -1,5 +1,6 @@
 package com.newland.beecode.web;
 
+import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.newland.beecode.domain.MarketingCatalog;
+import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.MarketingCatalogService;
 import com.newland.utils.PaginationHelper;
 
-//@RooWebScaffold(path = "marketingCatalog", formBackingObject = MarketingCatalog.class, create=true,update=false)
 @RequestMapping("/marketingCatalog")
 @Controller
 public class MarketingCatalogController extends BaseController{
@@ -30,7 +31,18 @@ public class MarketingCatalogController extends BaseController{
 	}
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid MarketingCatalog marketingCatalog,Model model){
-        this.marketingCatalogService.save(marketingCatalog);
+        
+		try {
+			if(this.marketingCatalogService.findMarketingCatalogsByCatalogName(marketingCatalog.getCatalogName())!=null){
+				throw new AppException(ErrorsCode.BIZ_MARKINGCATALOG_NAME_EXITS,"");
+			}
+     
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		
+		this.marketingCatalogService.save(marketingCatalog);
 		model.addAttribute("marketingCatalog", this.marketingCatalogService.findAll());
 		return "redirect:/marketingCatalog";
 	}
@@ -70,11 +82,27 @@ public class MarketingCatalogController extends BaseController{
 	}
 	
 	@RequestMapping(value="/{id}",params = "form",method=RequestMethod.GET)
-	public String update(@PathVariable("id") Long id,Model model){
+	public String update(@PathVariable("id") Long id,Model model)throws Exception{
+		
 		MarketingCatalog marketingCatalog=this.marketingCatalogService.findById(id);
-		//marketingCatalog.setUpdateTime(new Date());
+		marketingCatalog.setUpdateTime(new Date());
 		model.addAttribute("marketingCatalog", marketingCatalog);
 		return "marketingCatalog/update";
+	}
+	@RequestMapping(method=RequestMethod.PUT)
+	public String updateSubmit(@Valid MarketingCatalog marketingCatalog , Model model){
+		
+		try {
+			if(this.marketingCatalogService.findMarketingCatalogsByCatalogName(marketingCatalog.getCatalogName())!=null){
+				throw new AppException(ErrorsCode.BIZ_MARKINGCATALOG_NAME_EXITS,"");
+			}
+            this.marketingCatalogService.update(marketingCatalog);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		
+		return "redirect:/marketingCatalog";
 	}
 	
 }

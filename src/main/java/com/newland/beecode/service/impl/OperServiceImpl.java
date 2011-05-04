@@ -1,9 +1,10 @@
 package com.newland.beecode.service.impl;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
-import javax.management.relation.Role;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,18 @@ public class OperServiceImpl implements OperService{
 	private RoleDao roleDao;
 
 	@Override
-	public void save(Oper oper) {
-		this.operDao.save(oper);
-		
+	public void save(Oper oper,Long[] roles) {
+		oper.setRoles(this.genRoles(roles));
+		this.operDao.save(oper);		
+	}
+	
+	private Set<Roles>  genRoles(Long[] rolesIds){
+		Set<Roles> roles=new HashSet<Roles>();
+		for(Long rolesId:rolesIds){
+			Roles role=this.roleDao.get(rolesId);
+			roles.add(role);
+		}		
+		return roles;	
 	}
 
 	@Override
@@ -54,22 +64,26 @@ public class OperServiceImpl implements OperService{
 	}
 
 	@Override
-	public void update(Oper oper) {
-		this.operDao.update(oper);
+	public void update(Oper oper,Long[] roles) {
+		oper.setRoles(this.genRoles(roles));
 		
+		System.out.println(oper.getOperNo());
+		System.out.println(oper.getOperName());
+		System.out.println(oper.isEnabled());
+		System.out.println(oper.getRoles().size());
+		this.operDao.saveOrUpdate(oper);
+		System.out.println(oper.getVersion());
 	}
 
 	@Override
 	public void delete(Long id) {
-		this.operDao.delete(id);
-		
+		this.operDao.delete(id);	
 	}
 
 	@Override
 	public List<Roles> findRoleAll() {
 		return this.roleDao.findAll();
 	}
-	
-	
+
 
 }

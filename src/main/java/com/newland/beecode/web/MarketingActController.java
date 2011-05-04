@@ -2,7 +2,6 @@ package com.newland.beecode.web;
 
 import com.intensoft.base.Dictionary;
 import com.intensoft.formater.DictViewFormatter;
-import com.newland.beecode.dao.MarketingActDao;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -357,6 +356,7 @@ public class MarketingActController {
 	@RequestMapping(params = { "find=ByCondition", "form" }, method = RequestMethod.GET)
 	public String findMarketingActsByConditionForm(Model model) {
 		addDateTimeFormatPatterns(model);
+		
 		return "marketingacts/findMarketingActsByCondition";
 	}
 	

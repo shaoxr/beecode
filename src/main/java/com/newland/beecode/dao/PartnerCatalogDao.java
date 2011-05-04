@@ -7,7 +7,6 @@ package com.newland.beecode.dao;
 import com.intensoft.dao.hibernate.SimpleHibernateTemplate;
 import com.newland.beecode.domain.PartnerCatalog;
 import java.util.List;
-import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -25,16 +24,14 @@ public class PartnerCatalogDao extends SimpleHibernateTemplate<PartnerCatalog, L
         return this.find("FROM PartnerCatalog AS partnercatalog WHERE partnercatalog.catalogName = ?", catalogName);
     }
     
-       public  List<PartnerCatalog> findPartnerCatalogEntries(int firstResult, int maxResults) {
+    public  List<PartnerCatalog> findPartnerCatalogEntries(int firstResult, int maxResults) {
 
-        
-        return findListByQuery("select o from PartnerCatalog o", firstResult, maxResults);
+       return findListByQuery("select o from PartnerCatalog o", firstResult, maxResults);
     }  
     
        
-           public  long countPartnerCatalogs() {
+    public  long countPartnerCatalogs() {
         //return entityManager().createQuery("select count(o) from PartnerCatalog o", Long.class).getSingleResult();
-               
-               return this.findLong("select count(o) from PartnerCatalog o");
+        return this.findLong("select count(o) from PartnerCatalog o");
     } 
 }

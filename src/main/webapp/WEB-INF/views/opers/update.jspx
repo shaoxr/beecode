@@ -5,6 +5,7 @@
     <form:update id="fu_com_newland_beecode_domain_Oper" idField="operNo" modelAttribute="oper" path="/opers" z="oq1+Ln2fv4hDdaVsVS4m7RJDwvA=">
         <field:input field="operName" id="c_com_newland_beecode_domain_Oper_operName" max="24" required="true" z="7YnXcPlKMPmLqkfYz+fOQ8DDzVk="/>
         <field:checkbox field="enabled" id="c_com_newland_beecode_domain_Oper_enabled" z="+pVwEsQ/F1EMdKMYnH/U/RL9taE="/>
-    	<field:select field="roles" id="c_com_newland_beecode_domain_Oper_role1" itemLabel="roleName" itemValue="id" items="${roleses}" path="/roleses" z="8k6fbpdEQ455BrOe5wBH7Q4n6gA="/>
+    	<field:select path="" itemLabel="roleName" itemValue="id" multiple="true"  disableFormBinding="true" items="${oper.roles}" field="roleIds" id="s_com_newland_beecode_domain_Oper_role1"  z="X2s+u3OVA3VfiaFh+21omv0PBMg="/>
+    
     </form:update>
 </div>

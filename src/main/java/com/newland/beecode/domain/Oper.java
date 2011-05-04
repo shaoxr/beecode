@@ -11,9 +11,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
+
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -41,9 +45,22 @@ public class Oper {
     private Date genTime;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @JoinTable(name="oper_roles",joinColumns=@JoinColumn(name="oper"),inverseJoinColumns=@JoinColumn(name="roles"))
     private Set<Roles> roles = new HashSet<Roles>();
 
-    public boolean isEnabled() {
+    @Version
+    @Column(name = "version")
+    private Integer version; 
+    
+    public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
+	public boolean isEnabled() {
         return enabled;
     }
 

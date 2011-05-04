@@ -5,10 +5,8 @@
 package com.newland.beecode.dao;
 
 import com.intensoft.dao.hibernate.SimpleHibernateTemplate;
-import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.Oper;
 import java.util.List;
-import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 /**

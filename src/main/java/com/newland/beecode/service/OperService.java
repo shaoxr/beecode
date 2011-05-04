@@ -13,8 +13,7 @@ import com.newland.beecode.domain.Roles;
  */
 public interface OperService {
 	
-	public void save(Oper oper);
-	
+	public void save(Oper oper,Long[] roles);
 	
 	public List<Oper> findAll();
 	
@@ -26,7 +25,7 @@ public interface OperService {
 	
 	public long countOpers();
 	
-	public void update(Oper oper);
+	public void update(Oper oper,Long[] roles);
 	
 	public void delete(Long id);
 

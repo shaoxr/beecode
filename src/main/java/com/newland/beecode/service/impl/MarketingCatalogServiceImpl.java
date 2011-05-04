@@ -11,6 +11,7 @@ import com.newland.beecode.dao.MarketingActDao;
 import com.newland.beecode.dao.MarketingCatalogDao;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.MarketingCatalog;
+import com.newland.beecode.domain.PartnerCatalog;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.MarketingCatalogService;
@@ -62,6 +63,12 @@ public class MarketingCatalogServiceImpl implements MarketingCatalogService{
 	@Override
 	public void update(MarketingCatalog marketingCatalog) {
 		this.marketingCatalogDao.update(marketingCatalog);
+	}
+	@Override
+	public MarketingCatalog findMarketingCatalogsByCatalogName(
+			String catalogName) {
+		List<MarketingCatalog> list= this.marketingCatalogDao.findMarketingCatalogsByCatalogName(catalogName);
+		return list.size()>0?list.get(0):null;
 	}
 
 }
