@@ -189,7 +189,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		return count;
 	}
 	/**
-	 * 二维码生�?
+	 * 二维码生成
 	 * @param coupon
 	 */
 	public void genCode(Coupon coupon,MarketingAct act){
@@ -302,7 +302,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 	}
 	
 	/**
-	 * 每天零点�?��执行批量过期处理任务
+	 * 每天零点开始执行批量过期处理任务
 	 */
 	@Override
 	@Transactional
@@ -314,7 +314,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		try {
 			date = sdf.parse(dateStr);
 		} catch (ParseException e) {
-			//不可能发生异�?
+			//不可能发生异常
 		}
 		//MarketingAct.expired(date);
                 actDao.expired(date);
