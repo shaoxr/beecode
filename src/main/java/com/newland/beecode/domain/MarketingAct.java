@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
@@ -35,15 +36,15 @@ public class MarketingAct {
 	/**
 	 * 业务类型字典名称
 	 */
-	public static final String BUSINESS_TYPE="BUSINESS_TYPE";
+	public static final String BUSINESS_TYPE = "BUSINESS_TYPE";
 	/**
 	 * 短信/彩信 类型字典
 	 */
-	public static final String MS_TYPE="MS_TYPE";
+	public static final String MS_TYPE = "MS_TYPE";
 	/**
 	 * 卡检查字典
 	 */
-	public static final String DICT_KEY_NAME_CHECK_CARD="BIND_CARD";
+	public static final String DICT_KEY_NAME_CHECK_CARD = "BIND_CARD";
 
 	/**
 	 * 待审核
@@ -67,7 +68,7 @@ public class MarketingAct {
 	/**
 	 * 发放中
 	 */
-	public static final Integer STATUS_SENDNG=4;
+	public static final Integer STATUS_SENDNG = 4;
 
 	/**
 	 * 已发放
@@ -84,130 +85,131 @@ public class MarketingAct {
 	 */
 	public static final Integer STATUS_CLOSED = 7;
 	/**
-	 * 绑定银行卡 
+	 * 绑定银行卡
 	 */
-	public static final String BIND_CARD_YES="1";
+	public static final String BIND_CARD_YES = "1";
 	/**
-	 * 不绑定银行卡 
+	 * 不绑定银行卡
 	 */
-	public static final String BIND_CARD_NO="0";
+	public static final String BIND_CARD_NO = "0";
 
 	public MarketingAct() {
 		amount = new BigDecimal(0);
 		rebateRate = new Float(0);
 	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGen")
 	@GenericGenerator(name = "tableGen", strategy = "org.hibernate.id.MultipleHiLoPerTableGenerator", parameters = { @Parameter(name = "max_lo", value = "100") })
 	@Column
-        private Long actNo;
+	private Long actNo;
 
 	@Transient
 	private String actStatusDesc;
 
-        @Column
+	@Column
 	private String actName;
-
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date startDate;
 
-
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date endDate;
 
-        @Column
+	@Column
 	private String actDetail;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "MM")
 	private Date genTime;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(style = "M-")
 	private Date sendTime;
-    
 
-        @Column
+	@Column
 	private Integer times;
-	
-        
 
-        @Column
+	@Column
 	private String checkCode;
 
-        @Column
+	@Column
 	private Float rebateRate;
 
 	/**
 	 * 兑换券价值
 	 */
-        @Column
+	@Column
 	private BigDecimal amount;
-	
-        @Column
+
+	@Column
 	private Integer actStatus;
 	/**
 	 * 礼券数量
 	 */
-        @Column
+	@Column
 	private Long couponSum;
 	/**
 	 * 彩信发放数量
 	 */
-        @Column
+	@Column
 	private Long mmsSendSum;
 	/**
 	 * 短信发放数量
 	 */
-        @Column
+	@Column
 	private Long smsSendSum;
-	
+
 	@Transient
 	private Long sendErrSum;
-	
 
-        @Column
+	@Column
 	private String bizNo;
-    
-	@ManyToMany(cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Partner> partners = new HashSet<Partner>();
-    
-	
+
 	@ManyToOne
-	@JoinColumn(name="marketing_catalog")
+	@JoinColumn(name = "marketing_catalog")
 	private MarketingCatalog marketingCatalog;
-	
+
 	@Column
 	private Long operNo;
-	
-        @Column
+
+	@Column
 	private String mmsContent;
-	
-        @Column
+
+	@Column
 	private String mmsTitle;
-	
-        @Column
+
+	@Column
 	private String bindCard;
-        
-        @Column
+
+	@Column
 	private String fileName;
-	
+
 	@Transient
 	private String bizName;
-	
+
 	@Transient
 	private MarketingActSummary summary;
-	
+
 	@Transient
 	private MmsTemplate mmsTemplate;
-    
-	
 
-        
-    
+	@Version
+	@Column(name = "version")
+	private Integer version;
+
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 
 	public MarketingActSummary getSummary() {
 		return summary;
@@ -217,222 +219,220 @@ public class MarketingAct {
 		this.summary = summary;
 	}
 
-    public String getActDetail() {
-        return actDetail;
-    }
+	public String getActDetail() {
+		return actDetail;
+	}
 
-    public void setActDetail(String actDetail) {
-        this.actDetail = actDetail;
-    }
+	public void setActDetail(String actDetail) {
+		this.actDetail = actDetail;
+	}
 
-    public String getActName() {
-        return actName;
-    }
+	public String getActName() {
+		return actName;
+	}
 
-    public void setActName(String actName) {
-        this.actName = actName;
-    }
+	public void setActName(String actName) {
+		this.actName = actName;
+	}
 
-    public Long getActNo() {
-        return actNo;
-    }
+	public Long getActNo() {
+		return actNo;
+	}
 
-    public void setActNo(Long actNo) {
-        this.actNo = actNo;
-    }
+	public void setActNo(Long actNo) {
+		this.actNo = actNo;
+	}
 
-    public Integer getActStatus() {
-        return actStatus;
-    }
+	public Integer getActStatus() {
+		return actStatus;
+	}
 
-    public void setActStatus(Integer actStatus) {
-        this.actStatus = actStatus;
-    }
+	public void setActStatus(Integer actStatus) {
+		this.actStatus = actStatus;
+	}
 
-    public String getActStatusDesc() {
-        return actStatusDesc;
-    }
+	public String getActStatusDesc() {
+		return actStatusDesc;
+	}
 
-    public void setActStatusDesc(String actStatusDesc) {
-        this.actStatusDesc = actStatusDesc;
-    }
+	public void setActStatusDesc(String actStatusDesc) {
+		this.actStatusDesc = actStatusDesc;
+	}
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
+	public BigDecimal getAmount() {
+		return amount;
+	}
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
+	}
 
-    public String getBindCard() {
-        return bindCard;
-    }
+	public String getBindCard() {
+		return bindCard;
+	}
 
-    public void setBindCard(String bindCard) {
-        this.bindCard = bindCard;
-    }
+	public void setBindCard(String bindCard) {
+		this.bindCard = bindCard;
+	}
 
-    public String getBizName() {
-        return bizName;
-    }
+	public String getBizName() {
+		return bizName;
+	}
 
-    public void setBizName(String bizName) {
-        this.bizName = bizName;
-    }
+	public void setBizName(String bizName) {
+		this.bizName = bizName;
+	}
 
-    public String getBizNo() {
-        return bizNo;
-    }
+	public String getBizNo() {
+		return bizNo;
+	}
 
-    public void setBizNo(String bizNo) {
-        this.bizNo = bizNo;
-    }
+	public void setBizNo(String bizNo) {
+		this.bizNo = bizNo;
+	}
 
-    public String getCheckCode() {
-        return checkCode;
-    }
+	public String getCheckCode() {
+		return checkCode;
+	}
 
-    public void setCheckCode(String checkCode) {
-        this.checkCode = checkCode;
-    }
+	public void setCheckCode(String checkCode) {
+		this.checkCode = checkCode;
+	}
 
-    public Long getCouponSum() {
-        return couponSum;
-    }
+	public Long getCouponSum() {
+		return couponSum;
+	}
 
-    public void setCouponSum(Long couponSum) {
-        this.couponSum = couponSum;
-    }
+	public void setCouponSum(Long couponSum) {
+		this.couponSum = couponSum;
+	}
 
-    public Date getEndDate() {
-        return endDate;
-    }
+	public Date getEndDate() {
+		return endDate;
+	}
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 
-    public String getFileName() {
-        return fileName;
-    }
+	public String getFileName() {
+		return fileName;
+	}
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 
-    public Date getGenTime() {
-        return genTime;
-    }
+	public Date getGenTime() {
+		return genTime;
+	}
 
-    public void setGenTime(Date genTime) {
-        this.genTime = genTime;
-    }
+	public void setGenTime(Date genTime) {
+		this.genTime = genTime;
+	}
 
-    public MarketingCatalog getMarketingCatalog() {
-        return marketingCatalog;
-    }
+	public MarketingCatalog getMarketingCatalog() {
+		return marketingCatalog;
+	}
 
-    public void setMarketingCatalog(MarketingCatalog marketingCatalog) {
-        this.marketingCatalog = marketingCatalog;
-    }
+	public void setMarketingCatalog(MarketingCatalog marketingCatalog) {
+		this.marketingCatalog = marketingCatalog;
+	}
 
-    public String getMmsContent() {
-        return mmsContent;
-    }
+	public String getMmsContent() {
+		return mmsContent;
+	}
 
-    public void setMmsContent(String mmsContent) {
-        this.mmsContent = mmsContent;
-    }
+	public void setMmsContent(String mmsContent) {
+		this.mmsContent = mmsContent;
+	}
 
-    public Long getMmsSendSum() {
-        return mmsSendSum;
-    }
+	public Long getMmsSendSum() {
+		return mmsSendSum;
+	}
 
-    public void setMmsSendSum(Long mmsSendSum) {
-        this.mmsSendSum = mmsSendSum;
-    }
+	public void setMmsSendSum(Long mmsSendSum) {
+		this.mmsSendSum = mmsSendSum;
+	}
 
-    public MmsTemplate getMmsTemplate() {
-        return mmsTemplate;
-    }
+	public MmsTemplate getMmsTemplate() {
+		return mmsTemplate;
+	}
 
-    public void setMmsTemplate(MmsTemplate mmsTemplate) {
-        this.mmsTemplate = mmsTemplate;
-    }
+	public void setMmsTemplate(MmsTemplate mmsTemplate) {
+		this.mmsTemplate = mmsTemplate;
+	}
 
-    public String getMmsTitle() {
-        return mmsTitle;
-    }
+	public String getMmsTitle() {
+		return mmsTitle;
+	}
 
-    public void setMmsTitle(String mmsTitle) {
-        this.mmsTitle = mmsTitle;
-    }
+	public void setMmsTitle(String mmsTitle) {
+		this.mmsTitle = mmsTitle;
+	}
 
-    public Long getOperNo() {
-        return operNo;
-    }
+	public Long getOperNo() {
+		return operNo;
+	}
 
-    public void setOperNo(Long operNo) {
-        this.operNo = operNo;
-    }
+	public void setOperNo(Long operNo) {
+		this.operNo = operNo;
+	}
 
-    public Set<Partner> getPartners() {
-        return partners;
-    }
+	public Set<Partner> getPartners() {
+		return partners;
+	}
 
-    public void setPartners(Set<Partner> partners) {
-        this.partners = partners;
-    }
+	public void setPartners(Set<Partner> partners) {
+		this.partners = partners;
+	}
 
-    public Float getRebateRate() {
-        return rebateRate;
-    }
+	public Float getRebateRate() {
+		return rebateRate;
+	}
 
-    public void setRebateRate(Float rebateRate) {
-        this.rebateRate = rebateRate;
-    }
+	public void setRebateRate(Float rebateRate) {
+		this.rebateRate = rebateRate;
+	}
 
-    public Long getSendErrSum() {
-        return sendErrSum;
-    }
+	public Long getSendErrSum() {
+		return sendErrSum;
+	}
 
-    public void setSendErrSum(Long sendErrSum) {
-        this.sendErrSum = sendErrSum;
-    }
+	public void setSendErrSum(Long sendErrSum) {
+		this.sendErrSum = sendErrSum;
+	}
 
-    public Date getSendTime() {
-        return sendTime;
-    }
+	public Date getSendTime() {
+		return sendTime;
+	}
 
-    public void setSendTime(Date sendTime) {
-        this.sendTime = sendTime;
-    }
+	public void setSendTime(Date sendTime) {
+		this.sendTime = sendTime;
+	}
 
-    public Long getSmsSendSum() {
-        return smsSendSum;
-    }
+	public Long getSmsSendSum() {
+		return smsSendSum;
+	}
 
-    public void setSmsSendSum(Long smsSendSum) {
-        this.smsSendSum = smsSendSum;
-    }
+	public void setSmsSendSum(Long smsSendSum) {
+		this.smsSendSum = smsSendSum;
+	}
 
-    public Date getStartDate() {
-        return startDate;
-    }
+	public Date getStartDate() {
+		return startDate;
+	}
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
 
-    public Integer getTimes() {
-        return times;
-    }
+	public Integer getTimes() {
+		return times;
+	}
 
-    public void setTimes(Integer times) {
-        this.times = times;
-    }
-        
-        
+	public void setTimes(Integer times) {
+		this.times = times;
+	}
 
 }
