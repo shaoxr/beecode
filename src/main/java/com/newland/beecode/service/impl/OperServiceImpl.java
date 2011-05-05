@@ -65,24 +65,27 @@ public class OperServiceImpl implements OperService{
 
 	@Override
 	public void update(Oper oper,Long[] roles) {
+
 		oper.setRoles(this.genRoles(roles));
-		
-		System.out.println(oper.getOperNo());
-		System.out.println(oper.getOperName());
-		System.out.println(oper.isEnabled());
-		System.out.println(oper.getRoles().size());
 		this.operDao.saveOrUpdate(oper);
-		System.out.println(oper.getVersion());
+		
 	}
 
 	@Override
 	public void delete(Long id) {
-		this.operDao.delete(id);	
+		//this.operDao.delete(id);
+		this.operDao.excuteByHQL("delete from Oper o where o.id=?", id);
 	}
 
 	@Override
 	public List<Roles> findRoleAll() {
 		return this.roleDao.findAll();
+	}
+
+	@Override
+	public Oper findOperByOperName(String operName) {
+		List<Oper> list= this.operDao.findOperByOperName(operName);
+		return list.size()>0?list.get(0):null;
 	}
 
 

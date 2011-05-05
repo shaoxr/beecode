@@ -27,7 +27,7 @@ public class Oper {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGen")
-    @GenericGenerator(name = "tableGen", strategy = "org.hibernate.id.MultipleHiLoPerTableGenerator", parameters = { @Parameter(name = "max_lo", value = "100") })
+    @GenericGenerator(name = "tableGen", strategy = "org.hibernate.id.MultipleHiLoPerTableGenerator", parameters = { @Parameter(name = "max_lo", value = "0") })
     @Column
     private Long operNo;
 
@@ -44,7 +44,7 @@ public class Oper {
     @DateTimeFormat(style = "MM")
     private Date genTime;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
     @JoinTable(name="oper_roles",joinColumns=@JoinColumn(name="oper"),inverseJoinColumns=@JoinColumn(name="roles"))
     private Set<Roles> roles = new HashSet<Roles>();
 

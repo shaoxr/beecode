@@ -1,6 +1,7 @@
 package com.newland.beecode.web;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.PartnerCatalog;
+import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerCatalogService;
 import com.newland.beecode.service.PartnerService;
@@ -40,7 +42,11 @@ public class PartnerController extends BaseController{
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Partner partner,Model model){
             try {
-				partnerService.save(partner);
+            	List<Partner> partners=this.partnerService.findByProperty("partnerNo", partner.getPartnerNo());
+            	if(partners.size()>0){
+        			throw new AppException(ErrorsCode.BIZ_PARTNER_NO_EXITS,"");
+        		}
+        		partnerService.save(partner);
 			} catch (Exception e) {
 				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 				return "prompt";

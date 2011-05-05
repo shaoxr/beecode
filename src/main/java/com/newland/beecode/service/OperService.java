@@ -28,5 +28,7 @@ public interface OperService {
 	public void update(Oper oper,Long[] roles);
 	
 	public void delete(Long id);
+	
+	public Oper findOperByOperName(String operName);
 
 }
