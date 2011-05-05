@@ -36,29 +36,36 @@ public class MarketingCatalogController extends BaseController{
 			if(this.marketingCatalogService.findMarketingCatalogsByCatalogName(marketingCatalog.getCatalogName())!=null){
 				throw new AppException(ErrorsCode.BIZ_MARKINGCATALOG_NAME_EXITS,"");
 			}
+			this.marketingCatalogService.save(marketingCatalog);
+			model.addAttribute("marketingCatalog", this.marketingCatalogService.findAll());
      
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		
-		this.marketingCatalogService.save(marketingCatalog);
-		model.addAttribute("marketingCatalog", this.marketingCatalogService.findAll());
 		return "redirect:/marketingCatalog";
 	}
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(
 			@RequestParam(value = "page", required = false) Integer page, 
 			@RequestParam(value = "size", required = false) Integer size, Model model,HttpServletRequest request){
-		Map<String, String> queryParams = PaginationHelper.makeParameters(
-		request.getParameterMap(), "");
-		page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
-		size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-		model.addAttribute("marketingCatalogs", this.marketingCatalogService.findMarketingCatalogEntries((page.intValue() - 1) * size, size));
-		int maxPages = PaginationHelper.calcMaxPages(size, this.marketingCatalogService.countMarketingCatalogs());
-		model.addAttribute("maxPages",maxPages);
-		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
-		model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+		try {
+			Map<String, String> queryParams = PaginationHelper.makeParameters(
+			request.getParameterMap(), "");
+			page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+			size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+			model.addAttribute("marketingCatalogs", this.marketingCatalogService.findMarketingCatalogEntries((page.intValue() - 1) * size, size));
+			int maxPages = PaginationHelper.calcMaxPages(size, this.marketingCatalogService.countMarketingCatalogs());
+			model.addAttribute("maxPages",maxPages);
+			model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "marketingCatalog/list";
 	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -67,12 +74,13 @@ public class MarketingCatalogController extends BaseController{
     		@RequestParam(value = "size", required = false) Integer size, Model model) {
             try {
 				this.marketingCatalogService.delete(id);
+				 model.addAttribute("page", (page == null) ? "1" : page.toString());
+			     model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
 			} catch (Exception e) {
 				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+				this.logger.error(this.getMessage(e), e);
 				return "prompt";
 			}
-        model.addAttribute("page", (page == null) ? "1" : page.toString());
-        model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
         return "redirect:/marketingCatalog";
     }
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -84,9 +92,15 @@ public class MarketingCatalogController extends BaseController{
 	@RequestMapping(value="/{id}",params = "form",method=RequestMethod.GET)
 	public String update(@PathVariable("id") Long id,Model model)throws Exception{
 		
-		MarketingCatalog marketingCatalog=this.marketingCatalogService.findById(id);
-		marketingCatalog.setUpdateTime(new Date());
-		model.addAttribute("marketingCatalog", marketingCatalog);
+		try {
+			MarketingCatalog marketingCatalog=this.marketingCatalogService.findById(id);
+			marketingCatalog.setUpdateTime(new Date());
+			model.addAttribute("marketingCatalog", marketingCatalog);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "marketingCatalog/update";
 	}
 	@RequestMapping(method=RequestMethod.PUT)
@@ -99,6 +113,7 @@ public class MarketingCatalogController extends BaseController{
             this.marketingCatalogService.update(marketingCatalog);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		

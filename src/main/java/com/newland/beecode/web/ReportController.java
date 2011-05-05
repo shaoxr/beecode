@@ -25,6 +25,7 @@ import com.newland.beecode.domain.MarketingCatalog;
 import com.newland.beecode.domain.PartnerCatalog;
 import com.newland.beecode.domain.report.ReportForm;
 import com.newland.beecode.domain.report.ReportResult;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.CouponService;
 import com.newland.beecode.service.ExcelService;
 import com.newland.beecode.service.MarketingCatalogService;
@@ -35,7 +36,7 @@ import javax.annotation.Resource;
 
 @RequestMapping("/report")
 @Controller
-public class ReportController {
+public class ReportController extends BaseController{
 	
     @Autowired
     private CouponService couponService;
@@ -65,40 +66,45 @@ public class ReportController {
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
 			HttpServletRequest request, HttpServletResponse response){
-		Map<String, String> queryParams = PaginationHelper.makeParameters(
-				request.getParameterMap(), request.getQueryString());
-		page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
-		size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-		String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
+		try {
+			Map<String, String> queryParams = PaginationHelper.makeParameters(
+					request.getParameterMap(), request.getQueryString());
+			page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+			size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+			String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
 
-		addDateTimeFormatPatterns(model);
-		ReportForm reportForm=new ReportForm();
-		reportForm.setStartDate(minGenTime);
-		reportForm.setEndDate(maxGenTime);
-		reportForm.setActNo(actNo);
-		reportForm.setParterNo(parterNo);
-		reportForm.setMarketingCatalogId(new Long(marketingCatalogId));
-		reportForm.setPartnerCatalogId(new Long(partnerCatalogId));
-		reportForm.setPage(page);
-		reportForm.setSize(size);
-		reportForm.setPagination(true);
-		
-		//ReportResult rr=Coupon.reportCount(reportForm);
-                ReportResult rr = this.couponService.reportCount(reportForm);
-		int maxPages = PaginationHelper.calcMaxPages(size, rr.getCount());
-		model.addAttribute("rptDetail",rr.getResultList());
-		addDateTimeFormatPatterns(model);
-		model.addAttribute("maxPages", maxPages);
-		model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
-		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
-		model.addAttribute(PaginationHelper.PARAM_SIZE, size);
-		model.addAttribute("minEndDate",NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"));
-		model.addAttribute("maxEndDate",NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd"));
-		model.addAttribute("actNo",actNo);
-		model.addAttribute("parterNo",parterNo);
-		
-		if(maxPages>0){
-			model.addAttribute("emptyNo",true);
+			addDateTimeFormatPatterns(model);
+			ReportForm reportForm=new ReportForm();
+			reportForm.setStartDate(minGenTime);
+			reportForm.setEndDate(maxGenTime);
+			reportForm.setActNo(actNo);
+			reportForm.setParterNo(parterNo);
+			reportForm.setMarketingCatalogId(new Long(marketingCatalogId));
+			reportForm.setPartnerCatalogId(new Long(partnerCatalogId));
+			reportForm.setPage(page);
+			reportForm.setSize(size);
+			reportForm.setPagination(true);
+			
+			ReportResult rr = this.couponService.reportCount(reportForm);
+			int maxPages = PaginationHelper.calcMaxPages(size, rr.getCount());
+			model.addAttribute("rptDetail",rr.getResultList());
+			addDateTimeFormatPatterns(model);
+			model.addAttribute("maxPages", maxPages);
+			model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
+			model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+			model.addAttribute("minEndDate",NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"));
+			model.addAttribute("maxEndDate",NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd"));
+			model.addAttribute("actNo",actNo);
+			model.addAttribute("parterNo",parterNo);
+			
+			if(maxPages>0){
+				model.addAttribute("emptyNo",true);
+			}
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
 		}
     	return "report/count";
     }
@@ -121,38 +127,44 @@ public class ReportController {
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
 			HttpServletRequest request, HttpServletResponse response){
-		Map<String, String> queryParams = PaginationHelper.makeParameters(
-				request.getParameterMap(), request.getQueryString());
-		page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
-		size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-		String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
-		addDateTimeFormatPatterns(model);
-		ReportForm reportForm=new ReportForm();
-		reportForm.setStartDate(minGenTime);
-		reportForm.setEndDate(maxGenTime);
-		reportForm.setActNo(actNo);
-		reportForm.setMarketingCatalogId(new Long(marketingCatalogId));
-		reportForm.setPartnerCatalogId(new Long(partnerCatalogId));
-		reportForm.setParterNo(parterNo);
-		reportForm.setPage(page);
-		reportForm.setSize(size);
-		reportForm.setPagination(true);
-		
-		//ReportResult rr=Coupon.reportDetail(reportForm);
-                ReportResult rr = this.couponService.reportDetail(reportForm);
-		int maxPages = PaginationHelper.calcMaxPages(size, rr.getCount());
-		model.addAttribute("rptDetail",rr.getResultList());
-		addDateTimeFormatPatterns(model);
-		model.addAttribute("maxPages", maxPages);
-		model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
-		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
-		model.addAttribute(PaginationHelper.PARAM_SIZE, size);
-		model.addAttribute("minEndDate",NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"));
-		model.addAttribute("maxEndDate",NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd"));
-		model.addAttribute("actNo",actNo);
-		model.addAttribute("parterNo",parterNo);
-		if(maxPages>0){
-			model.addAttribute("emptyNo",true);
+		try {
+			Map<String, String> queryParams = PaginationHelper.makeParameters(
+					request.getParameterMap(), request.getQueryString());
+			page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+			size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+			String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
+			addDateTimeFormatPatterns(model);
+			ReportForm reportForm=new ReportForm();
+			reportForm.setStartDate(minGenTime);
+			reportForm.setEndDate(maxGenTime);
+			reportForm.setActNo(actNo);
+			reportForm.setMarketingCatalogId(new Long(marketingCatalogId));
+			reportForm.setPartnerCatalogId(new Long(partnerCatalogId));
+			reportForm.setParterNo(parterNo);
+			reportForm.setPage(page);
+			reportForm.setSize(size);
+			reportForm.setPagination(true);
+			
+			//ReportResult rr=Coupon.reportDetail(reportForm);
+			        ReportResult rr = this.couponService.reportDetail(reportForm);
+			int maxPages = PaginationHelper.calcMaxPages(size, rr.getCount());
+			model.addAttribute("rptDetail",rr.getResultList());
+			addDateTimeFormatPatterns(model);
+			model.addAttribute("maxPages", maxPages);
+			model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
+			model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+			model.addAttribute("minEndDate",NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"));
+			model.addAttribute("maxEndDate",NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd"));
+			model.addAttribute("actNo",actNo);
+			model.addAttribute("parterNo",parterNo);
+			if(maxPages>0){
+				model.addAttribute("emptyNo",true);
+			}
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
 		}
     	return "report/detail";
     }
@@ -164,6 +176,7 @@ public class ReportController {
 			@RequestParam("parterNo") String parterNo,
 			Model model,
 			HttpServletRequest request, HttpServletResponse response){
+		try {
 		    ReportForm reportForm=new ReportForm();
 		    reportForm.setStartDate(minGenTime);
 		    reportForm.setEndDate(maxGenTime);
@@ -171,7 +184,7 @@ public class ReportController {
 		    reportForm.setParterNo(parterNo);
 		    reportForm.setPagination(false);
 		    FileInputStream nStream;
-		try {
+		
 			nStream = new FileInputStream(this.detailExcelService.generateExcelFile(
 					this.couponService.reportDetail(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
 			response.setContentType("application/vnd.ms-excel");
@@ -183,8 +196,9 @@ public class ReportController {
 			}
 			response.getOutputStream().close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
 		}
 		
 		return null;
@@ -197,6 +211,7 @@ public class ReportController {
 			@RequestParam("parterNo") String parterNo,
 			Model model,
 			HttpServletRequest request, HttpServletResponse response){
+		try {
 		    ReportForm reportForm=new ReportForm();
 		    reportForm.setStartDate(minGenTime);
 		    reportForm.setEndDate(maxGenTime);
@@ -204,7 +219,6 @@ public class ReportController {
 		    reportForm.setParterNo(parterNo);
 		    reportForm.setPagination(false);
 		    FileInputStream nStream;
-		try {
 			nStream = new FileInputStream(this.countExcelService.generateExcelFile(
 					this.couponService.reportCount(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
 			response.setContentType("application/vnd.ms-excel");
@@ -216,15 +230,12 @@ public class ReportController {
 			}
 			response.getOutputStream().close();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
 		}
 		
 		return null;
-	}
-	void addDateTimeFormatPatterns(Model model) {
-		model.addAttribute("date_format", "yyyy-MM-dd");
-		model.addAttribute("datetime_format", "yyyy-MM-dd HH:mm");
 	}
 	@ModelAttribute("marketingCatalogs")
 	public Collection<MarketingCatalog> populateMarketingCatalogs() {

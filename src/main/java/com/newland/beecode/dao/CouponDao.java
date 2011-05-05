@@ -26,7 +26,7 @@ import org.hibernate.Query;
 public class CouponDao extends BaseDao<Coupon,Long> {
 
     public List<Coupon> findByActNo(Long actNo) {
-        return this.find("from Coupon as coupon where coupon.marketingAct.actNo= :actNo", actNo);
+        return this.find("from Coupon as coupon where coupon.marketingAct.actNo= ?", actNo);
     }
 
 

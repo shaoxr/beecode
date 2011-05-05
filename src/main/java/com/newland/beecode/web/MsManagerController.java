@@ -25,8 +25,13 @@ public class MsManagerController extends BaseController{
 	
 	@RequestMapping(value="/balance",params = "form", method = RequestMethod.GET)
 	public String balanceForm(Model model){
-		//model.addAttribute("msTypes", DictView.getListByKeyName(MarketingAct.MS_TYPE));
-            model.addAttribute("msTypes", dictViewFormat.getSelectModelCollection(MarketingAct.MS_TYPE));
+            try {
+				model.addAttribute("msTypes", dictViewFormat.getSelectModelCollection(MarketingAct.MS_TYPE));
+			} catch (Exception e) {
+				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+				this.logger.error(this.getMessage(e), e);
+				return "prompt";
+			}
 		return "msManager/balance";
 	}
 	@RequestMapping(value="/balance",params = "find=ByCondition", method = RequestMethod.GET)
@@ -34,16 +39,22 @@ public class MsManagerController extends BaseController{
 			@RequestParam(value = "userName", required = false) String userName,
 			@RequestParam(value = "passWord", required = false) String passWord,
 			@RequestParam(value = "msType", required = false) String msType){
-		long count=0;
 		try {
-			count = mmsService.getBalance(userName, passWord, 1);
+			long count=0;
+			try {
+				count = mmsService.getBalance(userName, passWord, 1);
+			} catch (Exception e) {
+				model.addAttribute(ErrorsCode.MESSAGE, ErrorsCode.BIZ_MMS_CON_ERROR);
+				return "prompt";
+			}
+			model.addAttribute("msTypes", dictViewFormat.getSelectModelCollection(MarketingAct.MS_TYPE));
+			model.addAttribute("count", count);
+			model.addAttribute("msType", msType);
 		} catch (Exception e) {
-			model.addAttribute(ErrorsCode.MESSAGE, ErrorsCode.BIZ_MMS_CON_ERROR);
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
-		model.addAttribute("msTypes", dictViewFormat.getSelectModelCollection(MarketingAct.MS_TYPE));
-		model.addAttribute("count", count);
-		model.addAttribute("msType", msType);
 		return "msManager/balance";
 	}
 	

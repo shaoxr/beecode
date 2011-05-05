@@ -22,9 +22,11 @@ import org.tempuri.service.MMSService;
 
 import com.newland.beecode.dao.CouponDao;
 import com.newland.beecode.dao.MarketingActDao;
+import com.newland.beecode.dao.MarketingCatalogDao;
 import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.Customer;
 import com.newland.beecode.domain.MarketingAct;
+import com.newland.beecode.domain.MarketingCatalog;
 import com.newland.beecode.domain.MmsTemplate;
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.condition.CheckResult;
@@ -50,6 +52,8 @@ public class MarketingActServiceImpl implements MarketingActService {
     
     @Resource(name = "marketingActDao")
     private MarketingActDao actDao;
+    @Resource(name = "marketingCatalogDao")
+    private MarketingCatalogDao marketingCatalogDao;
     
     @Resource(name = "couponDao")
     private CouponDao couponDao;
@@ -84,7 +88,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 					}
 					act=giveActs.remove(0);
 					/**
-					 * 彩信发�?
+					 * 彩信发�?
 					 */ 
 					long[] count=sendMMS(act);
 					act.setMmsSendSum(count[0]);
@@ -142,7 +146,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 				//throw new AppException(ErrorsCode.BIZ_MS_BALANCE_UN_LESS,"");
 			}
     	  act.setActStatus(MarketingAct.STATUS_SENDNG);
-          act = actDao.update(act);
+          //act = actDao.update(act);
     	  synchronized(giveActs){
       	    giveActs.add(act);
       	    giveActs.notifyAll();
@@ -172,6 +176,9 @@ public class MarketingActServiceImpl implements MarketingActService {
                 couponDao.save(coupon);
 				this.genCode(coupon,act);
 				this.genTxtFile(coupon, act);
+				if(count==10){
+					throw new Exception("");
+				}
 			}
 			act.setCouponSum(count);
             actDao.update(act);
@@ -182,7 +189,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		return count;
 	}
 	/**
-	 * 二维码生�?
+	 * 二维码生�?
 	 * @param coupon
 	 */
 	public void genCode(Coupon coupon,MarketingAct act){
@@ -226,7 +233,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 			  }
 			  String content=this.fileService.getTextContent(coupon.getCouponId().toString());
 			  System.out.println(content);
-			  int resp=smsService.sendSMS("2SDK-EMY-6688-JBVTN", "123456", null, new String[]{coupon.getAcctMobile()}, act.getMmsTitle(), content, "gbk",5, coupon.getCouponId());
+			  int resp=smsService.sendSMS("2SDK-EMY-6688-JBVTN", "198538", null, new String[]{coupon.getAcctMobile()}, content, "", "gbk",5, coupon.getCouponId());
 			 System.out.println("---------------> sms:"+resp);
 			  if(resp==0){
 				  smsCount++;
@@ -256,6 +263,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 		act.setActStatus(MarketingAct.STATUS_BEFORE_RECHECK);
 		act.setMmsContent(act.getMmsTemplate().getTemplateContent());
 		act.setPartners(this.genPartners(partners));
+		MarketingCatalog marketingCatalog=this.marketingCatalogDao.get(act.getMarketingCatalog().getId());
+		act.setMarketingCatalog(marketingCatalog);
         actDao.save(act);
 	}
 	private  Set<Partner> genPartners(Long[] partners){
@@ -293,7 +302,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 	}
 	
 	/**
-	 * 每天零点�?��执行批量过期处理任务
+	 * 每天零点�?��执行批量过期处理任务
 	 */
 	@Override
 	@Transactional
@@ -305,7 +314,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		try {
 			date = sdf.parse(dateStr);
 		} catch (ParseException e) {
-			//不可能发生异�?
+			//不可能发生异�?
 		}
 		//MarketingAct.expired(date);
                 actDao.expired(date);

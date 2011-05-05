@@ -22,6 +22,7 @@ import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.MarketingCatalog;
 import com.newland.beecode.domain.condition.CouponCondition;
 import com.newland.beecode.domain.condition.QueryResult;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.CouponService;
 import com.newland.beecode.service.MarketingCatalogService;
 import com.newland.utils.PaginationHelper;
@@ -30,7 +31,7 @@ import javax.annotation.Resource;
 
 @RequestMapping("/coupons")
 @Controller
-public class CouponController {
+public class CouponController extends BaseController{
 
     @Resource(name = "dictViewService")
     private DictViewFormatter dictView;
@@ -43,17 +44,30 @@ public class CouponController {
 	@RequestMapping(value = "/{couponId}", method = RequestMethod.GET)
 	public String show(@PathVariable(value = "couponId") Long couponId,
 			Model model) {
-		model.addAttribute("coupon", this.couponService.findByCoupon(couponId));
-		addDateTimeFormatPatterns(model);
+		try {
+			model.addAttribute("coupon", this.couponService.findByCoupon(couponId));
+			addDateTimeFormatPatterns(model);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "coupons/show";
 	}
 
 	@RequestMapping(value = "/reversal/{couponId}", method = RequestMethod.POST)
 	public String cancelCoupon(@RequestParam String mobile, @PathVariable(value = "couponId") Long couponId, Model model){
-		if(mobile != null && mobile.trim().length() < 11){
-			mobile = null;
+		Coupon coupon;
+		try {
+			if(mobile != null && mobile.trim().length() < 11){
+				mobile = null;
+			}
+			coupon = couponService.reversalCoupon(couponId, mobile);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
 		}
-		Coupon coupon = couponService.reversalCoupon(couponId, mobile);
 		return "redirect:/coupons/" + coupon.getCouponId();
 	}
 	@RequestMapping(params = { "find=ByCondition", "form" }, method = RequestMethod.GET)
@@ -76,27 +90,33 @@ public class CouponController {
 			@RequestParam(value = "size", required = false) Integer size,
 			HttpServletRequest request, HttpServletResponse response) {
 
-		Map<String, String> queryParams = PaginationHelper.makeParameters(
-				request.getParameterMap(), request.getQueryString());
-		page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
-		size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-		String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
-		CouponCondition cc=new CouponCondition();
-		cc.setActNo(actNo);
-		cc.setCouponId(couponId);
-		cc.setCouponStatus(couponStatus);
-		cc.setMobile(mobile);
-		cc.setMarketingCatalogId(marketingCatalogId);
-		cc.setMmsStatus(mmsStatus);
-		cc.setSmsStatus(smsStatus);
-		List<Coupon> coupons=this.couponService.findByCondition(cc,(page-1)*size,size);
-		model.addAttribute("coupons",coupons);
-		int maxPages = PaginationHelper.calcMaxPages(size, this.couponService.countByCondition(cc));
-		model.addAttribute("maxPages", maxPages);
-		model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
-		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
-		model.addAttribute(PaginationHelper.PARAM_SIZE, size);
-		addDateTimeFormatPatterns(model);
+		try {
+			Map<String, String> queryParams = PaginationHelper.makeParameters(
+					request.getParameterMap(), request.getQueryString());
+			page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+			size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+			String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
+			CouponCondition cc=new CouponCondition();
+			cc.setActNo(actNo);
+			cc.setCouponId(couponId);
+			cc.setCouponStatus(couponStatus);
+			cc.setMobile(mobile);
+			cc.setMarketingCatalogId(marketingCatalogId);
+			cc.setMmsStatus(mmsStatus);
+			cc.setSmsStatus(smsStatus);
+			List<Coupon> coupons=this.couponService.findByCondition(cc,(page-1)*size,size);
+			model.addAttribute("coupons",coupons);
+			int maxPages = PaginationHelper.calcMaxPages(size, this.couponService.countByCondition(cc));
+			model.addAttribute("maxPages", maxPages);
+			model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
+			model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+			addDateTimeFormatPatterns(model);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "coupon/findcouponsbyCondition";
 	}
 
@@ -115,11 +135,5 @@ public class CouponController {
 	public Collection<Dictionary> populateMmsstatusList() {
 		//return DictView.getListByKeyName(Coupon.MMS_SMS_STATUS_KEY_NAME);
             return dictView.getSelectModelCollection(Coupon.MMS_SMS_STATUS_KEY_NAME);
-	}
-        
-        
-	void addDateTimeFormatPatterns(Model model) {
-		model.addAttribute("date_format", "yyyy-MM-dd");
-		model.addAttribute("datetime_format", "yyyy-MM-dd HH:mm");
 	}
 }

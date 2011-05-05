@@ -28,6 +28,7 @@ public class UtilController extends BaseController{
 			model.addAttribute(ErrorsCode.MESSAGE, this.checkService.customerCheck(file,fileName).getMessage());
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		
