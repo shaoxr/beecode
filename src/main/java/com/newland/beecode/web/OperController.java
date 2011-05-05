@@ -1,6 +1,7 @@
 package com.newland.beecode.web;
 
 import com.newland.beecode.domain.Oper;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.OperService;
 
 import java.io.UnsupportedEncodingException;
@@ -22,36 +23,47 @@ import org.springframework.web.util.WebUtils;
 
 @RequestMapping("/opers")
 @Controller
-public class OperController {
+public class OperController extends BaseController{
     @Autowired
     private OperService operService;    
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Oper oper,@RequestParam(value="roleIds") Long[] roleIds,  Model model,
 			HttpServletRequest request) {
-		/*if (result.hasErrors()) {
-			System.out.println("---result.hasErrors()-------------");
-			System.out.println("--------------"+result);
-			model.addAttribute("oper", oper);
-			addDateTimeFormatPatterns(model);
-			return "opers/create";
-		}*/
-		oper.setGenTime(new Date());
-        this.operService.save(oper,roleIds);
+		try {
+			oper.setGenTime(new Date());
+			this.operService.save(oper,roleIds);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "redirect:/opers/"
 				+ encodeUrlPathSegment(oper.getOperNo().toString(), request);
 	}
 
 	@RequestMapping(params = "form", method = RequestMethod.GET)
 	public String createForm(Model model) {
-		model.addAttribute("oper", new Oper());
-		model.addAttribute("roleses", this.operService.findRoleAll());
+		try {
+			model.addAttribute("oper", new Oper());
+			model.addAttribute("roleses", this.operService.findRoleAll());
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "opers/create";
 	}
 
 	@RequestMapping(value = "/{operNo}", method = RequestMethod.GET)
 	public String show(@PathVariable("operNo") Long operNo, Model model) {
-		model.addAttribute("oper", this.operService.findById(operNo));
-		model.addAttribute("itemId", operNo);
+		try {
+			model.addAttribute("oper", this.operService.findById(operNo));
+			model.addAttribute("itemId", operNo);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		
 		return "opers/show";
 	}
@@ -61,18 +73,24 @@ public class OperController {
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
 			Model model) {
-		addDateTimeFormatPatterns(model);
-		if (page != null || size != null) {
-			int sizeNo = size == null ? 10 : size.intValue();
-			model.addAttribute("opers", this.operService.findOperEntries(page == null ? 0
-					: (page.intValue() - 1) * sizeNo, sizeNo));
-			float nrOfPages = (float) this.operService.countOpers() / sizeNo;
-			model.addAttribute(
-					"maxPages",
-					(int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-							: nrOfPages));
-		} else {
-			model.addAttribute("opers", this.operService.findAll());
+		try {
+			addDateTimeFormatPatterns(model);
+			if (page != null || size != null) {
+				int sizeNo = size == null ? 10 : size.intValue();
+				model.addAttribute("opers", this.operService.findOperEntries(page == null ? 0
+						: (page.intValue() - 1) * sizeNo, sizeNo));
+				float nrOfPages = (float) this.operService.countOpers() / sizeNo;
+				model.addAttribute(
+						"maxPages",
+						(int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+								: nrOfPages));
+			} else {
+				model.addAttribute("opers", this.operService.findAll());
+			}
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
 		}
 		return "opers/list";
 	}
@@ -80,27 +98,28 @@ public class OperController {
 	@RequestMapping(method = RequestMethod.PUT)
 	public String update(Oper oper,@RequestParam(value="roleIds") Long[] roleIds, Model model,
 			HttpServletRequest request) {
-//		if (result.hasErrors()) {
-//			model.addAttribute("oper", oper);
-//			addDateTimeFormatPatterns(model);
-//			return "opers/update";
-//		}
-		//Oper dboper = this.operService.findById(oper.getOperNo());
-
-		//dboper.setEnabled(oper.isEnabled());
-		//dboper.setOperName(oper.getOperName());
-		//dboper.setRoles(oper.getRoles());
-		//dboper.persist();
 		
-        this.operService.update(oper,roleIds);
+        try {
+			this.operService.update(oper,roleIds);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "redirect:/opers/"
 				+ encodeUrlPathSegment(oper.getOperNo().toString(), request);
 	}
 
 	@RequestMapping(value = "/{operNo}", params = "form", method = RequestMethod.GET)
 	public String updateForm(@PathVariable("operNo") Long operNo, Model model) {
-		model.addAttribute("oper", this.operService.findById(operNo));
-		model.addAttribute("roleses", this.operService.findAll());
+		try {
+			model.addAttribute("oper", this.operService.findById(operNo));
+			model.addAttribute("roleses", this.operService.findAll());
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "opers/update";
 	}
 
@@ -109,13 +128,18 @@ public class OperController {
 			@RequestParam(required = true, value = "oldPassword") String oldPassword,
 			@RequestParam(required = true, value = "operNo") Long operNo,
 			Model model, HttpServletRequest request) {
-		Oper oper = this.operService.findById(operNo);
-		if(oper == null || oper.getOperPwd().equals(oldPassword) == false){
-			//TODO throw exec, forward to error page
+		try {
+			Oper oper = this.operService.findById(operNo);
+			if(oper == null || oper.getOperPwd().equals(oldPassword) == false){
+				//TODO throw exec, forward to error page
+			}
+			oper.setOperPwd(newPassword);
+			this.operService.update(oper,null);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
 		}
-		oper.setOperPwd(newPassword);
-		//oper.merge();
-                this.operService.update(oper,null);
 		return "redirect:";
 	}
 
@@ -131,29 +155,19 @@ public class OperController {
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
 			Model model) {
-		//Oper.findOper(operNo).remove();
-                this.operService.delete(operNo);
-		model.addAttribute("page", (page == null) ? "1" : page.toString());
-		model.addAttribute("size", (size == null) ? "10" : size.toString());
+		try {
+			this.operService.delete(operNo);
+			model.addAttribute("page", (page == null) ? "1" : page.toString());
+			model.addAttribute("size", (size == null) ? "10" : size.toString());
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "redirect:/opers?page="
 				+ ((page == null) ? "1" : page.toString()) + "&size="
 				+ ((size == null) ? "10" : size.toString());
 	}
 
-	void addDateTimeFormatPatterns(Model model) {
-		model.addAttribute("date_format", "yyyy-MM-dd");
-		model.addAttribute("datetime_format", "yyyy-MM-dd HH:mm");
-	}
 
-	String encodeUrlPathSegment(String pathSegment, HttpServletRequest request) {
-		String enc = request.getCharacterEncoding();
-		if (enc == null) {
-			enc = WebUtils.DEFAULT_CHARACTER_ENCODING;
-		}
-		try {
-			pathSegment = UriUtils.encodePathSegment(pathSegment, enc);
-		} catch (UnsupportedEncodingException uee) {
-		}
-		return pathSegment;
-	}
 }

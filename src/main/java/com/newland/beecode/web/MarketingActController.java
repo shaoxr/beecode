@@ -46,7 +46,7 @@ import javax.validation.Valid;
 
 @RequestMapping("/marketingacts")
 @Controller
-public class MarketingActController {
+public class MarketingActController extends BaseController{
     
     @Resource(name = "dictViewService")
     private DictViewFormatter dictView;
@@ -73,6 +73,7 @@ public class MarketingActController {
 			marketingActService.append(actNo, file);
 		} catch (AppException e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "redirect:/marketingacts/find/append";
@@ -80,13 +81,19 @@ public class MarketingActController {
 
 	@RequestMapping(value = "/append/{actNo}", method = RequestMethod.GET)
 	public String appendForm(@PathVariable("actNo") Long actNo, Model model) {
-		addDateTimeFormatPatterns(model);
-		MarketingAct marketingAct= marketingActService.findByActNo(actNo);
-		model.addAttribute("marketingAct",marketingAct);
-		if(marketingAct.getBizNo().equals("00")){
-			model.addAttribute("fuck", true);
+		try {
+			addDateTimeFormatPatterns(model);
+			MarketingAct marketingAct= marketingActService.findByActNo(actNo);
+			model.addAttribute("marketingAct",marketingAct);
+			if(marketingAct.getBizNo().equals("00")){
+				model.addAttribute("fuck", true);
+			}
+			model.addAttribute("itemId", actNo);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
 		}
-		model.addAttribute("itemId", actNo);
 		return "marketingacts/append/form";
 	}
 
@@ -99,26 +106,32 @@ public class MarketingActController {
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
 			HttpServletRequest request) {
-		Map<String, String> queryParams = PaginationHelper.makeParameters(
-		request.getParameterMap(), request.getQueryString());
-		page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
-		size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-		MarketingActCondition mac=new MarketingActCondition();
-		mac.setBizNo(bizNo);
-		mac.setStartGenDate(minEndDate);
-		mac.setEndGenDate(maxEndDate);
-		mac.setActName(actName);
-		mac.setActStatus(actStatus);
-		//mac.setPage(page);
-		//mac.setSize(size);
-		//mac.setPagination(true);
-		List<MarketingAct> marketingActs=this.marketingActService.findByCondition(mac,(page-1)*size,size);
-		int maxPages = PaginationHelper.calcMaxPages(size, this.marketingActService.countByCondition(mac));
-		model.addAttribute("maxPages",maxPages);
-		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
-		model.addAttribute(PaginationHelper.PARAM_SIZE, size);
-		model.addAttribute("marketingacts",marketingActs);
-		addDateTimeFormatPatterns(model);
+		try {
+			Map<String, String> queryParams = PaginationHelper.makeParameters(
+			request.getParameterMap(), request.getQueryString());
+			page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+			size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+			MarketingActCondition mac=new MarketingActCondition();
+			mac.setBizNo(bizNo);
+			mac.setStartGenDate(minEndDate);
+			mac.setEndGenDate(maxEndDate);
+			mac.setActName(actName);
+			mac.setActStatus(actStatus);
+			//mac.setPage(page);
+			//mac.setSize(size);
+			//mac.setPagination(true);
+			List<MarketingAct> marketingActs=this.marketingActService.findByCondition(mac,(page-1)*size,size);
+			int maxPages = PaginationHelper.calcMaxPages(size, this.marketingActService.countByCondition(mac));
+			model.addAttribute("maxPages",maxPages);
+			model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+			model.addAttribute("marketingacts",marketingActs);
+			addDateTimeFormatPatterns(model);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "marketingacts/list/append";
 	}
 	@RequestMapping(value = "/find/append",params = { "find=ByCondition" ,"form"}, method = RequestMethod.GET)
@@ -135,8 +148,8 @@ public class MarketingActController {
 		try {
 			marketingActService.createMarketingAct(marketingAct,partners, file);
 		} catch (Exception e) {
-			model.addAttribute(ErrorsCode.MESSAGE,this.getMessage(e));
-			e.printStackTrace();
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "redirect:/marketingacts/"
@@ -146,29 +159,47 @@ public class MarketingActController {
 
 	@RequestMapping(params = "form", method = RequestMethod.GET)
 	public String createForm(Model model) {
-		model.addAttribute("marketingAct", new MarketingAct());
-		model.addAttribute("checkCards", dictView.getSelectModelCollection(MarketingAct.DICT_KEY_NAME_CHECK_CARD));
-		addDateTimeFormatPatterns(model);
+		try {
+			model.addAttribute("marketingAct", new MarketingAct());
+			model.addAttribute("checkCards", dictView.getSelectModelCollection(MarketingAct.DICT_KEY_NAME_CHECK_CARD));
+			addDateTimeFormatPatterns(model);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "marketingacts/create";
 	}
 
 	@RequestMapping(value = "/{actNo}", method = RequestMethod.GET)
 	public String show(@PathVariable("actNo") Long actNo, Model model) {
-		addDateTimeFormatPatterns(model);
-		MarketingAct act = this.marketingActService.findByActNo(actNo);
-		if (act.getActStatus() > MarketingAct.STATUS_BEFORE_GIVE) {
-			MarketingActSummary marketingSummary = this.marketingActService.marketingSummary(actNo);
-			act.setSummary(marketingSummary);
-			model.addAttribute("statistics",true);
+		try {
+			addDateTimeFormatPatterns(model);
+			MarketingAct act = this.marketingActService.findByActNo(actNo);
+			if (act.getActStatus() > MarketingAct.STATUS_BEFORE_GIVE) {
+				MarketingActSummary marketingSummary = this.marketingActService.marketingSummary(actNo);
+				act.setSummary(marketingSummary);
+				model.addAttribute("statistics",true);
+			}
+			model.addAttribute("marketingact", act);
+			model.addAttribute("itemId", actNo);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
 		}
-		model.addAttribute("marketingact", act);
-		model.addAttribute("itemId", actNo);
 		return "marketingacts/show";
 	}
 	@RequestMapping(value = "{actNo}/detail", method = RequestMethod.GET)
 	public String couponDetail(@PathVariable("actNo") Long actNo, Model model){
-		CouponSumaryReport rpt = couponService.summaryByMarketing(actNo);
-		model.addAttribute("rpt", rpt);
+		try {
+			CouponSumaryReport rpt = couponService.summaryByMarketing(actNo);
+			model.addAttribute("rpt", rpt);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "marketingacts/report";
 	}
 
@@ -177,23 +208,29 @@ public class MarketingActController {
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
 			Model model) {
-		if (page != null || size != null) {
-			int sizeNo = size == null ? 10 : size.intValue();
-			model.addAttribute("marketingacts", this.marketingActService.findMarketingActEntries(
-							page == null ? 0 : (page.intValue() - 1) * sizeNo,
-							sizeNo));
-			float nrOfPages = (float) this.marketingActService.countMarketingActs()
-					/ sizeNo;
-			model.addAttribute(
-					"maxPages",
-					(int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
-							: nrOfPages));
-		} else {
-			model.addAttribute("marketingacts",
-					
-                                this.marketingActService.findAll());
+		try {
+			if (page != null || size != null) {
+				int sizeNo = size == null ? 10 : size.intValue();
+				model.addAttribute("marketingacts", this.marketingActService.findMarketingActEntries(
+								page == null ? 0 : (page.intValue() - 1) * sizeNo,
+								sizeNo));
+				float nrOfPages = (float) this.marketingActService.countMarketingActs()
+						/ sizeNo;
+				model.addAttribute(
+						"maxPages",
+						(int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1
+								: nrOfPages));
+			} else {
+				model.addAttribute("marketingacts",
+						
+			                        this.marketingActService.findAll());
+			}
+			addDateTimeFormatPatterns(model);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
 		}
-		addDateTimeFormatPatterns(model);
 		return "marketingacts/list";
 	}
 
@@ -215,12 +252,14 @@ public class MarketingActController {
 			Model model,HttpServletRequest request)  {
 		try {
 			marketingActService.invalidMarketingAct(actNo);
+			model.addAttribute("page", (page == null) ? "1" : page.toString());
+			model.addAttribute("size", (size == null) ? "10" : size.toString());
 		} catch (Exception e) {
-			model.addAttribute(ErrorsCode.MESSAGE,this.getMessage(e));
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
-		model.addAttribute("page", (page == null) ? "1" : page.toString());
-		model.addAttribute("size", (size == null) ? "10" : size.toString());
+		
 		return "redirect:/marketingacts?"+query;
 	}
     
@@ -230,27 +269,39 @@ public class MarketingActController {
 			@RequestParam(value = "size", required = false) Integer size,
 			@RequestParam(value = "query", required = false) String query,
 			HttpServletRequest request) {
-		        Map<String, String> queryParams = PaginationHelper.makeParameters(
-				request.getParameterMap(), request.getQueryString());
-				page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
-				size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-				String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
-				QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_RECHECK, page, size);
-		    model.addAttribute("marketingacts",qr.getResultList());
-		    int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
-		    model.addAttribute("maxPages",maxPages);
-		    model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
-		    model.addAttribute(PaginationHelper.PARAM_PAGE, page);
-			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+		        try {
+					Map<String, String> queryParams = PaginationHelper.makeParameters(
+					request.getParameterMap(), request.getQueryString());
+					page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+					size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+					String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
+					QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_RECHECK, page, size);
+                    model.addAttribute("marketingacts",qr.getResultList());
+                    int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
+                    model.addAttribute("maxPages",maxPages);
+                    model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
+                    model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+                    model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+				} catch (NumberFormatException e) {
+					model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+					this.logger.error(this.getMessage(e), e);
+					return "prompt";
+				}
 		return "marketingacts/list/check";
 	}
 
 	@RequestMapping(value = "/check/{actNo}", method = RequestMethod.GET)
 	public String checkMarketingActForm(@PathVariable("actNo") Long actNo,
 			Model model) {
-		addDateTimeFormatPatterns(model);
-		model.addAttribute("marketingAct",this.marketingActService.findByActNo(actNo));
-		model.addAttribute("itemId", actNo);
+		try {
+			addDateTimeFormatPatterns(model);
+			model.addAttribute("marketingAct",this.marketingActService.findByActNo(actNo));
+			model.addAttribute("itemId", actNo);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "marketingacts/check/form";
 	}
 
@@ -263,6 +314,7 @@ public class MarketingActController {
 			model.addAttribute("count", marketingActService.checkMarketingAct(actNo, actStatus));		
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "marketingacts/checkTip";
@@ -273,26 +325,38 @@ public class MarketingActController {
 			@RequestParam(value = "size", required = false) Integer size,
 			@RequestParam(value = "query", required = false) String query,
 			HttpServletRequest request) {
-		        Map<String, String> queryParams = PaginationHelper.makeParameters(
-				request.getParameterMap(), request.getQueryString());
-				page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
-				size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-				String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
-				QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_GIVE, page, size);
-		    model.addAttribute("marketingacts",qr.getResultList());
-		    int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
-		    model.addAttribute("maxPages",maxPages);
-		    model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
-		    model.addAttribute(PaginationHelper.PARAM_PAGE, page);
-			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+		        try {
+					Map<String, String> queryParams = PaginationHelper.makeParameters(
+					request.getParameterMap(), request.getQueryString());
+					page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+					size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+					String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
+					QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_GIVE, page, size);
+                    model.addAttribute("marketingacts",qr.getResultList());
+                    int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
+                    model.addAttribute("maxPages",maxPages);
+                    model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
+                    model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+                    model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+				} catch (NumberFormatException e) {
+					model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+					this.logger.error(this.getMessage(e), e);
+					return "prompt";
+				}
 		return "marketingacts/list/send";
 	}
 	@RequestMapping(value = "/send/{actNo}", method = RequestMethod.GET)
 	public String sendMarketingActForm(@PathVariable("actNo") Long actNo,
 			Model model) {
-		addDateTimeFormatPatterns(model);
-		model.addAttribute("marketingact", this.marketingActService.findByActNo(actNo));
-		model.addAttribute("itemId", actNo);
+		try {
+			addDateTimeFormatPatterns(model);
+			model.addAttribute("marketingact", this.marketingActService.findByActNo(actNo));
+			model.addAttribute("itemId", actNo);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "marketingacts/send/form";
 	}
 	@RequestMapping(value = "/send", method = RequestMethod.POST)
@@ -300,8 +364,8 @@ public class MarketingActController {
 		try {
 			this.marketingActService.marketingActSend(actNo);
 		} catch (Exception e) {
-			e.printStackTrace();
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "marketingacts/sendTip";
@@ -330,28 +394,31 @@ public class MarketingActController {
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size,
 			HttpServletRequest request) {
-		Map<String, String> queryParams = PaginationHelper.makeParameters(
-		request.getParameterMap(), request.getQueryString());
-		page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
-		size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-		String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
-		MarketingActCondition mac=new MarketingActCondition();
-		mac.setMarketingCatalogId(new Long(marketingCatalog)); 
-		mac.setBizNo(bizNo);
-		mac.setStartGenDate(minEndDate);
-		mac.setEndGenDate(maxEndDate);
-		mac.setActStatus(actStatus);
-		//mac.setPage(page);
-		//mac.setSize(size);
-		//mac.setPagination(true);
-		List<MarketingAct> marketingActs=this.marketingActService.findByCondition(mac,(page-1)*size,size);
-		int maxPages = PaginationHelper.calcMaxPages(size, this.marketingActService.countByCondition(mac));
-		model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
-		model.addAttribute("maxPages",maxPages);
-		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
-		model.addAttribute(PaginationHelper.PARAM_SIZE, size);
-		model.addAttribute("marketingacts",marketingActs);
-		addDateTimeFormatPatterns(model);
+		try {
+			Map<String, String> queryParams = PaginationHelper.makeParameters(
+			request.getParameterMap(), request.getQueryString());
+			page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+			size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+			String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
+			MarketingActCondition mac=new MarketingActCondition();
+			mac.setMarketingCatalogId(new Long(marketingCatalog)); 
+			mac.setBizNo(bizNo);
+			mac.setStartGenDate(minEndDate);
+			mac.setEndGenDate(maxEndDate);
+			mac.setActStatus(actStatus);
+			List<MarketingAct> marketingActs=this.marketingActService.findByCondition(mac,(page-1)*size,size);
+			int maxPages = PaginationHelper.calcMaxPages(size, this.marketingActService.countByCondition(mac));
+			model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
+			model.addAttribute("maxPages",maxPages);
+			model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+			model.addAttribute("marketingacts",marketingActs);
+			addDateTimeFormatPatterns(model);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "marketingacts/findMarketingActsByCondition";
 	}
 
@@ -386,28 +453,5 @@ public class MarketingActController {
 	public Collection<Dictionary> populateMarketingstatusList() {
             return dictView.getSelectModelCollection(MarketingAct.DICT_KEY_NAME);
 	}
-	void addDateTimeFormatPatterns(Model model) {
-		model.addAttribute("date_format", "yyyy-MM-dd");
-		model.addAttribute("datetime_format", "yyyy-MM-dd HH:mm");
-	}
 
-	String encodeUrlPathSegment(String pathSegment, HttpServletRequest request) {
-		String enc = request.getCharacterEncoding();
-		if (enc == null) {
-			enc = WebUtils.DEFAULT_CHARACTER_ENCODING;
-		}
-		try {
-			pathSegment = UriUtils.encodePathSegment(pathSegment, enc);
-		} catch (UnsupportedEncodingException uee) {
-		}
-		return pathSegment;
-	}
-	private String getMessage(Exception e){
-		String errCode=ErrorsCode.SYSTEM_ERR;
-		if(e instanceof AppException){
-			errCode= ((AppException)e).getCode();
-		}
-		return errCode;
-		
-	}
 }

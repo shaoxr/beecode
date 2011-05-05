@@ -29,13 +29,7 @@ public class CoupontCtrlController {
     
     
         @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid CoupontCtrl coupontCtrl, BindingResult result, Model model, HttpServletRequest request) {
-        if (result.hasErrors()) {
-            model.addAttribute("coupontCtrl", coupontCtrl);
-            addDateTimeFormatPatterns(model);
-            return "coupontctrls/create";
-        }
-        //coupontCtrl.persist();
+    public String create(@Valid CoupontCtrl coupontCtrl, Model model, HttpServletRequest request) {
         coupontCtrlDao.save(coupontCtrl);
         return "redirect:/coupontctrls/" + encodeUrlPathSegment(coupontCtrl.getCouponId().toString(), request);
     }

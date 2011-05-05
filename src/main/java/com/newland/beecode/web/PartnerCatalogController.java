@@ -50,15 +50,21 @@ public class PartnerCatalogController extends BaseController{
 	public String list(
 			@RequestParam(value = "page", required = false) Integer page, 
 			@RequestParam(value = "size", required = false) Integer size, Model model,HttpServletRequest request){
-		Map<String, String> queryParams = PaginationHelper.makeParameters(
-		request.getParameterMap(), "");
-		page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
-		size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-		model.addAttribute("partnercatalogs", this.partnerCatalogService.findPartnerCatalogEntries((page.intValue() - 1) * size, size));
-		int maxPages = PaginationHelper.calcMaxPages(size, this.partnerCatalogService.countPartnerCatalogs());
-		model.addAttribute("maxPages",maxPages);
-		model.addAttribute(PaginationHelper.PARAM_PAGE, page);
-		model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+		try {
+			Map<String, String> queryParams = PaginationHelper.makeParameters(
+			request.getParameterMap(), "");
+			page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+			size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+			model.addAttribute("partnercatalogs", this.partnerCatalogService.findPartnerCatalogEntries((page.intValue() - 1) * size, size));
+			int maxPages = PaginationHelper.calcMaxPages(size, this.partnerCatalogService.countPartnerCatalogs());
+			model.addAttribute("maxPages",maxPages);
+			model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+		} catch (NumberFormatException e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "partnerCatalog/list";
 	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -67,26 +73,39 @@ public class PartnerCatalogController extends BaseController{
     		@RequestParam(value = "size", required = false) Integer size, Model model) {
             try {
 				this.partnerCatalogService.delete(id);
+				model.addAttribute("page", (page == null) ? "1" : page.toString());
+		        model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
 			} catch (Exception e) {
 				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+				this.logger.error(this.getMessage(e), e);
 				return "prompt";
 			}
-        model.addAttribute("page", (page == null) ? "1" : page.toString());
-        model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
         return "redirect:/partnerCatalog";
     }
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String show(Model model,@PathVariable("id") Long id){
-		PartnerCatalog partnerCatalog=this.partnerCatalogService.findById(id);
-		model.addAttribute("partnerCatalog", partnerCatalog);
+		try {
+			PartnerCatalog partnerCatalog=this.partnerCatalogService.findById(id);
+			model.addAttribute("partnerCatalog", partnerCatalog);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "partnerCatalog/show";
 	}
 	
 	@RequestMapping(value="/{id}",params = "form",method=RequestMethod.GET)
 	public String update(@PathVariable("id") Long id,Model model){
-		PartnerCatalog partnerCatalog=this.partnerCatalogService.findById(id);
-		partnerCatalog.setUpdateTime(new Date());
-		model.addAttribute("partnerCatalog", partnerCatalog);
+		try {
+			PartnerCatalog partnerCatalog=this.partnerCatalogService.findById(id);
+			partnerCatalog.setUpdateTime(new Date());
+			model.addAttribute("partnerCatalog", partnerCatalog);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
 		return "partnerCatalog/update";
 	}
 	@RequestMapping(method=RequestMethod.PUT)

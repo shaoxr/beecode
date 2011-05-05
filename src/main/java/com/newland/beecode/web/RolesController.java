@@ -1,6 +1,7 @@
 package com.newland.beecode.web;
 
 import com.newland.beecode.domain.Roles;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.RolesService;
 
 import java.io.UnsupportedEncodingException;
@@ -20,7 +21,7 @@ import org.springframework.web.util.WebUtils;
 
 @RequestMapping("/roleses")
 @Controller
-public class RolesController {
+public class RolesController extends BaseController {
     
     @Autowired
     private RolesService rolesService;
@@ -31,8 +32,13 @@ public class RolesController {
             model.addAttribute("roles", roles);
             return "roleses/create";
         }
-        //roles.persist();
-        rolesService.save(roles);
+        try {
+			rolesService.save(roles);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
         
         return "redirect:/roleses/" + encodeUrlPathSegment(roles.getId().toString(), request);
     }
@@ -45,22 +51,34 @@ public class RolesController {
     
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public String show(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("roles", rolesService.findUniqueByProperty("id", id));
-        model.addAttribute("itemId", id);
+        try {
+			model.addAttribute("roles", rolesService.findUniqueByProperty("id", id));
+			model.addAttribute("itemId", id);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
         return "roleses/show";
     }
     
     @RequestMapping(method = RequestMethod.GET)
     public String list(@RequestParam(value = "page", required = false) Integer page, 
     		@RequestParam(value = "size", required = false) Integer size, Model model) {
-        if (page != null || size != null) {
-            int sizeNo = size == null ? 10 : size.intValue();
-            model.addAttribute("roleses", rolesService.findRolesEntries(page == null ? 0 : (page.intValue() - 1) * sizeNo, sizeNo));
-            float nrOfPages = (float) rolesService.countRoleses() / sizeNo;
-            model.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
-        } else {
-            model.addAttribute("roleses", rolesService.findAll());
-        }
+        try {
+			if (page != null || size != null) {
+			    int sizeNo = size == null ? 10 : size.intValue();
+			    model.addAttribute("roleses", rolesService.findRolesEntries(page == null ? 0 : (page.intValue() - 1) * sizeNo, sizeNo));
+			    float nrOfPages = (float) rolesService.countRoleses() / sizeNo;
+			    model.addAttribute("maxPages", (int) ((nrOfPages > (int) nrOfPages || nrOfPages == 0.0) ? nrOfPages + 1 : nrOfPages));
+			} else {
+			    model.addAttribute("roleses", rolesService.findAll());
+			}
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
         return "roleses/list";
     }
     
@@ -70,24 +88,41 @@ public class RolesController {
             model.addAttribute("roles", roles);
             return "roleses/update";
         }
-        //roles.merge();
-        rolesService.update(roles);
+        try {
+			rolesService.update(roles);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
         return "redirect:/roleses/" + encodeUrlPathSegment(roles.getId().toString(), request);
     }
     
     @RequestMapping(value = "/{id}", params = "form", method = RequestMethod.GET)
     public String updateForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("roles", rolesService.findUniqueByProperty("id", id));
+        try {
+			model.addAttribute("roles", rolesService.findUniqueByProperty("id", id));
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
         return "roleses/update";
     }
     
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable("id") Long id, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, Model model) {
-        //Roles.findRoles(id).remove();
-    	rolesService.delete(id);
-        
-        model.addAttribute("page", (page == null) ? "1" : page.toString());
-        model.addAttribute("size", (size == null) ? "10" : size.toString());
+    	
+    	try {
+			rolesService.delete(id);
+			
+			model.addAttribute("page", (page == null) ? "1" : page.toString());
+			model.addAttribute("size", (size == null) ? "10" : size.toString());
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			this.logger.error(this.getMessage(e), e);
+			return "prompt";
+		}
         return "redirect:/roleses?page=" + ((page == null) ? "1" : page.toString()) + "&size=" + ((size == null) ? "10" : size.toString());
     }
     

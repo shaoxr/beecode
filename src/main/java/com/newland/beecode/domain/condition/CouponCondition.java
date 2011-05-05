@@ -125,7 +125,7 @@ public class CouponCondition extends SimpleQueryCondition{
 		if(GlobalConstant.ALL_LONG.equals(this.marketingCatalogId)){
 			return null;
 		}
-		return this.marketingCatalogId;
+		return null;
 	}
 
 	public void setMarketingCatalogId(Long marketingCatalogId) {
