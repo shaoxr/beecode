@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.report.PartnerSummaryReport;
-import com.newland.beecode.exception.AppException;
 
 public interface PartnerService {
 
