@@ -29,7 +29,8 @@ public class MarketingActDao extends BaseDao<MarketingAct, Long> {
 
         QueryResult qr = new QueryResult();
 
-        List<MarketingAct> list = this.find("from MarketingAct ma where ma.actStatus=?", actStatus);
+        //List<MarketingAct> list = this.find("from MarketingAct ma where ma.actStatus=?", actStatus);
+        List<MarketingAct> list =this.findListByQuery("from MarketingAct ma where ma.actStatus=?", page, size, actStatus);
 
         List counts = this.find("select count(ma) from MarketingAct ma where ma.actStatus=?", actStatus);
 
