@@ -147,6 +147,34 @@ public class ErrorsCode {
 	 * 商户号已经存在
 	 */
 	public static final String BIZ_PARTNER_NO_EXITS="BIZ.PARTNER.002";
+	/**
+	 * 找到商户sheet
+	 */
+	public static final String BIZ_PARTNER_SHEET_NOT_FOUND="BIZ.PARTNER.003";
+	/**
+	 * EXCEL商户名不能为空
+	 */
+	public static final String BIZ_PARTNER_EXCEL_NAME_NULL="BIZ.PARTNER.004";
+	/**
+	 * EXCEL商户编号不能为空或者格式有错
+	 */
+	public static final String BIZ_PARTNER_EXCEL_PARTNERNO_ERROR="BIZ.PARTNER.005";
+	/**
+	 *  EXCEL商户检查通过
+	 */
+	public static final String BIZ_PARTNER_EXCEL_PASS="BIZ.PARTNER.006";
+	/**
+	 * 文件上传有误
+	 */
+	public static final String BIZ_PARTNER_EXCEL_FILE_UPLOAD_ERROR="BIZ.PARTNER.007";
+	/**
+	 * 商户文件格式有误
+	 */
+	public static final String BIZ_PARTNER_EXCEL_CHECK_ERROR="BIZ.PARTNER.008";
+	/**
+	 * 商户不存在
+	 */
+	public static final String BIZ_PARTNER_EXCEL_NOT_EXITS="BIZ.PARTNER.009";
 	
 	
 	/**

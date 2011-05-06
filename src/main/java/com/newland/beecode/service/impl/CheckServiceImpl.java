@@ -19,17 +19,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.newland.beecode.domain.Customer;
+import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.condition.CheckResult;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.CheckService;
 import com.newland.beecode.service.FileService;
+import com.newland.beecode.service.PartnerService;
 @Service("checkService")
 public class CheckServiceImpl implements CheckService{
 	@Autowired
 	private MessageSource messageSource;
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private PartnerService partnerService;
 	@Override
 	public CheckResult customerCheck(MultipartFile file,String fileName)throws AppException {
 		StringBuffer tempError = new StringBuffer();
@@ -105,6 +109,61 @@ public class CheckServiceImpl implements CheckService{
 			throw new AppException(ErrorsCode.BIZ_CUSTOMER_FILE_CHECK_ERROR,"");
 		}
 		return list;
+	}
+	@Override
+	public CheckResult partnerCheck(MultipartFile file, String fileName)
+			throws AppException {
+		StringBuffer tempError = new StringBuffer();
+		CheckResult cr=new CheckResult();
+		cr.setPass(true);
+		try {
+			this.fileService.storeFile(file,fileName);
+			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(this.fileService.getPath(fileName)));
+			HSSFWorkbook wb = new HSSFWorkbook(fs);
+			HSSFSheet sheet = wb.getSheet("partner");
+			if(sheet==null){
+				cr.setPass(false);
+				cr.setMessage(messageSource.getMessage(ErrorsCode.BIZ_PARTNER_SHEET_NOT_FOUND, null, Locale.CHINA));
+				return cr;
+			}
+			HSSFRow row;
+			for (int j = 1; j <= sheet.getLastRowNum(); j++) {
+				int i=0;
+				row = sheet.getRow(j);
+				HSSFCell name = row.getCell((short) i++);
+				tempError.append("<tr><td>" + j + "</td><td>");
+				if(name==null || name.toString().equals("")){
+					tempError.append(messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NAME_NULL, null, Locale.CHINA));
+					cr.setPass(false);
+				}
+				tempError.append("</td><td>");
+				HSSFCell partnerNo = row.getCell((short) i++);
+				if(partnerNo==null || partnerNo.toString().equals("")||partnerNo.toString().length()!=16){
+					tempError.append(messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PARTNERNO_ERROR, null, Locale.CHINA));
+					cr.setPass(false);
+				}
+				List<Partner> partners=this.partnerService.findByProperty("partnerNo", partnerNo.toString());
+				if(partners.size()==0){
+					tempError.append(messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NOT_EXITS, null, Locale.CHINA));
+					cr.setPass(false);
+				}
+				tempError.append("</td></tr>");
+			}
+			if(cr.isPass()){
+				cr.setMessage(messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PASS, new Object[]{sheet.getLastRowNum()}, Locale.CHINA));
+				return cr;
+			}
+			cr.setMessage(tempError.toString());
+			return cr;
+		} catch (IOException e) {
+			throw new AppException(ErrorsCode.BIZ_PARTNER_EXCEL_FILE_UPLOAD_ERROR,"");
+		}catch (RuntimeException e) {
+			throw new AppException(ErrorsCode.BIZ_PARTNER_EXCEL_CHECK_ERROR,"");
+		}
+	}
+	@Override
+	public List<Partner> getPartner(String fileName) throws AppException {
+		return null;
 	}
 
 

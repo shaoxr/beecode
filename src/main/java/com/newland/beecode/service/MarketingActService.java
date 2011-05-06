@@ -87,4 +87,6 @@ public interface MarketingActService {
 	public List<MarketingAct> findAll();
 	
 	public List<MarketingAct> findMarketingActsByActStatus(Integer actStatus);
+	
+	public void update(MarketingAct marketingAct) throws AppException;
 }
