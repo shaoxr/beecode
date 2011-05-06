@@ -371,5 +371,17 @@ public class MarketingActServiceImpl implements MarketingActService {
 	public int countByCondition(MarketingActCondition mac) {
 		return this.actDao.countSimpleQuery(mac);
 	}
+	@Override
+	public void update(MarketingAct marketingAct) throws AppException {
+		MarketingAct act = this.findByActNo(marketingAct.getActNo());
+		act.setActName(marketingAct.getActName());
+		act.setActDetail(marketingAct.getActDetail());
+		act.setBindCard(marketingAct.getCheckCode());
+		act.setStartDate(marketingAct.getStartDate());
+		act.setEndDate(marketingAct.getEndDate());
+		act.setTimes(marketingAct.getTimes());		
+		this.actDao.update(marketingAct);
+	}
+
 
 }

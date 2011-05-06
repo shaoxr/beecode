@@ -16,7 +16,7 @@
             </list>
         </property>
     </bean>  
-    <context:component-scan base-package="com.newland.beecode, com.intensoft.formater">
+    <context:component-scan base-package="com.newland.beecode">
         
     </context:component-scan>
         
@@ -52,7 +52,12 @@
                 <prop key="hibernate.cache.use_second_level_cache">false</prop>
             </props>
         </property>
-        <property name="packagesToScan" value="com.intensoft.base,com.newland.beecode.domain" />
+        <property name="packagesToScan" value="com.newland.beecode.domain" /> 
+        <property name="mappingResources">
+        	<list>
+        		<value>hbm/mysql/Dictionary.hbm.xml</value>     
+        	</list>
+        </property>
     </bean>  
     
         <!-- 事务管理器配置,数据源事务 -->
@@ -63,7 +68,14 @@
     <!-- 使用annotation定义事务 -->
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
                    
+     		<!-- 数据字典 -->
+		<bean id="dictViewDao" class="com.intensoft.formater.dao.DictViewDao">
+			<property name="sessionFactory" ref="sessionFactory" />
+		</bean>
 
+		<bean id="dictViewService" class="com.intensoft.formater.DictViewFormatter">
+			<property name="dictViewDao" ref="dictViewDao" />
+		</bean>
 
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">                   
         <property name="basename" value="messages" />                 

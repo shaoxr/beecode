@@ -190,6 +190,29 @@ public class MarketingActController extends BaseController{
 		}
 		return "marketingacts/show";
 	}
+	@RequestMapping(value="/{actNo}",params = "form",method=RequestMethod.GET)
+	public String update(@PathVariable("actNo") Long actNo, Model model){	
+		try {
+			MarketingAct act = this.marketingActService.findByActNo(actNo);
+			model.addAttribute("marketingAct", act);
+			model.addAttribute("checkCards", dictView.getSelectModelCollection(MarketingAct.DICT_KEY_NAME_CHECK_CARD));
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		return "marketingacts/update";
+	}
+	@RequestMapping(method=RequestMethod.PUT)
+	public String updateSubmit(@Valid MarketingAct marketingAct,Model model){
+		System.out.println(marketingAct.getActName());
+		try{
+			this.marketingActService.update(marketingAct);
+		}catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		return "redirect:/marketingacts/show"; 
+	}
 	@RequestMapping(value = "{actNo}/detail", method = RequestMethod.GET)
 	public String couponDetail(@PathVariable("actNo") Long actNo, Model model){
 		try {
