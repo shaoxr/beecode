@@ -281,7 +281,7 @@ public class MarketingActServiceImpl implements MarketingActService {
             MarketingAct act = actDao.findUniqueByProperty("actNo", actNo);
             if (act.getActStatus().equals(MarketingAct.STATUS_BEFORE_RECHECK)) {
 				act.setActStatus(MarketingAct.STAUS_DELETE);
-				actDao.update(act);;
+				actDao.update(act);
 			} else {
 				throw new AppException(ErrorsCode.BIZ_MARKETACT_DONOT_DELETE,"do not delete");
 		}

@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
@@ -100,9 +101,9 @@ public class MarketingAct {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGen")
-	@GenericGenerator(name = "tableGen", strategy = "org.hibernate.id.MultipleHiLoPerTableGenerator", parameters = { @Parameter(name = "max_lo", value = "100") })
-	@Column
-	private Long actNo;
+    @GenericGenerator(name = "tableGen", strategy = "org.hibernate.id.MultipleHiLoPerTableGenerator", parameters = { @Parameter(name = "max_lo", value = "0") })
+    @Column
+    private Long actNo;
 
 	@Transient
 	private String actStatusDesc;
@@ -168,8 +169,9 @@ public class MarketingAct {
 	@Column
 	private String bizNo;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Partner> partners = new HashSet<Partner>();
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinTable(name="marketing_act_partners",joinColumns=@JoinColumn(name="marketing_act"),inverseJoinColumns=@JoinColumn(name="partners"))
+    private Set<Partner> partners = new HashSet<Partner>();
 
 	@ManyToOne
 	@JoinColumn(name = "marketing_catalog")

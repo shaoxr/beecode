@@ -6,6 +6,6 @@
         <field:display  field="operName" id="s_com_newland_beecode_domain_Oper_operName" object="${oper}" z="SIzHVcU72sWENkz9Qw/P19tKEMI="/>
         <field:display field="operPwd" id="s_com_newland_beecode_domain_Oper_operPwd" object="${oper}" z="Pkg/yLvUgdQtEA7TxneHe9rWado="/>
         <field:display field="enabled" id="s_com_newland_beecode_domain_Oper_enabled" object="${oper}" z="lBtmhGyRVvkupOSko5JB1dWJdBY="/>
-        <field:checkboxlist checkitems="${oper.roles}" disabled="true"  id="s_com_newland_beecode_domain_Oper_role1" disableFormBinding="true" itemLabel="roleName" itemValue="id" items="${oper.roles}" field="roles"></field:checkboxlist>
+        <field:checkboxlist checkitems="${oper.roles}" id="s_com_newland_beecode_domain_Oper_role1" disableFormBinding="true" itemLabel="roleName" itemValue="id" items="${oper.roles}" field="roles" readonly="true" disabled="true"></field:checkboxlist>
     </page:show>
 </div>

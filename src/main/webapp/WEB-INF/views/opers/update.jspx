@@ -6,8 +6,7 @@
         <field:input field="operName" id="c_com_newland_beecode_domain_Oper_operName" max="24" required="true" z="7YnXcPlKMPmLqkfYz+fOQ8DDzVk="/>
         <field:input field="operPwd" id="c_com_newland_beecode_domain_Oper_operpwd" max="24" required="true"  z="7YnXcPlKMPmLqkfYz+fOQ8DDzVk="/>
         <field:checkbox field="enabled" id="c_com_newland_beecode_domain_Oper_enabled" z="+pVwEsQ/F1EMdKMYnH/U/RL9taE="/>
-    	<field:select path="" itemLabel="roleName" itemValue="id" multiple="true"  disableFormBinding="true" items="${oper.roles}" field="roleIds" id="s_com_newland_beecode_domain_Oper_role1" required="true" z="X2s+u3OVA3VfiaFh+21omv0PBMg="/>
-    
+    	<field:checkboxlist checkitems="${oper.roles}"  id="s_com_newland_beecode_domain_Oper_role1" disableFormBinding="true" itemLabel="roleName" itemValue="id" items="${oper.roles}" field="roleIds"></field:checkboxlist>
     </form:update>
        <form:dependency dependencies="${dependencies}" id="d_com_newland_beecode_domain_Oper" render="${not empty dependencies}" z="J1rY6YnBPVmsZYWa0/AW1417sgA="/>
     

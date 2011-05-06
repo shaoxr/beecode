@@ -20,7 +20,13 @@
     <c:set var="sec_field">
       <spring:escapeBody javaScriptEscape="true">${field}</spring:escapeBody>
     </c:set>
-   <c:if test="${readonly}">
+    <c:if test="${empty disabled}">
+      <c:set value="false" var="disabled" />
+    </c:if>
+    <c:if test="${empty readonly}">
+      <c:set value="false" var="readonly" />
+    </c:if>
+    <c:if test="${readonly}">
       <c:set value="readonly" var="readonly" />
     </c:if>
     <c:if test="${disabled}">
@@ -38,9 +44,9 @@
                 <c:set value="checked" var="checkedstatus" />
              </c:if>
            </c:forEach>
-             <input id="_${sec_field}_id" name="${sec_field}" readonly="${ readonly}" disabled="${disabled}" value="${item[fn:escapeXml(itemValue)]}" checked="${checkedstatus}" type="checkbox">
+             <input id="_${sec_field}_id" name="${sec_field}" disabled="${disabled}" readonly="${readonly}" value="${item[fn:escapeXml(itemValue)]}" checked="${checkedstatus}" type="checkbox">
                         <spring:eval expression="item[itemLabel]" />
-                      </input>
+             </input>
                       
           </c:forEach>
     </div>
