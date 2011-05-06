@@ -159,4 +159,9 @@ public class ErrorsCode {
 	 */
 	public static final String BIZ_MARKINGCATALOG_NAME_EXITS="BIZ.MARKETINGCATALOG.002";
 	
+	/**
+	 * 操作员姓名已经存在
+	 */
+	public static final String BIZ_OPER_NAME_EXITS="BIZ.OPER.001";
+	
 }

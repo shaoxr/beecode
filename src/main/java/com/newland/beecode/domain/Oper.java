@@ -27,7 +27,7 @@ public class Oper {
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGen")
-    @GenericGenerator(name = "tableGen", strategy = "org.hibernate.id.MultipleHiLoPerTableGenerator", parameters = { @Parameter(name = "max_lo", value = "100") })
+    @GenericGenerator(name = "tableGen", strategy = "org.hibernate.id.MultipleHiLoPerTableGenerator", parameters = { @Parameter(name = "max_lo", value = "0") })
     @Column
     private Long operNo;
 

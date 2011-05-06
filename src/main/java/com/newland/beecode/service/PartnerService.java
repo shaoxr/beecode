@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.report.PartnerSummaryReport;
-import com.newland.beecode.exception.AppException;
 
 public interface PartnerService {
 
@@ -14,7 +13,7 @@ public interface PartnerService {
 	
 	public List<Partner> findAll();
 	
-	public void save(Partner partner) throws AppException;
+	public void save(Partner partner) ;
 	
 	public Partner findById(Long id);
 	
@@ -24,5 +23,7 @@ public interface PartnerService {
 	
 	public void delete(Long id);
 	
-	public void update(Partner partner ) throws AppException;
+	public void update(Partner partner ) ;
+	
+	public List<Partner> findByProperty(String propertyName,Object values);
 }

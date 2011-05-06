@@ -7,7 +7,6 @@
 			<menu:item id="i_oper_list" messageCode="global_menu_list" url="/opers?page=1&amp;size=${empty param.size ? 10 : param.size}" z="nvH/v7LzoQsvjqhbb0xe0w+2sjc="/>
 	    </menu:category>
 	    <menu:category id="c_roles" z="rs8zfmLS6SJZoIvFFQfrlrSaJVU=">
-			<menu:item id="i_roles_new" messageCode="global_menu_new" url="/roleses?form" z="3pwVBouHLA1zzuNbxsmScZYd3Ow="/>
 			<menu:item id="i_roles_list" messageCode="global_menu_list" url="/roleses?page=1&amp;size=${empty param.size ? 10 : param.size}" z="hajFcKWAQ9yfIfMWvLv3ooTzCFE="/>
 		</menu:category>
 		

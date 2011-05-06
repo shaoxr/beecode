@@ -202,7 +202,6 @@ public class MarketingActController extends BaseController{
 		}
 		return "marketingacts/report";
 	}
-
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(
 			@RequestParam(value = "page", required = false) Integer page,
@@ -271,12 +270,12 @@ public class MarketingActController extends BaseController{
 			HttpServletRequest request) {
 		        try {
 					Map<String, String> queryParams = PaginationHelper.makeParameters(
-					request.getParameterMap(), request.getQueryString());
+					request.getParameterMap(), "");
 					page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
 					size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
 					String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
-					QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_RECHECK, page, size);
-                    model.addAttribute("marketingacts",qr.getResultList());
+					QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_RECHECK, (page-1)*size, size);
+					model.addAttribute("marketingacts",qr.getResultList());
                     int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
                     model.addAttribute("maxPages",maxPages);
                     model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
@@ -327,11 +326,11 @@ public class MarketingActController extends BaseController{
 			HttpServletRequest request) {
 		        try {
 					Map<String, String> queryParams = PaginationHelper.makeParameters(
-					request.getParameterMap(), request.getQueryString());
+					request.getParameterMap(), "");
 					page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
 					size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
 					String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
-					QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_GIVE, page, size);
+					QueryResult qr=this.marketingActService.findMarketingActEntriesByActStatus(MarketingAct.STATUS_BEFORE_GIVE, (page-1)*size, size);
                     model.addAttribute("marketingacts",qr.getResultList());
                     int maxPages = PaginationHelper.calcMaxPages(size, qr.getCount());
                     model.addAttribute("maxPages",maxPages);
