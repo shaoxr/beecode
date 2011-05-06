@@ -7,7 +7,7 @@
         <field:datetime disableFormBinding="true" dateTimePattern="${date_format}" required="false" field="minGenTime" id="f_com_newland_beecode_domain_Coupon_minGenTime"/>
         <field:datetime disableFormBinding="true" dateTimePattern="${date_format}" required="false" field="maxGenTime" id="f_com_newland_beecode_domain_Coupon_maxGenTime"/>
          -->
-        <field:select disableFormBinding="true" field="msType" id="f_com_newland_beecode_domain_msmanager_mstype" itemValue="keyValue" itemLabel="keyDesc" items="${msTypes}" multiple="false" path=""/>
+        <field:select disableFormBinding="true" field="msType" id="f_com_newland_beecode_domain_msmanager_mstype" itemValue="key" itemLabel="value" items="${msTypes}" multiple="false" path=""/>
         <field:input disableFormBinding="true" field="userName" id="c_com_newland_beecode_domain_msmanager_username" required="true"/>
         <field:input disableFormBinding="true" field="passWord" id="c_com_newland_beecode_domain_msmanager_password" required="true"/>
     </form:find>
