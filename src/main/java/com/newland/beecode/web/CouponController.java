@@ -215,7 +215,6 @@ public class CouponController extends BaseController{
 			}
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			logger.error("", e);
 			return "prompt";
 		}
 		return "coupons/sendTip";
@@ -236,7 +235,6 @@ public class CouponController extends BaseController{
 			
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			logger.error("", e);
 			return "prompt";
 		}
 		return "coupons/sendTip";
@@ -251,7 +249,6 @@ public class CouponController extends BaseController{
 			
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			logger.error("", e);
 			return "prompt";
 		}
 		
