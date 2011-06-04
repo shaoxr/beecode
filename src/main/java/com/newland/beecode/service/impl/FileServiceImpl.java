@@ -626,8 +626,8 @@ public class FileServiceImpl implements FileService{
 				coupons.add(coupon);
 			}
 			
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (IOException e) {
+			throw new AppException(ErrorsCode.BIZ_IO_EXCEPTION,"",e);
 		}finally{
 			try {
 				reader.close();
