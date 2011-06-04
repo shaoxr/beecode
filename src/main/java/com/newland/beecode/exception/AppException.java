@@ -23,11 +23,13 @@ public class AppException extends Exception {
 	private Throwable exception;
 
 	public AppException(String code, String msg) {
+		super("["+msg+"]");
 		this.code = code;
 		this.msg = msg;
 	}
 	
 	public AppException(String code, String msg, Throwable t){
+		super("["+msg+"]",t);
 		this.code = code;
 		this.msg = msg;
 		this.exception = t;

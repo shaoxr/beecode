@@ -2,12 +2,7 @@
   <jsp:output omit-xml-declaration="yes" />
 
   <jsp:directive.attribute name="id" type="java.lang.String" required="true" description="The identifier for this tag (do not change!)" />
-  <jsp:directive.attribute name="field1" type="java.lang.String" required="true" description="The field exposed from the form backing object" />
-  <jsp:directive.attribute name="field2" type="java.lang.String" required="true" description="The field exposed from the form backing object" />
- <jsp:directive.attribute name="field3" type="java.lang.String" required="true" description="The field exposed from the form backing object" />
-  <jsp:directive.attribute name="field4" type="java.lang.String" required="true" description="The field exposed from the form backing object" />
-  <jsp:directive.attribute name="field5" type="java.lang.String" required="true" description="The field exposed from the form backing object" />
- 
+ <jsp:directive.attribute name="model" type="java.lang.String" required="true" description="The field exposed from the form backing object" />
   <jsp:directive.attribute name="label" type="java.lang.String" required="false" description="The label used for this field, will default to a message bundle if not supplied" />
   <jsp:directive.attribute name="required" type="java.lang.Boolean" required="false" description="Indicates if this field is required (default false)" />
   <jsp:directive.attribute name="disabled" type="java.lang.Boolean" required="false" description="Specify if this field should be enabled" />
@@ -41,36 +36,24 @@
       <c:set value="false" var="required" />
     </c:if>
     
-    <c:set var="sec_field1">
-      <spring:escapeBody javaScriptEscape="true" >${field1}</spring:escapeBody>
-    </c:set>
-    <c:set var="sec_field2">
-      <spring:escapeBody javaScriptEscape="true" >${field2}</spring:escapeBody>
-    </c:set>
-     <c:set var="sec_field3">
-      <spring:escapeBody javaScriptEscape="true" >${field3}</spring:escapeBody>
-    </c:set>
-    <c:set var="sec_field4">
-      <spring:escapeBody javaScriptEscape="true" >${field4}</spring:escapeBody>
-    </c:set>
-    
-    <c:set var="sec_field5">
-      <spring:escapeBody javaScriptEscape="true" >${field5}</spring:escapeBody>
+   
+    <c:set var="model">
+      <spring:escapeBody javaScriptEscape="true" >${model}</spring:escapeBody>
     </c:set>
    <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_name" var="name" htmlEscape="false" />
    
     <div id="_${fn:escapeXml(id)}_id">
-      <label for="_${sec_field}_id">
+      <label for="_${model}_id">
         <c:out value="${fn:escapeXml(label)}" />
         :
       </label>
       <c:choose>
         <c:when test="${disableFormBinding}">
-          <input id="_${sec_field}_id_1" name="${sec_field1}" type="${fn:escapeXml(type)}" style="width:80px"/>
-           <span for="_${sec_field}_id_33" style="width:300px;color: red">
+          <input id="_${model}_title1_id" name="${model}.title1" type="${fn:escapeXml(type)}" style="width:80px"/>
+           <span for="_name_id" style="width:300px;color: red">
             <c:out value="${fn:escapeXml(name)}" />
            </span>
-          <input id="_${sec_field}_id_2" name="${sec_field2}" type="${fn:escapeXml(type)}" style="width:80px"/>
+          <input id="_${model}_title2_id" name="${model}.title2" type="${fn:escapeXml(type)}" style="width:80px"/>
           
         </c:when>
         <c:otherwise>
@@ -79,9 +62,11 @@
               <form:password id="_${sec_field}_id" path="${sec_field}" disabled="${disabled}" cssStyle="width:200px" />
             </c:when>
             <c:otherwise>
-              <form:input id="_${sec_field}_id" path="${sec_field1}" disabled="${disabled}"  cssStyle="width:100px" />
-              <br/>
-              <form:input id="_${sec_field}_ids" path="${sec_field2}" disabled="${disabled}"  cssStyle="width:100px" />
+              <form:input id="_${model}_title1_id" path="${model}.title1" disabled="${disabled}"  cssStyle="width:80px" />
+              <span for="_name_id" style="width:300px;color: red">
+              <c:out value="${fn:escapeXml(name)}" />
+              </span>
+              <form:input id="_${model}_title2_id" path="${model}.title2" disabled="${disabled}"  cssStyle="width:80px" />
             </c:otherwise>
           </c:choose>
           <br />
@@ -105,72 +90,114 @@
         <spring:escapeBody javaScriptEscape="true">${field_invalid}</spring:escapeBody>
       </c:set>
       <script type="text/javascript">
-        Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id_1', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${sec_field_validation}', invalidMessage: '${sec_field_invalid}', required: ${required}}})); 
-        Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id_2', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${sec_field_validation}', invalidMessage: '${sec_field_invalid}', required: ${required}}})); 
+        Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_title1_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${sec_field_validation}', invalidMessage: '${sec_field_invalid}', required: ${required}}})); 
+        Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_title2_id', widgetType : 'dijit.form.ValidationTextBox', widgetAttrs : {promptMessage: '${sec_field_validation}', invalidMessage: '${sec_field_invalid}', required: ${required}}})); 
 
       </script>
     </div>
-    
-    <div id="_${fn:escapeXml(id)}_id_3">
-      <label for="_${sec_field}_id_3">
+    <div id="_${fn:escapeXml(id)}_id_1_1">
+      <label for="_${model}_cardBefore_id_1">
         +++
       </label>
-      <form:textarea id="_${sec_field}_id_3" path="${sec_field3}" disabled="${disabled}" cssStyle="width:230px" />
+      <form:textarea id="_${model}_cardBefore_id_2" path="${model}.cardBefore" disabled="${disabled}" cssStyle="width:230px" />
       <br />
       <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
-      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id_3', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_cardBefore_id_2', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
     </div>
     
-    <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_couponid_desc" var="couponid_desc" htmlEscape="false" />
-    <div id="_${fn:escapeXml(id)}_id_33">
-      <label for="_${sec_field}_id_33">
+    <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_account_desc" var="account_desc" htmlEscape="false" />
+    <div id="_${fn:escapeXml(id)}_id_1_2">
+      <label for="_account_desc_id_1">
         +
       </label>
-      <label for="_${sec_field}_id_33" style="width:300px;color: red">
+      <label for="_account_desc_id_2" style="width:300px;color: red">
+        <c:out value="${fn:escapeXml(account_desc)}" />
+      </label>
+      <br />
+    </div>
+    <br />
+    
+    
+    <div id="_${fn:escapeXml(id)}_id_2_1">
+      <label for="_${model}_valueBefore_id_1">
+        +++
+      </label>
+      <form:textarea id="_${model}_valueBefore_id_2" path="${model}.valueBefore" disabled="${disabled}" cssStyle="width:230px" />
+      <br />
+      <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_valueBefore_id_2', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+    </div>
+    
+    <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_value_desc" var="value_desc" htmlEscape="false" />
+    <div id="_${fn:escapeXml(id)}_id_2_2">
+      <label for="_value_desc_id_1">
+        +
+      </label>
+      <label for="_value_desc_id_2" style="width:300px;color: red">
+        <c:out value="${fn:escapeXml(value_desc)}" />
+      </label>
+      <br />
+    </div>
+    <br />
+    
+    
+    <div id="_${fn:escapeXml(id)}_id_3_1">
+      <label for="_${model}_couponIdBefore_id_1">
+        +++
+      </label>
+      <form:textarea id="_${model}_couponIdBefore_id_2" path="${model}.couponIdBefore" disabled="${disabled}" cssStyle="width:230px" />
+      <br />
+      <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_couponIdBefore_id_2', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+    </div>
+    <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_couponid_desc" var="couponid_desc" htmlEscape="false" />
+    <div id="_${fn:escapeXml(id)}_id_3_2">
+      <label for="_couponid_desc_id_1">
+        +
+      </label>
+      <label for="_couponid_desc_id_2" style="width:300px;color: red">
         <c:out value="${fn:escapeXml(couponid_desc)}" />
       </label>
       <br />
     </div>
+    <br />
     
-    
-    <div id="_${fn:escapeXml(id)}_id_4">
-      <label for="_${sec_field}_id_4">
+    <div id="_${fn:escapeXml(id)}_id_4_1">
+      <label for="_${model}_periodBefore_id_1">
         +++
       </label>
-      <form:textarea id="_${sec_field}_id_4" path="${sec_field4}" disabled="${disabled}" cssStyle="width:230px" />
+      <form:textarea id="_${model}_periodBefore_id_2" path="${model}.periodBefore" disabled="${disabled}" cssStyle="width:230px" />
       <br />
       <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
-      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id_4', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_periodBefore_id_2', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
     </div>
-    
     <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_startendtime" var="times" htmlEscape="false" />
-    <div id="_${fn:escapeXml(id)}_id_33">
-      <label for="_${sec_field}_id_33">
+    <div id="_${fn:escapeXml(id)}_id_4_2">
+      <label for="_startendtime_id_1">
         +
       </label>
-      <label for="_${sec_field}_id_33" style="width:300px;color: red">
+      <label for="_startendtime_id_1" style="width:300px;color: red">
         <c:out value="${fn:escapeXml(times)}" />
       </label>
       <br />
     </div>
     
-    
-    <div id="_${fn:escapeXml(id)}_id_5">
-      <label for="_${sec_field}_id_5">
+    <br />
+    <div id="_${fn:escapeXml(id)}_id_5_1">
+      <label for="_${model}_ending_id_1">
         +++
       </label>
-      <form:textarea id="_${sec_field}_id_5" path="${sec_field5}" disabled="${disabled}" cssStyle="width:230px" />
+      <form:textarea id="_${model}_ending_id_2" path="${model}.ending" disabled="${disabled}" cssStyle="width:230px" />
       <br />
       <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
-      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id_5', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_ending_id_2', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
     </div>
-    <br />
     <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_desc" var="desc" htmlEscape="false" />
-    <div id="_${fn:escapeXml(id)}_id_33">
-      <label for="_${sec_field}_id_33">
+    <div id="_${fn:escapeXml(id)}_id_5_2">
+      <label for="_mmscontent_desc_id_1">
         +
       </label>
-      <label for="_${sec_field}_id_33" style="width:300px;">
+      <label for="_mmscontent_desc_id_2" style="width:300px;">
         <c:out value="${fn:escapeXml(desc)}" />
       </label>
       <br />

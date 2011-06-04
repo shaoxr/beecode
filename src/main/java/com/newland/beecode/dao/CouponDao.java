@@ -4,23 +4,16 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.intensoft.dao.hibernate.SimpleHibernateTemplate;
 import com.newland.beecode.domain.Coupon;
-import com.newland.beecode.domain.condition.CouponCondition;
-import com.newland.beecode.domain.condition.QueryResult;
 import com.newland.beecode.domain.report.ConsumeDetail;
-import com.newland.beecode.domain.report.CouponSummaryItem;
 import com.newland.beecode.domain.report.PartnerSummaryItem;
 import com.newland.beecode.domain.report.ReportForm;
 import com.newland.beecode.domain.report.ReportResult;
-import java.util.LinkedList;
-import org.hibernate.Query;
 
 @Repository("couponDao")
 public class CouponDao extends BaseDao<Coupon,Long> {
@@ -35,42 +28,13 @@ public class CouponDao extends BaseDao<Coupon,Long> {
         return findUniqueByProperty("serialNo", serialNo);
     }
 
-    @SuppressWarnings("unchecked")
-    public List<CouponSummaryItem> summaryPartnerByAct(final Long actNo){
-
-        StringBuffer buf = new StringBuffer();
-        buf.append("select pt.partner_name, ctrl.check_day, count(*), sum(act.amount) exchange, sum(ctrl.amount) ");
-        buf.append("from coupon cp, marketing_act act, coupont_ctrl ctrl, marketing_act_partners mp, partner pt ");
-        buf.append("where cp.marketing_act=? and cp.marketing_act=act.act_no and ctrl.coupon_id=cp.coupon_id and ");
-        buf.append("mp.partners=pt.id and mp.marketing_act=act.act_no ");
-        buf.append("group by pt.partner_name, ctrl.check_day");
-
-        Query q = this.getHibernateTemplate().getSessionFactory().getCurrentSession().createQuery(buf.toString());
-
-        q.setParameter(1, actNo);
-        List l = q.list();
-        List<CouponSummaryItem> result = new LinkedList<CouponSummaryItem>();
-        for (Iterator it = l.iterator(); it.hasNext();) {
-            Object[] obj = (Object[]) it.next();
-            CouponSummaryItem cs = new CouponSummaryItem();
-            cs.setPartnerName((String) obj[0]);
-            cs.setDay((Date) obj[1]);
-            cs.setCount(((BigInteger) obj[2]).intValue());
-            cs.setExchangeAmount((BigDecimal) obj[3]);
-            cs.setRebateAmount((BigDecimal) obj[4]);
-            result.add(cs);
-        }
-
-        return result;
-
-    }
 
     public ReportResult reportDetail(ReportForm reportForm) {
         StringBuffer buf = new StringBuffer();
         StringBuffer CountBuf = new StringBuffer();
         StringBuffer whereBuf=new StringBuffer();
         buf.append("select ctrl.check_day, act.act_name, pt.partner_name ,pt.partner_no,cp.coupon_id,cp.acct_mobile, "
-                + "ctrl.rebate_rate,abs(act.amount) ,act.biz_no, (ctrl.amount*(10-ctrl.rebate_rate))/10,ctrl.amount ");
+                + "ctrl.rebate_rate,abs(ctrl.amount) ,act.biz_no, (ctrl.original_amount-ctrl.off_amount),ctrl.original_amount,ctrl.back_amount ");
         whereBuf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act ");
         whereBuf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
         whereBuf.append("  and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
@@ -129,6 +93,7 @@ public class CouponDao extends BaseDao<Coupon,Long> {
             cd.setBizName((String) obj[8]);
             cd.setRebateAmount((BigDecimal) obj[9]);
             cd.setOriginalAmount((BigDecimal) obj[10]);
+            cd.setBackAmount((BigDecimal) obj[11]);
             result.add(cd);
         }
         rr.setResultList(result);
@@ -140,8 +105,7 @@ public class CouponDao extends BaseDao<Coupon,Long> {
         StringBuffer countBuf = new StringBuffer();
         StringBuffer whereBuf=new StringBuffer();
 
-        HashMap<String, Object> conditions = new HashMap<String, Object>();
-        buf.append("select act.act_name, pt.partner_name , count(*), sum(act.amount)  ,act.biz_no, sum(ctrl.amount) ,sum((ctrl.amount*(10-ctrl.rebate_rate))/10) ");
+        buf.append("select act.act_name, pt.partner_name , count(*), sum(ctrl.amount)  ,act.biz_no, sum(ctrl.original_amount) ,sum((ctrl.original_amount-ctrl.off_amount)),sum(ctrl.back_amount) ");
         countBuf.append(" select count(*) ");
         whereBuf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act ");
         whereBuf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
@@ -195,6 +159,7 @@ public class CouponDao extends BaseDao<Coupon,Long> {
             ps.setOriginalAmount((BigDecimal) obj[5]);
             ps.setExchangeAmount((BigDecimal) obj[3]);
             ps.setRebateAmount((BigDecimal) obj[6]);
+            ps.setBackAmount((BigDecimal) obj[7]);
             result.add(ps);
         }
         rr.setResultList(result);

@@ -5,5 +5,9 @@
 		<put-attribute name="body"
 			value="/WEB-INF/views/util/checkCustomer.jspx" />
 	</definition>
+	<definition extends="default" name="util/checkpartner">
+		<put-attribute name="body"
+			value="/WEB-INF/views/util/checkpartner.jspx" />
+	</definition>
 	
 </tiles-definitions>

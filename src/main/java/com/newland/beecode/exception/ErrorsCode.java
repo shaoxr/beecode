@@ -26,6 +26,10 @@ public class ErrorsCode {
 	 * 礼券在该商户不可用
 	 */
 	public static final String ERR_COUPON_PARTNER_NOT_FOUND = "BIZ.004";
+	/**
+	 * 该卡不参与活动
+	 */
+	public static final String ERR_COUPON_CARD_NOT_USE="BIZ.CARD.000";
 	
 	/**
 	 * posp 返回错误码
@@ -48,6 +52,11 @@ public class ErrorsCode {
 	 * 礼券在该商户不可用
 	 */
 	public static final String POSP_ERR_COUPON_PARTNER_NOT_FOUND="E5";
+	/**
+	 * posp 返回错误码
+	 * 该卡不参与活动 
+	 */
+	public static final String POSP_ERR_COUPON_CARD_DO_NOT_USE="E6";
 	/**
 	 * posp 返回错误码
 	 * 系统异常
@@ -130,6 +139,31 @@ public class ErrorsCode {
 	 */
 	public static final String BIZ_CUSTOMER_CREATE_ERROR="BIZ.021";
 	/**
+	 * 客户记录为空
+	 */
+	public static final String BIZ_CUSTOMER_BLANK="BIZ.022";
+	/**
+	 * 起始日期迟于截止日期
+	 */
+	public static final String BIZ_STARDATE_AFTER_ENDDATE="BIZ.023";
+	
+	/**
+	 * 客户资料检查，卡号位数不对
+	 */
+	public static final String BIZ_CUSTOMER_ACCOUNT_LENGTH_ERROR="BIZ.024";
+	/**
+	 * 客户资料检查，卡号格式不对(包含非数字)
+	 */
+	public static final String BIZ_CUSTOMER_ACCOUNT_NOT_NUMBER="BIZ.025";
+	/**
+	 * 客户资料检查，金额为空
+	 */
+	public static final String BIZ_CUSTOMER_AMOUNT_NULL="BIZ.026";
+	/**
+	 * 客户资料检查，金额格式不对(包含非数字)
+	 */
+	public static final String BIZ_CUSTOMER_AMOUNT_NOT_NUMBER="BIZ.027";
+	/**
 	 * 商户类别名称已经存在
 	 */
 	public static final String BIZ_PARTNERCATALOG_NAME_EXITS="BIZ.PARTNERCATALOG.001";
@@ -137,7 +171,10 @@ public class ErrorsCode {
 	 * 商户类别下已经存在商户，无法删除
 	 */
 	public static final String BIZ_PARTNERCATALOG_DONOT_DELETE="BIZ.PARTNERCATALOG.002";
-	
+	/**
+	 * 商户名或者商户号已经存在
+	 */
+	public static final String BIZ_PARTNER_NAME_OR_NO_EXITS="BIZ.PARTNER.000";
 	/**
 	 * 商户名已经存在
 	 */
@@ -175,6 +212,47 @@ public class ErrorsCode {
 	 * 商户不存在
 	 */
 	public static final String BIZ_PARTNER_EXCEL_NOT_EXITS="BIZ.PARTNER.009";
+	/**
+	 * 商户文件检查不通过
+	 */
+	public static final String BIZ_PARTNER_EXCEL_CHECK_NOT_PASS="BIZ.PARTNER.010";
+	/**
+	 * 商户文件记录为空
+	 */
+	public static final String BIZ_PARTNER_EXCEL_BLANK="BIZ.PARTNER.011";
+	/**
+	 * 该商户已经参与活动，无法删除，
+	 */
+	public static final String BIZ_PARTNER_DO_NOT_DELETE="BIZ.PARTNER.012";
+	
+	
+	
+	
+	
+	/**
+	 * 只有在待审核或者审核失败情况下才可以更新
+	 */
+	public static final String BIZ_MARKETINGACT_DOT_NO_UPDATE="BIZ.MARKETINGACT.000";
+	
+	/**
+	 * 没有待审核客户文件，无法提交审核
+	 */
+	public static final String BIZ_MARKETINGACT_CUSTOMER_FILE_NULL_DO_NOT_SUBMIT_CHECK="BIZ.MARKETINGACT.001";
+	
+	/**
+	 * 卡bin检查码不能为空
+	 */
+	public static final String BIZ_MARKETINGACT_CHECK_CODE_NOT_NULL="BIZ.MARKETINGACT.002";
+	/**
+	 * 卡bin检查码格式不对，只能为数字或者*号，长度为6
+	 */
+	public static final String BIZ_MARKETINGACT_CHECK_CODE_FORMAT_ERROR="BIZ.MARKETINGACT.003";
+	/**
+	 * *必须要跟在数字后面
+	 */
+	public static final String BIZ_MARKETINGACT_CHECK_CODE_ORDER_ERROR="BIZ.MARKETINGACT.004";
+	
+	
 	
 	
 	/**
@@ -191,5 +269,81 @@ public class ErrorsCode {
 	 * 操作员姓名已经存在
 	 */
 	public static final String BIZ_OPER_NAME_EXITS="BIZ.OPER.001";
+	
+	/**
+	 * 客户重复
+	 */
+	public static final String BIZ_CUSTOMER_EXITS="BIZ.CUSTOMER.000";
+	/**
+	 * 二维码生成错误
+	 */
+	public static final String BIZ_BARCODE_GEN_ERROR="BIZ.BARCODE.000";
+	
+	
+	/**
+	 * 找到不文件
+	 */
+	public static final String BIZ_IO_FILE_NOT_FOUND="BIZ.IO.000";
+	
+	/**
+	 * 文件操作失败
+	 */
+	public static final String BIZ_IO_EXCEPTION="BIZ.IO.001";
+	/**
+	 * 短信正在发送中，请稍候再操作
+	 */
+	public static final String BIZ_SMS_SENDING="BIZ.SMS.000";
+	/**
+	 * 彩信正在发送中，请稍候再操作
+	 */
+	public static final String BIZ_MMS_SENDING="BIZ.MMS.000";
+	
+	public static final String BIZ_MMS_SUBMIT_SUCCESS="BIZ.MMS.001";
+	/**
+	 * 发送时找不到彩信文件
+	 */
+	public static final String BIZ_MMS_SEND_ACT_FILE_NOT_FOUND="BIZ.MMS.002";
+	/**
+	 * 没有需要发送的彩信文件
+	 */
+	public static final String BIZ_MMS_NOT_COUPON_TO_SEND="BIZ.MMS.003";
+	
+	
+	
+	
+	
+	public static final String BIZ_SMS_SUBMIT_SUCCESS="BIZ.SMS.001";
+	/**
+	 * 发送时找不到短信文件
+	 */
+	public static final String BIZ_SMS_SEND_ACT_FILE_NOT_FOUND="BIZ.SMS.002";
+	/**
+	 * 没有需要发送的短信文件
+	 */
+	public static final String BIZ_SMS_NOT_COUPON_TO_SEND="BIZ.MMS.003";
+	
+	
+	
+	
+	/**
+	 * 状态反馈文件解析有误
+	 */
+	public static final String BIZ_RESP_STATUS_ERROR="BIZ.RESP_STATUS.000";
+	/**
+	 * 找不到sheet
+	 */
+	public static final String BIZ_RESP_STATUS_SHEET_NOT_FOUND="BIZ.RESP_STATUS.001";
+	/**
+	 * 文件内容为空
+	 */
+	public static final String BIZ_RESP_STATUS_EXCEL_BLANK="BIZ.RESP_STATUS.002";
+	
+	/**
+	 * 正在发送中，无法下载
+	 */
+	public static final String BIZ_SEND_LIST_DO_NOT_DOWNLOAD="BIZ.SEND_LIST.000";
+	
+	
+	
 	
 }

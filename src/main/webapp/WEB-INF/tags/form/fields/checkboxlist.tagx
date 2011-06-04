@@ -44,9 +44,18 @@
                 <c:set value="checked" var="checkedstatus" />
              </c:if>
            </c:forEach>
-             <input id="_${sec_field}_id" name="${sec_field}" disabled="${disabled}" readonly="${readonly}" value="${item[fn:escapeXml(itemValue)]}" checked="${checkedstatus}" type="checkbox">
-                        <spring:eval expression="item[itemLabel]" />
-             </input>
+             <c:choose> 
+			<c:when test="${checkedstatus!='checked'}">
+				<input id="_${sec_field}_id" name="${sec_field}" value="${item[fn:escapeXml(itemValue)]}"  type="checkbox">
+                        		<spring:eval expression="item[itemLabel]" />
+             			</input>
+			</c:when> 
+			<c:otherwise>
+				<input id="_${sec_field}_id" name="${sec_field}" value="${item[fn:escapeXml(itemValue)]}" checked="true" type="checkbox">
+                        		<spring:eval expression="item[itemLabel]" />
+            		 		</input>
+			</c:otherwise> 
+		</c:choose> 
                       
           </c:forEach>
     </div>

@@ -4,6 +4,7 @@ import com.newland.beecode.domain.Oper;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.OperService;
+import com.newland.beecode.service.RolesService;
 import com.newland.utils.PaginationHelper;
 
 import java.util.Date;
@@ -24,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class OperController extends BaseController{
     @Autowired
-    private OperService operService;    
+    private OperService operService;  
+    @Autowired
+    private RolesService rolesService; 
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Oper oper,@RequestParam(value="roleIds") Long[] roleIds,  Model model,
 			HttpServletRequest request) {
@@ -39,7 +42,6 @@ public class OperController extends BaseController{
 			return "prompt";
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "redirect:/opers/"
@@ -53,7 +55,6 @@ public class OperController extends BaseController{
 			model.addAttribute("roleses", this.operService.findRoleAll());
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "opers/create";
@@ -66,7 +67,6 @@ public class OperController extends BaseController{
 			model.addAttribute("itemId", operNo);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		
@@ -105,7 +105,6 @@ public class OperController extends BaseController{
 			this.operService.update(oper,roleIds);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "redirect:/opers/"
@@ -116,10 +115,9 @@ public class OperController extends BaseController{
 	public String updateForm(@PathVariable("operNo") Long operNo, Model model) {
 		try {	
 			model.addAttribute("oper", this.operService.findById(operNo));
-			model.addAttribute("roleses", this.operService.findAll());
+			model.addAttribute("roleses", this.rolesService.findAll());		
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "opers/update";
@@ -139,7 +137,6 @@ public class OperController extends BaseController{
 			this.operService.update(oper,null);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "redirect:";
@@ -163,7 +160,6 @@ public class OperController extends BaseController{
 			model.addAttribute("size", (size == null) ? "10" : size.toString());
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "redirect:/opers?page="

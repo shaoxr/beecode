@@ -22,6 +22,7 @@
 		<intercept-url pattern="/coupons/**" access="hasRole('ROLE_BUSINESS')" />
 		<intercept-url pattern="/report/**" access="hasRole('ROLE_BUSINESS')" />
 		<intercept-url pattern="/util/**" access="hasRole('ROLE_BUSINESS')" />
+		<intercept-url pattern="/batchsend/**" access="hasRole('ROLE_SEND')" />
 		<intercept-url pattern="/partnerCatalog/**" access="hasRole('ROLE_BUSINESS')" />
 		<intercept-url pattern="/marketingCatalog/**" access="hasRole('ROLE_BUSINESS')" />
 		<intercept-url pattern="/ticketctrl/**" access="hasRole('ROLE_BUSINESS')" />

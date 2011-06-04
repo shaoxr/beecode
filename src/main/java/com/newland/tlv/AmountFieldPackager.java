@@ -35,7 +35,6 @@ public class AmountFieldPackager extends DecimalFieldPackager{
 		}
 		
 		String resultStr = super.getAsString(field);
-		System.out.println(">>>>>>>"+resultStr);
 		return resultStr;
 	}
 

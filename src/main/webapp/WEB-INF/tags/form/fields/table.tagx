@@ -12,6 +12,8 @@
   <jsp:directive.attribute name="create" type="java.lang.Boolean" required="false" description="Include 'create' link into table (default true)" />
   <jsp:directive.attribute name="update" type="java.lang.Boolean" required="false" description="Include 'update' link into table (default true)" />
   <jsp:directive.attribute name="delete" type="java.lang.Boolean" required="false" description="Include 'delete' link into table (default true)" />
+  <jsp:directive.attribute name="append" type="java.lang.Boolean" required="false" description="Include 'delete' link into table (default true)" />
+  <jsp:directive.attribute name="appendpath" type="java.lang.String" required="false" description="Specify the URL path" />
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
   <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
   <c:if test="${empty render or render}">
@@ -21,7 +23,7 @@
     <c:set var="columnMaxLengths" scope="request" />
     <c:set var="columnPatterns" scope="request" />
     <c:set var="columnItemLabels" scope="request" />
-    <c:set var="className" scope="request"/>
+    <c:set var="columnClassNames" scope="request"/>
     <jsp:doBody />
 
     <c:if test="${empty typeIdFieldName}">
@@ -40,11 +42,15 @@
     <c:if test="${empty delete}">
       <c:set var="delete" value="true" />
     </c:if>
+    <c:if test="${empty append}">
+      <c:set var="append" value="false" />
+    </c:if>
 
 	<spring:message code="label_${fn:toLowerCase(fn:substringAfter(id,'_'))}" var="typeName" htmlEscape="false" />
     <c:set var="lengths" value="${fn:split(columnMaxLengths, ',')}" scope="request" />
     <c:set var="patterns" value="${fn:split(columnPatterns, ',')}" scope="request" />
     <c:set var="itemLabels" value="${fn:split(columnItemLabels, ',')}" scope="request" />
+    <c:set var="classNames" value="${fn:split(columnClassNames, ',')}" scope="request" />
 
     <table>
       <thead>
@@ -58,6 +64,9 @@
             <th></th>
           </c:if>
           <c:if test="${update}">
+            <th></th>
+          </c:if>
+          <c:if test="${append}">
             <th></th>
           </c:if>
           <c:if test="${delete}">
@@ -74,6 +83,7 @@
             <c:set var="columnMaxLength" value="${lengths[num.count-1]}" scope="request" />
             <c:set var="pattern" value="${patterns[num.count-1]}" scope="request" />
             <c:set var="itemLabel" value="${itemLabels[num.count-1]}" scope="request" />
+            <c:set var="className" value="${classNames[num.count-1]}" scope="request" />
             <td>
               <c:choose>
                 <c:when test="${columnMaxLength lt 0}">
@@ -118,6 +128,18 @@
               <spring:message arguments="${typeName}[${item[typeIdFieldName]}]" code="entity_update" var="update_label" />
               <a href="${fn:escapeXml(update_form_url)}" alt="${fn:escapeXml(update_label)}" title="${fn:escapeXml(update_label)}">
                 <img alt="${fn:escapeXml(update_label)}" class="image" src="${fn:escapeXml(update_image_url)}" title="${fn:escapeXml(update_label)}" />
+              </a>
+            </td>
+          </c:if>
+          <c:if test="${append}">
+            <td>
+              <spring:url value="${path}/${appendpath}/${item[typeIdFieldName]}" var="update_form_url">
+                <spring:param name="form" />
+              </spring:url>
+              <spring:url value="/resources/images/update.png" var="update_image_url" />
+              <spring:message arguments="${typeName}[${item[typeIdFieldName]}]" code="entity_append" var="append_label" />
+              <a href="${fn:escapeXml(update_form_url)}" alt="${fn:escapeXml(append_label)}" title="${fn:escapeXml(append_label)}">
+                <img alt="${fn:escapeXml(append_label)}" class="image" src="${fn:escapeXml(update_image_url)}" title="${fn:escapeXml(append_label)}" />
               </a>
             </td>
           </c:if>

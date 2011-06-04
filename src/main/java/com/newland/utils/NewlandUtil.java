@@ -30,5 +30,24 @@ public class NewlandUtil {
 		}
 		return null;
 	}
+	public static String formatString(String str,int len){
+			if(str.length()>len){
+				return str.substring(0,len-1);
+			}
+			int temp=len-str.length();
+			for(int i=0;i<temp;i++){
+				str="0"+str;
+			}
+			return str;
+	}
+	public static String formatBigDecimal(BigDecimal b,int len){
+		return formatString(b.movePointRight(2).setScale(0,BigDecimal.ROUND_HALF_UP).toString(),len);
+	}
+	public static String formatBigDecimal(BigDecimal b){
+		return b.movePointRight(2).setScale(0,BigDecimal.ROUND_HALF_UP).toString();
+	}
+	public static BigDecimal String2BigDecimal(String s){
+		return new BigDecimal(s).movePointLeft(2);
+	}
 
 }

@@ -3,6 +3,7 @@ package com.newland.beecode.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -21,6 +23,7 @@ import javax.persistence.Version;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Subselect;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.newland.beecode.domain.report.MarketingActSummary;
@@ -29,7 +32,11 @@ import javax.persistence.Entity;
 
 @Entity
 public class MarketingAct {
-
+	
+	public static final String CHECK_CODE_REGEX=";";
+    public static final String FILE_NAME_REGEX="###";
+    
+    public static final String FILE_NAME_REGEX_IN="@@";
 	/**
 	 * 字典名称
 	 */
@@ -46,45 +53,70 @@ public class MarketingAct {
 	 * 卡检查字典
 	 */
 	public static final String DICT_KEY_NAME_CHECK_CARD = "BIND_CARD";
+	/**
+	 * 待添加客户
+	 */
+	public static final Integer STATUS_WAIT_ADD_CUSTOMER=0;
 
 	/**
 	 * 待审核
 	 */
-	public static final Integer STATUS_BEFORE_RECHECK = 0;
+	public static final Integer STATUS_BEFORE_RECHECK = 1;
+	/**
+	 * 追加客户
+	 */
+	public static final Integer STATUS_APPEND_CUSTOMER=2;
 
 	/**
 	 * 审核失败
 	 */
-	public static final Integer STATUS_RECHECK_FAIL = 1;
+	public static final Integer STATUS_RECHECK_FAIL = 3;
 
 	/**
 	 * 作废
 	 */
-	public static final Integer STAUS_DELETE = 2;
+	public static final Integer STAUS_DELETE = 4;
 
 	/**
 	 * 待发放
 	 */
-	public static final Integer STATUS_BEFORE_GIVE = 3;
+	public static final Integer STATUS_BEFORE_GIVE = 5;
 	/**
 	 * 发放中
 	 */
-	public static final Integer STATUS_SENDNG = 4;
+	public static final Integer STATUS_SENDNG = 6;
 
 	/**
 	 * 已发放
 	 */
-	public static final Integer STATUS_AFTER_GIVE = 5;
+	public static final Integer STATUS_AFTER_GIVE = 7;
 
 	/**
 	 * 已过期
 	 */
-	public static final Integer STATUS_EXPIRED = 6;
+	public static final Integer STATUS_EXPIRED = 8;
 
 	/**
 	 * 已关闭
 	 */
-	public static final Integer STATUS_CLOSED = 7;
+	public static final Integer STATUS_CLOSED = 9;
+	/**
+	 * 短信是否正在发放--NO
+	 */
+	public static final Integer SMS_SENDING_NO=0;
+	/**
+	 * 短信是否正在发放--YES
+	 */
+	public static final Integer SMS_SENDING_YES=1;
+	/**
+	 * 彩信是否正在发放--YES 
+	 */
+	public static final Integer MMS_SENDING_YES=1;
+	/**
+	 * 彩信是否正在发放--NO
+	 */
+	public static final Integer MMS_SENDING_NO=0;
+	
 	/**
 	 * 绑定银行卡
 	 */
@@ -96,7 +128,7 @@ public class MarketingAct {
 
 	public MarketingAct() {
 		amount = new BigDecimal(0);
-		rebateRate = new Float(0);
+		rebateRate = new BigDecimal(0);
 	}
 
 	@Id
@@ -137,7 +169,7 @@ public class MarketingAct {
 	private String checkCode;
 
 	@Column
-	private Float rebateRate;
+	private BigDecimal rebateRate;
 
 	/**
 	 * 兑换券价值
@@ -169,19 +201,16 @@ public class MarketingAct {
 	@Column
 	private String bizNo;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToMany
 	@JoinTable(name="marketing_act_partners",joinColumns=@JoinColumn(name="marketing_act"),inverseJoinColumns=@JoinColumn(name="partners"))
     private Set<Partner> partners = new HashSet<Partner>();
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "marketing_catalog")
 	private MarketingCatalog marketingCatalog;
 
 	@Column
 	private Long operNo;
-
-	@Column
-	private String mmsContent;
 
 	@Column
 	private String mmsTitle;
@@ -198,12 +227,75 @@ public class MarketingAct {
 	@Transient
 	private MarketingActSummary summary;
 
-	@Transient
+	@OneToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name = "mms_template_id")
 	private MmsTemplate mmsTemplate;
 
 	@Version
 	@Column(name = "version")
 	private Integer version;
+	@Column
+	private Integer mmsSending;
+	@Column
+	private Integer smsSending;
+	
+	@Column
+	private BigDecimal maxAmount;
+	
+	@Column
+	private BigDecimal backRate;
+	/**
+	 * 兑换物名称
+	 */
+	@Column
+	private String exchangeName;
+
+	@Transient
+	private MsStatus msStatus;
+	
+	@Transient
+	private List<Customer> unCheckCustomers;
+	@Transient
+	private List<Customer> checkedCustomers;
+	
+	public List<Customer> getUnCheckCustomers() {
+		return unCheckCustomers;
+	}
+
+	public void setUnCheckCustomers(List<Customer> unCheckCustomers) {
+		this.unCheckCustomers = unCheckCustomers;
+	}
+
+	public List<Customer> getCheckedCustomers() {
+		return checkedCustomers;
+	}
+
+	public void setCheckedCustomers(List<Customer> checkedCustomers) {
+		this.checkedCustomers = checkedCustomers;
+	}
+
+	public Integer getMmsSending() {
+		return mmsSending;
+	}
+
+	public void setMmsSending(Integer mmsSending) {
+		this.mmsSending = mmsSending;
+	}
+
+	public Integer getSmsSending() {
+		return smsSending;
+	}
+
+	public void setSmsSending(Integer smsSending) {
+		this.smsSending = smsSending;
+	}
+	public MsStatus getMsStatus() {
+		return msStatus;
+	}
+
+	public void setMsStatus(MsStatus msStatus) {
+		this.msStatus = msStatus;
+	}
 
 	public Integer getVersion() {
 		return version;
@@ -341,13 +433,6 @@ public class MarketingAct {
 		this.marketingCatalog = marketingCatalog;
 	}
 
-	public String getMmsContent() {
-		return mmsContent;
-	}
-
-	public void setMmsContent(String mmsContent) {
-		this.mmsContent = mmsContent;
-	}
 
 	public Long getMmsSendSum() {
 		return mmsSendSum;
@@ -389,11 +474,11 @@ public class MarketingAct {
 		this.partners = partners;
 	}
 
-	public Float getRebateRate() {
+	public BigDecimal getRebateRate() {
 		return rebateRate;
 	}
 
-	public void setRebateRate(Float rebateRate) {
+	public void setRebateRate(BigDecimal rebateRate) {
 		this.rebateRate = rebateRate;
 	}
 
@@ -436,5 +521,26 @@ public class MarketingAct {
 	public void setTimes(Integer times) {
 		this.times = times;
 	}
+	public BigDecimal getMaxAmount() {
+		return maxAmount;
+	}
 
+	public void setMaxAmount(BigDecimal maxAmount) {
+		this.maxAmount = maxAmount;
+	}
+
+	public BigDecimal getBackRate() {
+		return backRate;
+	}
+
+	public void setBackRate(BigDecimal backRate) {
+		this.backRate = backRate;
+	}
+	public String getExchangeName() {
+		return exchangeName;
+	}
+
+	public void setExchangeName(String exchangeName) {
+		this.exchangeName = exchangeName;
+	}
 }

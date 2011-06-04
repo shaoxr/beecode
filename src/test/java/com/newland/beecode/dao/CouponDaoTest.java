@@ -13,7 +13,7 @@ import com.newland.beecode.domain.condition.CouponCondition;
 
 
 
-@ContextConfiguration(locations = "/applicationContext.xml") 
+@ContextConfiguration(locations = {"/applicationContext.xml","/applicationContext-*.xml"}) 
 public class CouponDaoTest extends AbstractJUnit4SpringContextTests{
 	@Resource(name = "couponDao")
     private CouponDao couponDao;

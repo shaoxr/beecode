@@ -23,14 +23,6 @@ public class OperDaoTest extends AbstractJUnit4SpringContextTests{
 		}
 	}
 	@Test  
-	public void testFindOperEntries(){
-		List<Oper> oper = operDao.findOperEntries(0,10);
-		System.out.println(oper.size());
-		for(Oper op : oper){
-			System.out.println(op.getOperName());
-		}
-	}
-	@Test  
 	public void testCountOpers(){
 		System.out.println(operDao.countOpers());
 		

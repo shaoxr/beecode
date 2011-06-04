@@ -7,7 +7,6 @@ package com.newland.beecode.dao;
 import com.intensoft.dao.hibernate.SimpleHibernateTemplate;
 import com.newland.beecode.domain.Roles;
 import java.util.List;
-import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 /**

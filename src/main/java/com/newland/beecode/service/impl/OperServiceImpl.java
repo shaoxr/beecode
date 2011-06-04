@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.newland.beecode.dao.OperDao;
 import com.newland.beecode.dao.RoleDao;
@@ -55,7 +56,7 @@ public class OperServiceImpl implements OperService{
 
 	@Override
 	public List<Oper> findOperEntries(Integer start, Integer end) {
-		return this.operDao.findOperEntries(start, end);
+		return this.operDao.findListByQuery("select o from Oper o", start, end);
 	}
 
 	@Override
@@ -72,9 +73,9 @@ public class OperServiceImpl implements OperService{
 	}
 
 	@Override
+	@Transactional(rollbackFor=Exception.class)
 	public void delete(Long id) {
-		//this.operDao.delete(id);
-		this.operDao.excuteByHQL("delete from Oper o where o.id=?", id);
+		this.operDao.delete(id);
 	}
 
 	@Override
@@ -84,7 +85,7 @@ public class OperServiceImpl implements OperService{
 
 	@Override
 	public Oper findOperByOperName(String operName) {
-		List<Oper> list= this.operDao.findOperByOperName(operName);
+		List<Oper> list= this.operDao.findByProperty("operName", operName);
 		return list.size()>0?list.get(0):null;
 	}
 

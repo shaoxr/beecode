@@ -38,8 +38,19 @@ public class CouponCheckRequest {
      * 折扣率
      */
     private BigDecimal rebateRate;
-    
     /**
+     * 折让金额
+     */
+    private BigDecimal offAmount;
+    /**
+     * 原始金额
+     */
+    private BigDecimal originalAmount;
+    
+	private BigDecimal backAmount;
+    
+
+	/**
      * 业务类型
      */
     private String BizType;
@@ -66,6 +77,13 @@ public class CouponCheckRequest {
     
     private String traceNo;
     
+    public BigDecimal getBackAmount() {
+		return backAmount;
+	}
+
+	public void setBackAmount(BigDecimal backAmount) {
+		this.backAmount = backAmount;
+	}
     public String getTraceNo() {
 		return traceNo;
 	}
@@ -172,4 +190,20 @@ public class CouponCheckRequest {
 		}
 		this.couponString = couponString;
 	}
+	  public BigDecimal getOffAmount() {
+			return offAmount;
+		}
+
+		public void setOffAmount(BigDecimal offAmount) {
+			this.offAmount = offAmount;
+		}
+
+		public BigDecimal getOriginalAmount() {
+			return originalAmount;
+		}
+
+		public void setOriginalAmount(BigDecimal originalAmount) {
+			this.originalAmount = originalAmount;
+		}
+
 }

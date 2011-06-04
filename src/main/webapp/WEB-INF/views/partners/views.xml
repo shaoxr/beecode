@@ -4,6 +4,9 @@
 	<definition extends="default" name="partners/list">
 		<put-attribute name="body" value="/WEB-INF/views/partners/list.jspx" />
 	</definition>
+	<definition extends="default" name="partners/find">
+		<put-attribute name="body" value="/WEB-INF/views/partners/findbycondition.jspx" />
+	</definition>
 	<definition extends="default" name="partners/show">
 		<put-attribute name="body" value="/WEB-INF/views/partners/show.jspx" />
 	</definition>

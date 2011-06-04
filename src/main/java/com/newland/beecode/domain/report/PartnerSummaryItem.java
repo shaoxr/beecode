@@ -58,6 +58,16 @@ public class PartnerSummaryItem {
 	
 	private BigDecimal originalAmount;
 	
+	private BigDecimal backAmount;
+	
+	public BigDecimal getBackAmount() {
+		return backAmount;
+	}
+
+	public void setBackAmount(BigDecimal backAmount) {
+		this.backAmount = backAmount;
+	}
+
 	public BigDecimal getOriginalAmount() {
 		return originalAmount;
 	}

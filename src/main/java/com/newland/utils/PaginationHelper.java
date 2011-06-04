@@ -12,7 +12,7 @@ public class PaginationHelper {
 
 	public static final String PARAM_QUERY_STRING = "query";
 	
-	public static final String PAGE_SIZE="10";
+	public static final String PAGE_SIZE="20";
 
 	public static final int calcMaxPages(Integer size, long counts) {
 		float nrOfPages = (float) counts / size;

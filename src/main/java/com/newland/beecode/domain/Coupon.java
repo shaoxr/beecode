@@ -1,25 +1,20 @@
 package com.newland.beecode.domain;
 
+import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Query;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.persistence.Version;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,7 +22,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 public class Coupon {
-	private static final Log logger = LogFactory.getLog(Coupon.class);
+	public static final String DEFAULT_CARD="****************";
+	
+	public static final int GEN_BARCODE_LIMIT_NUM=2000;
+	
+	public static int SINGLE_SEND_MAX=5000;
 	/**
 	 * 字典名称
 	 */
@@ -70,17 +69,9 @@ public class Coupon {
 	 */
 	public static final Integer MMS_STATUS_SNED=1;
 	/**
-	 * 彩信成功接收
-	 */
-	public static final Integer MMS_STATUS_REC_SUCCESS=2;
-	/**
-	 * 彩信接收失败
-	 */
-	public static final Integer MMS_STATUS_REC_ERROR=3;
-	/**
 	 * 彩信发送失败
 	 */
-	public static final Integer MMS_STATUS_SEND_ERROR=4;
+	public static final Integer MMS_STATUS_SEND_ERROR=2;
 	
 	/**
 	 * 短信等待发送
@@ -93,15 +84,7 @@ public class Coupon {
 	/**
 	 * 短信发送失败
 	 */
-	public static final Integer SMS_STATUS_SEND_ERROR=4;
-	/**
-	 * 短信成功接收
-	 */
-	public static final Integer SMS_STATUS_REC_SUCCESS=2;
-	/**
-	 * 短信接收失败
-	 */
-	public static final Integer SMS_STATUS_REC_ERROR=3;
+	public static final Integer SMS_STATUS_SEND_ERROR=2;
 	
 	
 	
@@ -113,6 +96,10 @@ public class Coupon {
 	 *  优惠券
 	 */
 	public static final String BIZ_TYPE_DISCOUNT="01";
+	/**
+	 *  抵用券
+	 */
+	public static final String BIZ_TYPE_VOUCHER="02";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGen")
@@ -146,11 +133,8 @@ public class Coupon {
 	@Column
 	private Integer smsStatus;
 
-	@Transient
-	private String couponStatusDesc;
-
 	@Column
-	private Float rebateRate;
+	private BigDecimal rebateRate;
 
 	@Column
 	private Integer times;
@@ -172,22 +156,26 @@ public class Coupon {
 	@Column
 	private Integer remainTimes;
 
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="marketing_act")
 	private MarketingAct marketingAct;
-	
-	@Transient
-	private String mmsStatusDesc;
-	
-	@Transient
-	private String smsStatusDesc;
 	
 	@Column
 	@Version
 	private Integer version;
 	
-	//start getter/setter
+	@Column
+	private BigDecimal backAmount;
 	
+	
+
+	public BigDecimal getBackAmount() {
+		return backAmount;
+	}
+
+	public void setBackAmount(BigDecimal backAmount) {
+		this.backAmount = backAmount;
+	}
 
 	public Long getCouponId() {
 		return couponId;
@@ -269,11 +257,11 @@ public class Coupon {
 		this.smsStatus = smsStatus;
 	}
 
-	public Float getRebateRate() {
+	public BigDecimal getRebateRate() {
 		return rebateRate;
 	}
 
-	public void setRebateRate(Float rebateRate) {
+	public void setRebateRate(BigDecimal rebateRate) {
 		this.rebateRate = rebateRate;
 	}
 
@@ -341,35 +329,7 @@ public class Coupon {
 		this.version = version;
 	}
 
-	public void setCouponStatusDesc(String couponStatusDesc) {
-		this.couponStatusDesc = couponStatusDesc;
-	}
 
-	public void setMmsStatusDesc(String mmsStatusDesc) {
-		this.mmsStatusDesc = mmsStatusDesc;
-	}
-
-	public void setSmsStatusDesc(String smsStatusDesc) {
-		this.smsStatusDesc = smsStatusDesc;
-	}
-	
-	
-	//end getter/setter
-	//TODO 改成公共的数据字典服务提供
-//	public String getMmsStatusDesc(){
-//		return DictView.getDescByKeyName(MMS_SMS_STATUS_KEY_NAME, this.getMmsStatus().toString());
-//		
-//	}
-//	
-//
-//	public String getSmsStatusDesc(){
-//		return DictView.getDescByKeyName(MMS_SMS_STATUS_KEY_NAME, this.getSmsStatus().toString());
-//	}
-//
-//	public String getCouponStatusDesc() {
-//		return DictView.getValuesByKeyName(DICT_KEY_NAME).get(
-//				couponStatus.toString());
-//	}
 
 	
 

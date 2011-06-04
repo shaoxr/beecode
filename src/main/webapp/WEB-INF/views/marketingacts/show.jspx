@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:spring="http://www.springframework.org/tags"  xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+<div xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:spring="http://www.springframework.org/tags"  xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    <page:show update="false" create="false" delete="false" list="true" id="ps_com_newland_beecode_domain_MarketingAct" object="${marketingact}" path="/marketingacts">
+    <page:show update="false" create="false" delete="false" list="false" id="ps_com_newland_beecode_domain_MarketingAct" object="${marketingact}" path="/marketingacts">
         <field:display  field="catalogName" id="s_com_newland_beecode_domain_MarketingAct_actName" object="${marketingact.marketingCatalog}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI=" />
         <field:display field="actName" id="s_com_newland_beecode_domain_MarketingAct_actName" object="${marketingact}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI="/>
         <field:display date="true" dateTimePattern="${date_format}" field="startDate" id="s_com_newland_beecode_domain_MarketingAct_startDate" object="${marketingact}" z="user-managed"/>
         <field:display date="true" dateTimePattern="${date_format}" field="endDate" id="s_com_newland_beecode_domain_MarketingAct_endDate" object="${marketingact}" z="user-managed"/>
         <field:display field="actDetail" id="s_com_newland_beecode_domain_MarketingAct_actDetail" object="${marketingact}" z="2WpcBBhBZTaSRmjsEBwZd8QbPos="/>
         <field:display date="true" dateTimePattern="${datetime_format}" field="genTime" id="s_com_newland_beecode_domain_MarketingAct_genTime" object="${marketingact}" z="user-managed"/>
+        <field:display field="bindCard" id="s_com_newland_beecode_domain_marketingact_checkCard" pattern="dictView" className="BIND_CARD" object="${marketingact}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
+        <c:if test="${marketingact.bindCard eq '1'}">
+          <field:display field="checkCode" id="s_com_newland_beecode_domain_marketingact_bindcard_detail" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
+        </c:if>
         <field:display field="bizNo" id="s_com_newland_beecode_domain_marketingact_businesstype" pattern="dictView" className="BUSINESS_TYPE" object="${marketingact}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
         <field:display field="times" id="s_com_newland_beecode_domain_MarketingAct_times" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
         <c:if test="${marketingact.bizNo eq '01'}">
@@ -16,21 +20,44 @@
         </c:if>
         <c:if test="${marketingact.bizNo eq '00'}">
           <field:display field="amount" id="s_com_newland_beecode_domain_MarketingAct_amount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+          <field:display field="exchangeName" id="c_com_newland_beecode_domain_MarketingAct_exchangeName"  object="${marketingact}" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>        
         </c:if>
-        
+        <c:if test="${marketingact.bizNo eq '02'}">
+          <field:display field="backRate" id="s_com_newland_beecode_domain_MarketingAct_backRate" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+          <field:display field="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        </c:if>
         <field:display field="actStatus" id="s_com_newland_beecode_domain_MarketingAct_actStatusDesc" pattern="dictView" className="ACT_STATUS"  object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
         <!--  field:display field="partners" id="s_com_newland_beecode_domain_MarketingAct_partners" object="${marketingact}" z="+bo3mVX7w04Ps2EgE3Ju7ydfBis="/>
         -->
         <field:select disableFormBinding="true" id="s_com_newland_beecode_domain_MarketingAct_partners" itemLabel="allName" itemValue="partnerNo" multiple="true" disabled="true" items="${marketingact.partners}" field="partner" path=""></field:select>
+        <field:display field="mmsTemplate" id="s_com_newland_beecode_domain_marketingact_mmscontent"  object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
+        <field:display field="msStatus" itemLabel="totalCount" id="s_com_newland_beecode_domain_MarketingAct_couponsum" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
+        <field:display field="msStatus" itemLabel="MMSSuccessCount" id="s_com_newland_beecode_domain_marketingact_mms_sendsum" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
+        <field:display field="msStatus" itemLabel="SMSSuccessCount" id="s_com_newland_beecode_domain_marketingact_sms_sendsum" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
         <c:if test="${statistics}">
-        <field:display field="couponSum"  id="s_com_newland_beecode_domain_marketingact_summary_joincount" object="${marketingact}" />
-        <field:display field="mmsSendSum" id="s_com_newland_beecode_domain_marketingact_mms_sendsum" object="${marketingact}" />
-         <field:display field="smsSendSum" id="s_com_newland_beecode_domain_marketingact_sms_sendsum" object="${marketingact}" />
         <field:display field="summary" itemLabel="usedTimes" id="s_com_newland_beecode_domain_marketingact_summary_usedtimes" object="${marketingact}" />
         <field:display field="summary" itemLabel="remainTimes" id="s_com_newland_beecode_domain_marketingact_summary_remaintimes" object="${marketingact}" />
         <spring:url value="${marketingact.actNo}/detail" var="rpt_url"/>
     	<!--<a href="javascript:window.open('${rpt_url}','${marketingact.actName} 统计', 'height=400, width=600, top=200, left=200, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=n o, status=no');">活动统计</a>
     	--></c:if>
     </page:show>
+    
+    <page:list id="pl_com_newland_beecode_domain_MarketingAct_customer_checked" items="${customersChecked}" z="sFCbrOVGxWJl4YkClga8MCMB8GE=">
+        <table:filetable downloadpath="/util/downloadcustomer" newName="newName" oldName="oldName" download="true" data="${customersChecked}"  id="label_com_newland_beecode_domain_MarketingAct_customer_checked" path="/marketingacts" update="false" delete="false" invalid="false" create="false"  show="false" typeIdFieldName="newName" z="user-managed">
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_customer_excel_name" property="oldName" z="GnYCjbtwHcjvxbxNMAn0j6eJmmM="/>
+            <table:column id="c_com_newland_beecode_domain_marketingact_customer_count" property="count" z="GnYCjbtwHcjvxbxNMAn0j6eJmmM="/>
+        </table:filetable>
+    </page:list>
+    <page:list id="pl_com_newland_beecode_domain_MarketingAct_customer_un" items="${customersUn}" z="sFCbrOVGxWJl4YkClga8MCMB8GE=">
+        <table:filetable downloadpath="/util/downloadcustomer" newName="newName" oldName="oldName" download="true" data="${customersUn}"  id="label_com_newland_beecode_domain_MarketingAct_customer_un" path="/marketingacts" update="false" delete="false" invalid="false" create="false"  show="false" typeIdFieldName="newName" z="user-managed">
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_customer_excel_name" property="oldName" z="GnYCjbtwHcjvxbxNMAn0j6eJmmM="/>
+            <table:column id="c_com_newland_beecode_domain_marketingact_customer_count" property="count" z="GnYCjbtwHcjvxbxNMAn0j6eJmmM="/>
+        </table:filetable>
+    </page:list>
+    <util:panel id="exportwork" title="导出word">
+        <form action="/beecode/marketingacts/actInfoDownload/${marketingact.actNo}" method="get">
+          <input type="submit" value="活动导出word"/>
+        </form>
+      </util:panel>
     
 </div>

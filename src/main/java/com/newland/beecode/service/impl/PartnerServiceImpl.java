@@ -1,18 +1,19 @@
 package com.newland.beecode.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import org.springframework.stereotype.Service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.newland.beecode.dao.MarketingActDao;
 import com.newland.beecode.dao.PartnerCatalogDao;
 import com.newland.beecode.dao.PartnerDao;
+import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.PartnerCatalog;
-import com.newland.beecode.domain.report.PartnerSummaryItem;
-import com.newland.beecode.domain.report.PartnerSummaryReport;
+import com.newland.beecode.exception.AppException;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerService;
 import javax.annotation.Resource;
 
@@ -23,61 +24,15 @@ public class PartnerServiceImpl implements PartnerService {
     private PartnerDao partnerDao;
     @Resource(name = "partnerCatalogDao")
     private PartnerCatalogDao partnerCatalogDao;
+    @Autowired
+    private MarketingActDao marketingActDao;
 
-    @Override
-    public PartnerSummaryReport summaryReport(Long id) {
-        //List<PartnerSummaryItem> items = Partner.summaryPartner(id);
-        List<PartnerSummaryItem> items = partnerDao.summaryPartner(id);
-        PartnerSummaryReport rpt = new PartnerSummaryReport();
-        rpt.setItems(items);
-
-        Map<String, PartnerSummaryReport.DayReport> temp = new HashMap<String, PartnerSummaryReport.DayReport>();
-        for (Iterator it = items.iterator(); it.hasNext();) {
-            PartnerSummaryItem item = (PartnerSummaryItem) it.next();
-            PartnerSummaryReport.DayReport day = temp.get(item.getCheckDay() + item.getBizName());
-            if (day == null) {
-                day = new PartnerSummaryReport.DayReport();
-                day.setDay(item.getCheckDay());
-                day.setDayCount(item.getCount());
-                day.setBizName(item.getBizName());
-                day.setExchangeAmount(item.getExchangeAmount());
-                day.setRebateAmount(item.getRebateAmount());
-                temp.put(item.getCheckDay() + item.getBizName(), day);
-            } else {
-                day.setDayCount(day.getDayCount() + item.getCount());
-                day.setExchangeAmount(day.getExchangeAmount().add(item.getExchangeAmount()));
-                day.setRebateAmount(day.getRebateAmount().add(item.getRebateAmount()));
-            }
-        }
-        rpt.setDayRpts(new ArrayList<PartnerSummaryReport.DayReport>());
-        rpt.getDayRpts().addAll(temp.values());
-
-        Map<String, PartnerSummaryReport.MarketingReport> pmp = new HashMap<String, PartnerSummaryReport.MarketingReport>();
-        for (Iterator it = items.iterator(); it.hasNext();) {
-            PartnerSummaryItem item = (PartnerSummaryItem) it.next();
-            PartnerSummaryReport.MarketingReport mr = pmp.get(item.getActName());
-            if (mr == null) {
-                mr = new PartnerSummaryReport.MarketingReport();
-                mr.setActName(item.getActName());
-                mr.setBizName(item.getBizName());
-                mr.setUsedTimes(item.getCount());
-                mr.setExchangeAmount(item.getExchangeAmount());
-                mr.setRebateAmount(item.getRebateAmount());
-                pmp.put(item.getActName(), mr);
-            } else {
-                mr.setUsedTimes(mr.getUsedTimes() + item.getCount());
-                mr.setExchangeAmount(mr.getExchangeAmount().add(item.getExchangeAmount()));
-                mr.setRebateAmount(mr.getRebateAmount().add(item.getRebateAmount()));
-            }
-        }
-        rpt.setMarketingRpts(new ArrayList<PartnerSummaryReport.MarketingReport>());
-        rpt.getMarketingRpts().addAll(pmp.values());
-
-        return rpt;
-    }
 
 	@Override
 	public List<Partner> findByCatalog(Long catalogId) {
+		if(PartnerCatalog.ALL_LONG.equals(catalogId)){
+			return this.partnerDao.find("from Partner p ");
+		}
 		return this.partnerDao.findByProperty("partnerCatalog.id", catalogId);
 	}
 
@@ -87,8 +42,15 @@ public class PartnerServiceImpl implements PartnerService {
 	}
 
 	@Override
-	public void save(Partner partner) {
-		
+	public void save(Partner partner) throws AppException{
+		Partner _partner =this.partnerDao.findUniqueByProperty("partnerNo", partner.getPartnerNo());
+		if(_partner!=null){
+			throw new AppException(ErrorsCode.BIZ_PARTNER_NO_EXITS,"");
+		}
+		_partner=this.partnerDao.findUniqueByProperty("partnerName", partner.getPartnerName());
+		if(_partner!=null){
+			throw new AppException(ErrorsCode.BIZ_PARTNER_NAME_EXITS,"");
+		}
 		PartnerCatalog partnerCatalog=this.partnerCatalogDao.get(partner.getPartnerCatalog().getId());
 		partner.setPartnerCatalog(partnerCatalog);
 		this.partnerDao.save(partner);
@@ -102,23 +64,33 @@ public class PartnerServiceImpl implements PartnerService {
 
 	@Override
 	public List<Partner> findPartnerEntries(Integer start, Integer end) {
-		return this.partnerDao.findPartnerEntries(start, end);
+		return this.partnerDao.findListByQuery("select o from Partner o", start, end);
 	}
 
 	@Override
 	public long countPartners() {
-		return this.partnerDao.countPartners();
+		return this.partnerDao.findLong("select count(o) from Partner o");
 	}
 
 	@Override
-	public void delete(Long id) {
+	@Transactional
+	public void delete(Long id) throws AppException{
+		List<MarketingAct> acts=this.marketingActDao.find("select  act from MarketingAct act join act.partners as ps where ps.id=?", id);
+		if(acts.size()>0){
+			throw new AppException(ErrorsCode.BIZ_PARTNER_DO_NOT_DELETE,"");
+		}
 		this.partnerDao.delete(id);
 		
 	}
 
 	@Override
-	public void update(Partner partner) {
+	public void update(Partner partner) throws AppException{
 		
+		
+		List<Partner> partners=this.partnerDao.find("from Partner p where (p.partnerName=? or p.partnerNo=?) and p.id<>?", partner.getPartnerName(),partner.getPartnerNo(),partner.getId());
+		if(partners.size()>0){
+			throw new AppException(ErrorsCode.BIZ_PARTNER_NAME_OR_NO_EXITS,"");
+		}
 		PartnerCatalog partnerCatalog=this.partnerCatalogDao.get(partner.getPartnerCatalog().getId());
 		partner.setPartnerCatalog(partnerCatalog);
 		this.partnerDao.update(partner);
@@ -128,5 +100,28 @@ public class PartnerServiceImpl implements PartnerService {
 	@Override
 	public List<Partner> findByProperty(String propertyName, Object value) {
 		return this.partnerDao.findByProperty(propertyName, value);
+	}
+
+	@Override
+	public List<Partner> findByCatalogEntries(Long partnerCatalogId,
+			Integer start, Integer end) {
+		if(partnerCatalogId.equals(PartnerCatalog.ALL_LONG)){
+			return this.partnerDao.findListByQuery("from Partner p ", start, end);
+		}
+		return this.partnerDao.findListByQuery("from Partner p where p.partnerCatalog.id=?", start, end, partnerCatalogId);
+	}
+
+	@Override
+	public long countPartnersByCatalog(Long partnerCatalogId) {
+		if(partnerCatalogId.equals(PartnerCatalog.ALL_LONG)){
+			return this.partnerDao.findLong("select count(o) from Partner o");
+		}
+		return this.partnerDao.findLong("select count(*) from Partner p where p.partnerCatalog.id=?", partnerCatalogId);
+	}
+
+	@Override
+	public Partner findByPartnerNo(String partnerNo) {
+		List<Partner> partners=this.partnerDao.find("from Partner p where p.partnerNo=?", partnerNo);
+		return partners.size()>0?partners.get(0):null;
 	}
 }

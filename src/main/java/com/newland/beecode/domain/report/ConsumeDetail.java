@@ -15,7 +15,10 @@ public class ConsumeDetail {
 	
 	private BigDecimal rebateAmount;
 	
-    private BigDecimal rebateRate;
+	private BigDecimal backAmount;
+	
+
+	private BigDecimal rebateRate;
 	
 	private String bizName;
 	
@@ -27,6 +30,13 @@ public class ConsumeDetail {
 	private String  couponId;
 	
 	private String  acctMobile;
+	public BigDecimal getBackAmount() {
+		return backAmount;
+	}
+
+	public void setBackAmount(BigDecimal backAmount) {
+		this.backAmount = backAmount;
+	}
 	
 	public Date getCheckDay() {
 		return checkDay;

@@ -1,8 +1,5 @@
 package com.newland.beecode.web;
 
-import com.newland.beecode.dao.CouponDao;
-import com.newland.beecode.dao.MarketingCatalogDao;
-import com.newland.beecode.dao.PartnerCatalogDao;
 import java.io.FileInputStream;
 import java.util.Collection;
 import java.util.Date;
@@ -32,7 +29,6 @@ import com.newland.beecode.service.MarketingCatalogService;
 import com.newland.beecode.service.PartnerCatalogService;
 import com.newland.utils.NewlandUtil;
 import com.newland.utils.PaginationHelper;
-import javax.annotation.Resource;
 
 @RequestMapping("/report")
 @Controller
@@ -103,7 +99,6 @@ public class ReportController extends BaseController{
 			}
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
     	return "report/count";
@@ -163,7 +158,6 @@ public class ReportController extends BaseController{
 			}
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
     	return "report/detail";
@@ -189,7 +183,6 @@ public class ReportController extends BaseController{
 					this.couponService.reportDetail(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
 			response.setContentType("application/vnd.ms-excel");
 			response.addHeader("Content-Disposition", "attachment;filename=" +"reportDetailExcel");
-			int l=0;
 			byte[] b=new byte[1024 * 1024];
 			while (nStream.read(b)>0){
 				response.getOutputStream().write(b);
@@ -197,7 +190,6 @@ public class ReportController extends BaseController{
 			response.getOutputStream().close();
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		
@@ -223,7 +215,6 @@ public class ReportController extends BaseController{
 					this.couponService.reportCount(reportForm).getResultList(), NewlandUtil.dataToString(minGenTime, "yyyy-MM-dd"), NewlandUtil.dataToString(maxGenTime, "yyyy-MM-dd")));
 			response.setContentType("application/vnd.ms-excel");
 			response.addHeader("Content-Disposition", "attachment;filename=" + "reportCountExcel");
-			int l=0;
 			byte[] b=new byte[1024 * 1024];
 			while (nStream.read(b)>0){
 				response.getOutputStream().write(b);
@@ -231,7 +222,6 @@ public class ReportController extends BaseController{
 			response.getOutputStream().close();
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		

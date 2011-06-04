@@ -9,14 +9,13 @@ import com.newland.beecode.service.impl.CouponQueryRequest;
 import com.newland.beecode.service.impl.RespParam;
 
 public interface BeecodeService {
+	
+	public Map voucherBackoff(Map reqMap);
 	// 兑换券冲正
 	public Map exchangeBackoff(Map reqMap);
 
 	// 兑换券兑换
 	public Map exchange(Map reqMap);
-
-	// 折扣验证
-	public Map discountCheck(Map reqMap);
 
 	// 折扣登记
 	public Map discount(Map reqMap);
@@ -24,6 +23,9 @@ public interface BeecodeService {
 	// 折扣冲正
 	public Map discountBackout(Map reqMap);
 
-	// 折扣券查询
-	public Map discountQuery(Map reqMap);
+	// 查询
+	public Map query(Map reqMap);
+	
+	//抵用券
+	public Map voucher(Map reqMap);
 }

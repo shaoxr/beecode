@@ -7,10 +7,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.tempuri.service.MMSService;
 
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.exception.ErrorsCode;
+import com.newland.beecode.service.MMSService;
+
 import javax.annotation.Resource;
 
 @RequestMapping("/msManager")
@@ -29,7 +30,6 @@ public class MsManagerController extends BaseController{
 				model.addAttribute("msTypes", dictViewFormat.getSelectModelCollection(MarketingAct.MS_TYPE));
 			} catch (Exception e) {
 				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-				this.logger.error(this.getMessage(e), e);
 				return "prompt";
 			}
 		return "msManager/balance";
@@ -52,7 +52,6 @@ public class MsManagerController extends BaseController{
 			model.addAttribute("msType", msType);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "msManager/balance";

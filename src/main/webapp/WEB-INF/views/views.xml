@@ -24,4 +24,7 @@
     <definition extends="default" name="prompt">
         <put-attribute name="body" value="/WEB-INF/views/prompt.jspx"/>
     </definition>
+    <definition extends="default" name="promptExcel">
+        <put-attribute name="body" value="/WEB-INF/views/promptExcel.jspx"/>
+    </definition>
 </tiles-definitions>

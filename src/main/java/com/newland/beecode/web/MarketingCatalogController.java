@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.newland.beecode.domain.MarketingCatalog;
-import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.MarketingCatalogService;
 import com.newland.utils.PaginationHelper;
@@ -33,15 +32,11 @@ public class MarketingCatalogController extends BaseController{
 	public String create(@Valid MarketingCatalog marketingCatalog,Model model){
         
 		try {
-			if(this.marketingCatalogService.findMarketingCatalogsByCatalogName(marketingCatalog.getCatalogName())!=null){
-				throw new AppException(ErrorsCode.BIZ_MARKINGCATALOG_NAME_EXITS,"");
-			}
 			this.marketingCatalogService.save(marketingCatalog);
 			model.addAttribute("marketingCatalog", this.marketingCatalogService.findAll());
      
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		
@@ -63,7 +58,6 @@ public class MarketingCatalogController extends BaseController{
 			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "marketingCatalog/list";
@@ -78,7 +72,6 @@ public class MarketingCatalogController extends BaseController{
 			     model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
 			} catch (Exception e) {
 				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-				this.logger.error(this.getMessage(e), e);
 				return "prompt";
 			}
         return "redirect:/marketingCatalog";
@@ -98,7 +91,6 @@ public class MarketingCatalogController extends BaseController{
 			model.addAttribute("marketingCatalog", marketingCatalog);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "marketingCatalog/update";
@@ -107,13 +99,9 @@ public class MarketingCatalogController extends BaseController{
 	public String updateSubmit(@Valid MarketingCatalog marketingCatalog , Model model){
 		
 		try {
-			if(this.marketingCatalogService.findMarketingCatalogsByCatalogName(marketingCatalog.getCatalogName())!=null){
-				throw new AppException(ErrorsCode.BIZ_MARKINGCATALOG_NAME_EXITS,"");
-			}
             this.marketingCatalogService.update(marketingCatalog);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		

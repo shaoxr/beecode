@@ -4,7 +4,7 @@
     <jsp:output omit-xml-declaration="yes"/>
     <page:show id="ps_com_newland_beecode_domain_MarketingCatalog" object="${marketingCatalog}" path="/marketingCatalog" update="false" delete="false" z="vJ+GKHz3drm32hsBSzPVbOb5A7E=">
         <field:display field="catalogName" id="s_com_newland_beecode_domain_MarketingCatalog_catalogName" object="${marketingCatalog}" z="qq95NTWMbXZj5mSyrLXZNUrXEhg="/>
-        <field:display date="true" dateTimePattern="${marketingCatalog_createtime_date_format}" field="createTime" id="s_com_newland_beecode_domain_MarketingCatalog_createTime" object="${marketingCatalog}" z="hnO0Q3hj3wiGgzuchRMc5fdBVlg="/>
-        <field:display date="true" dateTimePattern="${marketingCatalog_updatetime_date_format}" field="updateTime" id="s_com_newland_beecode_domain_MarketingCatalog_updateTime" object="${marketingCatalog}" z="xYvAka9KceuLnRv2UVFBLYEqD9U="/>
+        <field:display date="true" dateTimePattern="yyyy-MM-dd" field="createTime" id="s_com_newland_beecode_domain_MarketingCatalog_createTime" object="${marketingCatalog}" z="hnO0Q3hj3wiGgzuchRMc5fdBVlg="/>
+        <field:display date="true" dateTimePattern="yyyy-MM-dd" field="updateTime" id="s_com_newland_beecode_domain_MarketingCatalog_updateTime" object="${marketingCatalog}" z="xYvAka9KceuLnRv2UVFBLYEqD9U="/>
     </page:show>
 </div>

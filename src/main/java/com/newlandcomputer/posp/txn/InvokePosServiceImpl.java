@@ -2,6 +2,7 @@ package com.newlandcomputer.posp.txn;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -20,41 +21,29 @@ public class InvokePosServiceImpl implements InvokePosSerivice {
 		this.beecodeService = beecodeService;
 	}
 	private BeecodeService beecodeService;
-	public Map discount( Map reqMap) {
-		logger.debug("discount rec Map： "+reqMap);
-		Map respMap=this.beecodeService.discount(reqMap);
-		logger.debug("discount return Map： "+respMap);
-		return respMap;
-	}
-	public Map discountBackout( Map reqMap) {
-		logger.debug("discountBackout rec Map： "+reqMap);
-		Map respMap=this.beecodeService.discountBackout(reqMap);
-		logger.debug("discountBackout return Map： "+respMap);
-		return respMap;
-	}
-	public Map discountCheck(Map reqMap) {
-		logger.debug("discountCheck  rec  Map： "+reqMap);
-		Map respMap=this.beecodeService.discountCheck(reqMap);
-		logger.debug("discountCheck return Map： "+respMap);
-		return respMap;
-	}
-	public Map exchange( Map reqMap) {
-		logger.debug("exchange rec Map： "+reqMap);
-		Map respMap=this.beecodeService.exchange(reqMap);
-		logger.debug("exchange return Map： "+respMap);
-		return respMap;
-	}
-	public Map exchangeBackout( Map reqMap) {
-		logger.debug("exchangeBackout rec Map： "+reqMap);
-		Map respMap=this.beecodeService.exchangeBackoff(reqMap);
-		logger.debug("exchangeBackout return  Map： "+respMap);
-		return respMap;
-	}
-	public Map discountQuery( Map reqMap) {
-		logger.debug("discountQuery rec Map： "+reqMap);
-		Map respMap=this.beecodeService.discountQuery(reqMap);
-		logger.debug("discountQuery return Map： "+respMap);
-		return respMap;
+	@Override
+	public Map txn(Map reqMap,String transType) {
+		if("97".equals(transType)){
+			return this.beecodeService.voucherBackoff(reqMap);
+		}
+		if("98".equals(transType)){
+			return this.beecodeService.discountBackout(reqMap);
+			
+		}if("99".equals(transType)){
+			return this.beecodeService.exchangeBackoff(reqMap);
+		}if("00".equals(transType)){
+			return this.beecodeService.exchange(reqMap);
+		}
+		if("01".equals(transType)){
+			return this.beecodeService.discount(reqMap);	
+		}
+		if("02".equals(transType)){
+			return this.beecodeService.voucher(reqMap);
+		}
+		if("10".equals(transType)){
+			return this.beecodeService.query(reqMap);
+		}
+		return new HashMap();
 	}
 	
 

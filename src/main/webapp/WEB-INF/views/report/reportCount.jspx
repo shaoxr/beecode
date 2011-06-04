@@ -14,11 +14,12 @@
         <table:table data="${rptDetail}" id="l_com_newland_beecode_domain_Coupon" create="false" delete="false" update="false" path="/report" show="false">
             <table:column id="c_com_newland_beecode_domain_marketingact_actname" property="actName" maxLength="21" z="Pi2IMxFd9QnYwb7EBMbiZ2ud/lo="/>
             <table:column id="c_com_newland_beecode_domain_partner_partnername" maxLength="20" property="partnerName" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
-            <table:column id="c_com_newland_beecode_domain_marketingact_businesstype" maxLength="20" property="bizName" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
+            <table:column id="c_com_newland_beecode_domain_marketingact_businesstype" maxLength="20" pattern="dictView" className="BUSINESS_TYPE" property="bizName" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
             <table:column id="c_com_newland_beecode_domain_marketingact_count" property="count" />
             <table:column id="c_com_newland_beecode_domain_marketingact_amount" property="exchangeAmount" />
             <table:column id="c_com_newland_beecode_domain_MarketingAct_originalAmount" property="originalAmount" />
             <table:column id="c_com_newland_beecode_domain_MarketingAct_rebateAmount" property="rebateAmount" />
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_backamount" property="backAmount" />
         </table:table>
     </page:list>
      <c:if test="${emptyNo}">

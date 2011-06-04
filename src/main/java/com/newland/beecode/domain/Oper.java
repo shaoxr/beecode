@@ -44,7 +44,7 @@ public class Oper {
     @DateTimeFormat(style = "MM")
     private Date genTime;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch=FetchType.LAZY)
     @JoinTable(name="oper_roles",joinColumns=@JoinColumn(name="oper"),inverseJoinColumns=@JoinColumn(name="roles"))
     private Set<Roles> roles = new HashSet<Roles>();
 

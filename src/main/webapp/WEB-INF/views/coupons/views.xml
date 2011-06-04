@@ -7,7 +7,26 @@
 	<definition extends="default" name="coupons/show">
         <put-attribute name="body" value="/WEB-INF/views/coupons/show.jspx"/>
     </definition>
-    <definition extends="default" name="coupon/findcouponsbyCondition">
+    <definition extends="default" name="coupons/updateStatus">
+        <put-attribute name="body" value="/WEB-INF/views/coupons/updateStatus.jspx"/>
+    </definition>
+    <definition extends="default" name="coupons/findcouponsbyCondition">
         <put-attribute name="body" value="/WEB-INF/views/coupons/findCouponsByCondition.jspx"/>
     </definition>
+    <definition extends="default" name="coupons/list/send">
+		<put-attribute name="body"
+			value="/WEB-INF/views/coupons/sendList.jspx" />
+	</definition>
+	<definition extends="default" name="coupons/send/form">
+		<put-attribute name="body"
+			value="/WEB-INF/views/coupons/sendForm.jspx" />
+	</definition>
+	<definition extends="default" name="coupons/sendTip">
+		<put-attribute name="body"
+			value="/WEB-INF/views/coupons/sendTip.jspx" />
+	</definition>
+	<definition extends="default" name="coupons/sendCount">
+		<put-attribute name="body"
+			value="/WEB-INF/views/coupons/sendCount.jspx" />
+	</definition>
 </tiles-definitions>

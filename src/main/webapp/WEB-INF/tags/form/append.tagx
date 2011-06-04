@@ -4,6 +4,7 @@
   <jsp:directive.attribute name="id" type="java.lang.String" required="true" description="The identifier for this tag (do not change!)" />
   <jsp:directive.attribute name="modelAttribute" type="java.lang.String" required="true" description="The name of the model attribute for form binding" />
   <jsp:directive.attribute name="path" type="java.lang.String" required="true" description="Specify the relative URL path (with leading /)" />
+  <jsp:directive.attribute name="path2" type="java.lang.String" required="true" description="Specify the relative URL path (with leading /)" />
   <jsp:directive.attribute name="label" type="java.lang.String" required="false" description="The label used for this object, will default to a message bundle if not supplied" />
   <jsp:directive.attribute name="idField" type="java.lang.String" required="false" description="Specify the field name of the id field (default 'id')" />
   <jsp:directive.attribute name="versionField" type="java.lang.String" required="false" description="Specify the field name of the version field (default 'version'). If specified 'none' the version field will not be inlcuded (versionField='none')." />
@@ -28,7 +29,7 @@
         <form:errors cssClass="errors" delimiter="&lt;p/&gt;" />
         <jsp:doBody />
         <div class="submit" id="${fn:escapeXml(id)}_submit">
-          <spring:message code="button_save" var="save_button" />
+          <spring:message code="upload" var="save_button" />
           <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
           <input id="proceed" type="submit" value="${fn:escapeXml(save_button)}" />
         </div>
@@ -36,6 +37,17 @@
         <c:if test="${versionField ne 'none'}">
           <form:hidden id="_${fn:escapeXml(versionField)}_id" path="${fn:escapeXml(versionField)}" />
         </c:if>
+      </form:form>
+      <br/>
+      <br/>
+      <spring:url value="${path2}" var="form_url2" />
+      <form:form action="${fn:escapeXml(form_url2)}" method="POST" enctype="multipart/form-data" modelAttribute="${modelAttribute}">
+      <div class="submit" id="${fn:escapeXml(id)}_submits">
+          <spring:message code="upload_over" var="upload_over" />
+          <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
+          <input id="proceeds" type="submit" value="${fn:escapeXml(upload_over)}" />
+          <form:hidden id="_${fn:escapeXml(idField)}_ids" path="${fn:escapeXml(idField)}" />
+        </div>
       </form:form>
     </util:panel>
   </c:if>

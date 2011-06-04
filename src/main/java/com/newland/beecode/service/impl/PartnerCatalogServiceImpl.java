@@ -32,18 +32,23 @@ public class PartnerCatalogServiceImpl implements PartnerCatalogService{
 	}
 	@Override
 	public PartnerCatalog findPartnerCatalogsByCatalogName(String catalogName) {
-		List<PartnerCatalog> list= this.partnerCatalogDao.findPartnerCatalogsByCatalogName(catalogName);
+		List<PartnerCatalog> list= this.partnerCatalogDao.findByProperty("catalogName", catalogName);
 		return list.size()>0?list.get(0):null;
 	}
 	@Override
-	public void save(PartnerCatalog partnerCatalog) {
+	public void save(PartnerCatalog partnerCatalog) throws AppException{
+		if(this.partnerCatalogDao.findUniqueByProperty("catalogName", partnerCatalog.getCatalogName())!=null){
+			throw new AppException(ErrorsCode.BIZ_PARTNERCATALOG_NAME_EXITS,"");
+		}
+		partnerCatalog.setCreateTime(new Date());
+		partnerCatalog.setUpdateTime(new Date());
 		this.partnerCatalogDao.save(partnerCatalog);
 		
 	}
 	@Override
 	public List<PartnerCatalog> findPartnerCatalogEntries(Integer start,
 			Integer end) {
-		return this.partnerCatalogDao.findPartnerCatalogEntries(start, end);
+		return this.partnerCatalogDao.findListByQuery("select o from PartnerCatalog o", start, end);
 	}
 	@Override
 	public long countPartnerCatalogs() {
@@ -63,7 +68,12 @@ public class PartnerCatalogServiceImpl implements PartnerCatalogService{
 		return this.partnerCatalogDao.get(id);
 	}
 	@Override
-	public void update(PartnerCatalog partnerCatalog) {
+	public void update(PartnerCatalog partnerCatalog) throws AppException{
+		List<PartnerCatalog> partnerCatalogs =this.partnerCatalogDao.find("from PartnerCatalog p where p.catalogName=? and p.id<>?", partnerCatalog.getCatalogName(),partnerCatalog.getId());
+		if(partnerCatalogs.size()>0){
+			throw new AppException(ErrorsCode.BIZ_PARTNERCATALOG_NAME_EXITS,"");
+		}
+		partnerCatalog.setUpdateTime(new Date());
 		this.partnerCatalogDao.update(partnerCatalog);
 	}
 

@@ -21,7 +21,7 @@
         <c:set var="columnMaxLengths" value="${empty maxLength ? 10 : maxLength}" scope="request" />
         <c:set var="columnPatterns" value="${empty pattern ? '-' : pattern}" scope="request" />
         <c:set var="columnItemLabels" value="${empty itemLabel ? '-' : itemLabel}" scope="request" />
-        <c:set var="className" value="${className }" scope="request"/>
+        <c:set var="columnClassNames" value="${empty className ? '-' : className}" scope="request"/>
       </c:when>
       <c:otherwise>
         <c:set var="columnProperties" value="${columnProperties},${property}" scope="request" />
@@ -29,7 +29,7 @@
         <c:set var="columnMaxLengths" value="${columnMaxLengths},${empty maxLength ? 10 : maxLength}" scope="request" />
         <c:set var="columnPatterns" value="${columnPatterns},${empty pattern ? '-' : pattern}" scope="request" />
         <c:set var="columnItemLabels" value="${columnItemLabels},${empty itemLabel ? '-' : itemLabel}" scope="request" />
-        <c:set var="className" value="${className }" scope="request"/>
+        <c:set var="columnClassNames" value="${columnClassNames},${empty className ? '-' : className}" scope="request"/>
       </c:otherwise>
     </c:choose>
   </c:if>

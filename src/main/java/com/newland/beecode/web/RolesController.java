@@ -36,7 +36,6 @@ public class RolesController extends BaseController {
 			rolesService.save(roles);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
         
@@ -56,7 +55,6 @@ public class RolesController extends BaseController {
 			model.addAttribute("itemId", id);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
         return "roleses/show";
@@ -76,7 +74,6 @@ public class RolesController extends BaseController {
 			}
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
         return "roleses/list";
@@ -92,7 +89,6 @@ public class RolesController extends BaseController {
 			rolesService.update(roles);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
         return "redirect:/roleses/" + encodeUrlPathSegment(roles.getId().toString(), request);
@@ -104,7 +100,6 @@ public class RolesController extends BaseController {
 			model.addAttribute("roles", rolesService.findUniqueByProperty("id", id));
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
         return "roleses/update";
@@ -120,7 +115,6 @@ public class RolesController extends BaseController {
 			model.addAttribute("size", (size == null) ? "10" : size.toString());
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
         return "redirect:/roleses?page=" + ((page == null) ? "1" : page.toString()) + "&size=" + ((size == null) ? "10" : size.toString());

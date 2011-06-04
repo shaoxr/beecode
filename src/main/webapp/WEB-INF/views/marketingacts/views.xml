@@ -13,10 +13,6 @@
 		<put-attribute name="body"
 			value="/WEB-INF/views/marketingacts/create.jspx" />
 	</definition>
-	<definition extends="default" name="marketingacts/update">
-		<put-attribute name="body"
-			value="/WEB-INF/views/marketingacts/update.jspx" />
-	</definition>
 	<definition extends="default"
 		name="marketingacts/findMarketingActsByCondition">
 		<put-attribute name="body"
@@ -30,15 +26,12 @@
 		<put-attribute name="body"
 			value="/WEB-INF/views/marketingacts/check.jspx" />
 	</definition>
-	<definition extends="default" name="marketingacts/list/send">
-		<put-attribute name="body"
-			value="/WEB-INF/views/marketingacts/sendList.jspx" />
-	</definition>
-	<definition extends="default" name="marketingacts/send/form">
-		<put-attribute name="body"
-			value="/WEB-INF/views/marketingacts/send.jspx" />
-	</definition>
+	
 	<definition extends="default" name="marketingacts/append/form">
+		<put-attribute name="body"
+			value="/WEB-INF/views/marketingacts/append.jspx" />
+	</definition>
+	<definition extends="default" name="marketingacts/appendcustomer">
 		<put-attribute name="body"
 			value="/WEB-INF/views/marketingacts/append.jspx" />
 	</definition>
@@ -54,9 +47,9 @@
 		<put-attribute name="body"
 			value="/WEB-INF/views/marketingacts/checkTip.jspx" />
 	</definition>
-	<definition extends="default" name="marketingacts/sendTip">
-		<put-attribute name="body"
-			value="/WEB-INF/views/marketingacts/sendTip.jspx" />
-	</definition>
-	
+	<definition extends="default" name="marketingacts/update">
+  		<put-attribute name="body" 
+  			value="/WEB-INF/views/marketingacts/updates.jspx" /> 
+  	</definition>
+		
 </tiles-definitions>

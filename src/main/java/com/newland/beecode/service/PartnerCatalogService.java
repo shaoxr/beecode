@@ -16,7 +16,7 @@ public interface PartnerCatalogService {
 	
 	public PartnerCatalog findPartnerCatalogsByCatalogName(String catalogName);
 	
-	public void save(PartnerCatalog partnerCatalog);
+	public void save(PartnerCatalog partnerCatalog)throws AppException;
 	
 	public List<PartnerCatalog> findPartnerCatalogEntries(Integer start,Integer end);
 	
@@ -26,6 +26,6 @@ public interface PartnerCatalogService {
 	
 	public PartnerCatalog findById(Long id);
 	
-	public void update(PartnerCatalog partnerCatalog);
+	public void update(PartnerCatalog partnerCatalog)throws AppException;
 
 }

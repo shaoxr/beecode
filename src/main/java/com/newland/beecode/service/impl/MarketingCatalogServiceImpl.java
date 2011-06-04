@@ -11,7 +11,6 @@ import com.newland.beecode.dao.MarketingActDao;
 import com.newland.beecode.dao.MarketingCatalogDao;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.MarketingCatalog;
-import com.newland.beecode.domain.PartnerCatalog;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.MarketingCatalogService;
@@ -34,10 +33,13 @@ public class MarketingCatalogServiceImpl implements MarketingCatalogService{
 	@Override
 	public List<MarketingCatalog> findMarketingCatalogEntries(Integer start,
 			Integer end) {
-		return this.marketingCatalogDao.findMarketingCatalogEntries(start, end);
+		return this.marketingCatalogDao.findListByQuery("from MarketingCatalog m", start, end);
 	}
 	@Override
-	public void save(MarketingCatalog marketingCatalog) {
+	public void save(MarketingCatalog marketingCatalog)throws AppException {
+		if(this.marketingCatalogDao.findUniqueByProperty("catalogName", marketingCatalog.getCatalogName())!=null){
+			throw new AppException(ErrorsCode.BIZ_MARKINGCATALOG_NAME_EXITS,"");
+		}
 		marketingCatalog.setCreateTime(new Date());
 		marketingCatalog.setUpdateTime(new Date());
 		this.marketingCatalogDao.save(marketingCatalog);
@@ -45,11 +47,11 @@ public class MarketingCatalogServiceImpl implements MarketingCatalogService{
 	}
 	@Override
 	public long countMarketingCatalogs() {
-		return this.marketingCatalogDao.countMarketingCatalogs();
+		 return this.marketingCatalogDao.findLong("select count(o) from MarketingCatalog o");
 	}
 	@Override
 	public void delete(Long id)throws AppException {
-		List<MarketingAct> marketingActs=this.marketingActDao.findByProperty("marketingCatalog.id", id);
+		List<MarketingAct> marketingActs=this.marketingActDao.findByProperty("id", id);
 		if(marketingActs.size()>0){
 			throw new AppException(ErrorsCode.BIZ_MARKINGCATALOG_DONOT_DELETE,"");
 		}
@@ -61,14 +63,19 @@ public class MarketingCatalogServiceImpl implements MarketingCatalogService{
 		return this.marketingCatalogDao.get(id);
 	}
 	@Override
-	public void update(MarketingCatalog marketingCatalog) {
+	public void update(MarketingCatalog marketingCatalog) throws AppException{
+		List<MarketingCatalog> marketingCatalogs=this.marketingCatalogDao.find("from MarketingCatalog m where m.catalogName=? and m.id<>?", marketingCatalog.getCatalogName(),marketingCatalog.getId());
+		if(marketingCatalogs.size()>0){
+			
+			throw new AppException(ErrorsCode.BIZ_MARKINGCATALOG_NAME_EXITS,"");
+		}
+		marketingCatalog.setUpdateTime(new Date());
 		this.marketingCatalogDao.update(marketingCatalog);
 	}
 	@Override
 	public MarketingCatalog findMarketingCatalogsByCatalogName(
 			String catalogName) {
-		List<MarketingCatalog> list= this.marketingCatalogDao.findMarketingCatalogsByCatalogName(catalogName);
-		return list.size()>0?list.get(0):null;
+		return this.marketingCatalogDao.findUniqueByProperty("catalogName", catalogName);
 	}
 
 }

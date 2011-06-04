@@ -3,6 +3,9 @@ package com.newland.beecode.service.impl;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.zxing.BarcodeFormat;
@@ -11,32 +14,39 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.newland.beecode.domain.Coupon;
+import com.newland.beecode.exception.AppRTException;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.BarCodeService;
+import com.newland.beecode.service.FileService;
 @Service("barCodeService")
 public class BarCodeServiceImpl implements BarCodeService{
 	private static final String subfix = "gif";
+	@Autowired
+	private FileService fileService;
+	private Log logger = LogFactory.getLog(this.getClass());
 	@Override
-	public void genCode(String str,String fileName) {
-		try {
-			QRCodeWriter writer = new QRCodeWriter();
-			BitMatrix bitMatrix = writer.encode(str, BarcodeFormat.QR_CODE, 200, 200);
-			if(fileName==null){
-				fileName="a";
+	public void genCode(String str,String fileName)throws AppRTException {
+			try {
+				QRCodeWriter writer = new QRCodeWriter();
+				BitMatrix bitMatrix = writer.encode(str, BarcodeFormat.QR_CODE, 200, 200);
+				if(fileName==null){
+					fileName="a";
+				}
+				fileName=fileName+"."+subfix;
+				File f = new File(this.fileService.getImagePath()+fileName);
+				if(f.exists()){
+					f.delete();
+				}
+				f.createNewFile();
+				
+				MatrixToImageWriter.writeToFile(bitMatrix, subfix, f);
+			} catch (WriterException e) {
+				logger.error("WriterException", e);
+				throw new AppRTException(ErrorsCode.BIZ_BARCODE_GEN_ERROR,"",e);
+			} catch (IOException e) {
+				logger.error("IOException", e);
+				throw new AppRTException(ErrorsCode.BIZ_BARCODE_GEN_ERROR,"",e);
 			}
-			long t = System.currentTimeMillis();
-			fileName=fileName+"."+subfix;
-			File f = new File("D:/beecode/images/" + fileName);
-			if(f.exists()){
-				f.delete();
-			}
-			f.createNewFile();
-			
-			MatrixToImageWriter.writeToFile(bitMatrix, subfix, f);
-		} catch (WriterException e) {
-			  e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 		
 	}
 

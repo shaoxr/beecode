@@ -11,7 +11,7 @@
         <field:select disableFormBinding="true" headerKey="99999" headerValue="全部" field="actStatus" id="c_com_newland_beecode_domain_marketingact_actstatusdesc" itemValue="key" itemLabel="value" items="${marketingstatusList}"  path=""/>
     </form:find>
     <page:list id="pl_com_newland_beecode_domain_MarketingAct" items="${marketingacts}" z="sFCbrOVGxWJl4YkClga8MCMB8GE=">
-        <table:table data="${marketingacts}"  id="label_com_newland_beecode_domain_MarketingAct" path="/marketingacts" update="false" delete="false" invalid="true" create="false" typeIdFieldName="actNo" z="user-managed">
+        <table:table data="${marketingacts}"  id="label_com_newland_beecode_domain_MarketingAct" path="/marketingacts" update="true" delete="false" append="true" appendpath="appendCustomer" invalid="true" create="false" typeIdFieldName="actNo" z="user-managed">
             <table:column id="c_com_newland_beecode_domain_MarketingAct_actName" property="actName" z="GnYCjbtwHcjvxbxNMAn0j6eJmmM="/>
             <table:column id="c_com_newland_beecode_domain_MarketingAct_startDate" property="startDate" z="ycv72nkx9eKie1sUGfK7Hy/MfiU="/>
             <table:column id="c_com_newland_beecode_domain_MarketingAct_endDate" property="endDate" z="flUS8dAyZR6iy/uGpq43G3snXhA="/>

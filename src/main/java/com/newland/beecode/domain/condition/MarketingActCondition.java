@@ -76,6 +76,9 @@ public class MarketingActCondition  extends SimpleQueryCondition{
 	}
 	@SimpleQueryProperty(operator = OperatorType.EQ,property = "actNo")
 	public Long getActNo() {
+		if(GlobalConstant.ALL_LONG.equals(this.actNo)){
+			return null;
+		}
 		return actNo;
 	}
 

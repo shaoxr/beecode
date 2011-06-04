@@ -30,8 +30,8 @@
         <div class="submit" id="${fn:escapeXml(id)}_submit">
           <spring:message code="button_check_pass" var="pass_button" />
           <spring:message code="button_check_fail" var="fail_button" />
-          <input id="proceed_pass" type="submit" value="${fn:escapeXml(pass_button)}" onclick="dojo.byId('actStatus').value='3';"/>
-          <input id="proceed_fail" type="submit" value="${fn:escapeXml(fail_button)}" onclick="dojo.byId('actStatus').value='1';"/>
+          <input id="proceed_pass" type="submit" value="${fn:escapeXml(pass_button)}" onclick="dojo.byId('actStatus').value='5';"/>
+          <input id="proceed_fail" type="submit" value="${fn:escapeXml(fail_button)}" onclick="dojo.byId('actStatus').value='3';"/>
         </div>
         <input type="hidden" id="actStatus" name="actStatus" value="3" />
         <form:hidden id="_${fn:escapeXml(idField)}_id" path="${fn:escapeXml(idField)}" />

@@ -81,45 +81,13 @@ public class DepotPosProtocolHandler extends IoHandlerAdapter {
 		
 		Map m,resultMap=null;
 		String transType = (String)msg.getField(_TLV_TRANS_TYPE_KEY).getValue();
-		if("98".equals(transType)){
-			
+			System.out.println(transType+"-------------------------->");
 			m = TLVMappingUtils.fieldMapIntoMapForTLV(msg);
-			resultMap = invokeService.discountBackout( m);
+			resultMap = invokeService.txn(m, transType);
 			TLVMappingUtils.mapIntoFieldMapForTLV(resultMap, msg);
 			
-			if("00".equals(resultMap.get(07))){
-				
-			}
 			
-		}if("99".equals(transType)){
-			m = TLVMappingUtils.fieldMapIntoMapForTLV(msg);
-			resultMap = invokeService.exchangeBackout( m);
-			TLVMappingUtils.mapIntoFieldMapForTLV(resultMap, msg);
-		}if("00".equals(transType)){
-			m = TLVMappingUtils.fieldMapIntoMapForTLV(msg);
-			resultMap = invokeService.exchange( m);
-			TLVMappingUtils.mapIntoFieldMapForTLV(resultMap, msg);
-		}
-		if("01".equals(transType)){//
-			m = TLVMappingUtils.fieldMapIntoMapForTLV(msg);
-			resultMap = invokeService.discountCheck( m);
-			TLVMappingUtils.mapIntoFieldMapForTLV(resultMap, msg);
-			if("00".equals(resultMap.get(07))){
-				
-				
-				
-					m = TLVMappingUtils.fieldMapIntoMapForTLV(msg);
-					resultMap = invokeService.discount( m);
-					TLVMappingUtils.mapIntoFieldMapForTLV(resultMap, msg);
-				
-				
-			}
-		}
-		if("02".equals(transType)){
-			m = TLVMappingUtils.fieldMapIntoMapForTLV(msg);
-			resultMap = invokeService.discountQuery( m);
-			TLVMappingUtils.mapIntoFieldMapForTLV(resultMap, msg);
-		}
+	
 		msg.getHeader().swapDirection();
 	}
 

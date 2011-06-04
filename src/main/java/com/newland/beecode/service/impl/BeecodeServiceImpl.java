@@ -48,7 +48,7 @@ public class BeecodeServiceImpl implements BeecodeService {
 			req.setTxnTime(new Date());
 			Coupon coupon=this.couponService.consumeCoupon(req);
 			reqMap.put(7, ErrorsCode.POSP_RIGHT);
-			reqMap.put(10, coupon.getMarketingAct().getActName());
+			reqMap.put(10, coupon.getMarketingAct().getExchangeName());
 		} catch (Exception e) {
 			if(e instanceof AppException){
 				reqMap.put(7, this.convertCode(((AppException) e).getCode()));
@@ -61,19 +61,23 @@ public class BeecodeServiceImpl implements BeecodeService {
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map discountCheck(Map reqMap) {
+	public Map discount(Map reqMap) {
 		try {
 			CouponCheckRequest req=new CouponCheckRequest();
-			req.setAmount((BigDecimal)reqMap.get(1));
+			req.setOriginalAmount((BigDecimal)reqMap.get(1));
+			req.setOffAmount((BigDecimal)reqMap.get(4));
 			req.setBatchNo((String)reqMap.get(12));
 			req.setBizType((String)reqMap.get(0));
 			req.setCheckCode((String)reqMap.get(11));
 			req.setDeviceNo((String)reqMap.get(9));
+			req.setTraceNo((String)reqMap.get(2));
 			req.setPartnerNo((String)reqMap.get(3));
-			req.setRebateRate(NewlandUtil.String2BigByRebate((String)reqMap.get(8)));
+			req.setRebateRate((BigDecimal)reqMap.get(8));
 			req.setCouponString((String)reqMap.get(5));
-			this.couponService.checkCoupon(req);
+			req.setTxnTime(new Date());
+			Coupon coupon=this.couponService.consumeCoupon(req);
 			reqMap.put(7,ErrorsCode.POSP_RIGHT);
+			reqMap.put(10, coupon.getMarketingAct().getActName());
 		} catch (Exception e) {
 			if(e instanceof AppException){
 				reqMap.put(7,this.convertCode(((AppException) e).getCode()));
@@ -84,32 +88,15 @@ public class BeecodeServiceImpl implements BeecodeService {
 		}
 		return reqMap;
 	}
-	@SuppressWarnings("unchecked")
 	@Override
-	public Map discount(Map reqMap) {
+	public Map voucherBackoff(Map reqMap) {
 		try {
-			CouponCheckRequest req=new CouponCheckRequest();
-			req.setAmount((BigDecimal)reqMap.get(1));
-			req.setBatchNo((String)reqMap.get(12));
-			req.setBizType((String)reqMap.get(0));
-			req.setCheckCode((String)reqMap.get(11));
-			req.setDeviceNo((String)reqMap.get(9));
-			req.setTraceNo((String)reqMap.get(2));
-			req.setPartnerNo((String)reqMap.get(3));
-			req.setRebateRate(NewlandUtil.String2BigByRebate((String)reqMap.get(8)));
-			req.setCouponString((String)reqMap.get(5));
-			req.setTxnTime(new Date());
-			Coupon coupon=this.couponService.consumeCoupon(req);
-			reqMap.put(7,ErrorsCode.POSP_RIGHT);
-			reqMap.put(10, coupon.getMarketingAct().getActName());
+			CouponBackoffRequest req=new CouponBackoffRequest((String)reqMap.get(2), (String)reqMap.get(3), (String)reqMap.get(5), (String)reqMap.get(9), (String)reqMap.get(12));
+		    this.couponService.backOff(req);
+		    reqMap.put(7, ErrorsCode.POSP_RIGHT);
 		} catch (Exception e) {
-			reqMap.put(10, "");
-			if(e instanceof AppException){
-				reqMap.put(7,this.convertCode(((AppException) e).getCode()));
-			}else{
-				logger.error("",e);
-				reqMap.put(7,ErrorsCode.POSP_ERR_SYSTEM_EEROR);
-			}
+			logger.error("",e);
+			reqMap.put(7,ErrorsCode.POSP_ERR_SYSTEM_EEROR);
 		}
 		return reqMap;
 	}
@@ -128,17 +115,53 @@ public class BeecodeServiceImpl implements BeecodeService {
 	}
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map discountQuery(Map reqMap) {
+	public Map query(Map reqMap) {
 		try {
 			CouponCheckRequest req=new CouponCheckRequest();
 			req.setCouponString((String)reqMap.get(5));
 			req.setDeviceNo((String) reqMap.get(9));
 			req.setPartnerNo((String) reqMap.get(3));
 			Coupon coupon=this.couponService.queryCoupon(req);
+			if(coupon.getBusinessType().equals(Coupon.BIZ_TYPE_DISCOUNT)){
+				reqMap.put(14, Coupon.BIZ_TYPE_DISCOUNT);
+				reqMap.put(8,coupon.getRebateRate());
+			}else if(coupon.getBusinessType().equals(Coupon.BIZ_TYPE_VOUCHER)){
+				reqMap.put(14, Coupon.BIZ_TYPE_VOUCHER);
+				reqMap.put(13, coupon.getBackAmount());
+			}else{
+				reqMap.put(7,ErrorsCode.POSP_ERR_SYSTEM_EEROR);
+			}
 			reqMap.put(7, ErrorsCode.POSP_RIGHT);
-			reqMap.put(8, NewlandUtil.float2StringByRebate(coupon.getRebateRate()));
+			
 		} catch (Exception e) {
-			reqMap.put(8,"00");
+			if(e instanceof AppException){
+				reqMap.put(7,this.convertCode(((AppException) e).getCode()));
+			}else{
+				logger.error("",e);
+				reqMap.put(7,ErrorsCode.POSP_ERR_SYSTEM_EEROR);
+			}
+		}
+		return reqMap;
+	}
+
+	@Override
+	public Map voucher(Map reqMap) {
+		try {
+			CouponCheckRequest req=new CouponCheckRequest();
+			req.setOriginalAmount((BigDecimal)reqMap.get(1));
+			req.setBackAmount((BigDecimal)reqMap.get(13));
+			req.setBatchNo((String)reqMap.get(12));
+			req.setBizType((String)reqMap.get(0));
+			req.setCheckCode((String)reqMap.get(11));
+			req.setDeviceNo((String)reqMap.get(9));
+			req.setTraceNo((String)reqMap.get(2));
+			req.setPartnerNo((String)reqMap.get(3));
+			req.setCouponString((String)reqMap.get(5));
+			req.setTxnTime(new Date());
+			Coupon coupon=this.couponService.consumeCoupon(req);
+			reqMap.put(7,ErrorsCode.POSP_RIGHT);
+			reqMap.put(10, coupon.getMarketingAct().getActName());
+		} catch (Exception e) {
 			if(e instanceof AppException){
 				reqMap.put(7,this.convertCode(((AppException) e).getCode()));
 			}else{
@@ -160,6 +183,9 @@ public class BeecodeServiceImpl implements BeecodeService {
 		}
 		if(code.equals(ErrorsCode.ERR_COUPON_PARTNER_NOT_FOUND)){
 			return ErrorsCode.POSP_ERR_COUPON_PARTNER_NOT_FOUND;
+		}
+		if(code.equals(ErrorsCode.ERR_COUPON_CARD_NOT_USE)){
+			return ErrorsCode.POSP_ERR_COUPON_CARD_DO_NOT_USE;
 		}
 		
 		

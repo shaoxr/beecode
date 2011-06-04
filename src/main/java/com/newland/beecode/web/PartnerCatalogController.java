@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.newland.beecode.domain.PartnerCatalog;
-import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerCatalogService;
 import com.newland.utils.PaginationHelper;
@@ -33,11 +32,6 @@ public class PartnerCatalogController extends BaseController{
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid PartnerCatalog partnerCatalog,Model model){
 		try {
-			if(this.partnerCatalogService.findPartnerCatalogsByCatalogName(partnerCatalog.getCatalogName())!=null){
-				throw new AppException(ErrorsCode.BIZ_PARTNERCATALOG_NAME_EXITS,"");
-			}
-			partnerCatalog.setCreateTime(new Date());
-			partnerCatalog.setUpdateTime(new Date());
             this.partnerCatalogService.save(partnerCatalog);
 			model.addAttribute("partnercatalogs", this.partnerCatalogService.findAll());
 		} catch (Exception e) {
@@ -62,7 +56,6 @@ public class PartnerCatalogController extends BaseController{
 			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
 		} catch (NumberFormatException e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "partnerCatalog/list";
@@ -77,7 +70,6 @@ public class PartnerCatalogController extends BaseController{
 		        model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
 			} catch (Exception e) {
 				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-				this.logger.error(this.getMessage(e), e);
 				return "prompt";
 			}
         return "redirect:/partnerCatalog";
@@ -89,7 +81,6 @@ public class PartnerCatalogController extends BaseController{
 			model.addAttribute("partnerCatalog", partnerCatalog);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "partnerCatalog/show";
@@ -103,7 +94,6 @@ public class PartnerCatalogController extends BaseController{
 			model.addAttribute("partnerCatalog", partnerCatalog);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			this.logger.error(this.getMessage(e), e);
 			return "prompt";
 		}
 		return "partnerCatalog/update";
@@ -111,9 +101,6 @@ public class PartnerCatalogController extends BaseController{
 	@RequestMapping(method=RequestMethod.PUT)
 	public String updateSubmit(@Valid PartnerCatalog partnerCatalog,Model model){	
 		try {
-			if(this.partnerCatalogService.findPartnerCatalogsByCatalogName(partnerCatalog.getCatalogName())!=null){
-				throw new AppException(ErrorsCode.BIZ_PARTNERCATALOG_NAME_EXITS,"");
-			}
             this.partnerCatalogService.update(partnerCatalog);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));

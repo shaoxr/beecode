@@ -3,7 +3,6 @@ package com.newland.beecode.service;
 import java.util.List;
 
 import com.newland.beecode.domain.MarketingCatalog;
-import com.newland.beecode.domain.PartnerCatalog;
 import com.newland.beecode.exception.AppException;
 
 /**
@@ -17,7 +16,7 @@ public interface MarketingCatalogService {
 	
 	public List<MarketingCatalog> findMarketingCatalogEntries(Integer start,Integer end);
 	
-	public void save(MarketingCatalog marketingCatalog);
+	public void save(MarketingCatalog marketingCatalog)throws AppException;
 	
 	public long countMarketingCatalogs();
 	
@@ -25,7 +24,7 @@ public interface MarketingCatalogService {
 	
 	public MarketingCatalog findById(Long id);
 	
-	public void update(MarketingCatalog marketingCatalog);
+	public void update(MarketingCatalog marketingCatalog)throws AppException;
 	
 	public MarketingCatalog findMarketingCatalogsByCatalogName(String catalogName);
 

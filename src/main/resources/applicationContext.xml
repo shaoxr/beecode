@@ -82,26 +82,11 @@
         <property name="useCodeAsDefaultMessage" value="true" />         
     </bean> 
     <bean id="baseService" class="com.newland.beecode.service.impl.BaseServiceImpl">                   
-        <property name="MMSUserName" value="GD-ltwx" />
-        <property name="MMSPassword" value="l123" /> 
-        <property name="filePath" value="D:/beecode/" />
-        <property name="SMSUserName" value=""/>
-        <property name="SMSPassword" value=""/>
-        <property name="SMSKey" value=""/>  
-    </bean> 
-    <!--
-    <bean name="viewResolver" 
-        class="org.springframework.web.servlet.view.XmlViewResolver" >
-        <property name="order" value="1"/>  
-      <property name="location">
-         <value>/WEB-INF/spring/ajax-view.xml</value>
-      </property>
-      </bean>
-      
-      
--->
-    <bean id="dictViewService" class="com.intensoft.formater.DictViewFormatter">
-        <property name="dictViewDao" ref="dictViewDao"/>
-        <!-- dictViewDao 已自动声明 -->
+        <property name="MMSUserName" value="GD-zynn" />
+        <property name="MMSPassword" value="zn1922" /> 
+        <property name="filePath" value="d:/beecode/" />
+        <property name="SMSUserName" value="2SDK-EMY-6688-JBYQQ"/>
+        <property name="SMSPassword" value="175626"/>
+        <property name="SMSKey" value="198538"/>  
     </bean> 
 </beans>

@@ -1,10 +1,11 @@
 package com.newland.beecode.web;
 
+import java.io.FileInputStream;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.PartnerCatalog;
-import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerCatalogService;
 import com.newland.beecode.service.PartnerService;
+import com.newland.beecode.service.impl.ExportExcelTemplateService;
 import com.newland.utils.PaginationHelper;
 
 @RequestMapping("/partners")
@@ -33,6 +34,8 @@ public class PartnerController extends BaseController{
     private PartnerCatalogService partnerCatalogService;
     @Autowired
     private PartnerService partnerService;
+    @Autowired
+    private ExportExcelTemplateService  partnerExcelService;
     
 	@RequestMapping(params = "form", method = RequestMethod.GET)
 	public String create(Model model){
@@ -42,10 +45,6 @@ public class PartnerController extends BaseController{
 	@RequestMapping(method = RequestMethod.POST)
 	public String create(@Valid Partner partner,Model model){
             try {
-            	List<Partner> partners=this.partnerService.findByProperty("partnerNo", partner.getPartnerNo());
-            	if(partners.size()>0){
-        			throw new AppException(ErrorsCode.BIZ_PARTNER_NO_EXITS,"");
-        		}
         		partnerService.save(partner);
 			} catch (Exception e) {
 				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
@@ -63,10 +62,14 @@ public class PartnerController extends BaseController{
 		}
 		return "partners/show";
 	}
+	@RequestMapping(params = {"find=ByCondition","form" }, method = RequestMethod.GET)
+	public String findForm(Model model){
+		
+		 return "partners/find";
+	}
 	@RequestMapping(method = RequestMethod.GET)
-	public String list(
-			@RequestParam(value = "page", required = false) Integer page, 
-			@RequestParam(value = "size", required = false) Integer size, Model model,HttpServletRequest request){
+	public String list(@RequestParam(value = "page", required = false) Integer page, 
+			@RequestParam(value = "size", required = false) Integer size,Model model,HttpServletRequest request){
 		try {
 			Map<String, String> queryParams = PaginationHelper.makeParameters(
 			request.getParameterMap(), "");
@@ -82,6 +85,53 @@ public class PartnerController extends BaseController{
 			return "prompt";
 		}
 		return "partners/list";
+	}
+	@RequestMapping(params={"find=ByCondition"},method = RequestMethod.GET)
+	public String find(
+			@RequestParam(value = "page", required = false) Integer page, 
+			@RequestParam(value = "size", required = false) Integer size, 
+			@RequestParam(value = "query", required = false) String query,
+			@RequestParam(value = "partnerCatalogId", required = false) Long partnerCatalogId, Model model,HttpServletRequest request){
+		try {
+			Map<String, String> queryParams = PaginationHelper.makeParameters(
+			request.getParameterMap(), request.getQueryString());
+			page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
+			size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
+			String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
+			model.addAttribute("partners", this.partnerService.findByCatalogEntries(partnerCatalogId,(page.intValue() - 1) * size, size));
+			int maxPages = PaginationHelper.calcMaxPages(size,this.partnerService.countPartnersByCatalog(partnerCatalogId));
+			model.addAttribute("maxPages",maxPages);
+			model.addAttribute(PaginationHelper.PARAM_PAGE, page);
+			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
+			 model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
+			model.addAttribute("partnerCatalogId",partnerCatalogId);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		return "partners/find";
+	}
+	@RequestMapping(value="/excelExport",method = RequestMethod.GET)
+	public String excelExport(@RequestParam(value = "partnerCatalogId", required = false) Long partnerCatalogId,
+			Model model,HttpServletRequest request, HttpServletResponse response){
+		FileInputStream nStream;
+		
+		try {
+			nStream = new FileInputStream(this.partnerExcelService.generateExcelFile(
+					this.partnerService.findByCatalog(partnerCatalogId), null, null));
+			response.setContentType("application/vnd.ms-excel");
+			response.addHeader("Content-Disposition", "attachment;filename=" +"partner");
+			byte[] b=new byte[1024 * 1024];
+			while (nStream.read(b)>0){
+				response.getOutputStream().write(b);
+			}
+			response.getOutputStream().close();
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		} 
+		
+		return null;
 	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable("id") Long id,

@@ -67,7 +67,7 @@ public class CoupontCtrl {
     @DateTimeFormat(style = "S-")
     private Date checkDate;
     /**
-     * 折扣金额或兑换物品价值
+     * 兑换物品价值
      */
     @Column
     private BigDecimal amount;
@@ -77,6 +77,24 @@ public class CoupontCtrl {
     @Column
     private BigDecimal rebateRate;
     /**
+     * 抵用金额
+     */
+    @Column
+    private BigDecimal backAmount;
+    /**
+     * 折让金额
+     */
+    @Column
+    private BigDecimal offAmount;
+    /**
+     * 原始金额
+     * 
+     */
+    @Column
+    private BigDecimal originalAmount;
+
+
+	/**
      * 业务代码
      */
     @Column
@@ -88,6 +106,14 @@ public class CoupontCtrl {
      */
     @Column
     private String voidFlag;
+    
+    public BigDecimal getBackAmount() {
+		return backAmount;
+	}
+
+	public void setBackAmount(BigDecimal backAmount) {
+		this.backAmount = backAmount;
+	}
 
     public BigDecimal getAmount() {
         return amount;
@@ -192,6 +218,21 @@ public class CoupontCtrl {
     public void setVoidFlag(String voidFlag) {
         this.voidFlag = voidFlag;
     }
+    public BigDecimal getOffAmount() {
+		return offAmount;
+	}
+
+	public void setOffAmount(BigDecimal offAmount) {
+		this.offAmount = offAmount;
+	}
+
+	public BigDecimal getOriginalAmount() {
+		return originalAmount;
+	}
+
+	public void setOriginalAmount(BigDecimal originalAmount) {
+		this.originalAmount = originalAmount;
+	}
     
     
 }

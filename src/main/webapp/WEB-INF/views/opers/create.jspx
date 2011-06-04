@@ -14,7 +14,6 @@
     	<field:input field="operPwd" id="c_com_newland_beecode_domain_Oper_operPwd" required="true" type="password" z="user-managed"/>
     	<field:input disableFormBinding="true" field="pwdConfirm" id="c_com_newland_beecode_domain_Oper_operConfirm" required="true" type="password" z="user-managed"/>
         <field:checkbox field="enabled" id="c_com_newland_beecode_domain_Oper_enabled" z="+pVwEsQ/F1EMdKMYnH/U/RL9taE="/>
-    	<field:select field="roleIds" disableFormBinding="true" id="c_com_newland_beecode_domain_Oper_role1" itemValue="id" itemLabel="roleName" items="${roleses}" multiple="true" path="/roleses" z="8k6fbpdEQ455BrOe5wBH7Q4n6gA="/>
     	<field:checkboxlist id="s_com_newland_beecode_domain_Oper_role1" disableFormBinding="true" itemLabel="roleName" itemValue="id" items="${roleses}" checkitems="${roleses}" field="roleIds" readonly="false" disabled="false"></field:checkboxlist>
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_newland_beecode_domain_Oper" render="${not empty dependencies}" z="J1rY6YnBPVmsZYWa0/AW1417sgA="/>

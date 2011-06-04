@@ -1,10 +1,46 @@
 package com.newland.beecode.domain.condition;
 
-public class CheckResult {
+import java.util.List;
+import java.util.Set;
+
+
+public class CheckResult<T> {
 	
 	private boolean pass;
 	
 	private String message;
+	
+	private Set<T> set;
+	
+	private List<T> list;
+	
+	public List<T> getList() {
+		return list;
+	}
+
+	public void setList(List<T> list) {
+		this.list = list;
+	}
+
+	private int count;
+
+
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public Set<T> getSet() {
+		return set;
+	}
+
+	public void setSet(Set<T> set) {
+		this.set = set;
+	}
 
 	public boolean isPass() {
 		return pass;

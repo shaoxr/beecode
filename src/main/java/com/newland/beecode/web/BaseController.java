@@ -11,15 +11,21 @@ import org.springframework.web.util.UriUtils;
 import org.springframework.web.util.WebUtils;
 
 import com.newland.beecode.exception.AppException;
+import com.newland.beecode.exception.AppRTException;
 import com.newland.beecode.exception.ErrorsCode;
-import com.newland.beecode.service.impl.MarketingActServiceImpl;
 
 public class BaseController {
 	protected Log logger = LogFactory.getLog(this.getClass());
-	protected String getMessage(Exception e){
+	protected String getMessage(Throwable e){
 		String errCode=ErrorsCode.SYSTEM_ERR;
 		if(e instanceof AppException){
 			errCode= ((AppException)e).getCode();
+			logger.error(errCode);
+		}else if(e instanceof AppRTException){
+			errCode= ((AppRTException)e).getCode();
+			logger.error(errCode);
+		}else{
+			logger.error(errCode,e);
 		}
 		return errCode;
 		

@@ -11,16 +11,30 @@
 		</menu:category>
 		
     </sec:authorize>
+    <sec:authorize ifAnyGranted="ROLE_SEND">
+       <menu:category id="c_batch_send" z="VqJ9tX6fahxI0ELApiUXlEbJC5I=">
+		    <menu:item id="fi_mms_batch_send"  url="/batchsend/mmsSendForm?form"/>
+		    <menu:item id="fi_sms_batch_send"  url="/batchsend/smsSendForm?form"/>
+		    <menu:item id="fi_mms_batch_send_list"  url="/batchsend/list"/>
+		    <menu:item id="fi_batch_send_count"  url="/batchsend/sendCount"/>
+		</menu:category>
+    
+    </sec:authorize>
     <sec:authorize ifAnyGranted="ROLE_BUSINESS">
         <menu:category id="c_partner" >
             <menu:item id="i_partner_catalog_new" messageCode="global_menu_new" url="/partnerCatalog?form" z="4xjV01xDZ9Kh11CbimGNrPY2LQw="/>
             <menu:item id="i_partner_catalog_list" messageCode="global_menu_list" url="/partnerCatalog" z="lbpoRNR4iI77PzeiPBiRRca9fgQ="/>
             <menu:item id="i_partner_new" messageCode="global_menu_new" url="/partners?form" z="4xjV01xDZ9Kh11CbimGNrPY2LQw="/>
-			<menu:item id="i_partner_list" messageCode="global_menu_list" url="/partners?page=1&amp;size=${empty param.size ? 10 : param.size}" z="lbpoRNR4iI77PzeiPBiRRca9fgQ="/>
+			<menu:item id="i_partner_list" messageCode="global_menu_list" url="/partners" z="lbpoRNR4iI77PzeiPBiRRca9fgQ="/>
+			<menu:item id="i_partner_export"  url="/partners?find=ByCondition&amp;form" />
+		</menu:category>
+		<menu:category id="c_marketing_catalog" >
+		     <menu:item id="id_marketingcatalog_new"  messageCode="global_menu_new" url="/marketingCatalog?form"/>
+			 <menu:item id="id_marketingcatalog_list" messageCode="global_menu_list" url="/marketingCatalog"/>
 		</menu:category>
 		<menu:category id="c_marketingact" z="VqJ9tX6fahxI0ELApiUXlEbJC5I=">
 		    <menu:item id="id_marketingact_customer"  url="/util/checkcustomer?form"/>
-		    <menu:item id="id_marketingcatalog_list"  url="/marketingCatalog"/>
+		    <menu:item id="id_marketingact_partner"  url="/util/checkpartner?form"/>
 			<menu:item id="id_marketingact_new" messageCode="global_menu_new" url="/marketingacts?form"/>
 			<menu:item id="fi_marketingact_condition" messageCode="global_menu_find" url="/marketingacts?find=ByCondition&amp;form" z="user-managed"/>
 			<!--  menu:item id="id_marketingact_append" messageCode="global_menu_append" url="/marketingacts/find/append?find=ByCondition&amp;form"/>-->
@@ -29,17 +43,19 @@
 			<menu:item id="id_check_marketingact" messageCode="global_menu_check" url="/marketingacts/find/check"/>
 		</menu:category>
 		<menu:category id="c_coupon" z="VqJ9tX6fahxI0ELApiUXlEbJC5I=">
-		    <menu:item id="fi_coupon_send"  url="/marketingacts/find/send"/>
+		    <menu:item id="fi_coupon_send"  url="/coupons/find/send"/>
 			<menu:item id="fi_coupon_condition" messageCode="global_menu_find" url="/coupons?find=ByCondition&amp;form"/>
+			<menu:item id="fi_coupon_mms_send_update"  url="/coupons/updateStatus"/>
+			<menu:item id="fi_coupon_send_count"  url="/coupons/sendCount"/>
 		</menu:category>
 		<menu:category id="c_report" z="rs8zfmLS6SJZoIvFFQfrlrSaJVU=">
 			<menu:item id="c_report_query" messageCode="global_menu_find" url="/report/detail?form" z="3pwVBouHLA1zzuNbxsmScZYd3Ow="/>
 			<menu:item id="c_report_query_count" messageCode="global_menu_find" url="/report/count?form" z="3pwVBouHLA1zzuNbxsmScZYd3Ow="/>
 		</menu:category>
-		<menu:category id="c_msmanager" z="rs8zfmLS6SJZoIvFFQfrlrSaJVU=">
+		<!--<menu:category id="c_msmanager" z="rs8zfmLS6SJZoIvFFQfrlrSaJVU=">
 			<menu:item id="c_msmanager_balance" url="/msManager/balance?form" z="3pwVBouHLA1zzuNbxsmScZYd3Ow="/>
 		</menu:category>
-	</sec:authorize>
+	--></sec:authorize>
 	<sec:authorize ifAnyGranted="ROLE_CHECK">
 	    <menu:category id="c_check" >
 			<menu:item id="id_check_marketingact" messageCode="global_menu_check" url="/marketingacts/find/check"/>
