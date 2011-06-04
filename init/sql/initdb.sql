@@ -212,7 +212,7 @@ CREATE TABLE `marketing_act` (
   `end_date` datetime NOT NULL,
   `file_name` varchar(1000) DEFAULT NULL,
   `gen_time` datetime DEFAULT NULL,
-  `mms_content` varchar(400) NOT NULL,
+  `mms_content` varchar(400) DEFAULT NULL,
   `mms_send_sum` bigint(20) DEFAULT NULL,
   `mms_title` varchar(40) NOT NULL,
   `oper_no` bigint(20) DEFAULT NULL,
