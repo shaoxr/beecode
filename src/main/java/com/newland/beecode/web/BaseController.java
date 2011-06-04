@@ -20,13 +20,11 @@ public class BaseController {
 		String errCode=ErrorsCode.SYSTEM_ERR;
 		if(e instanceof AppException){
 			errCode= ((AppException)e).getCode();
-			logger.error(errCode);
 		}else if(e instanceof AppRTException){
 			errCode= ((AppRTException)e).getCode();
-			logger.error(errCode);
-		}else{
-			logger.error(errCode,e);
 		}
+		logger.error(errCode,e);
+	
 		return errCode;
 		
 	}
