@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    
+
+
+    <form:update id="fu_com_newland_beecode_domain_MarketingCatalog" modelAttribute="marketingCatalog" path="/marketingCatalog" z="ITh8M+fBraiP8tVqxU9lCZSZmFU=">
+        <field:input field="catalogName" id="c_com_newland_beecode_domain_MarketingCatalog_catalogName" required="true" z="GAD8Lvm44v5FjHdxYe/mgroAs9Q="/>
+    	<field:input field="createTime" id="s_com_newland_beecode_domain_MarketingCatalog_createdate"   ></field:input>
+    	<field:input field="updateTime" id="s_com_newland_beecode_domain_MarketingCatalog_updatedate"   ></field:input>
+    </form:update>
+</div>

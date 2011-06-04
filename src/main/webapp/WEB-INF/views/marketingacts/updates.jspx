@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_newland_beecode_domain_MarketingAct" idField="actNo" modelAttribute="marketingAct" path="/marketingacts" z="kcVVh3Dr4Hohbg3mh1Yc7660eGY=">
+        <field:input  field="actName" id="c_com_newland_beecode_domain_MarketingAct_actName" max="30" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
+        <field:datetime dateTimePattern="${date_format}" field="startDate" id="c_com_newland_beecode_domain_MarketingAct_startDate" required="true" z="user-managed"/>
+        <field:datetime dateTimePattern="${date_format}" field="endDate" id="c_com_newland_beecode_domain_MarketingAct_endDate" required="true" z="user-managed"/>
+        <field:textarea field="actDetail" id="c_com_newland_beecode_domain_MarketingAct_actDetail" required="true" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>
+        <field:input field="times" id="c_com_newland_beecode_domain_MarketingAct_times" required="true" validationMessageCode="field_invalid_integer" z="t6HH8qJDiogoSsgcDZi6CHlFSe8="/>
+        <c:if test="${marketingAct.bizNo eq '00'}">
+           <field:input field="amount" id="c_com_newland_beecode_domain_MarketingAct_amount" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="/>
+           <field:input  field="exchangeName" id="c_com_newland_beecode_domain_MarketingAct_exchangeName"  required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
+        </c:if>
+        <c:if test="${marketingAct.bizNo eq '01'}">
+        	<field:input field="rebateRate" id="c_com_newland_beecode_domain_MarketingAct_rebateRate" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="/>
+        </c:if>
+        <c:if test="${marketingAct.bizNo eq '02'}">
+        	<field:input field="backRate" id="c_com_newland_beecode_domain_MarketingAct_backRate" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="/>
+        	<field:input field="maxAmount" id="c_com_newland_beecode_domain_MarketingAct_maxAmount" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="/>
+        </c:if>
+        <!--
+        <field:input field="bizNo" id="c_com_newland_beecode_domain_MarketingAct_bizNo" max="2" required="true" z="vdOGgQc2lVCkoPV5zUp70H8B8FM="/>
+        -->
+        <field:select field="bindCard"  id="c_com_newland_beecode_domain_marketingact_checkCard"  itemValue="key" itemLabel="value" items="${checkCards}" multiple="false" path="/businesstypes" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>  
+        <field:textarea  field="checkCode" id="c_com_newland_beecode_domain_MarketingAct_bindcard_detail" required="false" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>
+        <!--
+        <c:if test="${marketingAct.bindCard eq '1'}">
+        <field:textarea  field="checkCode" id="c_com_newland_beecode_domain_MarketingAct_bindcard_detail" required="false" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>
+        </c:if>
+        -->
+        <!--
+        <field:select  disabled="true" disableFormBinding="true" field="partnerIds"  id="c_com_newland_beecode_domain_MarketingAct_partners" itemValue="id" itemLabel="partnerName" items="${marketingAct.partners}" multiple="true" path="/partners" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>       
+    	<field:input field="actStatus" id="c_com_newland_beecode_domain_MarketingAct_actStatus" validationMessageCode="field_invalid_integer" z="N4lckUSYr1acRJxbDswhpw83FCg="/>
+    	-->
+    	<field:input  field="mmsTitle" id="c_com_newland_beecode_domain_MarketingAct_mmsTitle" max="20" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
+    	<field:textarea  field="mmsTemplate" disabled="true" id="c_com_newland_beecode_domain_MarketingAct_mmscontent" required="true" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>
+        <field:mmsinput model="mmsTemplate"  id="c_com_newland_beecode_domain_MarketingAct_mmsContent" max="20" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
+     <script type="text/javascript">
+	   dojo.addOnLoad(function(){
+		   if(dijit.byId("_bindCard_id").value=="1"){
+			   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_bindcard_detail_id").style.display="";
+			   
+		   }else{
+			   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_bindcard_detail_id").style.display="none";
+		   }
+		      dojo.connect(dijit.byId("_bindCard_id"), "onChange", function(evt) {
+			   if(dijit.byId("_bindCard_id").value=="1"){
+				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_bindcard_detail_id").style.display="";
+				   
+			   }else{
+				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_bindcard_detail_id").style.display="none";
+			   }
+		   })
+		   })	   
+</script>
+    </form:update>
+</div>
