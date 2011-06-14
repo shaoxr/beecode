@@ -85,7 +85,7 @@
         <property name="MMSUserName" value="GD-zynn" />
         <property name="MMSPassword" value="zn1922" /> 
         <property name="filePath" value="d:/beecode/" />
-        <property name="SMSUserName" value="2SDK-EMY-6688-JBYQQ"/>
+        <property name="SMSUserName" value="2SDK-EMY-6688-JBVTN"/>
         <property name="SMSPassword" value="175626"/>
         <property name="SMSKey" value="198538"/>  
     </bean> 

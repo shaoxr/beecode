@@ -58,7 +58,7 @@
               <form:password id="_${sec_field}_id" path="${sec_field}" disabled="${disabled}" cssStyle="width:200px" />
             </c:when>
             <c:otherwise>
-              <form:input id="_${sec_field}_id" path="${sec_field}" disabled="${disabled}" readonly="${readonly}" cssStyle="width:200px" />
+              <form:input id="_${sec_field}_id" path="${sec_field}"  disabled="${disabled}" readonly="${readonly}" cssStyle="width:200px" />
             </c:otherwise>
           </c:choose>
           <br />

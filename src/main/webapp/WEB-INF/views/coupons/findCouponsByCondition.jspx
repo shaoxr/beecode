@@ -20,6 +20,7 @@
             <table:column id="c_com_newland_beecode_domain_MarketingAct_actName" property="marketingAct" itemLabel="actName"/>
             <table:column id="c_com_newland_beecode_domain_Coupon_cuoponId" property="couponId" maxLength="18" >
             </table:column>
+            <table:column id="c_com_newland_beecode_domain_marketingact_acctname" maxLength="20" property="acctName" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
             <table:column id="c_com_newland_beecode_domain_Coupon_acctMobile" maxLength="20" property="acctMobile" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
             <table:column id="c_com_newland_beecode_domain_Coupon_cuoponStatus" property="couponStatus" pattern="dictView" className="COUPON_STATUS" z="ku2jC2WhvM+Uz28v4qfL1cwun1g="/>
         </table:table>

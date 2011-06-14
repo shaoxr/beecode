@@ -15,8 +15,8 @@
     <spring:message arguments="${label}" code="entity_create" var="title_msg"/>
     <util:panel id="${id}" title="${title_msg}" openPane="${openPane}">
       <spring:url value="${path}" var="form_url"/>
-      <script type="text/javascript">dojo.require('dijit.form.Button');</script>
-      <form:form action="${fn:escapeXml(form_url)}" method="POST" enctype="${enctype}" modelAttribute="${modelAttribute}">
+      <script type="text/javascript">dojo.require('dijit.form.Button');dojo.require('dijit.form.Form');</script>
+      <form:form dojoType="dijit.form.Form" action="${fn:escapeXml(form_url)}" method="POST" enctype="${enctype}" modelAttribute="${modelAttribute}" >
         <form:errors cssClass="errors" delimiter="&lt;p/&gt;"/>
         <jsp:doBody />
         <div id="${fn:escapeXml(id)}_submit">

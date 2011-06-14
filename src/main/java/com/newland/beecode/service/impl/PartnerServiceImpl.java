@@ -87,11 +87,15 @@ public class PartnerServiceImpl implements PartnerService {
 	public void update(Partner partner) throws AppException{
 		
 		
-		List<Partner> partners=this.partnerDao.find("from Partner p where (p.partnerName=? or p.partnerNo=?) and p.id<>?", partner.getPartnerName(),partner.getPartnerNo(),partner.getId());
+		List<Partner> partners=this.partnerDao.find("from Partner p where p.partnerName=? and p.id<>?", partner.getPartnerName(),partner.getId());
 		if(partners.size()>0){
-			throw new AppException(ErrorsCode.BIZ_PARTNER_NAME_OR_NO_EXITS,"");
+			throw new AppException(ErrorsCode.BIZ_PARTNER_NAME_EXITS,"");
 		}
+		partners=this.partnerDao.find("from Partner p where  p.partnerNo=? and p.id<>?",partner.getPartnerNo(),partner.getId());
 		PartnerCatalog partnerCatalog=this.partnerCatalogDao.get(partner.getPartnerCatalog().getId());
+		if(partners.size()>0){
+			throw new AppException(ErrorsCode.BIZ_PARTNER_NO_EXITS,"");
+		}
 		partner.setPartnerCatalog(partnerCatalog);
 		this.partnerDao.update(partner);
 		

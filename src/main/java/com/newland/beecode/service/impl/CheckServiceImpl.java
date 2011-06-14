@@ -131,14 +131,14 @@ public class CheckServiceImpl implements CheckService{
 					break;
 				}
 				if(nameError=="" && mobileError==""){
-					if(mobileList.contains(mobile.toString())){
-						
-						errorCount++;
-						tempError.append("<tr><td>" + j + "</td><td>");
-						tempError.append(messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA));
-						tempError.append("</td><tr>");
-						//return messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA);
-					}
+//					if(mobileList.contains(mobile.toString())){
+//						
+//						errorCount++;
+//						tempError.append("<tr><td>" + j + "</td><td>");
+//						tempError.append(messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA));
+//						tempError.append("</td><tr>");
+//						//return messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA);
+//					}
 					mobileList.add( mobile.toString());
 				}
 			}

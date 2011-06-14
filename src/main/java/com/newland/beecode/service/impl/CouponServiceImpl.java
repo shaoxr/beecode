@@ -122,7 +122,7 @@ public class CouponServiceImpl implements CouponService {
     			}
     		}
     		if(coupon.getBusinessType().equals(Coupon.BIZ_TYPE_DISCOUNT)){
-    			if(!coupon.getRebateRate().equals(req.getRebateRate())){
+    			if(coupon.getRebateRate().compareTo(req.getRebateRate())!=0){
         			throw new AppException(ErrorsCode.ERR_COUPON_INVALID,
                             "Request id=[" + req.getCouponId() + "],serialNo=["
                             + req.getSerialNo() + "] expired.");
