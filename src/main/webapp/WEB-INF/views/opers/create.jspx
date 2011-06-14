@@ -3,13 +3,17 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:create id="fc_com_newland_beecode_domain_Oper" modelAttribute="oper" path="/opers" render="${empty dependencies}" z="jk9NXVK4lGDIMyUjmcGfaT6KgR0=">
-    	<script type="dojo/method" event="onSubmit">
-		var pwd1= dojo.byId("c_com_newland_beecode_domain_Oper_operPwd");
-		var pwd2= dojo.byId("c_com_newland_beecode_domain_Oper_operConfirm");
-		if(pwd1.value != pwd2.value){
-			alert("密码不一致！");
-		}
-		</script>
+    	<!-- 
+    	 <script type="text/javascript">
+	   dojo.addOnLoad(function(){
+		   dojo.connect(dojo.byId("proceed"), "onclick", function(evt) {
+			   alert(1);
+			   return ;
+		   });
+	   });
+	   </script>
+	   
+	    -->
         <field:input field="operName" id="c_com_newland_beecode_domain_Oper_operName" max="24" required="true" z="7YnXcPlKMPmLqkfYz+fOQ8DDzVk="/>
     	<field:input field="operPwd" id="c_com_newland_beecode_domain_Oper_operPwd" required="true" type="password" z="user-managed"/>
     	<field:input disableFormBinding="true" field="pwdConfirm" id="c_com_newland_beecode_domain_Oper_operConfirm" required="true" type="password" z="user-managed"/>

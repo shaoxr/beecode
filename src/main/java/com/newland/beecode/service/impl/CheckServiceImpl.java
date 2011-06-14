@@ -112,7 +112,7 @@ public class CheckServiceImpl implements CheckService{
 				}
 				if(nameError!="" || mobileError!="" ||accountError!="" || amountError!=""){
 					errorCount++;
-					tempError.append("<tr><td>" + j + "</td><td>");
+					tempError.append("<tr><td>" + (j+1) + "</td><td>");
 					tempError.append(nameError);
 					tempError.append("</td><td>");
 					tempError.append(mobileError);
@@ -122,21 +122,23 @@ public class CheckServiceImpl implements CheckService{
 					tempError.append(amountError);
 					tempError.append("</td></tr>");
 				}
-				if(errorCount>20){
-					tempError.append("<tr><td>" + j + "</td><td>");
+				if(errorCount>=20){
+					tempError.append("<tr><td>..........</td><td>");
 					tempError.append("..........");
 					tempError.append("</td><td>");
 					tempError.append("...........");
-					tempError.append("</td></tr>");
+					tempError.append("</td><td>");
+					tempError.append("...........");
+					tempError.append("</td><td></td></tr>");
 					break;
 				}
 				if(nameError=="" && mobileError==""){
 					if(mobileList.contains(mobile.toString())){
 						
 						errorCount++;
-						tempError.append("<tr><td>" + j + "</td><td>");
+						tempError.append("<tr><td>" + (j+1) + "</td><td>");
 						tempError.append(messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA));
-						tempError.append("</td><tr>");
+						tempError.append("</td><td></td><td></td><td></td></tr>");
 						//return messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA);
 					}
 					mobileList.add( mobile.toString());
