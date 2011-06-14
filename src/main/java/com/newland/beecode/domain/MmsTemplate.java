@@ -115,7 +115,7 @@ public class MmsTemplate {
 		content=content.replaceAll(MmsTemplate.START_DATE,NewlandUtil.dataToString(act.getStartDate(), "yyyy-MM-dd"));
 		content=content.replaceAll(MmsTemplate.END_DATE,NewlandUtil.dataToString(act.getEndDate(), "yyyy-MM-dd"));
 		content=content.replaceAll(MmsTemplate.NAME, coupon.getAcctName());
-		String account_4=coupon.getAcctNo().substring(coupon.getAcctNo().length()-5, coupon.getAcctNo().length()-1);
+		String account_4=coupon.getAcctNo().substring(coupon.getAcctNo().length()-4, coupon.getAcctNo().length());
 		content=content.replaceAll(MmsTemplate.ACCOUNT_4, account_4);
 		if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
 			content=content.replaceAll(MmsTemplate.VALUE, act.getRebateRate().toString());
