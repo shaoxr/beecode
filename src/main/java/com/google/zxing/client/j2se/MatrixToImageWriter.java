@@ -35,6 +35,13 @@ public final class MatrixToImageWriter {
 
   private static final int BLACK = 0xFF000000;
   private static final int WHITE = 0xFFFFFFFF;
+  private static final int CUSTOMIZE=0xFF05376C;
+  private static final int FEN_HONG=0xFFFF80C0;
+  
+  private static final int CHINA_BANK=0xFFAA0034;
+  private static final int NONG_HANG=0xFF339967;
+  private static final int GREY=0xFFC0C0C0;
+  
 
   private MatrixToImageWriter() {}
 
@@ -42,13 +49,21 @@ public final class MatrixToImageWriter {
    * Renders a {@link BitMatrix} as an image, where "false" bits are rendered
    * as white, and "true" bits are rendered as black.
    */
-  public static BufferedImage toBufferedImage(BitMatrix matrix) {
+  public static BufferedImage toBufferedImage(BitMatrix matrix,BufferedImage imd) {
     int width = matrix.getWidth();
     int height = matrix.getHeight();
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    System.out.println(width+":"+height);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
-        image.setRGB(x, y, matrix.get(x, y) ? BLACK : WHITE);
+    		  if(imd!=null  && imd.getRGB(x, y)!=-1){
+    				  image.setRGB(x, y, matrix.get(x, y) ? GREY : GREY);
+    			  
+    		  }else{
+    			  image.setRGB(x, y, matrix.get(x, y) ? BLACK : WHITE);
+    		  }
+    		 
+        
       }
     }
     return image;
@@ -59,9 +74,9 @@ public final class MatrixToImageWriter {
    *
    * @see #toBufferedImage(BitMatrix)
    */
-  public static void writeToFile(BitMatrix matrix, String format, File file)
+  public static void writeToFile(BitMatrix matrix, String format, File file,BufferedImage imd)
           throws IOException {
-    BufferedImage image = toBufferedImage(matrix);
+    BufferedImage image = toBufferedImage(matrix,imd);
     ImageIO.write(image, format, file);
   }
 
@@ -72,7 +87,7 @@ public final class MatrixToImageWriter {
    */
   public static void writeToStream(BitMatrix matrix, String format, OutputStream stream)
           throws IOException {
-    BufferedImage image = toBufferedImage(matrix);
+    BufferedImage image = toBufferedImage(matrix,null);
     ImageIO.write(image, format, stream);
   }
 
