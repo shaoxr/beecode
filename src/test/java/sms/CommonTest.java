@@ -22,6 +22,9 @@ public class CommonTest {
 		System.out.println(b.equals(a));
 		
 		System.out.println("aaaabbbb".indexOf("a"));
+		
+		String m="123456789";
+		System.out.println(m.substring(m.length()-4, m.length()));
 	}
 
 }
