@@ -48,8 +48,8 @@ public class CheckServiceImpl implements CheckService{
 	    return pattern.matcher(str).matches();    
 	 }
 	public static boolean isIntegerOrFloat(String str){
-		Pattern pattern = Pattern.compile("([0-9]+)|([0-9]+.[0-9]+)");//符合整数或小数格�?
-		Pattern pattern = Pattern.compile("([0-9]+)|([0-9]+.[0-9]+)");//符合整数或小数格�?		return pattern.matcher(str).matches(); 
+		Pattern pattern = Pattern.compile("([0-9]+)|([0-9]+.[0-9]+)");	
+		return pattern.matcher(str).matches(); 
 	}
 	@Override
 	public String checkCustomerFile(MultipartFile file, String fileName,Customer customer,String bizNo)throws ExcelException, AppException {
