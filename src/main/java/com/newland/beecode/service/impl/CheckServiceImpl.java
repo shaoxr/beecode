@@ -48,8 +48,8 @@ public class CheckServiceImpl implements CheckService{
 	    return pattern.matcher(str).matches();    
 	 }
 	public static boolean isIntegerOrFloat(String str){
-		Pattern pattern = Pattern.compile("([0-9]+)|([0-9]+.[0-9]+)");//符合整数或小数格式
-		return pattern.matcher(str).matches(); 
+		Pattern pattern = Pattern.compile("([0-9]+)|([0-9]+.[0-9]+)");//符合整数或小数格�?
+		Pattern pattern = Pattern.compile("([0-9]+)|([0-9]+.[0-9]+)");//符合整数或小数格�?		return pattern.matcher(str).matches(); 
 	}
 	@Override
 	public String checkCustomerFile(MultipartFile file, String fileName,Customer customer,String bizNo)throws ExcelException, AppException {
@@ -112,7 +112,7 @@ public class CheckServiceImpl implements CheckService{
 				}
 				if(nameError!="" || mobileError!="" ||accountError!="" || amountError!=""){
 					errorCount++;
-					tempError.append("<tr><td>" + j + "</td><td>");
+					tempError.append("<tr><td>" + (j+1) + "</td><td>");
 					tempError.append(nameError);
 					tempError.append("</td><td>");
 					tempError.append(mobileError);
@@ -122,23 +122,25 @@ public class CheckServiceImpl implements CheckService{
 					tempError.append(amountError);
 					tempError.append("</td></tr>");
 				}
-				if(errorCount>20){
-					tempError.append("<tr><td>" + j + "</td><td>");
+				if(errorCount>=20){
+					tempError.append("<tr><td>..........</td><td>");
 					tempError.append("..........");
 					tempError.append("</td><td>");
 					tempError.append("...........");
-					tempError.append("</td></tr>");
+					tempError.append("</td><td>");
+					tempError.append("...........");
+					tempError.append("</td><td></td></tr>");
 					break;
 				}
 				if(nameError=="" && mobileError==""){
-//					if(mobileList.contains(mobile.toString())){
-//						
-//						errorCount++;
-//						tempError.append("<tr><td>" + j + "</td><td>");
-//						tempError.append(messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA));
-//						tempError.append("</td><tr>");
-//						//return messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA);
-//					}
+					if(mobileList.contains(mobile.toString())){
+						
+						errorCount++;
+						tempError.append("<tr><td>" + (j+1) + "</td><td>");
+						tempError.append(messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA));
+						tempError.append("</td><td></td><td></td><td></td></tr>");
+						//return messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA);
+					}
 					mobileList.add( mobile.toString());
 				}
 			}

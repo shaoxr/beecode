@@ -51,7 +51,7 @@ public class MarketingCatalogServiceImpl implements MarketingCatalogService{
 	}
 	@Override
 	public void delete(Long id)throws AppException {
-		List<MarketingAct> marketingActs=this.marketingActDao.findByProperty("id", id);
+		List<MarketingAct> marketingActs=this.marketingActDao.findByProperty("marketingCatalog.id", id);
 		if(marketingActs.size()>0){
 			throw new AppException(ErrorsCode.BIZ_MARKINGCATALOG_DONOT_DELETE,"");
 		}

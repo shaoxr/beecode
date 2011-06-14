@@ -120,7 +120,7 @@ public class PartnerController extends BaseController{
 			nStream = new FileInputStream(this.partnerExcelService.generateExcelFile(
 					this.partnerService.findByCatalog(partnerCatalogId), null, null));
 			response.setContentType("application/vnd.ms-excel");
-			response.addHeader("Content-Disposition", "attachment;filename=" +"partner");
+			response.addHeader("Content-Disposition", "attachment;filename=" +"partner.xls");
 			byte[] b=new byte[1024 * 1024];
 			while (nStream.read(b)>0){
 				response.getOutputStream().write(b);

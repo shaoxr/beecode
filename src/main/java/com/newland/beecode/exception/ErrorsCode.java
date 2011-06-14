@@ -269,7 +269,14 @@ public class ErrorsCode {
 	 * 操作员姓名已经存在
 	 */
 	public static final String BIZ_OPER_NAME_EXITS="BIZ.OPER.001";
-	
+	/**
+	 * 操作员两次输入密码不一样
+	 */
+	public static final String BIZ_OPER_PWD_INCORRECT="BIZ.OPER.002";
+	/**
+	 * 操作员角色不能为空
+	 */
+	public static final String BIZ_OPER_ROLE_NULL="BIZ.OPER.003";
 	/**
 	 * 客户重复
 	 */
