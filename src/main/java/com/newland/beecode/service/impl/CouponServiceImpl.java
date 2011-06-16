@@ -17,7 +17,7 @@ import com.intensoft.dao.hibernate.SimpleQueryCondition;
 import com.newland.beecode.dao.CouponCtrlDao;
 import com.newland.beecode.dao.CouponDao;
 import com.newland.beecode.domain.Coupon;
-import com.newland.beecode.domain.CoupontCtrl;
+import com.newland.beecode.domain.CouponCtrl;
 import com.newland.beecode.domain.SendList;
 import com.newland.beecode.domain.MsStatus;
 import com.newland.beecode.domain.MarketingAct;
@@ -171,7 +171,7 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon=checkCoupon(req);
         infoCheck(req,coupon);
 
-        CoupontCtrl ctrl = new CoupontCtrl();
+        CouponCtrl ctrl = new CouponCtrl();
         ctrl.setPartnerNo(req.getPartnerNo());
         ctrl.setCouponId(coupon.getCouponId());
         ctrl.setSerialNo(coupon.getSerialNo());
@@ -193,7 +193,7 @@ public class CouponServiceImpl implements CouponService {
         ctrl.setOriginalAmount(req.getOriginalAmount());
         ctrl.setOffAmount(req.getOffAmount());
         ctrl.setBatchNo(req.getBatchNo());
-        ctrl.setVoidFlag(CoupontCtrl.VOID_FLAG_NORMAL);
+        ctrl.setVoidFlag(CouponCtrl.VOID_FLAG_NORMAL);
         ctrlDao.save(ctrl);
 
         coupon.setRemainTimes(coupon.getRemainTimes() - 1);
@@ -259,20 +259,20 @@ public class CouponServiceImpl implements CouponService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void backOff(CouponBackoffRequest req) throws AppException{
         Coupon coupon  = couponDao.findBySerialNo(req.getSerialNo());
-        List<CoupontCtrl> list = ctrlDao.findBySerialNo(req.getSerialNo());
+        List<CouponCtrl> list = ctrlDao.findBySerialNo(req.getSerialNo());
         
-        CoupontCtrl ctrl = null;
-        for (CoupontCtrl coupontCtrl : list) {
+        CouponCtrl ctrl = null;
+        for (CouponCtrl coupontCtrl : list) {
             if (coupontCtrl.getBatchNo().equals(req.getBatchNo())
                     && coupontCtrl.getDeviceNo().equals(req.getDeviceNo())
                     && coupontCtrl.getPartnerNo().equals(req.getPartnerNo())
                     && coupontCtrl.getTraceNo().equals(req.getTraceNo())
-                    && coupontCtrl.getVoidFlag().equals(CoupontCtrl.VOID_FLAG_NORMAL)) {
+                    && coupontCtrl.getVoidFlag().equals(CouponCtrl.VOID_FLAG_NORMAL)) {
                 ctrl = coupontCtrl;
             }
         }
         if (coupon != null && ctrl != null) {
-            ctrl.setVoidFlag(CoupontCtrl.VOID_FLAG_BACKOFF);
+            ctrl.setVoidFlag(CouponCtrl.VOID_FLAG_BACKOFF);
 
             ctrlDao.update(ctrl);
             coupon.setRemainTimes(coupon.getRemainTimes() + 1);

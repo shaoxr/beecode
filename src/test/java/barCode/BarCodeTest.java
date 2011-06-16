@@ -23,7 +23,7 @@ public class BarCodeTest extends AbstractJUnit4SpringContextTests{
 		for(int i=0;i<10;i++){
 			System.out.println(Math.random());
 		}
-		this.barCodeService.genCode("Welcome to Newland!", "00100");
+		this.barCodeService.genCode("Welcome to Newland", "500x500");
 		//this.barCodeService.genCode("MEBKM:TITLE:Welcome to Newland!;URL:http\\://www.newland.com.cn;;", "002");
 	}
 	

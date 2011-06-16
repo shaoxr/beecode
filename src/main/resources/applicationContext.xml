@@ -81,12 +81,17 @@
         <property name="basename" value="messages" />                 
         <property name="useCodeAsDefaultMessage" value="true" />         
     </bean> 
-    <bean id="baseService" class="com.newland.beecode.service.impl.BaseServiceImpl">                   
+    <bean id="baseService" class="com.newland.beecode.service.impl.BaseServiceImpl"><!--                   
         <property name="MMSUserName" value="GD-zynn" />
         <property name="MMSPassword" value="zn1922" /> 
+        -->
+        <property name="MMSUserName" value="CXT016" />
+        <property name="MMSPassword" value="115117" /> 
         <property name="filePath" value="d:/beecode/" />
-        <property name="SMSUserName" value="2SDK-EMY-6688-JBVTN"/>
+        <!--<property name="SMSUserName" value="2SDK-EMY-6688-JBVTN"/>
         <property name="SMSPassword" value="175626"/>
-        <property name="SMSKey" value="198538"/>  
-    </bean> 
+        <property name="SMSKey" value="198538"/>
+    -->
+       <property name="SMSUserName" value="JC2283"/>
+        <property name="SMSPassword" value="115115"/></bean> 
 </beans>

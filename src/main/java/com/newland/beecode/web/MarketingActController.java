@@ -91,6 +91,19 @@ public class MarketingActController extends BaseController{
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
 		}
+		return "redirect:/marketingacts/appendMmsContent/"+ encodeUrlPathSegment(marketingAct.getActNo().toString(),
+				request)+"?form";
+	}
+	@RequestMapping(value="appendMmsContent/{actNo}",params="form", method = RequestMethod.GET)
+	public String appendMmsContentForm(@PathVariable("actNo") Long actNo,Model model,
+			HttpServletRequest request){
+		MarketingAct marketingAct=this.marketingActService.findByActNo(actNo);
+		model.addAttribute("marketingAct",marketingAct);
+		return "marketingacts/appendmmscontent";
+	}
+	@RequestMapping(value="appendMmsContent",method = RequestMethod.POST)
+	public String appendMmsContent(@Valid MarketingAct marketingAct,Model model, HttpServletRequest request){
+		this.marketingActService.appendMmsContent(marketingAct);
 		return "redirect:/marketingacts/appendCustomer/"+ encodeUrlPathSegment(marketingAct.getActNo().toString(),
 				request)+"?form";
 	}

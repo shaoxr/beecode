@@ -1,5 +1,6 @@
 package com.newland.beecode.service;
 
+import com.newland.beecode.task.SendParam;
 import com.ws.util.StatusReport;
 
 
@@ -38,4 +39,7 @@ public interface SMSService {
 			String srcCharset, int smsPriority,long smsID)throws Exception;
 	
 	public StatusReport[] getReport(String softwareSerialNo, String key)throws Exception;
+	
+	public String sendSMSByMontnets(SendParam mp)throws Exception;
+	public int getBalanceByMontnets()throws Exception;
 }

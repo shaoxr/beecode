@@ -162,6 +162,13 @@ public class MarketingActServiceImpl implements MarketingActService {
 		act.setMarketingCatalog(marketingCatalog);
         actDao.save(act);
 	}
+	@Transactional
+	public void appendMmsContent(MarketingAct act){
+		MarketingAct _act=this.actDao.get(act.getActNo());
+		_act.setMmsTemplate(act.getMmsTemplate());
+		_act.setMmsTitle(act.getMmsTitle());
+		this.actDao.update(_act);
+	}
 
 	@Transactional
 	public void invalidMarketingAct(Long actNo)throws AppException {
@@ -235,6 +242,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		act.setBindCard(marketingAct.getBindCard());
 		act.setMmsTemplate(marketingAct.getMmsTemplate());
 		if(marketingAct.getBindCard().equals(MarketingAct.BIND_CARD_YES)){
+			this.checkService.checkCodeCheck(marketingAct);
 			act.setCheckCode(marketingAct.getCheckCode());
 		}
 		if(act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)){
@@ -322,7 +330,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 	/**
 	 * 解锁发送状态
 	 */
-	public void unLockMarketingActSendStatus(Long actNo,Integer type) throws AppException {
+	public void unLockMarketingActSendStatus(Long actNo,Integer type) {
 		if(type.equals(SendList.MS_TYPE_MMS)){
 			this.actDao.excuteByHQL(
 					"update MarketingAct act set act.mmsSending=? where act.actNo=?",

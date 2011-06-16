@@ -18,41 +18,56 @@ import com.newland.beecode.task.SendParam;
  * @version 2011-5-31 下午02:31:34
  * 
  */
-@Service(value="mmsFetch2SendInvokeService")
-public class MmsFetch2SendInvokeService implements SendInvokeService{
-	private  Log logger = LogFactory.getLog(this.getClass());
+@Service(value = "mmsFetch2SendInvokeService")
+public class MmsFetch2SendInvokeService implements SendInvokeService {
+	private Log logger = LogFactory.getLog(this.getClass());
 	@Autowired
-	private MMSService mmsService; 
+	private MMSService mmsService;
 	@Autowired
 	private RespStatusDao respStatusDao;
 	@Autowired
 	private SendListService sendListService;
-	
-	private Integer msType=SendList.MS_TYPE_MMS;
+
+	private Integer msType = SendList.MS_TYPE_MMS;
 
 	@Override
-	public void sendRun(SendParam sp) throws Exception{
-				RespStatus respstatus = new RespStatus();
-				  respstatus.setRespDesc("success");
-				  String[] str=mmsService.sendMMS(sp);
-				  logger.debug("-------send :"+str[0]);
-				  if(str[0].indexOf("OK")>=0){
-					respstatus.setRespStatus(RespStatus.RESP_SUCCESS);
-				  }else{
-					  respstatus.setRespStatus(RespStatus.RESP_ERROR);
-					  respstatus.setRespDesc(str[0]);
-				  }
-				logger.debug("-------send :"+sp.getMobile());
-				respstatus.setCouponId(sp.getCouponId().toString());
-				respstatus.setMmsSendListId(sp.getSendListId());
-				this.respStatusDao.save(respstatus);
+	public void sendRun(SendParam sp) throws Exception {
+		// RespStatus respstatus = new RespStatus();
+		// respstatus.setRespDesc("success");
+		// String[] str=mmsService.sendMMS(sp);
+		// logger.debug("-------send :"+str[0]);
+		// if(str[0].indexOf("OK")>=0){
+		// respstatus.setRespStatus(RespStatus.RESP_SUCCESS);
+		// }else{
+		// respstatus.setRespStatus(RespStatus.RESP_ERROR);
+		// respstatus.setRespDesc(str[0]);
+		// }
+		// logger.debug("-------send :"+sp.getMobile());
+		// respstatus.setCouponId(sp.getCouponId().toString());
+		// respstatus.setMmsSendListId(sp.getSendListId());
+		// this.respStatusDao.save(respstatus);
+		RespStatus respstatus = new RespStatus();
+		respstatus.setRespDesc("success");
+		String resp = this.mmsService.sendMMSByMontnets(sp);
+		if (resp.length() > 10) {
+			logger.debug("send success mobile:" + sp.getMobile());
+			respstatus.setRespStatus(RespStatus.RESP_SUCCESS);
+			respstatus.setRespDesc(resp);
+		} else {
+			respstatus.setRespStatus(RespStatus.RESP_ERROR);
+			respstatus.setRespDesc(resp);
+			logger.debug("send error error code:"+resp+";mobile:" + sp.getMobile());
+		}
 		
+		respstatus.setCouponId(sp.getCouponId().toString());
+		respstatus.setMmsSendListId(sp.getSendListId());
+		this.respStatusDao.save(respstatus);
 	}
 
 	@Override
-	public void sendOver(Long actNo, Long sendListId) throws AppException {
+	public void sendOver(Long actNo, Long sendListId) {
 		this.sendListService.sendOver(sendListId);
-		
+
 	}
 
 	@Override

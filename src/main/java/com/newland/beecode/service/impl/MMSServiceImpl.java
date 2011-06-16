@@ -3,6 +3,7 @@ package com.newland.beecode.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.montnets.mms.CustomerMmsLocator;
 import com.newland.beecode.service.BaseService;
 import com.newland.beecode.service.MMSService;
 import com.newland.beecode.task.SendParam;
@@ -35,6 +36,11 @@ public class MMSServiceImpl implements MMSService{
 		MMSLocator client=new MMSLocator();
 		long result=client.getMMSSoap().getMMSCount(user, password, sendType);
 		return result;
+	}
+	@Override
+	public String sendMMSByMontnets(SendParam mp) throws Exception {
+		CustomerMmsLocator customer=new CustomerMmsLocator();
+		return customer.getCustomerMmsSoap().sendMms(this.baseService.getMMSUserName(), this.baseService.getMMSPassword(), mp.getMobile(), mp.getBase64Content(), mp.getTitle());
 	}
 	
 

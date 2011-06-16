@@ -82,7 +82,7 @@ public class CouponCondition extends SimpleQueryCondition{
 	@SimpleQueryProperty(operator = OperatorType.LIKE,property = "acctMobile")
 	public String getMobile() {
 		if(mobile!=null &&mobile.trim()!=""){
-			return mobile;
+			return "%"+mobile+"%";
 		}
 		return null;
 	}
@@ -90,7 +90,7 @@ public class CouponCondition extends SimpleQueryCondition{
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
-	@SimpleQueryProperty(operator = OperatorType.LIKE,property = "couponId")
+	@SimpleQueryProperty(operator = OperatorType.EQ,property = "couponId")
 	public Long getCouponId() {
 		return couponId;
 	}

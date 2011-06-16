@@ -94,7 +94,7 @@ public class UtilController extends BaseController{
 			nStream=new FileInputStream(this.fileService.getCustomerFile(newName));
 			response.setContentType("application/vnd.ms-excel");
 			response.addHeader("Content-Disposition", "attachment;filename="+newName);
-			byte[] b=new byte[1024 * 1024*30];
+			byte[] b=new byte[1024];
 			while (nStream.read(b)>0){
 				response.getOutputStream().write(b);
 			}

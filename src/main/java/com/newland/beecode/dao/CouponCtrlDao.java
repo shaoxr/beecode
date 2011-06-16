@@ -5,7 +5,7 @@
 package com.newland.beecode.dao;
 
 import com.intensoft.dao.hibernate.SimpleHibernateTemplate;
-import com.newland.beecode.domain.CoupontCtrl;
+import com.newland.beecode.domain.CouponCtrl;
 import java.util.List;
 import org.springframework.stereotype.Repository;
 
@@ -14,14 +14,14 @@ import org.springframework.stereotype.Repository;
  * @author skylai
  */
 @Repository("couponCtlDao")
-public class CouponCtrlDao extends SimpleHibernateTemplate<CoupontCtrl, Long> {
+public class CouponCtrlDao extends SimpleHibernateTemplate<CouponCtrl, Long> {
 
-    public List<CoupontCtrl> findBySerialNo(String serialNo) {
+    public List<CouponCtrl> findBySerialNo(String serialNo) {
 
         return this.find("select couponCtrl from CoupontCtrl as couponCtrl where couponCtrl.serialNo=?", serialNo);
     }
 
-    public List<CoupontCtrl> findCoupontCtrlEntries(int firstResult, int maxResults) {
+    public List<CouponCtrl> findCoupontCtrlEntries(int firstResult, int maxResults) {
 
         return findListByQuery("select o from CoupontCtrl o", firstResult, maxResults);
     }

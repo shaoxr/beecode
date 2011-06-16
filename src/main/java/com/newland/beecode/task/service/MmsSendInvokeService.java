@@ -37,22 +37,31 @@ public class MmsSendInvokeService implements SendInvokeService{
 	@Override
 	public void sendRun(SendParam sp)throws Exception{
 			  Coupon coupon=new Coupon();
-			  String[] str=mmsService.sendMMS(sp);
+			  /*String[] str=mmsService.sendMMS(sp);
 			  logger.debug("-------send :"+str[0]);
 			  if(str[0].indexOf("OK")>=0){
 				coupon.setMmsStatus(Integer.valueOf(RespStatus.RESP_SUCCESS));
 			  }else{
 				  coupon.setMmsStatus(Integer.valueOf(RespStatus.RESP_ERROR));
 				  coupon.setMmsDesc(str[0]);
+			  }*/
+			  String resp=this.mmsService.sendMMSByMontnets(sp);
+			  if(resp.length()>10){
+				  logger.debug("send success mobile:" + sp.getMobile());
+				  coupon.setMmsStatus(Integer.valueOf(RespStatus.RESP_SUCCESS)); 
+				  coupon.setMmsDesc(resp);
+			  }else{
+				  coupon.setMmsStatus(Integer.valueOf(RespStatus.RESP_ERROR));
+				  coupon.setMmsDesc(resp);
+				  logger.debug("send error error code:"+resp+";mobile:" + sp.getMobile());
 			  }
-			logger.debug("-------send :"+sp.getMobile());
 			this.couponDao.excuteByHQL("update Coupon c set c.mmsStatus=?,c.mmsDesc=? where c.couponId=?", coupon.getMmsStatus(),coupon.getMmsDesc(),sp.getCouponId());
 		
 		
 	}
 
 	@Override
-	public void sendOver(Long actNo, Long sendListId) throws AppException  {
+	public void sendOver(Long actNo, Long sendListId) {
 		marketingActService.unLockMarketingActSendStatus(actNo,  msType);
 		
 	}

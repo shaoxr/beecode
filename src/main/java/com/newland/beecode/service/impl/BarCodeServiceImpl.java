@@ -42,7 +42,7 @@ public class BarCodeServiceImpl implements BarCodeService{
 				}
 				f.createNewFile();
 				BufferedImage imd=ImageIO.read(new File("c:/nonghang.png"));
-				MatrixToImageWriter.writeToFile(bitMatrix, subfix, f,imd);
+				MatrixToImageWriter.writeToFile(bitMatrix, subfix, f,null);
 			} catch (WriterException e) {
 				logger.error("WriterException", e);
 				throw new AppRTException(ErrorsCode.BIZ_BARCODE_GEN_ERROR,"",e);
