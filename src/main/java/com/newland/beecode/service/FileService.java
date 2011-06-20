@@ -34,6 +34,8 @@ public interface FileService {
 	public  byte[] getZIPByte(Long couponId,String dir) throws AppException;
 	public  byte[] getZIPByte(Long couponId) throws AppException;
 	
+	public String getBase64Tms(Long couponId,String dir)throws AppException;
+	
 	public void genGetMMSzips(MarketingAct act,List<Coupon> coupon,HttpServletResponse response) throws AppException;
 	
 	public File getCustomerFile(String fileName) throws AppException;

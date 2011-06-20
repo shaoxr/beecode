@@ -33,6 +33,11 @@ public interface MarketingActService {
 	 */
 	public void append(Long actNo, MultipartFile file, String bizNo)throws AppException;
 	/**
+	 * 增加短信/彩信 内容
+	 * @param act
+	 */
+	public void appendMmsContent(MarketingAct act);
+	/**
 	 * genCode
 	 * @param coupon
 	 * @param act
@@ -73,7 +78,7 @@ public interface MarketingActService {
 	
 	public void sendOver(Long actNo);
 	
-	public void unLockMarketingActSendStatus(Long actNo,Integer type)throws AppException;
+	public void unLockMarketingActSendStatus(Long actNo,Integer type);
 	
 	public void send(Long actNo,Integer msType)throws AppException;
 	

@@ -89,8 +89,15 @@
           </c:if>
         </tr>
       </thead>
+      <c:set value="0" var="lineNumber" />
       <c:forEach items="${data}" var="item">
-        <tr>
+      <c:if test="${ (lineNumber % 2) ==0 }">
+        <c:set value="#FFFFFF" var="colorset" />
+      </c:if>
+      <c:if test="${ (lineNumber % 2) !=0 }">
+        <c:set value="#EFEFEF" var="colorset" />
+      </c:if>
+        <tr style="background-color: ${colorset};">
           <c:forTokens items="${columnProperties}" delims="," var="column" varStatus="num">
             <c:set var="columnMaxLength" value="${lengths[num.count-1]}" scope="request" />
             <c:set var="pattern" value="${patterns[num.count-1]}" scope="request" />
@@ -203,6 +210,7 @@
             </td>
           </c:if>
         </tr>
+        <c:set value="${lineNumber + 1}" var="lineNumber" />
       </c:forEach>
       <tr class="footer">
         <td colspan="10">

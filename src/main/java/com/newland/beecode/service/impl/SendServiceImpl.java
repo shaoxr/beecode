@@ -39,7 +39,8 @@ public class SendServiceImpl implements SendService {
 			if(sendInvokeService.getMsType().equals(SendList.MS_TYPE_MMS)){
 				for(Coupon coupon:couponList){
 					SendParam sp=new SendParam();
-					sp.setContent(this.fileService.getZIPByte(coupon.getCouponId(),dir));
+					//sp.setContent(this.fileService.getZIPByte(coupon.getCouponId(),dir));
+					sp.setBase64Content(this.fileService.getBase64Tms(coupon.getCouponId(), dir));
 					sp.setTitle(act.getMmsTitle());
 					sp.setSendListId(sendListId);
 					sp.setMobile(coupon.getAcctMobile());
@@ -64,10 +65,12 @@ public class SendServiceImpl implements SendService {
 					try {
 						if(threadPool.awaitTermination(4, TimeUnit.HOURS )){
 							logger.debug("sended ........,total times:"+(System.currentTimeMillis()-time));
-							sendInvokeService.sendOver(act.getActNo(),sendListId);
+							
 						}
 					} catch (Exception e) {
 						logger.error("", e);
+					}finally{
+						sendInvokeService.sendOver(act.getActNo(),sendListId);
 					}
 				}
 			}.start();

@@ -79,6 +79,7 @@ public class BeecodeServiceImpl implements BeecodeService {
 			reqMap.put(7,ErrorsCode.POSP_RIGHT);
 			reqMap.put(10, coupon.getMarketingAct().getActName());
 		} catch (Exception e) {
+			logger.error("", e);
 			if(e instanceof AppException){
 				reqMap.put(7,this.convertCode(((AppException) e).getCode()));
 			}else{

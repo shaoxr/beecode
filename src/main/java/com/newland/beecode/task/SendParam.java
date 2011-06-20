@@ -24,6 +24,16 @@ public class SendParam {
 	
 	private Long sendListId;
 	
+	private String base64Content;
+	
+
+	public String getBase64Content() {
+		return base64Content;
+	}
+
+	public void setBase64Content(String base64Content) {
+		this.base64Content = base64Content;
+	}
 
 	public String getSmsContent() {
 		return smsContent;

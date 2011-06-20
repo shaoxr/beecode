@@ -9,7 +9,7 @@
          -->
         <field:select disableFormBinding="true" field="marketingCatalogId" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_marketingcatalog" itemValue="id" itemLabel="catalogName" items="${marketingCatalogs}" multiple="false" path="/marketingCatalogs"/>
         <field:selectBlank disableFormBinding="true" field="actNo" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_marketingact_actname" itemValue="actNo" itemLabel="actName" items="${actList}" multiple="false" path="/businesstypes"/>
-        <field:input disableFormBinding="true" field="couponId" id="c_com_newland_beecode_domain_Coupon_cuoponId"/>
+        <field:number disableFormBinding="true" field="couponId" validationMessageCode="field_invalid_integer" id="c_com_newland_beecode_domain_Coupon_cuoponId"/>
         <field:input disableFormBinding="true" field="mobile" id="c_com_newland_beecode_domain_Coupon_acctMobile" max="16"/>
         <field:select disableFormBinding="true" field="couponStatus" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_coupon_status" itemValue="key" itemLabel="value" items="${cuoponstatusList}" multiple="false" path="/businesstypes" />
         <field:select disableFormBinding="true" field="mmsStatus" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_coupon_mmsstatus" itemValue="key" itemLabel="value" items="${mmsstatusList}" multiple="false" path="" />
@@ -20,6 +20,7 @@
             <table:column id="c_com_newland_beecode_domain_MarketingAct_actName" property="marketingAct" itemLabel="actName"/>
             <table:column id="c_com_newland_beecode_domain_Coupon_cuoponId" property="couponId" maxLength="18" >
             </table:column>
+            <table:column id="c_com_newland_beecode_domain_marketingact_acctname" maxLength="20" property="acctName" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
             <table:column id="c_com_newland_beecode_domain_Coupon_acctMobile" maxLength="20" property="acctMobile" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
             <table:column id="c_com_newland_beecode_domain_Coupon_cuoponStatus" property="couponStatus" pattern="dictView" className="COUPON_STATUS" z="ku2jC2WhvM+Uz28v4qfL1cwun1g="/>
         </table:table>

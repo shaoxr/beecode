@@ -16,5 +16,7 @@ public interface MMSService {
 	public String[] sendMMS(SendParam mp) throws Exception;
 	
 	public long getBalance(String user,String password,int sendType)throws Exception;
+	
+	public String sendMMSByMontnets(SendParam mp)throws Exception;
 
 }

@@ -32,25 +32,40 @@ public class SmsFetch2SendInvokeService implements SendInvokeService{
 	private Integer msType=SendList.MS_TYPE_SMS;
 	@Override
 	public void sendRun(SendParam sp) throws Exception{
+//			RespStatus respstatus = new RespStatus();
+//			int resp = smsService.sendSMS(null, new String[] {sp.getMobile() }, sp.getSmsContent(), "",
+//					"gbk", 5, sp.getCouponId());
+//			if (resp == 0) {
+//				respstatus.setRespStatus(RespStatus.RESP_SUCCESS);
+//			} else {
+//				respstatus.setRespStatus(RespStatus.RESP_ERROR);
+//			}
+//			logger.debug("-------send sms :" + sp.getMobile());
+//			
+//			respstatus.setCouponId(sp.getCouponId().toString());
+//			respstatus.setMmsSendListId(sp.getSendListId());
+//			respstatus.setRespDesc("success");
+//			this.respStatusDao.save(respstatus);
 			RespStatus respstatus = new RespStatus();
-			int resp = smsService.sendSMS(null, new String[] {sp.getMobile() }, sp.getSmsContent(), "",
-					"gbk", 5, sp.getCouponId());
-			if (resp == 0) {
+			respstatus.setRespDesc("success");
+			String resp=this.smsService.sendSMSByMontnets(sp);
+			if(resp.length()>10){
+				logger.debug("send success mobile:" + sp.getMobile());
 				respstatus.setRespStatus(RespStatus.RESP_SUCCESS);
+				respstatus.setRespDesc(resp);
 			} else {
 				respstatus.setRespStatus(RespStatus.RESP_ERROR);
+				respstatus.setRespDesc(resp);
+				logger.debug("send error error code:"+resp+";mobile:" + sp.getMobile());
 			}
-			logger.debug("-------send sms :" + sp.getMobile());
-			
 			respstatus.setCouponId(sp.getCouponId().toString());
 			respstatus.setMmsSendListId(sp.getSendListId());
-			respstatus.setRespDesc("success");
 			this.respStatusDao.save(respstatus);
 		
 	}
 
 	@Override
-	public void sendOver(Long actNo, Long sendListId) throws AppException {
+	public void sendOver(Long actNo, Long sendListId) {
 		this.sendListService.sendOver(sendListId);
 		
 	}

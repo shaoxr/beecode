@@ -36,7 +36,6 @@
 	   		<input type="submit" value="重新生成" onclick="javascript:return window.confirm('请确认重新生成礼券，原有礼券将作废！');"/>
 	   		</form>
    		</util:panel>
-   	</c:if>
    		<util:panel title="重新发送短信" id="cancel2" openPane="false">
 	   		<spring:url value="/coupons/resend/${coupon.couponId}?msType=0" var="url"></spring:url>
 	   		<form method="post" action="${url}">
@@ -49,4 +48,5 @@
 	   		<input type="submit" value="重新发送彩信" onclick="javascript:return window.confirm('请确认重新发送彩信！');"/>
 	   		</form>
    		</util:panel>
+   	</c:if>
 </div>

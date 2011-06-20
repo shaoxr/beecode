@@ -6,8 +6,12 @@
   <jsp:directive.attribute name="label" type="java.lang.String" required="false" description="The label used for this object, will default to a message bundle if not supplied"/>
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
   <jsp:directive.attribute name="openPane" type="java.lang.Boolean" required="false" description="Control if the title pane is opened or closed by default (default: true)"/>
+  <jsp:directive.attribute name="next" type="java.lang.Boolean" required="false" description="Control if the title pane is opened or closed by default (default: true)"/>
   <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)"/>
   <jsp:directive.attribute name="enctype" type="java.lang.String" required="false" description="Used for upload files"/>
+  <c:if test="${empty next}">
+      <c:set var="next" value="false" />
+    </c:if>
   <c:if test="${empty render or render}">
     <c:if test="${empty label}">
       <spring:message code="label_${fn:toLowerCase(fn:substringAfter(id,'_'))}" var="label" htmlEscape="false" />
@@ -15,14 +19,17 @@
     <spring:message arguments="${label}" code="entity_create" var="title_msg"/>
     <util:panel id="${id}" title="${title_msg}" openPane="${openPane}">
       <spring:url value="${path}" var="form_url"/>
-      <script type="text/javascript">dojo.require('dijit.form.Button');</script>
-      <form:form action="${fn:escapeXml(form_url)}" method="POST" enctype="${enctype}" modelAttribute="${modelAttribute}">
+      <script type="text/javascript">dojo.require('dijit.form.Button');dojo.require('dijit.form.Form');</script>
+      <form:form dojoType="dijit.form.Form" action="${fn:escapeXml(form_url)}" method="POST" enctype="${enctype}" modelAttribute="${modelAttribute}" >
         <form:errors cssClass="errors" delimiter="&lt;p/&gt;"/>
         <jsp:doBody />
         <div id="${fn:escapeXml(id)}_submit">
           <spring:message code="button_save" var="save_button"/>
+          <c:if test="${next}">
+           <spring:message code="button_next" var="save_button"/>
+          </c:if>
           <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
-          <button id="proceed" dojoType="dijit.form.Button" type="submit" name="submitButton">${fn:escapeXml(save_button)}</button>
+          <input id="proceed" type="submit" value="${fn:escapeXml(save_button)}" />
         </div>
       </form:form>
     </util:panel>

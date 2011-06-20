@@ -59,7 +59,7 @@ public final class QRCodeWriter implements Writer {
           height);
     }
 
-    ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.H;
+    ErrorCorrectionLevel errorCorrectionLevel = ErrorCorrectionLevel.Q;
     if (hints != null) {
       ErrorCorrectionLevel requestedECLevel = (ErrorCorrectionLevel) hints.get(EncodeHintType.ERROR_CORRECTION);
       if (requestedECLevel != null) {

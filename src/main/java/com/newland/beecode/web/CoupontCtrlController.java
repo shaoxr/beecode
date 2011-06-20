@@ -1,7 +1,7 @@
 package com.newland.beecode.web;
 
 import com.newland.beecode.dao.CouponCtrlDao;
-import com.newland.beecode.domain.CoupontCtrl;
+import com.newland.beecode.domain.CouponCtrl;
 import java.io.UnsupportedEncodingException;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -29,14 +29,14 @@ public class CoupontCtrlController {
     
     
         @RequestMapping(method = RequestMethod.POST)
-    public String create(@Valid CoupontCtrl coupontCtrl, Model model, HttpServletRequest request) {
+    public String create(@Valid CouponCtrl coupontCtrl, Model model, HttpServletRequest request) {
         coupontCtrlDao.save(coupontCtrl);
         return "redirect:/coupontctrls/" + encodeUrlPathSegment(coupontCtrl.getCouponId().toString(), request);
     }
     
     @RequestMapping(params = "form", method = RequestMethod.GET)
     public String createForm(Model model) {
-        model.addAttribute("coupontCtrl", new CoupontCtrl());
+        model.addAttribute("coupontCtrl", new CouponCtrl());
         addDateTimeFormatPatterns(model);
         return "coupontctrls/create";
     }
@@ -64,7 +64,7 @@ public class CoupontCtrlController {
     }
     
     @RequestMapping(method = RequestMethod.PUT)
-    public String update(@Valid CoupontCtrl coupontCtrl, BindingResult result, Model model, HttpServletRequest request) {
+    public String update(@Valid CouponCtrl coupontCtrl, BindingResult result, Model model, HttpServletRequest request) {
         if (result.hasErrors()) {
             model.addAttribute("coupontCtrl", coupontCtrl);
             addDateTimeFormatPatterns(model);

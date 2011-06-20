@@ -48,7 +48,7 @@ public class CheckServiceImpl implements CheckService{
 	    return pattern.matcher(str).matches();    
 	 }
 	public static boolean isIntegerOrFloat(String str){
-		Pattern pattern = Pattern.compile("([0-9]+)|([0-9]+.[0-9]+)");//符合整数或小数格式
+		Pattern pattern = Pattern.compile("([0-9]+)|([0-9]+.[0-9]+)");	
 		return pattern.matcher(str).matches(); 
 	}
 	@Override

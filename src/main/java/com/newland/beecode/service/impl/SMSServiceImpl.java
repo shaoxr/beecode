@@ -3,8 +3,10 @@ package com.newland.beecode.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.montnets.sms.WmgwLocator;
 import com.newland.beecode.service.BaseService;
 import com.newland.beecode.service.SMSService;
+import com.newland.beecode.task.SendParam;
 import com.ws.util.StatusReport;
 @Service(value="smsService")
 public class SMSServiceImpl implements SMSService  {
@@ -106,6 +108,18 @@ public class SMSServiceImpl implements SMSService  {
         StatusReport[] s=binding.getReport(softwareSerialNo, key);
        
 		return s;
+	}
+
+	@Override
+	public String sendSMSByMontnets(SendParam mp) throws Exception {
+		WmgwLocator wmg=new WmgwLocator();
+		return  wmg.getwmgwSoap().mongateCsSpSendSmsNew(this.baseService.getSMSUserName(),this.baseService.getSMSPassword(), 
+				mp.getMobile(), mp.getSmsContent(), 1, "*");
+	}
+	@Override
+	public int getBalanceByMontnets()throws Exception{
+		WmgwLocator wmg=new WmgwLocator();
+		return wmg.getwmgwSoap().mongateQueryBalance(this.baseService.getSMSUserName(),this.baseService.getSMSPassword());
 	}
 
 }

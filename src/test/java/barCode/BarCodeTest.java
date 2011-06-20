@@ -1,5 +1,7 @@
 package barCode;
 
+import jxl.format.RGB;
+
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,7 +20,12 @@ public class BarCodeTest extends AbstractJUnit4SpringContextTests{
 	private BarCodeService barCodeService;
 	@Test
 	public void genTest(){
-		this.barCodeService.genCode("http://218.66.48.231:3000/easyPayment/goods_05.html", "05");
+		for(int i=0;i<10;i++){
+			System.out.println(Math.random());
+		}
+		this.barCodeService.genCode("Welcome to Newland", "500x500");
+		//this.barCodeService.genCode("MEBKM:TITLE:Welcome to Newland!;URL:http\\://www.newland.com.cn;;", "002");
 	}
+	
 
 }

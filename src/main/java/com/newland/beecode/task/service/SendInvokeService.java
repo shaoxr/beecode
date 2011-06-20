@@ -12,7 +12,7 @@ public interface SendInvokeService {
 	
 	public void sendRun(SendParam sp)throws Exception;
 	
-	public void sendOver(Long actNo ,Long sendListId)throws AppException;
+	public void sendOver(Long actNo ,Long sendListId);
 	
 	public Integer getMsType();
 

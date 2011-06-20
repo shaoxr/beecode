@@ -3,6 +3,7 @@ package com.newland.beecode.service.impl;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,12 +13,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
-
+import sun.misc.BASE64Encoder;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
@@ -73,6 +75,8 @@ public class FileServiceImpl implements FileService{
 	public static final String SMS_DOWN_TEMP="sms_down_temp/";
 	public static final String SMS_SEND_EXTRACT="sms_send_extract/";
 	
+	public static final String encode="utf-8";
+	
 	
 	public static final int BUFFER = 2048;
 	public void storeFile(MultipartFile file, String fileName)  throws AppException {
@@ -113,7 +117,8 @@ public class FileServiceImpl implements FileService{
 	        BufferedReader reader = null;
 	        StringBuffer sb=new StringBuffer();
 	        try {
-	            reader = new BufferedReader(new FileReader(file));
+	            InputStreamReader read = new InputStreamReader (new FileInputStream(file),encode);
+	            reader = new BufferedReader(read);
 	            String tempString = null;
 	            while ((tempString = reader.readLine()) != null) {
 	            	sb.append(tempString);
@@ -140,16 +145,21 @@ public class FileServiceImpl implements FileService{
 		return this.baseService.getFilePath()+TEMP+fileName;
 	}
 	public void genTextFile(String content,Long couponId) throws AppException{
-		FileWriter fw =null;;
-		try {
-			fw=new FileWriter(this.baseService.getFilePath()+TEXT_PATH+couponId+".txt");
-			fw.write(content);
-			fw.close();
+		FileOutputStream fos = null;  
+        OutputStreamWriter osw = null;  
+        try {  
+        	File file=new File(this.baseService.getFilePath()+TEXT_PATH+couponId+".txt");
+        	if(file.exists()){
+        		file.delete();
+        	}
+            fos = new FileOutputStream(file);  
+            osw = new OutputStreamWriter(fos, encode);  
+            osw.write(content); 
 		} catch (IOException e) {
 			throw new AppException(ErrorsCode.BIZ_IO_EXCEPTION,"",e);
 		}finally{
 			try {
-				fw.close();
+				osw.close();
 			} catch (IOException e) {
 				throw new AppException(ErrorsCode.BIZ_IO_EXCEPTION,"",e);
 			}
@@ -229,7 +239,73 @@ public class FileServiceImpl implements FileService{
 				throw new AppException(ErrorsCode.BIZ_IO_EXCEPTION,"",e);
 			}
 	}
-   
+	@Override
+	public String getBase64Tms(Long couponId, String dir) throws AppException {
+		File[] files=new File[3];
+	    if(dir==null){
+	    	files[0]=new File(this.baseService.getFilePath()+SMIL_PATH+"tms.smil");
+	    	files[1]=new File(this.baseService.getFilePath()+IMAGE_PATH+couponId+".gif");
+	    	files[2]=new File(this.baseService.getFilePath()+TEXT_PATH+couponId+".txt");
+	    }else{
+	    	files[0]=new File(this.baseService.getFilePath()+SMIL_PATH+"tms.smil");
+	    	files[1]=new File(dir+"/"+couponId+".gif");
+	    	files[2] = new File(dir+"/"+couponId+".txt");
+	    }
+	    BASE64Encoder encode = new BASE64Encoder();
+	    return encode.encode(getTmsByte(files));
+	}
+	private byte[] getTmsByte(File[] files)throws AppException{ 
+		ByteArrayOutputStream fos = new ByteArrayOutputStream(); 
+		try {
+			String title="shaoxr";
+			
+			FileInputStream fs;
+			int totalLen=0;
+			for(File file:files ){
+				totalLen=totalLen+(int)file.length();
+			}
+			fos.write(0xA1);
+			fos.write(0x64);
+			fos.write(genByte(totalLen,4));
+			fos.write(3);
+			fos.write(genByte(title.length(),2));
+			fos.write(title.getBytes());
+			
+			
+			for(File file:files ){
+				fs = new FileInputStream(file);
+				String fileName=null;
+				if(file.getName().indexOf(".txt")!=-1){
+					fileName="00.txt";
+				}else if(file.getName().indexOf(".gif")!=-1){
+					fileName="00.gif";
+				}else{
+					fileName=file.getName();
+				}
+				byte[] Content=new byte[fs.available()];
+				fs.read(Content,0,Content.length);
+				fs.close();
+				fos.write(fileName.length());
+				fos.write(fileName.getBytes());
+				fos.write(genByte((int)file.length(),3));
+				fos.write(Content);
+			}
+			//FileOutputStream fo=new FileOutputStream(this.baseService.getFilePath()+SMIL_PATH+"test.tms");
+			//fos.writeTo(fo);
+		} catch (FileNotFoundException e) {
+			throw new AppException(ErrorsCode.BIZ_IO_FILE_NOT_FOUND,"",e);
+		} catch (IOException e) {
+			throw new AppException(ErrorsCode.BIZ_IO_EXCEPTION,"",e);
+		}
+		return fos.toByteArray();
+	}
+	private static byte[] genByte(int i,int len){
+		byte[] bytes=new byte[len];
+		for(int j=0;j<len;j++){
+			bytes[j]=(byte)(i>>(8*(len-1-j)) & 0xff);
+		}
+		return bytes;
+	}
 	@Override
 	public File getCustomerFile(String fileName)  throws AppException {
 		return new File(baseService.getFilePath()+TEMP + fileName);
@@ -639,5 +715,4 @@ public class FileServiceImpl implements FileService{
 		
 		return coupons;
 	}
-
 }

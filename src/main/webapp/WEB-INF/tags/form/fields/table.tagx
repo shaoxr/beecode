@@ -115,321 +115,170 @@
 			<c:set value="0" var="lineNumber" />
 			<c:forEach items="${data}" var="item">
 				<c:if test="${ (lineNumber % 2) ==0 }">
-
-					<tr style="background-color: #FFFFFF;">
-
-						<c:forTokens items="${columnProperties}" delims="," var="column"
-							varStatus="num">
-							<c:set var="columnMaxLength" value="${lengths[num.count-1]}"
-								scope="request" />
-							<c:set var="pattern" value="${patterns[num.count-1]}"
-								scope="request" />
-							<c:set var="itemLabel" value="${itemLabels[num.count-1]}"
-								scope="request" />
-							<c:set var="className" value="${classNames[num.count-1]}"
-								scope="request" />
-							<td><c:choose>
-									<c:when test="${columnMaxLength lt 0}">
-										<spring:eval expression="item[column]" var="col" />
-									</c:when>
-									<c:otherwise>
-										<spring:eval expression="item[column]" var="colTxt" />
-										<c:if test="${itemLabel != '-'}">
-											<spring:eval expression="item[column][itemLabel]"
-												var="colTxt" />
-										</c:if>
-										<c:choose>
-											<c:when test="${pattern eq '-'}">
-												<c:out value="${fn:substring(colTxt, 0, columnMaxLength)}" />
-											</c:when>
-											<c:when test="${pattern eq 'dictView'}">
-												<nl:springFormate className="${className}" value="${colTxt}" />
-											</c:when>
-											<c:otherwise>
-												<fmt:formatDate pattern="${pattern}" value="${colTxt}" />
-											</c:otherwise>
-										</c:choose>
-									</c:otherwise>
-								</c:choose></td>
-						</c:forTokens>
-						<c:if test="${show}">
-							<td><spring:url value="${path}/${item[typeIdFieldName]}"
-									var="show_form_url" /> <spring:url
-									value="/resources/images/show.png" var="show_image_url" /> <spring:message
-									arguments="${typeName}[${item[typeIdFieldName]}]"
-									code="entity_show" var="show_label" /> <a
-								href="${fn:escapeXml(show_form_url)}"
-								alt="${fn:escapeXml(show_label)}"
-								title="${fn:escapeXml(show_label)}"> <img
-									alt="${fn:escapeXml(show_label)}" class="image"
-									src="${fn:escapeXml(show_image_url)}"
-									title="${fn:escapeXml(show_label)}" /> </a></td>
-						</c:if>
-						<c:if test="${update}">
-							<td><spring:url value="${path}/${item[typeIdFieldName]}"
-									var="update_form_url">
-									<spring:param name="form" />
-								</spring:url> <spring:url value="/resources/images/update.png"
-									var="update_image_url" /> <spring:message
-									arguments="${typeName}[${item[typeIdFieldName]}]"
-									code="entity_update" var="update_label" /> <a
-								href="${fn:escapeXml(update_form_url)}"
-								alt="${fn:escapeXml(update_label)}"
-								title="${fn:escapeXml(update_label)}"> <img
-									alt="${fn:escapeXml(update_label)}" class="image"
-									src="${fn:escapeXml(update_image_url)}"
-									title="${fn:escapeXml(update_label)}" /> </a></td>
-						</c:if>
-						<c:if test="${append}">
-							<td><spring:url
-									value="${path}/${appendpath}/${item[typeIdFieldName]}"
-									var="update_form_url">
-									<spring:param name="form" />
-								</spring:url> <spring:url value="/resources/images/update.png"
-									var="update_image_url" /> <spring:message
-									arguments="${typeName}[${item[typeIdFieldName]}]"
-									code="entity_append" var="append_label" /> <a
-								href="${fn:escapeXml(update_form_url)}"
-								alt="${fn:escapeXml(append_label)}"
-								title="${fn:escapeXml(append_label)}"> <img
-									alt="${fn:escapeXml(append_label)}" class="image"
-									src="${fn:escapeXml(update_image_url)}"
-									title="${fn:escapeXml(append_label)}" /> </a></td>
-						</c:if>
-						<c:if test="${delete}">
-							<td><spring:url value="${path}/${item[typeIdFieldName]}"
-									var="delete_form_url" /> <spring:url
-									value="/resources/images/delete.png" var="delete_image_url" />
-								<form:form action="${fn:escapeXml(delete_form_url)}"
-									method="DELETE">
-									<spring:message
-										arguments="${typeName}[${item[typeIdFieldName]}]"
-										code="entity_delete" var="delete_label" />
-									<c:set var="delete_confirm_msg">
-										<spring:escapeBody javaScriptEscape="true">
-											<spring:message
-												arguments="${typeName}[${item[typeIdFieldName]}]"
-												code="entity_delete_confirm" />
-										</spring:escapeBody>
-									</c:set>
-									<input alt="${fn:escapeXml(delete_label)}" class="image"
-										src="${fn:escapeXml(delete_image_url)}"
-										title="${fn:escapeXml(delete_label)}" type="image"
-										value="${fn:escapeXml(delete_label)}"
-										onclick="return confirm('${delete_confirm_msg}');" />
-									<c:if test="${not empty param.page}">
-										<input name="page" type="hidden"
-											value="${fn:escapeXml(param.page)}" />
-									</c:if>
-									<c:if test="${not empty param.size}">
-										<input name="size" type="hidden"
-											value="${fn:escapeXml(param.size)}" />
-									</c:if>
-								</form:form></td>
-						</c:if>
-						<c:if test="${invalid}">
-							<td><spring:url
-									value="${path}/invalid/${item[typeIdFieldName]}"
-									var="invalid_form_url" /> <spring:url
-									value="/resources/images/delete.png" var="delete_image_url" />
-								<form:form action="${fn:escapeXml(invalid_form_url)}"
-									method="POST">
-									<spring:message
-										arguments="${typeName}[${item[typeIdFieldName]}]"
-										code="entity_invalid" var="invalid_label" />
-									<c:set var="invalid_confirm_msg">
-										<spring:escapeBody javaScriptEscape="true">
-											<spring:message
-												arguments="${typeName}[${item[typeIdFieldName]}]"
-												code="entity_invalid_confirm" />
-										</spring:escapeBody>
-									</c:set>
-									<input alt="${fn:escapeXml(invalid_label)}" class="image"
-										src="${fn:escapeXml(delete_image_url)}"
-										title="${fn:escapeXml(invalid_label)}" type="image"
-										value="${fn:escapeXml(invalid_label)}"
-										onclick="return confirm('${invalid_confirm_msg}');" />
-									<c:if test="${not empty param.page}">
-										<input name="page" type="hidden"
-											value="${fn:escapeXml(param.page)}" />
-									</c:if>
-									<c:if test="${not empty param.size}">
-										<input name="size" type="hidden"
-											value="${fn:escapeXml(param.size)}" />
-									</c:if>
-									<input name="query" type="hidden" value="${query}" />
-								</form:form></td>
-						</c:if>
-					</tr>
-
+					<c:set value="#FFFFFF" var="colorset" />
 				</c:if>
 				<c:if test="${ (lineNumber % 2) !=0 }">
+					<c:set value="#EFEFEF" var="colorset" />
+				</c:if>
+				<tr style="background-color: ${colorset};">
 
-					<tr style="background-color: #EFEFEF;">
-
-						<c:forTokens items="${columnProperties}" delims="," var="column"
-							varStatus="num">
-							<c:set var="columnMaxLength" value="${lengths[num.count-1]}"
-								scope="request" />
-							<c:set var="pattern" value="${patterns[num.count-1]}"
-								scope="request" />
-							<c:set var="itemLabel" value="${itemLabels[num.count-1]}"
-								scope="request" />
-							<c:set var="className" value="${classNames[num.count-1]}"
-								scope="request" />
-							<td><c:choose>
-									<c:when test="${columnMaxLength lt 0}">
-										<spring:eval expression="item[column]" var="col" />
+					<c:forTokens items="${columnProperties}" delims="," var="column"
+						varStatus="num">
+						<c:set var="columnMaxLength" value="${lengths[num.count-1]}"
+							scope="request" />
+						<c:set var="pattern" value="${patterns[num.count-1]}"
+							scope="request" />
+						<c:set var="itemLabel" value="${itemLabels[num.count-1]}"
+							scope="request" />
+						<c:set var="className" value="${classNames[num.count-1]}"
+							scope="request" />
+						<td><c:choose>
+							<c:when test="${columnMaxLength lt 0}">
+								<spring:eval expression="item[column]" var="col" />
+							</c:when>
+							<c:otherwise>
+								<spring:eval expression="item[column]" var="colTxt" />
+								<c:if test="${itemLabel != '-'}">
+									<spring:eval expression="item[column][itemLabel]" var="colTxt" />
+								</c:if>
+								<c:choose>
+									<c:when test="${pattern eq '-'}">
+										<c:out value="${fn:substring(colTxt, 0, columnMaxLength)}" />
+									</c:when>
+									<c:when test="${pattern eq 'dictView'}">
+										<nl:springFormate className="${className}" value="${colTxt}" />
 									</c:when>
 									<c:otherwise>
-										<spring:eval expression="item[column]" var="colTxt" />
-										<c:if test="${itemLabel != '-'}">
-											<spring:eval expression="item[column][itemLabel]"
-												var="colTxt" />
-										</c:if>
-										<c:choose>
-											<c:when test="${pattern eq '-'}">
-												<c:out value="${fn:substring(colTxt, 0, columnMaxLength)}" />
-											</c:when>
-											<c:when test="${pattern eq 'dictView'}">
-												<nl:springFormate className="${className}" value="${colTxt}" />
-											</c:when>
-											<c:otherwise>
-												<fmt:formatDate pattern="${pattern}" value="${colTxt}" />
-											</c:otherwise>
-										</c:choose>
+										<fmt:formatDate pattern="${pattern}" value="${colTxt}" />
 									</c:otherwise>
-								</c:choose></td>
-						</c:forTokens>
-						<c:if test="${show}">
-							<td><spring:url value="${path}/${item[typeIdFieldName]}"
-									var="show_form_url" /> <spring:url
-									value="/resources/images/show.png" var="show_image_url" /> <spring:message
-									arguments="${typeName}[${item[typeIdFieldName]}]"
-									code="entity_show" var="show_label" /> <a
-								href="${fn:escapeXml(show_form_url)}"
-								alt="${fn:escapeXml(show_label)}"
-								title="${fn:escapeXml(show_label)}"> <img
-									alt="${fn:escapeXml(show_label)}" class="image"
-									src="${fn:escapeXml(show_image_url)}"
-									title="${fn:escapeXml(show_label)}" /> </a></td>
-						</c:if>
-						<c:if test="${update}">
-							<td><spring:url value="${path}/${item[typeIdFieldName]}"
-									var="update_form_url">
-									<spring:param name="form" />
-								</spring:url> <spring:url value="/resources/images/update.png"
-									var="update_image_url" /> <spring:message
-									arguments="${typeName}[${item[typeIdFieldName]}]"
-									code="entity_update" var="update_label" /> <a
-								href="${fn:escapeXml(update_form_url)}"
-								alt="${fn:escapeXml(update_label)}"
-								title="${fn:escapeXml(update_label)}"> <img
-									alt="${fn:escapeXml(update_label)}" class="image"
-									src="${fn:escapeXml(update_image_url)}"
-									title="${fn:escapeXml(update_label)}" /> </a></td>
-						</c:if>
-						<c:if test="${append}">
-							<td><spring:url
-									value="${path}/${appendpath}/${item[typeIdFieldName]}"
-									var="update_form_url">
-									<spring:param name="form" />
-								</spring:url> <spring:url value="/resources/images/update.png"
-									var="update_image_url" /> <spring:message
-									arguments="${typeName}[${item[typeIdFieldName]}]"
-									code="entity_append" var="append_label" /> <a
-								href="${fn:escapeXml(update_form_url)}"
-								alt="${fn:escapeXml(append_label)}"
-								title="${fn:escapeXml(append_label)}"> <img
-									alt="${fn:escapeXml(append_label)}" class="image"
-									src="${fn:escapeXml(update_image_url)}"
-									title="${fn:escapeXml(append_label)}" /> </a></td>
-						</c:if>
-						<c:if test="${delete}">
-							<td><spring:url value="${path}/${item[typeIdFieldName]}"
-									var="delete_form_url" /> <spring:url
-									value="/resources/images/delete.png" var="delete_image_url" />
-								<form:form action="${fn:escapeXml(delete_form_url)}"
-									method="DELETE">
+								</c:choose>
+							</c:otherwise>
+						</c:choose></td>
+					</c:forTokens>
+					<c:if test="${show}">
+						<td><spring:url value="${path}/${item[typeIdFieldName]}"
+							var="show_form_url" /> <spring:url
+							value="/resources/images/show.png" var="show_image_url" /> <spring:message
+							arguments="${typeName}[${item[typeIdFieldName]}]"
+							code="entity_show" var="show_label" /> <a
+							href="${fn:escapeXml(show_form_url)}"
+							alt="${fn:escapeXml(show_label)}"
+							title="${fn:escapeXml(show_label)}"> <img
+							alt="${fn:escapeXml(show_label)}" class="image"
+							src="${fn:escapeXml(show_image_url)}"
+							title="${fn:escapeXml(show_label)}" /> </a></td>
+					</c:if>
+					<c:if test="${update}">
+						<td><spring:url value="${path}/${item[typeIdFieldName]}"
+							var="update_form_url">
+							<spring:param name="form" />
+						</spring:url> <spring:url value="/resources/images/update.png"
+							var="update_image_url" /> <spring:message
+							arguments="${typeName}[${item[typeIdFieldName]}]"
+							code="entity_update" var="update_label" /> <a
+							href="${fn:escapeXml(update_form_url)}"
+							alt="${fn:escapeXml(update_label)}"
+							title="${fn:escapeXml(update_label)}"> <img
+							alt="${fn:escapeXml(update_label)}" class="image"
+							src="${fn:escapeXml(update_image_url)}"
+							title="${fn:escapeXml(update_label)}" /> </a></td>
+					</c:if>
+					<c:if test="${append}">
+						<td><spring:url
+							value="${path}/${appendpath}/${item[typeIdFieldName]}"
+							var="update_form_url">
+							<spring:param name="form" />
+						</spring:url> <spring:url value="/resources/images/update.png"
+							var="update_image_url" /> <spring:message
+							arguments="${typeName}[${item[typeIdFieldName]}]"
+							code="entity_append" var="append_label" /> <a
+							href="${fn:escapeXml(update_form_url)}"
+							alt="${fn:escapeXml(append_label)}"
+							title="${fn:escapeXml(append_label)}"> <img
+							alt="${fn:escapeXml(append_label)}" class="image"
+							src="${fn:escapeXml(update_image_url)}"
+							title="${fn:escapeXml(append_label)}" /> </a></td>
+					</c:if>
+					<c:if test="${delete}">
+						<td><spring:url value="${path}/${item[typeIdFieldName]}"
+							var="delete_form_url" /> <spring:url
+							value="/resources/images/delete.png" var="delete_image_url" /> <form:form
+							action="${fn:escapeXml(delete_form_url)}" method="DELETE">
+							<spring:message arguments="${typeName}[${item[typeIdFieldName]}]"
+								code="entity_delete" var="delete_label" />
+							<c:set var="delete_confirm_msg">
+								<spring:escapeBody javaScriptEscape="true">
 									<spring:message
 										arguments="${typeName}[${item[typeIdFieldName]}]"
-										code="entity_delete" var="delete_label" />
-									<c:set var="delete_confirm_msg">
-										<spring:escapeBody javaScriptEscape="true">
-											<spring:message
-												arguments="${typeName}[${item[typeIdFieldName]}]"
-												code="entity_delete_confirm" />
-										</spring:escapeBody>
-									</c:set>
-									<input alt="${fn:escapeXml(delete_label)}" class="image"
-										src="${fn:escapeXml(delete_image_url)}"
-										title="${fn:escapeXml(delete_label)}" type="image"
-										value="${fn:escapeXml(delete_label)}"
-										onclick="return confirm('${delete_confirm_msg}');" />
-									<c:if test="${not empty param.page}">
-										<input name="page" type="hidden"
-											value="${fn:escapeXml(param.page)}" />
-									</c:if>
-									<c:if test="${not empty param.size}">
-										<input name="size" type="hidden"
-											value="${fn:escapeXml(param.size)}" />
-									</c:if>
-								</form:form></td>
-						</c:if>
-						<c:if test="${invalid}">
-							<td><spring:url
-									value="${path}/invalid/${item[typeIdFieldName]}"
-									var="invalid_form_url" /> <spring:url
-									value="/resources/images/delete.png" var="delete_image_url" />
-								<form:form action="${fn:escapeXml(invalid_form_url)}"
-									method="POST">
+										code="entity_delete_confirm" />
+								</spring:escapeBody>
+							</c:set>
+							<input alt="${fn:escapeXml(delete_label)}" class="image"
+								src="${fn:escapeXml(delete_image_url)}"
+								title="${fn:escapeXml(delete_label)}" type="image"
+								value="${fn:escapeXml(delete_label)}"
+								onclick="return confirm('${delete_confirm_msg}');" />
+							<c:if test="${not empty param.page}">
+								<input name="page" type="hidden"
+									value="${fn:escapeXml(param.page)}" />
+							</c:if>
+							<c:if test="${not empty param.size}">
+								<input name="size" type="hidden"
+									value="${fn:escapeXml(param.size)}" />
+							</c:if>
+						</form:form></td>
+					</c:if>
+					<c:if test="${invalid}">
+						<td><spring:url
+							value="${path}/invalid/${item[typeIdFieldName]}"
+							var="invalid_form_url" /> <spring:url
+							value="/resources/images/delete.png" var="delete_image_url" /> <form:form
+							action="${fn:escapeXml(invalid_form_url)}" method="POST">
+							<spring:message arguments="${typeName}[${item[typeIdFieldName]}]"
+								code="entity_invalid" var="invalid_label" />
+							<c:set var="invalid_confirm_msg">
+								<spring:escapeBody javaScriptEscape="true">
 									<spring:message
 										arguments="${typeName}[${item[typeIdFieldName]}]"
-										code="entity_invalid" var="invalid_label" />
-									<c:set var="invalid_confirm_msg">
-										<spring:escapeBody javaScriptEscape="true">
-											<spring:message
-												arguments="${typeName}[${item[typeIdFieldName]}]"
-												code="entity_invalid_confirm" />
-										</spring:escapeBody>
-									</c:set>
-									<input alt="${fn:escapeXml(invalid_label)}" class="image"
-										src="${fn:escapeXml(delete_image_url)}"
-										title="${fn:escapeXml(invalid_label)}" type="image"
-										value="${fn:escapeXml(invalid_label)}"
-										onclick="return confirm('${invalid_confirm_msg}');" />
-									<c:if test="${not empty param.page}">
-										<input name="page" type="hidden"
-											value="${fn:escapeXml(param.page)}" />
-									</c:if>
-									<c:if test="${not empty param.size}">
-										<input name="size" type="hidden"
-											value="${fn:escapeXml(param.size)}" />
-									</c:if>
-									<input name="query" type="hidden" value="${query}" />
-								</form:form></td>
-						</c:if>
-					</tr>
+										code="entity_invalid_confirm" />
+								</spring:escapeBody>
+							</c:set>
+							<input alt="${fn:escapeXml(invalid_label)}" class="image"
+								src="${fn:escapeXml(delete_image_url)}"
+								title="${fn:escapeXml(invalid_label)}" type="image"
+								value="${fn:escapeXml(invalid_label)}"
+								onclick="return confirm('${invalid_confirm_msg}');" />
+							<c:if test="${not empty param.page}">
+								<input name="page" type="hidden"
+									value="${fn:escapeXml(param.page)}" />
+							</c:if>
+							<c:if test="${not empty param.size}">
+								<input name="size" type="hidden"
+									value="${fn:escapeXml(param.size)}" />
+							</c:if>
+							<input name="query" type="hidden" value="${query}" />
+						</form:form></td>
+					</c:if>
+				</tr>
 
-				</c:if>
 				<c:set value="${lineNumber + 1}" var="lineNumber" />
 			</c:forEach>
 			<tr class="footer">
 				<td colspan="10"><c:if test="${empty create or create}">
-						<span class="new"> <spring:url value="/${path}"
-								var="create_url">
-								<spring:param name="form" />
-							</spring:url> <a href="${fn:escapeXml(create_url)}"> <spring:url
-									value="/resources/images/add.png" var="create_img_url" /> <spring:message
-									arguments="${typeName}" code="global_menu_new"
-									var="add_message" /> <img alt="${fn:escapeXml(add_message)}"
-								src="${fn:escapeXml(create_img_url)}"
-								title="${fn:escapeXml(add_message)}" /> </a> </span>
-						<c:out value=" " />
-					</c:if> <c:if test="${not empty maxPages}">
-						<util:pagination maxPages="${maxPages}" page="${page}"
-							size="${size}" querys="${query}" />
-					</c:if></td>
+					<span class="new"> <spring:url value="/${path}"
+						var="create_url">
+						<spring:param name="form" />
+					</spring:url> <a href="${fn:escapeXml(create_url)}"> <spring:url
+						value="/resources/images/add.png" var="create_img_url" /> <spring:message
+						arguments="${typeName}" code="global_menu_new" var="add_message" />
+					<img alt="${fn:escapeXml(add_message)}"
+						src="${fn:escapeXml(create_img_url)}"
+						title="${fn:escapeXml(add_message)}" /> </a> </span>
+					<c:out value=" " />
+				</c:if> <c:if test="${not empty maxPages}">
+					<util:pagination maxPages="${maxPages}" page="${page}"
+						size="${size}" querys="${query}" />
+				</c:if></td>
 			</tr>
 		</table>
 

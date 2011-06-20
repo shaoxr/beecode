@@ -1,7 +1,10 @@
 package com.newland.beecode.service.impl;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,7 +31,7 @@ public class BarCodeServiceImpl implements BarCodeService{
 	public void genCode(String str,String fileName)throws AppRTException {
 			try {
 				QRCodeWriter writer = new QRCodeWriter();
-				BitMatrix bitMatrix = writer.encode(str, BarcodeFormat.QR_CODE, 200, 200);
+				BitMatrix bitMatrix = writer.encode(str, BarcodeFormat.QR_CODE, 200,200);
 				if(fileName==null){
 					fileName="a";
 				}
@@ -38,8 +41,8 @@ public class BarCodeServiceImpl implements BarCodeService{
 					f.delete();
 				}
 				f.createNewFile();
-				
-				MatrixToImageWriter.writeToFile(bitMatrix, subfix, f);
+				BufferedImage imd=ImageIO.read(new File("c:/nonghang.png"));
+				MatrixToImageWriter.writeToFile(bitMatrix, subfix, f,null);
 			} catch (WriterException e) {
 				logger.error("WriterException", e);
 				throw new AppRTException(ErrorsCode.BIZ_BARCODE_GEN_ERROR,"",e);
