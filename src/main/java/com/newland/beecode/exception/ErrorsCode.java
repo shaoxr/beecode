@@ -185,7 +185,7 @@ public class ErrorsCode {
 	 */
 	public static final String BIZ_PARTNER_NO_EXITS="BIZ.PARTNER.002";
 	/**
-	 * 找到商户sheet
+	 * 找不到商户sheet
 	 */
 	public static final String BIZ_PARTNER_SHEET_NOT_FOUND="BIZ.PARTNER.003";
 	/**

@@ -29,15 +29,14 @@ public class OperController extends BaseController{
     @Autowired
     private RolesService rolesService; 
 	@RequestMapping(method = RequestMethod.POST)
-	public String create(@Valid Oper oper,@RequestParam(value="roleIds") Long[] roleIds,
+	public String create(@Valid Oper oper,@RequestParam(value="roleIds",required=false) Long[] roleIds,
 			@RequestParam(value="pwdConfirm") String pwdConfirm ,  Model model,
 			HttpServletRequest request) {
 		try {
-			System.out.println("roleIds is null");
 			if(!pwdConfirm.equals(oper.getOperPwd())){
 				throw new AppException(ErrorsCode.BIZ_OPER_PWD_INCORRECT,"");		
 			}
-			if(roleIds.length==0){
+			if(roleIds==null){
 				throw new AppException(ErrorsCode.BIZ_OPER_ROLE_NULL,"");		
 			}
 			if(this.operService.findOperByOperName(oper.getOperName())!=null){
@@ -106,10 +105,13 @@ public class OperController extends BaseController{
 	}
 
 	@RequestMapping(method = RequestMethod.PUT)
-	public String update(Oper oper,@RequestParam(value="roleIds") Long[] roleIds, Model model,
+	public String update(Oper oper,@RequestParam(value="roleIds",required=false) Long[] roleIds, Model model,
 			HttpServletRequest request) {
 		
         try {
+        	if(roleIds==null){
+				throw new AppException(ErrorsCode.BIZ_OPER_ROLE_NULL,"");		
+			}
 			this.operService.update(oper,roleIds);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
