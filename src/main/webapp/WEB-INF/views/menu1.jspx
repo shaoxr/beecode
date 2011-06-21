@@ -18,7 +18,9 @@
 		    <menu:item id="fi_mms_batch_send_list"  url="/batchsend/list"/>
 		    <menu:item id="fi_batch_send_count"  url="/batchsend/sendCount"/>
 		</menu:category>
-    
+    <menu:category id="c_msmanager" z="rs8zfmLS6SJZoIvFFQfrlrSaJVU=">
+			<menu:item id="c_msmanager_balance" url="/msManager/balance" z="3pwVBouHLA1zzuNbxsmScZYd3Ow="/>
+	</menu:category>
     </sec:authorize>
     <sec:authorize ifAnyGranted="ROLE_BUSINESS">
         <menu:category id="c_partner" >
@@ -52,10 +54,7 @@
 			<menu:item id="c_report_query" messageCode="global_menu_find" url="/report/detail?form" z="3pwVBouHLA1zzuNbxsmScZYd3Ow="/>
 			<menu:item id="c_report_query_count" messageCode="global_menu_find" url="/report/count?form" z="3pwVBouHLA1zzuNbxsmScZYd3Ow="/>
 		</menu:category>
-		<!--<menu:category id="c_msmanager" z="rs8zfmLS6SJZoIvFFQfrlrSaJVU=">
-			<menu:item id="c_msmanager_balance" url="/msManager/balance?form" z="3pwVBouHLA1zzuNbxsmScZYd3Ow="/>
-		</menu:category>
-	--></sec:authorize>
+	</sec:authorize>
 	<sec:authorize ifAnyGranted="ROLE_CHECK">
 	    <menu:category id="c_check" >
 			<menu:item id="id_check_marketingact" messageCode="global_menu_check" url="/marketingacts/find/check"/>

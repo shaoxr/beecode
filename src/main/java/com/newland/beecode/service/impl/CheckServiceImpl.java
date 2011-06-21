@@ -133,14 +133,14 @@ public class CheckServiceImpl implements CheckService{
 					break;
 				}
 				if(nameError=="" && mobileError==""){
-					if(mobileList.contains(mobile.toString())){
+					/*if(mobileList.contains(mobile.toString())){
 						
 						errorCount++;
 						tempError.append("<tr><td>" + (j+1) + "</td><td>");
 						tempError.append(messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA));
 						tempError.append("</td><td></td><td></td><td></td></tr>");
 						//return messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA);
-					}
+					}*/
 					mobileList.add( mobile.toString());
 				}
 			}
@@ -313,7 +313,7 @@ public class CheckServiceImpl implements CheckService{
 		if(act.getCheckCode()==null ||act.getCheckCode().trim().equals("")){
 			throw new AppException(ErrorsCode.BIZ_MARKETINGACT_CHECK_CODE_NOT_NULL,"");
 		}
-		String[] strs=act.getCheckCode().split("\r\n");
+		String[] strs=act.getCheckCode().split(MarketingAct.NEW_LINE);
 		StringBuffer sb=new StringBuffer();
 		Pattern pattern = Pattern.compile("[0-9[*]]{6}"); 
 		Pattern pattern_ = Pattern.compile("[0-9]+[*]*");
@@ -333,7 +333,7 @@ public class CheckServiceImpl implements CheckService{
 			i++;
 			
 		}
-		act.setCheckCode(sb.toString());
+		//act.setCheckCode(sb.toString());
 		
 	}
 

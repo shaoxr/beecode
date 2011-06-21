@@ -15,6 +15,9 @@ public class BarCodeFormat {
 		sb.append(coupon.getBusinessType());
 		if(act.getBizNo().equals(Coupon.BIZ_TYPE_VOUCHER)){
 			sb.append(NewlandUtil.formatBigDecimal(coupon.getBackAmount(), 10));
+		}else if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
+			sb.append(NewlandUtil.formatBigDecimal(act.getRebateRate(), 2));
+			sb.append(NewlandUtil.formatBigDecimal(act.getMaxAmount(), 8));
 		}else{
 			sb.append(NewlandUtil.formatBigDecimal(act.getRebateRate(), 10));
 		}

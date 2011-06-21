@@ -4,7 +4,7 @@
     <jsp:output omit-xml-declaration="yes"/>
     <util:panel id="title" title="提示信息">
     <p>
-      <div>审核成功！成功成礼券 <c:out value="${success}" /> 张。失败  <c:out value="${fail}" /> 张<br/>
+      <div>审核成功！成功升成礼券 <c:out value="${success}" /> 张。失败  <c:out value="${fail}" /> 张<br/>
              如果失败数不为 0,请重新审核直到失败数为 0.
       </div>
     </p>

@@ -82,7 +82,7 @@ public class CouponServiceImpl implements CouponService {
         }
 
         // 检查活动状态过期或关闭
-        if (coupon.getMarketingAct().getActStatus().equals(MarketingAct.STATUS_AFTER_GIVE) == false) {
+        if (coupon.getMarketingAct().getActStatus().equals(MarketingAct.STATUS_CLOSED) == true) {
             throw new AppException(ErrorsCode.ERR_COUPON_INVALID,
                     "Request id=[" + req.getCouponId() + "],serialNo=["
                     + req.getSerialNo() + "] invalid.");
@@ -122,7 +122,8 @@ public class CouponServiceImpl implements CouponService {
     			}
     		}
     		if(coupon.getBusinessType().equals(Coupon.BIZ_TYPE_DISCOUNT)){
-    			if(coupon.getRebateRate().compareTo(req.getRebateRate())!=0){
+    			if(coupon.getRebateRate().compareTo(req.getRebateRate())!=0 ||
+    					coupon.getMarketingAct().getMaxAmount().compareTo(req.getOriginalAmount().subtract(req.getOffAmount()))<0){
         			throw new AppException(ErrorsCode.ERR_COUPON_INVALID,
                             "Request id=[" + req.getCouponId() + "],serialNo=["
                             + req.getSerialNo() + "] expired.");
@@ -142,7 +143,7 @@ public class CouponServiceImpl implements CouponService {
 				MarketingAct act = coupon.getMarketingAct();
 				if (act.getBindCard().equals(MarketingAct.BIND_CARD_YES)) {
 					boolean pass=false;
-					String[] strs=act.getCheckCode().split(MarketingAct.CHECK_CODE_REGEX);
+					String[] strs=act.getCheckCode().split(MarketingAct.NEW_LINE);
 					for(String str:strs){
 					    str=str.replace("*", "").trim();
 					    if(req.getCheckCode().indexOf(str)==0){
@@ -261,17 +262,28 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon  = couponDao.findBySerialNo(req.getSerialNo());
         List<CouponCtrl> list = ctrlDao.findBySerialNo(req.getSerialNo());
         
-        CouponCtrl ctrl = null;
+        List<CouponCtrl> ctrls = ctrlDao.find("from CouponCtrl o where o.serialNo=? and o.batchNo=? and o.deviceNo=? and o.partnerNo=? and o.traceNo=? and o.voidFlag=? ", 
+        		req.getSerialNo(),req.getBatchNo(),req.getDeviceNo(),req.getPartnerNo(),req.getTraceNo(),CouponCtrl.VOID_FLAG_NORMAL);
+        
+        /*System.out.println(list.size()+">>>>>>>>");
         for (CouponCtrl coupontCtrl : list) {
+        	System.out.println(coupontCtrl.getBatchNo()+":"+req.getBatchNo()+coupontCtrl.getBatchNo().equals(req.getBatchNo()));
+        	System.out.println(coupontCtrl.getDeviceNo()+":"+req.getDeviceNo()+coupontCtrl.getDeviceNo().equals(req.getDeviceNo()));
+        	System.out.println(coupontCtrl.getPartnerNo()+":"+req.getPartnerNo()+coupontCtrl.getPartnerNo().equals(req.getPartnerNo()));
+        	System.out.println(coupontCtrl.getTraceNo()+":"+req.getTraceNo()+coupontCtrl.getTraceNo().equals(req.getTraceNo()));
+        	System.out.println(coupontCtrl.getVoidFlag().equals(CouponCtrl.VOID_FLAG_NORMAL));
             if (coupontCtrl.getBatchNo().equals(req.getBatchNo())
                     && coupontCtrl.getDeviceNo().equals(req.getDeviceNo())
                     && coupontCtrl.getPartnerNo().equals(req.getPartnerNo())
                     && coupontCtrl.getTraceNo().equals(req.getTraceNo())
                     && coupontCtrl.getVoidFlag().equals(CouponCtrl.VOID_FLAG_NORMAL)) {
                 ctrl = coupontCtrl;
+                System.out.println("here >..........");
             }
-        }
-        if (coupon != null && ctrl != null) {
+        }*/
+        
+        if (coupon != null && ctrls.size()>0) {
+        	CouponCtrl ctrl=ctrls.get(0);
             ctrl.setVoidFlag(CouponCtrl.VOID_FLAG_BACKOFF);
 
             ctrlDao.update(ctrl);

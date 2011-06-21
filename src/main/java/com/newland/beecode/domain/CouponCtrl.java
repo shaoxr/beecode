@@ -4,10 +4,15 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
@@ -21,10 +26,15 @@ public class CouponCtrl {
      * 正常
      */
     public static final String VOID_FLAG_NORMAL = "1";
-    /**
+    @Id
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGen")
+	@GenericGenerator(name = "tableGen", strategy = "org.hibernate.id.MultipleHiLoPerTableGenerator", parameters = { @Parameter(name = "max_lo", value = "0") })
+	@Column
+	private Long id;
+
+	/**
      * 礼券编号
      */
-    @Id
     @Column
     private Long couponId;
     /**
@@ -232,6 +242,13 @@ public class CouponCtrl {
 
 	public void setOriginalAmount(BigDecimal originalAmount) {
 		this.originalAmount = originalAmount;
+	}
+	 public Long getId() {
+			return id;
+	}
+
+	public void setId(Long id) {
+			this.id = id;
 	}
     
     

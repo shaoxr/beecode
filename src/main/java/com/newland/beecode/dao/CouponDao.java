@@ -35,7 +35,7 @@ public class CouponDao extends BaseDao<Coupon,Long> {
         StringBuffer whereBuf=new StringBuffer();
         buf.append("select ctrl.check_day, act.act_name, pt.partner_name ,pt.partner_no,cp.coupon_id,cp.acct_mobile, "
                 + "ctrl.rebate_rate,abs(ctrl.amount) ,act.biz_no, (ctrl.original_amount-ctrl.off_amount),ctrl.original_amount,ctrl.back_amount ");
-        whereBuf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act ");
+        whereBuf.append(" from coupon_ctrl ctrl,partner pt,coupon cp,marketing_act act ");
         whereBuf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
         whereBuf.append("  and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
         CountBuf.append("select count(*) ");
@@ -107,7 +107,7 @@ public class CouponDao extends BaseDao<Coupon,Long> {
 
         buf.append("select act.act_name, pt.partner_name , count(*), sum(ctrl.amount)  ,act.biz_no, sum(ctrl.original_amount) ,sum((ctrl.original_amount-ctrl.off_amount)),sum(ctrl.back_amount) ");
         countBuf.append(" select count(*) ");
-        whereBuf.append(" from coupont_ctrl ctrl,partner pt,coupon cp,marketing_act act ");
+        whereBuf.append(" from coupon_ctrl ctrl,partner pt,coupon cp,marketing_act act ");
         whereBuf.append(" where ctrl.partner_no=pt.partner_no  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
         whereBuf.append("  and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
 

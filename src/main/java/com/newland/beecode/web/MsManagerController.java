@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.MMSService;
+import com.newland.beecode.service.SMSService;
 
 import javax.annotation.Resource;
 
@@ -19,37 +20,19 @@ import javax.annotation.Resource;
 public class MsManagerController extends BaseController{
 	
     
-    @Resource(name = "dictViewService")
-    private DictViewFormatter dictViewFormat;
 	@Autowired
 	private MMSService mmsService;
+	@Autowired
+	private SMSService smsService;
 	
-	@RequestMapping(value="/balance",params = "form", method = RequestMethod.GET)
-	public String balanceForm(Model model){
-            try {
-				model.addAttribute("msTypes", dictViewFormat.getSelectModelCollection(MarketingAct.MS_TYPE));
-			} catch (Exception e) {
-				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-				return "prompt";
-			}
-		return "msManager/balance";
-	}
-	@RequestMapping(value="/balance",params = "find=ByCondition", method = RequestMethod.GET)
-	public String balance(Model model,
-			@RequestParam(value = "userName", required = false) String userName,
-			@RequestParam(value = "passWord", required = false) String passWord,
-			@RequestParam(value = "msType", required = false) String msType){
+	@RequestMapping(value="/balance", method = RequestMethod.GET)
+	public String balance(Model model){
 		try {
-			long count=0;
-			try {
-				count = mmsService.getBalance(userName, passWord, 1);
-			} catch (Exception e) {
-				model.addAttribute(ErrorsCode.MESSAGE, ErrorsCode.BIZ_MMS_CON_ERROR);
-				return "prompt";
-			}
-			model.addAttribute("msTypes", dictViewFormat.getSelectModelCollection(MarketingAct.MS_TYPE));
-			model.addAttribute("count", count);
-			model.addAttribute("msType", msType);
+			long mmsBalance = new Long(mmsService.getBalanceByMontnets());
+			long smsBalance = this.smsService.getBalanceByMontnets();
+				
+			model.addAttribute("mmsBalance", mmsBalance);
+			model.addAttribute("smsBalance", smsBalance);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";

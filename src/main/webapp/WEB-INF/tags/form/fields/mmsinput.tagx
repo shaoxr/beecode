@@ -95,6 +95,39 @@
 
       </script>
     </div>
+    <script type="text/javascript"> 
+        dojo.provide("ValidationTextarea");
+        dojo.require("dijit.form.SimpleTextarea");
+        dojo.require("dijit.form.ValidationTextBox");
+
+        dojo.declare(
+            "ValidationTextarea",
+            [dijit.form.ValidationTextBox,dijit.form.SimpleTextarea],
+            {
+            	regExp: "(.|\\s)*",
+                invalidMessage: " ",
+
+                postCreate: function() {
+                    this.inherited(arguments);
+                },
+
+                validate: function() {
+                    this.inherited(arguments);
+                    if (arguments.length==0) this.validate(true);
+                },
+
+                onFocus: function() {
+                    if (!this.isValid()) {
+                        this.displayMessage(this.getErrorMessage());
+                    }
+                },
+
+                onBlur: function() {
+                    this.validate(false);
+                }
+             }
+        );
+  </script>
     <div id="_${fn:escapeXml(id)}_id_1_1">
       <label for="_${model}_cardBefore_id_1">
         +++
@@ -102,7 +135,7 @@
       <form:textarea id="_${model}_cardBefore_id_2" path="${model}.cardBefore" disabled="${disabled}" cssStyle="width:230px" />
       <br />
       <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
-      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_cardBefore_id_2', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_cardBefore_id_2', widgetType : 'ValidationTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
     </div>
     
     <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_account_desc" var="account_desc" htmlEscape="false" />
@@ -125,7 +158,7 @@
       <form:textarea id="_${model}_valueBefore_id_2" path="${model}.valueBefore" disabled="${disabled}" cssStyle="width:230px" />
       <br />
       <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
-      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_valueBefore_id_2', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_valueBefore_id_2', widgetType : 'ValidationTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
     </div>
     
     <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_value_desc" var="value_desc" htmlEscape="false" />
@@ -148,7 +181,7 @@
       <form:textarea id="_${model}_couponIdBefore_id_2" path="${model}.couponIdBefore" disabled="${disabled}" cssStyle="width:230px" />
       <br />
       <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
-      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_couponIdBefore_id_2', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_couponIdBefore_id_2', widgetType : 'ValidationTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
     </div>
     <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_couponid_desc" var="couponid_desc" htmlEscape="false" />
     <div id="_${fn:escapeXml(id)}_id_3_2">
@@ -169,7 +202,7 @@
       <form:textarea id="_${model}_periodBefore_id_2" path="${model}.periodBefore" disabled="${disabled}" cssStyle="width:230px" />
       <br />
       <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
-      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_periodBefore_id_2', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_periodBefore_id_2', widgetType : 'ValidationTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
     </div>
     <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_startendtime" var="times" htmlEscape="false" />
     <div id="_${fn:escapeXml(id)}_id_4_2">
@@ -190,7 +223,7 @@
       <form:textarea id="_${model}_ending_id_2" path="${model}.ending" disabled="${disabled}" cssStyle="width:230px" />
       <br />
       <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
-      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_ending_id_2', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${model}_ending_id_2', widgetType : 'ValidationTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
     </div>
     <spring:message code="label_com_newland_beecode_domain_marketingact_mmscontent_desc" var="desc" htmlEscape="false" />
     <div id="_${fn:escapeXml(id)}_id_5_2">

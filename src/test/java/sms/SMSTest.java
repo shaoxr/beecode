@@ -50,7 +50,7 @@ public class SMSTest extends AbstractJUnit4SpringContextTests{
 			sp.setCouponId(new Long("507169060239"));
 			//String resp=this.smsService.sendSMSByMontnets(sp);
 			//System.out.println(resp);
-			this.smsService.getBalanceByMontnets();
+			System.out.println(this.smsService.getBalanceByMontnets());
 	} catch (Exception e) {
 		if(e instanceof AxisFault){
 			System.out.println("aaaaaaaaaaaaaaa");

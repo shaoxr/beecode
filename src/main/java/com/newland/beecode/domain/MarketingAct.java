@@ -34,6 +34,8 @@ import javax.persistence.Entity;
 public class MarketingAct {
 	
 	public static final String CHECK_CODE_REGEX=";";
+	
+	public static final String NEW_LINE="\r\n";
     public static final String FILE_NAME_REGEX="###";
     
     public static final String FILE_NAME_REGEX_IN="@@";

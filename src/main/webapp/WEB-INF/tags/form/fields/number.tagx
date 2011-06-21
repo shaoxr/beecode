@@ -23,6 +23,12 @@
     <c:if test="${empty type}">
       <c:set value="text" var="type" />
     </c:if>
+    <c:if test="${empty decimalMin}">
+      <c:set value="0" var="decimalMin" />
+    </c:if>
+    <c:if test="${empty decimalMax}">
+      <c:set value="100000000000000" var="decimalMax" />
+    </c:if>
 
     <c:if test="${empty disabled}">
       <c:set value="false" var="disabled" />
@@ -62,7 +68,7 @@
           <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
         </c:otherwise>
       </c:choose>
-      <spring:message arguments="${label}" code="field_invalid" var="field_invalid" />
+      <spring:message arguments="${label}" code="field_invalid_integer" var="field_invalid" />
       <c:choose>
         <c:when test="${required}">
           <spring:message code="field_required" var="field_required" />
@@ -78,8 +84,9 @@
       <c:set var="sec_field_invalid">
         <spring:escapeBody javaScriptEscape="true">${field_invalid}</spring:escapeBody>
       </c:set>
+      
       <script type="text/javascript">
-        Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id', widgetType : 'dijit.form.NumberTextBox', widgetAttrs : {promptMessage: '${sec_field_validation}', invalidMessage: '${sec_field_invalid}', required: ${required}}})); 
+        Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id', widgetType : 'dijit.form.NumberTextBox', widgetAttrs : {constraints: {min:${decimalMin},max:${decimalMax}},promptMessage: '${sec_field_validation}', invalidMessage: '${sec_field_invalid}',  required: ${required}}})); 
       </script>
     </div>
     <br />

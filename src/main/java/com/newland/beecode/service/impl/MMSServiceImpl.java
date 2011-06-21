@@ -1,9 +1,15 @@
 package com.newland.beecode.service.impl;
 
+import java.rmi.RemoteException;
+
+import javax.xml.rpc.ServiceException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.montnets.mms.CustomerMmsLocator;
+import com.newland.beecode.exception.AppException;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.BaseService;
 import com.newland.beecode.service.MMSService;
 import com.newland.beecode.task.SendParam;
@@ -41,6 +47,15 @@ public class MMSServiceImpl implements MMSService{
 	public String sendMMSByMontnets(SendParam mp) throws Exception {
 		CustomerMmsLocator customer=new CustomerMmsLocator();
 		return customer.getCustomerMmsSoap().sendMms(this.baseService.getMMSUserName(), this.baseService.getMMSPassword(), mp.getMobile(), mp.getBase64Content(), mp.getTitle());
+	}
+	@Override
+	public String getBalanceByMontnets() throws AppException {
+		try {
+			CustomerMmsLocator customer=new CustomerMmsLocator();
+			return customer.getCustomerMmsSoap().getMmsBalance(this.baseService.getMMSUserName(), this.baseService.getMMSPassword());
+		} catch (Exception e) {
+			throw new AppException(ErrorsCode.BIZ_MMS_CONNECT_ERROR,"");
+		} 
 	}
 	
 

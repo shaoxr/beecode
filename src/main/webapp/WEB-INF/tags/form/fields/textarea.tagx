@@ -39,7 +39,56 @@
       <form:textarea id="_${sec_field}_id" path="${sec_field}" disabled="${disabled}" cssStyle="width:230px" />
       <br />
       <form:errors cssClass="errors" id="_${sec_field}_error_id" path="${sec_field}" />
-      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id', widgetType : 'dijit.form.SimpleTextarea', widgetAttrs : {disabled : ${disabled}, required: ${required}}})); </script>
+      <spring:message arguments="${label}" code="field_invalid" var="field_invalid" />
+      <c:choose>
+        <c:when test="${required}">
+          <spring:message code="field_required" var="field_required" />
+          <spring:message argumentSeparator="," arguments="${label},(${field_required})" code="field_simple_validation" var="field_validation" />
+        </c:when>
+        <c:otherwise>
+          <spring:message argumentSeparator="," arguments="${label}, " code="field_simple_validation" var="field_validation" />
+        </c:otherwise>
+      </c:choose>
+      <c:set var="sec_field_validation">
+        <spring:escapeBody javaScriptEscape="true">${field_validation}</spring:escapeBody>
+      </c:set>
+      <c:set var="sec_field_invalid">
+        <spring:escapeBody javaScriptEscape="true">${field_invalid}</spring:escapeBody>
+      </c:set>
+        <script type="text/javascript"> 
+        dojo.provide("ValidationTextarea");
+        dojo.require("dijit.form.SimpleTextarea");
+        dojo.require("dijit.form.ValidationTextBox");
+
+        dojo.declare(
+            "ValidationTextarea",
+            [dijit.form.ValidationTextBox,dijit.form.SimpleTextarea],
+            {
+            	regExp: "(.|\\s)*",
+                invalidMessage: "This field is required",
+
+                postCreate: function() {
+                    this.inherited(arguments);
+                },
+
+                validate: function() {
+                    this.inherited(arguments);
+                    if (arguments.length==0) this.validate(true);
+                },
+
+                onFocus: function() {
+                    if (!this.isValid()) {
+                        this.displayMessage(this.getErrorMessage());
+                    }
+                },
+
+                onBlur: function() {
+                    this.validate(false);
+                }
+             }
+        );
+  </script>
+      <script type="text/javascript">Spring.addDecoration(new Spring.ElementDecoration({elementId : '_${sec_field}_id', widgetType : 'ValidationTextarea', widgetAttrs : {disabled : ${disabled},promptMessage: '${sec_field_validation}',invalidMessage: '${sec_field_invalid}', required: ${required}}})); </script>
     </div>
     <br />
 

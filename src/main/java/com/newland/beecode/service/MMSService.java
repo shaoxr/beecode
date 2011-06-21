@@ -1,5 +1,6 @@
 package com.newland.beecode.service;
 
+import com.newland.beecode.exception.AppException;
 import com.newland.beecode.task.SendParam;
 
 public interface MMSService {
@@ -18,5 +19,7 @@ public interface MMSService {
 	public long getBalance(String user,String password,int sendType)throws Exception;
 	
 	public String sendMMSByMontnets(SendParam mp)throws Exception;
+	
+	public String getBalanceByMontnets()throws AppException;
 
 }

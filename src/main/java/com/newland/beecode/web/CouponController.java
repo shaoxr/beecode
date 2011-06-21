@@ -48,8 +48,6 @@ public class CouponController extends BaseController{
 	@Autowired
 	private MarketingCatalogService marketingCatalogService;
 	@Autowired
-	private SendService sendService;
-	@Autowired
 	private MarketingActService marketingActService;
 	@RequestMapping(value = "/{couponId}", method = RequestMethod.GET)
 	public String show(@PathVariable(value = "couponId") Long couponId,

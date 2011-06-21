@@ -126,6 +126,7 @@ public class BeecodeServiceImpl implements BeecodeService {
 			if(coupon.getBusinessType().equals(Coupon.BIZ_TYPE_DISCOUNT)){
 				reqMap.put(14, Coupon.BIZ_TYPE_DISCOUNT);
 				reqMap.put(8,coupon.getRebateRate());
+				reqMap.put(15, coupon.getMarketingAct().getMaxAmount());
 			}else if(coupon.getBusinessType().equals(Coupon.BIZ_TYPE_VOUCHER)){
 				reqMap.put(14, Coupon.BIZ_TYPE_VOUCHER);
 				reqMap.put(13, coupon.getBackAmount());

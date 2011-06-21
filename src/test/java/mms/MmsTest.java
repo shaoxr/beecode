@@ -26,7 +26,7 @@ public class MmsTest extends AbstractJUnit4SpringContextTests{
 			//rep=this.smsService.registEx("2SDK-EMY-6688-JBYQQ", "198538", "175626");
 			//double b=this.smsService.getBalance("2SDK-EMY-6688-JBYQQ", "198538");
 			//System.out.println(b);
-			long mb=this.mmsService.getBalance("GD-zynn", "zn1922", 1);
+			String mb=this.mmsService.getBalanceByMontnets();
 			System.out.println(mb);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -35,4 +35,15 @@
             <table:column id="c_com_newland_beecode_domain_marketingact_customer_count" property="count" z="GnYCjbtwHcjvxbxNMAn0j6eJmmM="/>
         </table:filetable>
     </page:list>
+    
+    
+     <script type="text/javascript">
+    dojo.addOnLoad(function(){
+    	
+    	dojo.connect(dojo.byId("proceed_pass"), "onclick", function(evt) {
+    		dojo.byId("fu_com_newland_beecode_domain_MarketingAct_submit").style.display="none";
+    		dojo.byId("tip").style.display="";
+    	});
+    });
+    </script>
 </div>

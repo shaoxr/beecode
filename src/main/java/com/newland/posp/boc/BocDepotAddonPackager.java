@@ -24,7 +24,8 @@ public class BocDepotAddonPackager extends TLVMsgPackager {
 		    /*11*/ new StringFieldPackager( 20, "卡检查码 "),
 		    /*12*/ new StringFieldPackager(  6, "终端交易批次号  "),
 		    /*13*/ new AmountFieldPackager(10, "抵用金额"),
-		    /*14*/ new StringFieldPackager(  2, "礼券类型  ")
+		    /*14*/ new StringFieldPackager(  2, "礼券类型  "),
+		    /*15*/ new AmountFieldPackager(10, "折扣上限  ")
 	};
 	
 	public BocDepotAddonPackager()

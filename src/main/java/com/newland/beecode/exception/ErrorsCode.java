@@ -314,6 +314,15 @@ public class ErrorsCode {
 	 * 没有需要发送的彩信文件
 	 */
 	public static final String BIZ_MMS_NOT_COUPON_TO_SEND="BIZ.MMS.003";
+	/**
+	 * 彩信余额不足
+	 */
+	public static final String BIZ_MMS_LACK_OF_BALANCE="BIZ.MMS.004";
+	/**
+	 * 彩信网络连接异常，请检查网络
+	 */
+	public static final String BIZ_MMS_CONNECT_ERROR="BIZ.MMS.005";
+	
 	
 	
 	
@@ -327,7 +336,16 @@ public class ErrorsCode {
 	/**
 	 * 没有需要发送的短信文件
 	 */
-	public static final String BIZ_SMS_NOT_COUPON_TO_SEND="BIZ.MMS.003";
+	public static final String BIZ_SMS_NOT_COUPON_TO_SEND="BIZ.SMS.003";
+	
+	/**
+	 * 短信余额不足
+	 */
+	public static final String BIZ_SMS_LACK_OF_BALANCE="BIZ.SMS.004";
+	/**
+	 * 短信网络连接异常，请检查网络
+	 */
+	public static final String BIZ_SMS_CONNECT_ERROR="BIZ.SMS.005";
 	
 	
 	

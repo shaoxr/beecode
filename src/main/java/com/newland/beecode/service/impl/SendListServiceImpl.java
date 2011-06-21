@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.newland.beecode.dao.RespStatusDao;
 import com.newland.beecode.dao.sendListDao;
 import com.newland.beecode.domain.MsStatus;
 import com.newland.beecode.domain.RespStatus;
@@ -24,6 +25,8 @@ import com.newland.beecode.service.SendListService;
 public class SendListServiceImpl implements SendListService{
 	@Autowired
     private sendListDao sendListDao;
+	@Autowired
+	private RespStatusDao respStatusDao;
 	@Override
 	public SendList saveOrUpdate(SendList mmsSendList) {
 		return sendListDao.saveOrUpdate(mmsSendList);
@@ -43,7 +46,8 @@ public class SendListServiceImpl implements SendListService{
 	}
 	@Override
 	public void sendOver(Long id) {
-		sendListDao.excuteByHQL("update SendList m set m.sendStatus=?,m.endTime=? where m.id=?",SmsSendList.STATUS_SENDED,new Date(),id);
+		long successCount=this.respStatusDao.findLong("select count(*) from RespStatus r where r.respStatus=? and r.mmsSendListId=?", RespStatus.RESP_SUCCESS,id);
+		sendListDao.excuteByHQL("update SendList m set m.sendStatus=?,m.successCount=?,m.endTime=? where m.id=?",SmsSendList.STATUS_SENDED,successCount,new Date(),id);
 		
 	}
 	@Override

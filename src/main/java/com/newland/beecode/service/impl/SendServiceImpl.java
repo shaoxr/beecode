@@ -15,6 +15,8 @@ import com.newland.beecode.domain.SendList;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.FileService;
+import com.newland.beecode.service.MMSService;
+import com.newland.beecode.service.SMSService;
 import com.newland.beecode.service.SendService;
 import com.newland.beecode.task.SendParam;
 import com.newland.beecode.task.Task;
@@ -28,12 +30,17 @@ public class SendServiceImpl implements SendService {
 	
 	@Autowired
 	private FileService fileService;
+	@Autowired
+	private MMSService mmsService;
+	@Autowired
+	private SMSService smsService;
 	
 	@Override
 	public  void send(List<Coupon> couponList,final MarketingAct act,final SendInvokeService sendInvokeService,final Long sendListId,String dir) throws AppException {
 		
 		
-		try {		
+		try {
+			this.heartDetect(sendInvokeService.getMsType(), couponList.size());
 			final long time=System.currentTimeMillis();
 			final ThreadPoolExecutor threadPool =ThreadPoolFactory.newThreadPool(couponList.size());
 			if(sendInvokeService.getMsType().equals(SendList.MS_TYPE_MMS)){
@@ -75,6 +82,7 @@ public class SendServiceImpl implements SendService {
 				}
 			}.start();
 		} catch (Exception e) {
+			sendInvokeService.sendOver(act.getActNo(),sendListId);
 			if(e instanceof AppException){
 				throw (AppException)e;
 			}
@@ -100,6 +108,19 @@ public class SendServiceImpl implements SendService {
 			sendInvokeService.sendRun(sp);
 		} catch (Exception e) {
 			throw new AppException(ErrorsCode.BIZ_MS_SEND_ERROR,"",e);
+		}
+	}
+	private void heartDetect(Integer msType,long size)throws AppException{
+		if(msType.equals(SendList.MS_TYPE_MMS)){
+				long mmsBalance=new Long(this.mmsService.getBalanceByMontnets());
+				if(mmsBalance<size){
+					throw new AppException(ErrorsCode.BIZ_MMS_LACK_OF_BALANCE,"");
+				}
+		}else{
+				long smsBalance=this.smsService.getBalanceByMontnets();
+				if(smsBalance<size){
+					throw new AppException(ErrorsCode.BIZ_SMS_LACK_OF_BALANCE,"");
+				}
 		}
 	}
 

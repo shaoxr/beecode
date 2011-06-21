@@ -53,7 +53,6 @@ public final class MatrixToImageWriter {
     int width = matrix.getWidth();
     int height = matrix.getHeight();
     BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-    System.out.println(width+":"+height);
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
     		  if(imd!=null  && imd.getRGB(x, y)!=-1){

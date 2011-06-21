@@ -28,7 +28,7 @@
     	<field:display field="smsStatus" id="s_com_newland_beecode_domain_coupon_smsstatus" pattern="dictView" className="COUPON_MMS_STATUS" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
     	<field:display field="smsDesc" id="s_com_newland_beecode_domain_coupon_smsstatus_desc" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
     </page:show>
-    <c:if test="${coupon.couponStatus == 1}">
+    <!--<c:if test="${coupon.couponStatus == 1}">
    		<util:panel title="重新生成礼券" id="cancel" openPane="false">
 	   		<spring:url value="/coupons/reversal/${coupon.couponId}" var="url"></spring:url>
 	   		<form method="post" action="${url}">
@@ -49,4 +49,4 @@
 	   		</form>
    		</util:panel>
    	</c:if>
-</div>
+--></div>

@@ -47,16 +47,21 @@ public class MmsFetch2SendInvokeService implements SendInvokeService {
 		// respstatus.setMmsSendListId(sp.getSendListId());
 		// this.respStatusDao.save(respstatus);
 		RespStatus respstatus = new RespStatus();
-		respstatus.setRespDesc("success");
-		String resp = this.mmsService.sendMMSByMontnets(sp);
-		if (resp.length() > 10) {
-			logger.debug("send success mobile:" + sp.getMobile());
-			respstatus.setRespStatus(RespStatus.RESP_SUCCESS);
-			respstatus.setRespDesc(resp);
-		} else {
+		try {
+			String resp = this.mmsService.sendMMSByMontnets(sp);
+			if (resp.length() > 10) {
+				logger.debug("send success mobile:" + sp.getMobile());
+				respstatus.setRespStatus(RespStatus.RESP_SUCCESS);
+				respstatus.setRespDesc(resp);
+			} else {
+				respstatus.setRespStatus(RespStatus.RESP_ERROR);
+				respstatus.setRespDesc(resp);
+				logger.debug("send error error code:"+resp+";mobile:" + sp.getMobile());
+			}
+		} catch (Exception e) {
 			respstatus.setRespStatus(RespStatus.RESP_ERROR);
-			respstatus.setRespDesc(resp);
-			logger.debug("send error error code:"+resp+";mobile:" + sp.getMobile());
+			respstatus.setRespDesc("connect error");
+			logger.error("", e);
 		}
 		
 		respstatus.setCouponId(sp.getCouponId().toString());

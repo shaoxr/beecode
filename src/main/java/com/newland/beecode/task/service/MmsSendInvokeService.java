@@ -45,16 +45,22 @@ public class MmsSendInvokeService implements SendInvokeService{
 				  coupon.setMmsStatus(Integer.valueOf(RespStatus.RESP_ERROR));
 				  coupon.setMmsDesc(str[0]);
 			  }*/
-			  String resp=this.mmsService.sendMMSByMontnets(sp);
-			  if(resp.length()>10){
-				  logger.debug("send success mobile:" + sp.getMobile());
-				  coupon.setMmsStatus(Integer.valueOf(RespStatus.RESP_SUCCESS)); 
-				  coupon.setMmsDesc(resp);
-			  }else{
-				  coupon.setMmsStatus(Integer.valueOf(RespStatus.RESP_ERROR));
-				  coupon.setMmsDesc(resp);
-				  logger.debug("send error error code:"+resp+";mobile:" + sp.getMobile());
-			  }
+			  try {
+				String resp=this.mmsService.sendMMSByMontnets(sp);
+				  if(resp.length()>10){
+					  logger.debug("send success mobile:" + sp.getMobile());
+					  coupon.setMmsStatus(Integer.valueOf(RespStatus.RESP_SUCCESS)); 
+					  coupon.setMmsDesc(resp);
+				  }else{
+					  coupon.setMmsStatus(Integer.valueOf(RespStatus.RESP_ERROR));
+					  coupon.setMmsDesc(resp);
+					  logger.debug("send error error code:"+resp+";mobile:" + sp.getMobile());
+				  }
+			} catch (Exception e) {
+				 coupon.setMmsStatus(Integer.valueOf(RespStatus.RESP_ERROR));
+				  coupon.setMmsDesc("connect error");
+				  logger.error("", e);
+			}
 			this.couponDao.excuteByHQL("update Coupon c set c.mmsStatus=?,c.mmsDesc=? where c.couponId=?", coupon.getMmsStatus(),coupon.getMmsDesc(),sp.getCouponId());
 		
 		

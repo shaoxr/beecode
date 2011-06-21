@@ -1,9 +1,15 @@
 package com.newland.beecode.service.impl;
 
+import java.rmi.RemoteException;
+
+import javax.xml.rpc.ServiceException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.montnets.sms.WmgwLocator;
+import com.newland.beecode.exception.AppException;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.BaseService;
 import com.newland.beecode.service.SMSService;
 import com.newland.beecode.task.SendParam;
@@ -117,9 +123,13 @@ public class SMSServiceImpl implements SMSService  {
 				mp.getMobile(), mp.getSmsContent(), 1, "*");
 	}
 	@Override
-	public int getBalanceByMontnets()throws Exception{
-		WmgwLocator wmg=new WmgwLocator();
-		return wmg.getwmgwSoap().mongateQueryBalance(this.baseService.getSMSUserName(),this.baseService.getSMSPassword());
+	public int getBalanceByMontnets()throws AppException{
+		try {
+			WmgwLocator wmg=new WmgwLocator();
+			return wmg.getwmgwSoap().mongateQueryBalance(this.baseService.getSMSUserName(),this.baseService.getSMSPassword());
+		} catch (Exception e) {
+			throw new AppException(ErrorsCode.BIZ_SMS_CONNECT_ERROR,"");
+		} 
 	}
 
 }

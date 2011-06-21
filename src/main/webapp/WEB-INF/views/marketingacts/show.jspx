@@ -3,15 +3,15 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <page:show update="false" create="false" delete="false" list="false" id="ps_com_newland_beecode_domain_MarketingAct" object="${marketingact}" path="/marketingacts">
-        <field:display  field="catalogName" id="s_com_newland_beecode_domain_MarketingAct_actName" object="${marketingact.marketingCatalog}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI=" />
+        <field:display  field="catalogName" id="s_com_newland_beecode_domain_MarketingCatalog_catalogName" object="${marketingact.marketingCatalog}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI=" />
         <field:display field="actName" id="s_com_newland_beecode_domain_MarketingAct_actName" object="${marketingact}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI="/>
         <field:display date="true" dateTimePattern="${date_format}" field="startDate" id="s_com_newland_beecode_domain_MarketingAct_startDate" object="${marketingact}" z="user-managed"/>
         <field:display date="true" dateTimePattern="${date_format}" field="endDate" id="s_com_newland_beecode_domain_MarketingAct_endDate" object="${marketingact}" z="user-managed"/>
-        <field:display field="actDetail" id="s_com_newland_beecode_domain_MarketingAct_actDetail" object="${marketingact}" z="2WpcBBhBZTaSRmjsEBwZd8QbPos="/>
+        <field:textarea field="marketingact.actDetail" disabled="true" id="s_com_newland_beecode_domain_MarketingAct_actDetail"  z="2WpcBBhBZTaSRmjsEBwZd8QbPos="/>
         <field:display date="true" dateTimePattern="${datetime_format}" field="genTime" id="s_com_newland_beecode_domain_MarketingAct_genTime" object="${marketingact}" z="user-managed"/>
         <field:display field="bindCard" id="s_com_newland_beecode_domain_marketingact_checkCard" pattern="dictView" className="BIND_CARD" object="${marketingact}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
         <c:if test="${marketingact.bindCard eq '1'}">
-          <field:display field="checkCode" id="s_com_newland_beecode_domain_marketingact_bindcard_detail" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
+          <field:textarea field="marketingact.checkCode" disabled="true" id="s_com_newland_beecode_domain_marketingact_bindcard_detail"  z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
         </c:if>
         <field:display field="bizNo" id="s_com_newland_beecode_domain_marketingact_businesstype" pattern="dictView" className="BUSINESS_TYPE" object="${marketingact}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
         <field:display field="times" id="s_com_newland_beecode_domain_MarketingAct_times" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
