@@ -68,11 +68,13 @@ public class MarketingCatalogController extends BaseController{
     		@RequestParam(value = "page", required = false) Integer page, 
     		@RequestParam(value = "size", required = false) Integer size, Model model) {
             try {
-				this.marketingCatalogService.delete(id);
-				List<MarketingCatalog> marketingCatalog = this.marketingCatalogService.findMarketingCatalogEntries((page.intValue() - 1) * size, size);
-    			if(page.intValue()>1 && marketingCatalog.size()==0){
-    				page-=1;
-    			}
+				this.marketingCatalogService.delete(id);			
+				if(page!=null && page.intValue()>1){
+					List<MarketingCatalog> marketingCatalog = this.marketingCatalogService.findMarketingCatalogEntries((page.intValue() - 1) * size, size);
+	    			if(marketingCatalog.size()==0){
+	    				page-=1;
+	    			}
+				}				
 				 model.addAttribute("page", (page == null) ? "1" : page.toString());
 			     model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
 			} catch (Exception e) {

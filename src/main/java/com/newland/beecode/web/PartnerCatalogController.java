@@ -67,9 +67,11 @@ public class PartnerCatalogController extends BaseController{
     		@RequestParam(value = "size", required = false) Integer size, Model model) {
             try {
 				this.partnerCatalogService.delete(id);
-				List<PartnerCatalog> partnerCatalog = this.partnerCatalogService.findPartnerCatalogEntries((page.intValue() - 1) * size, size);
-				if(page.intValue()>1 && partnerCatalog.size()==0){
-					page-=1;
+				if(page!=null && page.intValue()>1){
+					List<PartnerCatalog> partnerCatalog = this.partnerCatalogService.findPartnerCatalogEntries((page.intValue() - 1) * size, size);
+					if(partnerCatalog.size()==0){
+						page-=1;
+					}				
 				}
 				model.addAttribute("page", (page == null) ? "1" : page.toString());
 		        model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
