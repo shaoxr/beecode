@@ -93,8 +93,7 @@ public class CheckServiceImpl implements CheckService{
 				if(account!=null && !account.toString().equals("")){
 					if(!isNumeric(account.toString())){
 						accountError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_ACCOUNT_NOT_NUMBER, null, Locale.CHINA);
-					}
-					if((account.toString().length()!=16 && account.toString().length()!=19)){
+					}else if((account.toString().length()!=16 && account.toString().length()!=19)){
 						accountError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_ACCOUNT_LENGTH_ERROR, null, Locale.CHINA);
 					}
 				}
