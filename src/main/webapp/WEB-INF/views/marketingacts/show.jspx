@@ -3,7 +3,7 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <page:show update="false" create="false" delete="false" list="false" id="ps_com_newland_beecode_domain_MarketingAct" object="${marketingact}" path="/marketingacts">
-        <field:display  field="catalogName" id="s_com_newland_beecode_domain_MarketingAct_actName" object="${marketingact.marketingCatalog}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI=" />
+        <field:display  field="catalogName" id="s_com_newland_beecode_domain_MarketingCatalog" object="${marketingact.marketingCatalog}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI=" />
         <field:display field="actName" id="s_com_newland_beecode_domain_MarketingAct_actName" object="${marketingact}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI="/>
         <field:display date="true" dateTimePattern="${date_format}" field="startDate" id="s_com_newland_beecode_domain_MarketingAct_startDate" object="${marketingact}" z="user-managed"/>
         <field:display date="true" dateTimePattern="${date_format}" field="endDate" id="s_com_newland_beecode_domain_MarketingAct_endDate" object="${marketingact}" z="user-managed"/>
