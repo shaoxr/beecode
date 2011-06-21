@@ -36,7 +36,7 @@ public class OperController extends BaseController{
 			if(!pwdConfirm.equals(oper.getOperPwd())){
 				throw new AppException(ErrorsCode.BIZ_OPER_PWD_INCORRECT,"");		
 			}
-			if(roleIds.length==0){
+			if(roleIds==null){
 				throw new AppException(ErrorsCode.BIZ_OPER_ROLE_NULL,"");		
 			}
 			if(this.operService.findOperByOperName(oper.getOperName())!=null){
