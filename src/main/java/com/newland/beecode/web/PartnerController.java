@@ -141,11 +141,13 @@ public class PartnerController extends BaseController{
     		@RequestParam(value = "size", required = false) Integer size, Model model) {
         try {
         	this.partnerService.delete(id);
-        	List<Partner> partner = this.partnerService.findPartnerEntries((page.intValue() - 1) * size, size);
-        	if(page.intValue()>1 && partner.size()==0){
-				page-=1;
-			}
-			model.addAttribute("page", (page == null) ? "1" : page.toString());
+        	if(page!=null && page.intValue()>1){
+               	List<Partner> partner = this.partnerService.findPartnerEntries((page.intValue() - 1) * size, size);
+            	if(partner.size()==0){
+    				page-=1;
+    			}
+        	}
+ 			model.addAttribute("page", (page == null) ? "1" : page.toString());
 			model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
