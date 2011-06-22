@@ -227,12 +227,13 @@ public class CheckServiceImpl implements CheckService{
 				partnerNoError="";
 				if(partnerNo==null || partnerNo.toString().equals("")){
 					partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PARTNERNO_ERROR, null, Locale.CHINA);
-				}
-				Partner partner=this.partnerService.findByPartnerNo(partnerNo.toString());
-				if(partner==null){
-					partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NOT_EXITS, null, Locale.CHINA);
 				}else{
-					partnerSet.add(partner);
+					Partner partner=this.partnerService.findByPartnerNo(partnerNo.toString());
+					if(partner==null){
+						partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NOT_EXITS, null, Locale.CHINA);
+					}else{
+						partnerSet.add(partner);
+					}					
 				}
 				if(partnerNoError!="" || partnerNameError!=""){
 					errorCount++;
