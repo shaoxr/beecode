@@ -234,7 +234,6 @@ public class MarketingActServiceImpl implements MarketingActService {
 			}
 			act.setPartners(partnerSet);
 		}	
-		act.setMmsTitle(marketingAct.getMmsTitle());
 		act.setStartDate(marketingAct.getStartDate());
 		act.setEndDate(marketingAct.getEndDate());
 		act.setTimes(marketingAct.getTimes());	

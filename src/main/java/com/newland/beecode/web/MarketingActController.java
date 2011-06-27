@@ -107,6 +107,13 @@ public class MarketingActController extends BaseController{
 		return "redirect:/marketingacts/appendCustomer/"+ encodeUrlPathSegment(marketingAct.getActNo().toString(),
 				request)+"?form";
 	}
+	@RequestMapping(value="appendMmsContentPre",method = RequestMethod.POST)
+	public String appendMmsContentPre(@Valid MarketingAct marketingAct,Model model, HttpServletRequest request){
+		
+		return "redirect:/marketingacts/"+ encodeUrlPathSegment(marketingAct.getActNo().toString(),
+				request)+"?form";
+		
+	}
 	@RequestMapping(value="appendCustomer/{actNo}",params="form", method = RequestMethod.GET)
 	public String appendCustomerForm(@PathVariable("actNo") Long actNo,Model model){
 		try {
@@ -244,7 +251,9 @@ public class MarketingActController extends BaseController{
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
 		}
-		return "redirect:marketingacts/"+marketingAct.getActNo();
+		//return "redirect:marketingacts/"+marketingAct.getActNo();
+		return "redirect:/marketingacts/appendMmsContent/"+ encodeUrlPathSegment(marketingAct.getActNo().toString(),
+				request)+"?form";
 	}
 
 	/**

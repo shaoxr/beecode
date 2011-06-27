@@ -22,7 +22,7 @@
 	   dojo.addOnLoad(function(){
 		   //dojo.byId("_rebateRate_id").value="1";
 		  // dojo.byId("_rebateRate_id").disabled="disabled";
-		  dojo.byId("_c_com_newland_beecode_domain_MarketingAct_bindcard_detail_id").style.display="none";
+		  //dojo.byId("_c_com_newland_beecode_domain_MarketingAct_bindcard_detail_id").style.display="none";
 		  dojo.byId("_rebateRate_id").value="1";
 				   dojo.byId("_backRate_id").value="0";
 				   dojo.byId("_maxAmount_id").value="0";
@@ -62,19 +62,17 @@
 				 
 				   
 			   }
-		   })
-		   
-		      dojo.connect(dijit.byId("_bindCard_id"), "onChange", function(evt) {
+		   });
+		   dojo.connect(dijit.byId("_bindCard_id"), "onChange", function(evt) {
 			   if(dijit.byId("_bindCard_id").value=="1"){
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_bindcard_detail_id").style.display="";
-				   
-			   }else{
+				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_bindcard_detail_id").style.display="block";
+				}else{
 				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_bindcard_detail_id").style.display="none";
 			   }
-		   })
+		   });
 		   
 		   
-		   })
+		   });
 	   
 </script>
     </form:create>
