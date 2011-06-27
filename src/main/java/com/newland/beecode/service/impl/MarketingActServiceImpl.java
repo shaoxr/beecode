@@ -239,7 +239,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		act.setTimes(marketingAct.getTimes());	
 		act.setActDetail(marketingAct.getActDetail());
 		act.setBindCard(marketingAct.getBindCard());
-		act.setMmsTemplate(marketingAct.getMmsTemplate());
+		//act.setMmsTemplate(marketingAct.getMmsTemplate());
 		if(marketingAct.getBindCard().equals(MarketingAct.BIND_CARD_YES)){
 			this.checkService.checkCodeCheck(marketingAct);
 			act.setCheckCode(marketingAct.getCheckCode());
