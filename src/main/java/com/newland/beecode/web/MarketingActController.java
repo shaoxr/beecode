@@ -335,6 +335,7 @@ public class MarketingActController extends BaseController{
 			Model model) {
 		try {
 			long[] res=this.transactionalService.checkMarketingAct(actNo, actStatus);
+			model.addAttribute("actStatus", actStatus);
 			model.addAttribute("success", res[0]);	
 			model.addAttribute("fail", res[1]);	
 		} catch (Exception e) {
