@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,9 +30,13 @@ public class OperServiceImpl implements OperService{
 	@Autowired
 	private RoleDao roleDao;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@Override
 	public void save(Oper oper,Long[] roles) {
 		oper.setRoles(this.genRoles(roles));
+		oper.setOperPwd(passwordEncoder.encodePassword(oper.getOperPwd(), null));
 		this.operDao.save(oper);		
 	}
 	
@@ -68,6 +73,11 @@ public class OperServiceImpl implements OperService{
 	public void update(Oper oper,Long[] roles) {
 
 		oper.setRoles(this.genRoles(roles));
+		
+		String oldPwd = operDao.get(oper.getOperNo()).getOperPwd();
+		if(!oper.getOperPwd().equals(oldPwd)){
+			oper.setOperPwd(passwordEncoder.encodePassword(oper.getOperPwd(), null));
+		}
 		this.operDao.saveOrUpdate(oper);
 		
 	}
