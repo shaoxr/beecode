@@ -59,10 +59,10 @@ public class AjaxRequestController extends BaseController{
 				sf.setValue(partner.getPartnerNo());
 				list2.add(sf);
 			}
-			
 			JSONObject obj=new JSONObject();
 			obj.accumulate("items", list2.toArray());
 			obj.accumulate("label", "name");
+			obj.accumulate("identifier", "value");
 			response.getWriter().write(obj.toString());
 		} catch (Exception e) {
 			this.getMessage(e);
