@@ -69,7 +69,7 @@ public class UtilController extends BaseController{
 		String fileName=String.valueOf(System.currentTimeMillis());
 		try {
 			 Set<Partner> partners=this.checkService.partnerCheck(file, fileName);
-			 model.addAttribute(ErrorsCode.MESSAGE, messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_PASS, new Object[]{partners.size()}, Locale.CHINA));
+			 model.addAttribute(ErrorsCode.MESSAGE, messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PASS, new Object[]{partners.size()}, Locale.CHINA));
 		} catch (Exception e) {
 			if(e instanceof ExcelException){
 				model.addAttribute(ErrorsCode.MESSAGE,e.getMessage());

@@ -79,18 +79,18 @@ public class CheckServiceImpl implements CheckService{
 			for (int j = 1; j <= sheet.getLastRowNum(); j++) {
 				int i=0;
 				row = sheet.getRow(j);
-				HSSFCell name = row.getCell((short) i++);
+				HSSFCell name = row.getCell(i++);
 				nameError="";
 				if(name==null || name.toString().equals("")){
 					nameError=messageSource.getMessage(ErrorsCode.BIZ_COUSTMER_NAME_NULL, null, Locale.CHINA);
 				}
-				HSSFCell mobile = row.getCell((short) i++);
+				HSSFCell mobile = row.getCell(i++);
 				mobileError="";
 				if(mobile==null || mobile.toString().equals("")||mobile.toString().length()!=11 ||!isNumeric(mobile.toString())){
 					mobileError=messageSource.getMessage(ErrorsCode.BIZ_COUSTMER_MOBILE_ERROR, null, Locale.CHINA);
 				}
 				accountError="";
-				HSSFCell account = row.getCell((short) i++);
+				HSSFCell account = row.getCell(i++);
 				if(account!=null && !account.toString().equals("")){
 					if(!isNumeric(account.toString())){
 						accountError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_ACCOUNT_NOT_NUMBER, null, Locale.CHINA);
@@ -100,7 +100,7 @@ public class CheckServiceImpl implements CheckService{
 				}
 				amountError="";
 				if(bizNo!=null && bizNo.equals(Coupon.BIZ_TYPE_VOUCHER)){				
-					HSSFCell amount = row.getCell((short) i++);
+					HSSFCell amount = row.getCell(i++);
 							
 					if(amount==null || amount.toString().equals("")){
 						amountError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_AMOUNT_NULL, null, Locale.CHINA);						
@@ -151,6 +151,8 @@ public class CheckServiceImpl implements CheckService{
 			throw new ExcelException("",tempError.toString());
 		} catch (IOException e) {
 			throw new AppException(ErrorsCode.BIZ_CUSTOMER_FILE_UPLOAD_ERROR,"");
+		} catch (IllegalArgumentException e) {
+			throw new AppException(ErrorsCode.BIZ_CUSTOMER_FILE_UPLOAD_ERROR,"");
 		}
 	}
 	@Override
@@ -167,10 +169,10 @@ public class CheckServiceImpl implements CheckService{
 				int i=0;
 				customer=new Customer();
 				row = sheet.getRow(j);
-				HSSFCell name = row.getCell((short) i++);
-				HSSFCell mobile = row.getCell((short) i++);
-				HSSFCell account = row.getCell((short) i++);
-				HSSFCell amount = row.getCell((short) i++);
+				HSSFCell name = row.getCell(i++);
+				HSSFCell mobile = row.getCell(i++);
+				HSSFCell account = row.getCell(i++);
+				HSSFCell amount = row.getCell(i++);
 				customer.setName(name.toString());
 				customer.setMobile(mobile.toString());
 				if(account==null ||account.toString().equals("")){
@@ -218,32 +220,35 @@ public class CheckServiceImpl implements CheckService{
 			for (int j = 1; j <= sheet.getLastRowNum(); j++) {
 				int i=0;
 				row = sheet.getRow(j);
-				HSSFCell name = row.getCell((short) i++);
+				HSSFCell name = row.getCell(i++);
 				partnerNameError="";
 				if(name==null || name.toString().equals("")){
 					partnerNameError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NAME_NULL, null, Locale.CHINA);
 				}
-				HSSFCell partnerNo = row.getCell((short) i++);
+				HSSFCell partnerNo = row.getCell(i++);
 				partnerNoError="";
+				Partner partner= null;
 				if(partnerNo==null || partnerNo.toString().equals("")){
 					partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PARTNERNO_ERROR, null, Locale.CHINA);
-				}
-				Partner partner=this.partnerService.findByPartnerNo(partnerNo.toString());
-				if(partner==null){
-					partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NOT_EXITS, null, Locale.CHINA);
 				}else{
-					partnerSet.add(partner);
+					partner=this.partnerService.findByPartnerNo(partnerNo.toString());
+					if(partner==null){
+						partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NOT_EXITS, null, Locale.CHINA);
+					}else{
+						partnerSet.add(partner);
+					}
 				}
+				
 				if(partnerNoError!="" || partnerNameError!=""){
 					errorCount++;
-					tempError.append("<tr><td>" + j + "</td><td>");
+					tempError.append("<tr><td>" + (j+1) + "</td><td>");
 					tempError.append(partnerNameError);
 					tempError.append("</td><td>");
 					tempError.append(partnerNoError);
 					tempError.append("</td></tr>");
 				}
-				if(errorCount>20){
-					tempError.append("<tr><td>" + j + "</td><td>");
+				if(errorCount>=20){
+					tempError.append("<tr><td>......</td><td>");
 					tempError.append("..........");
 					tempError.append("</td><td>");
 					tempError.append("...........");
@@ -251,7 +256,7 @@ public class CheckServiceImpl implements CheckService{
 					break;
 				}
 				
-				tempError.append("</td></tr>");
+				//tempError.append("</td></tr>");
 			}
 			if(errorCount==0){
 				//return messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PASS, new Object[]{sheet.getLastRowNum()}, Locale.CHINA);
@@ -260,6 +265,8 @@ public class CheckServiceImpl implements CheckService{
 			throw new ExcelException("",tempError.toString());
 			
 		} catch (IOException e) {
+			throw new AppException(ErrorsCode.BIZ_PARTNER_EXCEL_FILE_UPLOAD_ERROR,"");
+		} catch (IllegalArgumentException e) {
 			throw new AppException(ErrorsCode.BIZ_PARTNER_EXCEL_FILE_UPLOAD_ERROR,"");
 		}
 	}
@@ -287,12 +294,12 @@ public class CheckServiceImpl implements CheckService{
 				int i=0;
 				coupon =new Coupon();
 				row = sheet.getRow(j);
-				HSSFCell couponId = row.getCell((short) i++);
+				HSSFCell couponId = row.getCell(i++);
 				coupon.setCouponId(new Long(couponId.toString()));
-				HSSFCell status = row.getCell((short) i++);
+				HSSFCell status = row.getCell(i++);
 				coupon.setMmsStatus(new Integer(status.toString()));
 				coupon.setSmsStatus(new Integer(status.toString()));
-				HSSFCell statusDesc = row.getCell((short) i++);
+				HSSFCell statusDesc = row.getCell(i++);
 				coupon.setMmsDesc(statusDesc.toString());
 				coupon.setSmsDesc(statusDesc.toString());
 				coupons.add(coupon);

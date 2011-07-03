@@ -49,7 +49,7 @@ public interface MarketingActService {
 	
 	public MarketingAct findByActNo(Long actNo);
 	
-	public List<MarketingAct> findByCondition(MarketingActCondition mac,Integer start,Integer end);
+	public List<MarketingAct> findByCondition(MarketingActCondition mac,Integer start,Integer end)throws AppException;
 	
 	public int countByCondition(MarketingActCondition mac);
 	

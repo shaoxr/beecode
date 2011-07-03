@@ -10,7 +10,9 @@
   <jsp:directive.attribute name="render" type="java.lang.Boolean" required="false" description="Indicate if the contents of this tag and all enclosed tags should be rendered (default 'true')" />
   <jsp:directive.attribute name="openPane" type="java.lang.Boolean" required="false" description="Control if the title pane is opened or closed by default (default: true)" />
   <jsp:directive.attribute name="z" type="java.lang.String" required="false" description="Used for checking if element has been modified (to recalculate simply provide empty string value)" />
-
+  <jsp:directive.attribute name="pre" type="java.lang.Boolean" required="false" description="Control if the title pane is opened or closed by default (default: true)"/>
+  <jsp:directive.attribute name="prepath" type="java.lang.String" required="false" description="Specify the relative URL path (wit leading /)" />
+  
   <c:if test="${empty render or render}">
     <c:if test="${empty label}">
       <spring:message code="label_${fn:toLowerCase(fn:substringAfter(id,'_'))}" var="label" htmlEscape="false" />
@@ -21,17 +23,33 @@
     <c:if test="${empty versionField}">
       <c:set value="version" var="versionField" />
     </c:if>
+    <c:if test="${empty pre}">
+      <c:set value="false" var="pre" />
+    </c:if>
     <spring:message arguments="${label}" code="entity_update" var="title_msg" />
     <util:panel id="${id}" title="${title_msg}" openPane="${openPane}">
       <spring:url value="${path}" var="form_url" />
+      <c:if test="${pre}">
+           <spring:url value="${prepath}" var="form_url" />
+       </c:if>
       <form:form action="${fn:escapeXml(form_url)}" method="POST" modelAttribute="${modelAttribute}">
         <form:errors cssClass="errors" delimiter="&lt;p/&gt;" />
         <jsp:doBody />
         <div class="submit" id="${fn:escapeXml(id)}_submit">
           <spring:message code="button_next" var="button_next" />
+          <c:if test="${pre}">
+           <spring:message code="button_back" var="button_back"/>
+          </c:if>
           <script type="text/javascript">Spring.addDecoration(new Spring.ValidateAllDecoration({elementId:'proceed', event:'onclick'}));</script>
-          <input id="proceed" type="submit" value="${fn:escapeXml(button_next)}" />
-        </div>
+          <input id="back" type="submit" value="${fn:escapeXml(button_back)}" />
+          <input id="proceed" type="button" value="${fn:escapeXml(button_next)}" onclick="aa();"/>
+          <script type="text/javascript">
+			 function aa(){
+				document.getElementById("marketingAct").action = "/beecode/marketingacts/appendMmsContent";
+				document.getElementById("marketingAct").submit();
+			 }
+		  </script>
+          </div>
         <form:hidden id="_${fn:escapeXml(idField)}_id" path="${fn:escapeXml(idField)}" />
         <c:if test="${versionField ne 'none'}">
           <form:hidden id="_${fn:escapeXml(versionField)}_id" path="${fn:escapeXml(versionField)}" />

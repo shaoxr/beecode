@@ -312,12 +312,18 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public ReportResult reportCount(ReportForm reportForm) {
+	public ReportResult reportCount(ReportForm reportForm)throws AppException {
+		if(reportForm.getStartDate().after(reportForm.getEndDate())){
+			throw new AppException(ErrorsCode.BIZ_STARDATE_AFTER_ENDDATE,"");
+		}
 		return this.couponDao.reportCount(reportForm);
 	}
 
 	@Override
-	public ReportResult reportDetail(ReportForm reportForm) {
+	public ReportResult reportDetail(ReportForm reportForm)throws AppException{
+		if(reportForm.getStartDate().after(reportForm.getEndDate())){
+			throw new AppException(ErrorsCode.BIZ_STARDATE_AFTER_ENDDATE,"");
+		}
 		return this.couponDao.reportDetail(reportForm);
 	}
 

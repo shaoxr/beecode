@@ -193,7 +193,13 @@ public class MarketingActServiceImpl implements MarketingActService {
 	}
 
 	@Override
-	public List<MarketingAct> findByCondition(MarketingActCondition mac,Integer start,Integer end) {
+	@Transactional
+	public List<MarketingAct> findByCondition(MarketingActCondition mac,Integer start,Integer end) throws AppException{
+		if(mac.getStartGenDate()!=null&&mac.getEndGenDate()!=null){
+			if(mac.getStartGenDate().after(mac.getEndGenDate())){
+				throw new AppException(ErrorsCode.BIZ_STARDATE_AFTER_ENDDATE,"");
+			}			
+		}
 		return this.actDao.excuteSimpleQuery(mac,start,end);
 	}
 
@@ -225,6 +231,11 @@ public class MarketingActServiceImpl implements MarketingActService {
 	}
 	@Transactional
 	public void update(MarketingAct marketingAct,Long [] partners) throws AppException {
+		if(marketingAct.getStartDate()!=null&&marketingAct.getEndDate()!=null){
+			if(marketingAct.getStartDate().after(marketingAct.getEndDate())){
+				throw new AppException(ErrorsCode.BIZ_STARDATE_AFTER_ENDDATE,"");
+			}			
+		}
 		MarketingAct act = this.findByActNo(marketingAct.getActNo());
 		act.setActName(marketingAct.getActName());
 		if(partners!=null){
@@ -235,13 +246,12 @@ public class MarketingActServiceImpl implements MarketingActService {
 			}
 			act.setPartners(partnerSet);
 		}	
-		act.setMmsTitle(marketingAct.getMmsTitle());
 		act.setStartDate(marketingAct.getStartDate());
 		act.setEndDate(marketingAct.getEndDate());
 		act.setTimes(marketingAct.getTimes());	
 		act.setActDetail(marketingAct.getActDetail());
 		act.setBindCard(marketingAct.getBindCard());
-		act.setMmsTemplate(marketingAct.getMmsTemplate());
+		//act.setMmsTemplate(marketingAct.getMmsTemplate());
 		if(marketingAct.getBindCard().equals(MarketingAct.BIND_CARD_YES)){
 			this.checkService.checkCodeCheck(marketingAct);
 			act.setCheckCode(marketingAct.getCheckCode());
