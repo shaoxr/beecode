@@ -251,6 +251,10 @@ public class ErrorsCode {
 	 * *必须要跟在数字后面
 	 */
 	public static final String BIZ_MARKETINGACT_CHECK_CODE_ORDER_ERROR="BIZ.MARKETINGACT.004";
+	/**
+	 * 字数超过280
+	 */
+	public static final String BIZ_MARKETINGACT_MMS_CONTENT_NUM_OVER="BIZ.MARKETINGACT.005";
 	
 	
 	

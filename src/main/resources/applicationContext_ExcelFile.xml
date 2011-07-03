@@ -194,5 +194,17 @@
         	</list>
         </property>
     </bean>
+    <bean id="newlandService" class="com.newland.beecode.service.impl.ExportExcelTemplateService">
+        <property name="sheetName"><value>names</value></property>
+        <property name="cellList">
+        	<list>
+        	   <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>号码</value></property>
+                    <property name="path"><value>mobile</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+        	</list>
+        </property>
+    </bean>
     
 </beans>

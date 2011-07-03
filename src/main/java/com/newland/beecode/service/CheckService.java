@@ -1,6 +1,7 @@
 package com.newland.beecode.service;
 
 
+import java.io.File;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +25,8 @@ public interface CheckService {
 	public List<Coupon> getCouponsByRespStatus(MultipartFile file,Integer type)throws AppException;
 	
 	public void checkCodeCheck(MarketingAct act)throws AppException;
+	
+	public List<Customer> newland(File file);
 	
 	
 }

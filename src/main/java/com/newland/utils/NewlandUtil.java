@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 public class NewlandUtil {
 	public static String float2StringByRebate(float l){
@@ -49,5 +50,9 @@ public class NewlandUtil {
 	public static BigDecimal String2BigDecimal(String s){
 		return new BigDecimal(s).movePointLeft(2);
 	}
+	public static boolean isNumeric(String str){ 
+	    Pattern pattern = Pattern.compile("[0-9]*"); 
+	    return pattern.matcher(str).matches();    
+	 }
 
 }

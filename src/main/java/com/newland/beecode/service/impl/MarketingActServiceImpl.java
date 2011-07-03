@@ -163,7 +163,8 @@ public class MarketingActServiceImpl implements MarketingActService {
         actDao.save(act);
 	}
 	@Transactional
-	public void appendMmsContent(MarketingAct act){
+	public void appendMmsContent(MarketingAct act)throws AppException{
+		act.getMmsTemplate().checkNum();
 		MarketingAct _act=this.actDao.get(act.getActNo());
 		_act.setMmsTemplate(act.getMmsTemplate());
 		_act.setMmsTitle(act.getMmsTitle());

@@ -28,7 +28,7 @@ public class MsManagerController extends BaseController{
 	@RequestMapping(value="/balance", method = RequestMethod.GET)
 	public String balance(Model model){
 		try {
-			long mmsBalance = new Long(mmsService.getBalanceByMontnets());
+			String mmsBalance = mmsService.getBalanceByMontnets();
 			long smsBalance = this.smsService.getBalanceByMontnets();
 				
 			model.addAttribute("mmsBalance", mmsBalance);

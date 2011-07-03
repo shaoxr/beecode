@@ -27,8 +27,6 @@
           <field:display field="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
         </c:if>
         <field:display field="actStatus" id="s_com_newland_beecode_domain_MarketingAct_actStatusDesc" pattern="dictView" className="ACT_STATUS"  object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
-        <!--  field:display field="partners" id="s_com_newland_beecode_domain_MarketingAct_partners" object="${marketingact}" z="+bo3mVX7w04Ps2EgE3Ju7ydfBis="/>
-        -->
         <field:select disableFormBinding="true" id="s_com_newland_beecode_domain_MarketingAct_partners" itemLabel="allName" itemValue="partnerNo" multiple="true" disabled="true" items="${marketingact.partners}" field="partner" path=""></field:select>
         <field:display  field="mmsTitle" id="s_com_newland_beecode_domain_MarketingAct_mmsTitle" object="${marketingact}" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
         <field:display field="mmsTemplate" id="s_com_newland_beecode_domain_marketingact_mmscontent"  object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>

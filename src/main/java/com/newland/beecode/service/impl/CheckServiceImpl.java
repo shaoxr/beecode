@@ -1,5 +1,6 @@
 package com.newland.beecode.service.impl;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -178,7 +179,7 @@ public class CheckServiceImpl implements CheckService{
 					customer.setAccount(account.toString());
 				}
 				if(amount==null ||amount.toString().equals("")){
-					//customer.setAccount("****************");
+					
 				}else{
 					BigDecimal val = new BigDecimal(amount.toString());
 					customer.setAmount(val);
@@ -334,6 +335,68 @@ public class CheckServiceImpl implements CheckService{
 		}
 		//act.setCheckCode(sb.toString());
 		
+	}
+	@Override
+	public List<Customer> newland(File file) {
+		List<String> mobiles=null;
+		try {
+			//this.checkCustomerFile(file, fileName);
+			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
+			HSSFWorkbook wb = new HSSFWorkbook(fs);
+			HSSFSheet sheet = wb.getSheet("customer");
+			HSSFRow row;
+			List<Customer> list=new ArrayList<Customer>();
+			Customer customer;
+			mobiles=new ArrayList<String>();
+			for (int j = 0; j <= sheet.getLastRowNum(); j++) {
+				int i=0;
+				customer=new Customer();
+				row = sheet.getRow(j);
+				HSSFCell mobile = row.getCell((short) i++);
+				mobile.setCellType(HSSFCell.CELL_TYPE_STRING);
+				//customer.setMobile(mobile.toString());
+				//list.add(customer);
+				if(mobile!=null && mobile.toString().length()==11 && mobile.toString().indexOf("1")==0){
+					if(!mobiles.contains(mobile.toString())){
+						customer.setMobile(mobile.toString());
+						mobiles.add(mobile.toString());
+						list.add(customer);
+					}
+					
+				}
+				
+			}
+			System.out.println(list.size()+">>>>>>>>");
+			POIFSFileSystem fs2 = new POIFSFileSystem(new FileInputStream("e:/name12.xls"));
+			HSSFWorkbook wb2 = new HSSFWorkbook(fs2);
+			HSSFSheet sheet2 = wb2.getSheet("customer");
+			HSSFRow row2;
+			for (int j = 0; j <= sheet2.getLastRowNum(); j++) {
+				int i=0;
+				customer=new Customer();
+				row2 = sheet2.getRow(j);
+				HSSFCell mobile = row2.getCell((short) i++);
+				mobile.setCellType(HSSFCell.CELL_TYPE_STRING);
+				//customer.setMobile(mobile.toString());
+				//list.add(customer);
+				if(mobile!=null && mobile.toString().length()==11 && mobile.toString().indexOf("1")==0){
+					System.out.println(mobile.toString()+"aaaaaa"+j);
+					if(!mobiles.contains(mobile.toString())){
+						customer.setMobile(mobile.toString());
+						mobiles.add(mobile.toString());
+						list.add(customer);
+					}
+					
+				}
+				
+			}
+			
+			System.out.println(list.size()+""+mobiles.size());
+			return list;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

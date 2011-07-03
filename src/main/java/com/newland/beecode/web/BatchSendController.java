@@ -43,17 +43,11 @@ public class BatchSendController extends BaseController{
 	@Autowired
 	private FileService fileService;
 	@Autowired
-	private MarketingActService marketingActService;
-	@Autowired
 	private SendListService sendListService;
 	@Autowired
 	private RespStatusService respStatusService;
-	@Autowired
-	private CouponService couponService;
 	@Resource(name="smsFetch2SendInvokeService")
 	private SendInvokeService smsFetch2SendInvokeService;
-	@Resource(name="mmsFetch2SendInvokeService")
-	private SendInvokeService mmsFetch2SendInvokeService;
 	@Autowired
 	private SendService sendService;
 	
@@ -61,18 +55,7 @@ public class BatchSendController extends BaseController{
     public String mmsSendByzip(@RequestParam(value = "file", required = true) MultipartFile file,
     		Model model){
 		  try {
-			String dirName=this.fileService.extractMms(file);
-			List<Coupon> coupons=this.fileService.getCoupon(dirName);
-			MarketingAct act=this.fileService.getActFile(dirName, SendList.MS_TYPE_MMS);
-			SendList mmsSendList=new SendList();
-			mmsSendList.setTotalCount(new Long(coupons.size()));
-			mmsSendList.setSubmitTime(new Date());
-			mmsSendList.setSendStatus(SendList.STATUS_SENDING);
-			mmsSendList.setMsType(SendList.MS_TYPE_MMS);
-			mmsSendList.setActName(act.getActName());
-			mmsSendList.setActNo(act.getActNo());
-			mmsSendList=this.sendListService.saveOrUpdate(mmsSendList);
-			this.sendService.send(coupons, act, this.mmsFetch2SendInvokeService, mmsSendList.getId(), dirName);
+			  this.sendListService.send(file);
 			model.addAttribute(ErrorsCode.MESSAGE, ErrorsCode.BIZ_MMS_SUBMIT_SUCCESS);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));

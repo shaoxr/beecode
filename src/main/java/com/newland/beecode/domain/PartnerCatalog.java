@@ -30,7 +30,9 @@ public class PartnerCatalog {
     private Integer version;
     @Column
     private String catalogName;
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column
+    private String catalogNo;
+	@Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(style = "MM")
     private Date createTime;
     @Temporal(TemporalType.TIMESTAMP)
@@ -76,4 +78,11 @@ public class PartnerCatalog {
     public void setVersion(Integer version) {
         this.version = version;
     }
+    public String getCatalogNo() {
+		return catalogNo;
+	}
+
+	public void setCatalogNo(String catalogNo) {
+		this.catalogNo = catalogNo;
+	}
 }

@@ -40,7 +40,7 @@ public class SendServiceImpl implements SendService {
 		
 		
 		try {
-			this.heartDetect(sendInvokeService.getMsType(), couponList.size());
+			//this.heartDetect(sendInvokeService.getMsType(), couponList.size());
 			final long time=System.currentTimeMillis();
 			final ThreadPoolExecutor threadPool =ThreadPoolFactory.newThreadPool(couponList.size());
 			if(sendInvokeService.getMsType().equals(SendList.MS_TYPE_MMS)){

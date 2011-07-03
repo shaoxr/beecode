@@ -10,6 +10,7 @@
             <table:column id="c_com_newland_beecode_domain_mmssendlist_count" property="totalCount" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
             <table:column id="c_com_newland_beecode_domain_mmssendlist_success" property="successCount" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
             <table:column id="c_com_newland_beecode_domain_mmssendlist_send_status" property="sendStatus" pattern="dictView" className="MMS_SEND_LIST_STATUS" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
+            <table:column id="c_com_newland_beecode_domain_mmssendlist_success" property="message" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
             <table:column  pattern="yyyy-MM-dd HH:mm:ss" id="c_com_newland_beecode_domain_mmssendlist_submitTime" property="submitTime" z="Haw+F8umbMirRpxbBGmJ4nw1PcM="/>
             <table:column  pattern="yyyy-MM-dd HH:mm:ss" id="c_com_newland_beecode_domain_mmssendlist_endTime" property="endTime" z="6UGQz71NYPKazPiz6Eko6VUlTwQ="/>
         </table:filetable>

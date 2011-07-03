@@ -234,6 +234,9 @@ public class Coupon {
 	}
 
 	public String getMmsDesc() {
+		if(mmsDesc==null){
+			return "..";
+		}
 		return mmsDesc;
 	}
 
@@ -242,6 +245,9 @@ public class Coupon {
 	}
 
 	public String getSmsDesc() {
+		if(smsDesc==null){
+			return "..";
+		}
 		return smsDesc;
 	}
 

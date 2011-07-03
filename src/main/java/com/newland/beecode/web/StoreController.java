@@ -1,6 +1,5 @@
 package com.newland.beecode.web;
 
-
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,28 +16,39 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.newland.beecode.domain.PartnerCatalog;
+import com.newland.beecode.domain.Store;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerCatalogService;
+import com.newland.beecode.service.StoreService;
 import com.newland.utils.PaginationHelper;
-@RequestMapping("/partnerCatalog")
+
+/**
+ * @author shaoxr:
+ * @version 2011-6-24 下午01:20:30
+ * 
+ */
+@RequestMapping("/store")
 @Controller
-public class PartnerCatalogController extends BaseController{
-    @Autowired
+public class StoreController extends BaseController{
+	@Autowired
     private PartnerCatalogService  partnerCatalogService; 
+	@Autowired
+    private StoreService  storeService; 
 	@RequestMapping(params = "form", method = RequestMethod.GET)
 	public String create(Model model){
-		model.addAttribute("partnerCatalog", new PartnerCatalog());
-		return "partnerCatalog/create";
+		model.addAttribute("store", new Store());
+		 model.addAttribute("partnercatalogs", this.partnerCatalogService.findAll());
+		return "store/create";
 	}
 	@RequestMapping(method = RequestMethod.POST)
-	public String create(@Valid PartnerCatalog partnerCatalog,Model model){
+	public String create(@Valid Store store,Model model){
 		try {
-            this.partnerCatalogService.save(partnerCatalog);
+            this.storeService.save(store);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
 		}
-		return "redirect:/partnerCatalog";
+		return "redirect:/store";
 	}
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(
@@ -49,8 +59,8 @@ public class PartnerCatalogController extends BaseController{
 			request.getParameterMap(), "");
 			page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
 			size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
-			model.addAttribute("partnercatalogs", this.partnerCatalogService.findPartnerCatalogEntries((page.intValue() - 1) * size, size));
-			int maxPages = PaginationHelper.calcMaxPages(size, this.partnerCatalogService.countPartnerCatalogs());
+			model.addAttribute("stores", this.storeService.findStoreEntries((page.intValue() - 1) * size, size));
+			int maxPages = PaginationHelper.calcMaxPages(size, this.storeService.countStore());
 			model.addAttribute("maxPages",maxPages);
 			model.addAttribute(PaginationHelper.PARAM_PAGE, page);
 			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
@@ -58,60 +68,54 @@ public class PartnerCatalogController extends BaseController{
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
 		}
-		return "partnerCatalog/list";
+		return "stroe/list";
 	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable("id") Long id,
     		@RequestParam(value = "page", required = false) Integer page, 
     		@RequestParam(value = "size", required = false) Integer size, Model model) {
             try {
-				this.partnerCatalogService.delete(id);
-				if(page!=null && page.intValue()>1){
-					List<PartnerCatalog> partnerCatalog = this.partnerCatalogService.findPartnerCatalogEntries((page.intValue() - 1) * size, size);
-					if(partnerCatalog.size()==0){
-						page-=1;
-					}				
-				}
+				this.storeService.delete(id);
 				model.addAttribute("page", (page == null) ? "1" : page.toString());
 		        model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
 			} catch (Exception e) {
 				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 				return "prompt";
 			}
-        return "redirect:/partnerCatalog";
+        return "redirect:/store";
     }
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public String show(Model model,@PathVariable("id") Long id){
 		try {
-			PartnerCatalog partnerCatalog=this.partnerCatalogService.findById(id);
-			model.addAttribute("partnerCatalog", partnerCatalog);
+			Store store=this.storeService.findById(id);
+			model.addAttribute("store", store);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
 		}
-		return "partnerCatalog/show";
+		return "store/show";
 	}
 	
 	@RequestMapping(value="/{id}",params = "form",method=RequestMethod.GET)
 	public String update(@PathVariable("id") Long id,Model model){
 		try {
-			PartnerCatalog partnerCatalog=this.partnerCatalogService.findById(id);
-			partnerCatalog.setUpdateTime(new Date());
-			model.addAttribute("partnerCatalog", partnerCatalog);
+			Store store=this.storeService.findById(id);
+			model.addAttribute("store", store);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
 		}
-		return "partnerCatalog/update";
+		return "store/update";
 	}
 	@RequestMapping(method=RequestMethod.PUT)
-	public String updateSubmit(@Valid PartnerCatalog partnerCatalog,Model model){	
+	public String updateSubmit(@Valid Store store,Model model){	
 		try {
-            this.partnerCatalogService.update(partnerCatalog);
+            this.storeService.update(store);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
 		}
-		return "redirect:/partnerCatalog";
+		return "redirect:/store";
 	}
+
 }

@@ -103,7 +103,12 @@ public class MarketingActController extends BaseController{
 	}
 	@RequestMapping(value="appendMmsContent",method = RequestMethod.POST)
 	public String appendMmsContent(@Valid MarketingAct marketingAct,Model model, HttpServletRequest request){
-		this.marketingActService.appendMmsContent(marketingAct);
+		try {
+			this.marketingActService.appendMmsContent(marketingAct);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
 		return "redirect:/marketingacts/appendCustomer/"+ encodeUrlPathSegment(marketingAct.getActNo().toString(),
 				request)+"?form";
 	}

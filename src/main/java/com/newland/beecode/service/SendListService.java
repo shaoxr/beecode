@@ -2,8 +2,11 @@ package com.newland.beecode.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.newland.beecode.domain.MsStatus;
 import com.newland.beecode.domain.SendList;
+import com.newland.beecode.exception.AppException;
 
 /**
  * @author shaoxr:
@@ -25,6 +28,8 @@ public interface SendListService {
 	 */
 	public void sendOver(Long id);
 	
-	 public MsStatus findSendCount();
+	public void send(MultipartFile file)throws AppException;
+	
+	public MsStatus findSendCount();
 
 }

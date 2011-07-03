@@ -3,18 +3,30 @@ package com.newland.beecode.service.impl;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
+import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.newland.beecode.dao.RespStatusDao;
 import com.newland.beecode.dao.sendListDao;
+import com.newland.beecode.domain.Coupon;
+import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.MsStatus;
 import com.newland.beecode.domain.RespStatus;
 import com.newland.beecode.domain.SmsSendList;
 import com.newland.beecode.domain.SendList;
+import com.newland.beecode.exception.AppException;
+import com.newland.beecode.exception.ErrorsCode;
+import com.newland.beecode.service.FileService;
 import com.newland.beecode.service.SendListService;
+import com.newland.beecode.service.SendService;
+import com.newland.beecode.task.service.SendInvokeService;
 
 /**
  * @author shaoxr:
@@ -24,9 +36,17 @@ import com.newland.beecode.service.SendListService;
 @Service(value="sendListService")
 public class SendListServiceImpl implements SendListService{
 	@Autowired
+	private SendService sendService;
+	@Autowired
+	private FileService fileService;
+	@Autowired
     private sendListDao sendListDao;
 	@Autowired
 	private RespStatusDao respStatusDao;
+	@Resource(name="mmsFetch2SendInvokeService")
+	private SendInvokeService mmsFetch2SendInvokeService;
+	@Autowired
+	private MessageSource messageSource;
 	@Override
 	public SendList saveOrUpdate(SendList mmsSendList) {
 		return sendListDao.saveOrUpdate(mmsSendList);
@@ -66,6 +86,32 @@ public class SendListServiceImpl implements SendListService{
 			return msStatus;
 		}
 		return msStatus;
+	}
+	@Override
+	public void send(final MultipartFile file) throws AppException {
+		new Thread(){
+			public void run() {
+				SendList mmsSendList=new SendList();
+				try {
+					String dirName=fileService.extractMms(file);
+					List<Coupon> coupons=fileService.getCoupon(dirName);
+					MarketingAct act=fileService.getActFile(dirName, SendList.MS_TYPE_MMS);
+					mmsSendList.setTotalCount(new Long(coupons.size()));
+					mmsSendList.setSubmitTime(new Date());
+					mmsSendList.setSendStatus(SendList.STATUS_SENDING);
+					mmsSendList.setMsType(SendList.MS_TYPE_MMS);
+					mmsSendList.setActName(act.getActName());
+					mmsSendList.setActNo(act.getActNo());
+					mmsSendList=saveOrUpdate(mmsSendList);
+					sendService.send(coupons, act, mmsFetch2SendInvokeService, mmsSendList.getId(), dirName);
+				} catch (AppException e) {
+					String message=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_SHEET_NOT_FIND, null, Locale.CHINA);
+					sendListDao.excuteByHQL("update SendList s set s.message=? where s.id=?", message,mmsSendList.getId());
+				}
+			}
+		}.start();
+		
+		
 	}
 	
 	
