@@ -3,9 +3,8 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <page:show id="ps_com_newland_beecode_domain_Partner" object="${partner}" path="/partners" update="false" delete="false"   z="La/K35bQYAIeHugAAvHv6BSqZZU=">
-        <field:display field="partnerName" id="s_com_newland_beecode_domain_Partner_terminal_name" object="${partner}" z="YWA+qBhFSjV/avklX3zZNtSxz5I="/>
-        <field:display field="partnerNo" id="s_com_newland_beecode_domain_Partner_terminal_no" object="${partner}" z="SpbQ0UDKWOgK+7/2jb+s25tHWjQ="/>
-        <field:display itemLabel="catalogName" field="partnerCatalog" id="s_com_newland_beecode_domain_Partner" object="${partner}" z="pKSGFZJ0OBCFluluN+UWDeOkWG4="/>
+        <field:display field="partnerName" id="s_com_newland_beecode_domain_Partner_partnername" object="${partner}" z="YWA+qBhFSjV/avklX3zZNtSxz5I="/>
+        <field:display field="partnerNo" id="s_com_newland_beecode_domain_Partner_partnerNo" object="${partner}" z="SpbQ0UDKWOgK+7/2jb+s25tHWjQ="/>
     </page:show>
     <input id="proceed" type="submit" value="返回" onclick="javascript:history.go(-1);"/>
 </div>

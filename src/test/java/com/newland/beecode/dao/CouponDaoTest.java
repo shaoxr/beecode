@@ -38,12 +38,12 @@ public class CouponDaoTest extends AbstractJUnit4SpringContextTests{
 			Coupon coupon=new Coupon();
 			coupon.setAcctMobile(c.getMobile());
 			coupon.setMmsStatus(0);
-            this.couponDao.save(coupon);
+           // this.couponDao.save(coupon);
 		}
 		Coupon coupon=new Coupon();
 		coupon.setAcctMobile("18606060518");
 		coupon.setMmsStatus(0);
-        this.couponDao.save(coupon); 
+       // this.couponDao.save(coupon); 
 		
             
 

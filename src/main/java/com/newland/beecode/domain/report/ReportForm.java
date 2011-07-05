@@ -21,7 +21,10 @@ public class ReportForm {
 	
 	private Long marketingCatalogId;
 	
-
+	private Long partnerId;
+	
+	private String terminalNo;
+	
 	private String parterNo;
 	
 	private boolean pagination;
@@ -140,6 +143,28 @@ public class ReportForm {
 
 	public void setParterName(String parterName) {
 		this.parterName = parterName;
+	}
+
+	public Long getPartnerId() {
+		if(GlobalConstant.ALL_LONG.equals(this.partnerId)){
+			return null;
+		}
+		return partnerId;
+	}
+
+	public void setPartnerId(Long partnerId) {
+		this.partnerId = partnerId;
+	}
+
+	public String getTerminalNo() {
+		if(GlobalConstant.ALL_STRING.equals(this.terminalNo)){
+			return null;
+		}
+		return terminalNo;
+	}
+
+	public void setTerminalNo(String terminalNo) {
+		this.terminalNo = terminalNo;
 	}
 
 }

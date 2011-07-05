@@ -24,6 +24,7 @@ import com.newland.beecode.domain.PartnerCatalog;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerCatalogService;
 import com.newland.beecode.service.PartnerService;
+import com.newland.beecode.service.TerminalService;
 import com.newland.beecode.service.impl.ExportExcelTemplateService;
 import com.newland.utils.PaginationHelper;
 
@@ -38,6 +39,8 @@ public class PartnerController extends BaseController{
     private PartnerService partnerService;
     @Autowired
     private ExportExcelTemplateService  partnerExcelService;
+    @Autowired
+    private TerminalService terminalService;
     
 	@RequestMapping(params = "form", method = RequestMethod.GET)
 	public String create(Model model){
@@ -93,20 +96,20 @@ public class PartnerController extends BaseController{
 			@RequestParam(value = "page", required = false) Integer page, 
 			@RequestParam(value = "size", required = false) Integer size, 
 			@RequestParam(value = "query", required = false) String query,
-			@RequestParam(value = "partnerCatalogId", required = false) Long partnerCatalogId, Model model,HttpServletRequest request){
+			@RequestParam(value = "partnerId", required = false) Long partnerId, Model model,HttpServletRequest request){
 		try {
 			Map<String, String> queryParams = PaginationHelper.makeParameters(
 			request.getParameterMap(), request.getQueryString());
 			page = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_PAGE));
 			size = Integer.valueOf(queryParams.get(PaginationHelper.PARAM_SIZE));
 			String queryStr = queryParams.get(PaginationHelper.PARAM_QUERY_STRING);
-			model.addAttribute("partners", this.partnerService.findByCatalogEntries(partnerCatalogId,(page.intValue() - 1) * size, size));
-			int maxPages = PaginationHelper.calcMaxPages(size,this.partnerService.countPartnersByCatalog(partnerCatalogId));
+			model.addAttribute("terminals", this.terminalService.findByPartnerEntries(partnerId,(page.intValue() - 1) * size, size));
+			int maxPages = PaginationHelper.calcMaxPages(size,this.terminalService.countTerminalByPartner(partnerId));
 			model.addAttribute("maxPages",maxPages);
 			model.addAttribute(PaginationHelper.PARAM_PAGE, page);
 			model.addAttribute(PaginationHelper.PARAM_SIZE, size);
 			 model.addAttribute(PaginationHelper.PARAM_QUERY_STRING, queryStr);
-			model.addAttribute("partnerCatalogId",partnerCatalogId);
+			model.addAttribute("partnerId",partnerId);
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
@@ -114,13 +117,13 @@ public class PartnerController extends BaseController{
 		return "partners/find";
 	}
 	@RequestMapping(value="/excelExport",method = RequestMethod.GET)
-	public String excelExport(@RequestParam(value = "partnerCatalogId", required = false) Long partnerCatalogId,
+	public String excelExport(@RequestParam(value = "partnerId", required = false) Long partnerId,
 			Model model,HttpServletRequest request, HttpServletResponse response){
 		FileInputStream nStream;
 		
 		try {
 			nStream = new FileInputStream(this.partnerExcelService.generateExcelFile(
-					this.partnerService.findByCatalog(partnerCatalogId), null, null));
+					this.terminalService.findByPartner(partnerId),null,null));
 			response.setContentType("application/vnd.ms-excel");
 			response.addHeader("Content-Disposition", "attachment;filename=" +"partner.xls");
 			byte[] b=new byte[1024];
@@ -176,10 +179,10 @@ public class PartnerController extends BaseController{
 		}
 		return "redirect:/partners"; 
 	}
-	@ModelAttribute("partnercatalogs")
-    public Collection<PartnerCatalog> populatePartnerCatalogs() {
+	@ModelAttribute("partners")
+    public Collection<Partner> populatePartners() {
             
-        return this.partnerCatalogService.findAll();    
+        return this.partnerService.findAll();    
     }
 	
 }

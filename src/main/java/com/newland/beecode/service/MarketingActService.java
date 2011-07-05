@@ -26,6 +26,8 @@ public interface MarketingActService {
 	 */
 	public void invalidMarketingAct(Long actNo)throws AppException;
 	
+	public void shutdownMarketingAct(Long actNo)throws AppException;
+	
 	/**
 	 * 添加营销客户
 	 * @param actNo

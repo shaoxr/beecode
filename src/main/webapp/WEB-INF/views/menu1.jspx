@@ -24,10 +24,10 @@
     </sec:authorize>
     <sec:authorize ifAnyGranted="ROLE_BUSINESS">
         <menu:category id="c_partner" >
-            <menu:item id="i_partner_new" messageCode="global_menu_new" url="/partnerCatalog?form" z="4xjV01xDZ9Kh11CbimGNrPY2LQw="/>
-            <menu:item id="i_partner_list" messageCode="global_menu_list" url="/partnerCatalog" z="lbpoRNR4iI77PzeiPBiRRca9fgQ="/>
-            <menu:item id="i_partner_terminal_new" messageCode="global_menu_new" url="/partners?form" z="4xjV01xDZ9Kh11CbimGNrPY2LQw="/>
-			<menu:item id="i_partner_terminal_list" messageCode="global_menu_list" url="/partners" z="lbpoRNR4iI77PzeiPBiRRca9fgQ="/>
+            <menu:item id="i_partner_new" messageCode="global_menu_new" url="/partners?form" z="4xjV01xDZ9Kh11CbimGNrPY2LQw="/>
+            <menu:item id="i_partner_list" messageCode="global_menu_list" url="/partners" z="lbpoRNR4iI77PzeiPBiRRca9fgQ="/>
+            <menu:item id="i_partner_terminal_new" messageCode="global_menu_new" url="/terminal?form" z="4xjV01xDZ9Kh11CbimGNrPY2LQw="/>
+			<menu:item id="i_partner_terminal_list" messageCode="global_menu_list" url="/terminal" z="lbpoRNR4iI77PzeiPBiRRca9fgQ="/>
 			<menu:item id="i_partner_export"  url="/partners?find=ByCondition&amp;form" />
 		</menu:category>
 		<menu:category id="c_marketing_catalog" >

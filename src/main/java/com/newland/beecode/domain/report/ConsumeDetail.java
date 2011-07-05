@@ -17,6 +17,8 @@ public class ConsumeDetail {
 	
 	private BigDecimal backAmount;
 	
+	private String exchangeName;
+	
 
 	private BigDecimal rebateRate;
 	
@@ -26,6 +28,10 @@ public class ConsumeDetail {
 	private String parterNo;
 	
 	private String parterName;
+	
+	private String terminalName;
+	
+	private String terminalNo;
 	
 	private String  couponId;
 	
@@ -128,8 +134,28 @@ public class ConsumeDetail {
 	public void setAcctMobile(String acctMobile) {
 		this.acctMobile = acctMobile;
 	}
+	public String getTerminalName() {
+		return terminalName;
+	}
 
-	
+	public void setTerminalName(String terminalName) {
+		this.terminalName = terminalName;
+	}
+
+	public String getTerminalNo() {
+		return terminalNo;
+	}
+
+	public void setTerminalNo(String terminalNo) {
+		this.terminalNo = terminalNo;
+	}
+	public String getExchangeName() {
+		return exchangeName;
+	}
+
+	public void setExchangeName(String exchangeName) {
+		this.exchangeName = exchangeName;
+	}
 	
 
 }

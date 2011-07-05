@@ -112,7 +112,12 @@ public class SendServiceImpl implements SendService {
 	}
 	private void heartDetect(Integer msType,long size)throws AppException{
 		if(msType.equals(SendList.MS_TYPE_MMS)){
-				long mmsBalance=new Long(this.mmsService.getBalanceByMontnets());
+				long mmsBalance=0;
+				try {
+					mmsBalance = new Long(this.mmsService.getBalanceByMontnets());
+				} catch (NumberFormatException e) {
+					throw new AppException(ErrorsCode.BIZ_MMS_NAME_ERROR,"");
+				}
 				if(mmsBalance<size){
 					throw new AppException(ErrorsCode.BIZ_MMS_LACK_OF_BALANCE,"");
 				}

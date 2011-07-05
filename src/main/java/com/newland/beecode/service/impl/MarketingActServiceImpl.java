@@ -23,6 +23,7 @@ import com.newland.beecode.domain.MarketingCatalog;
 import com.newland.beecode.domain.SendList;
 import com.newland.beecode.domain.MmsTemplate;
 import com.newland.beecode.domain.Partner;
+import com.newland.beecode.domain.Terminal;
 import com.newland.beecode.domain.condition.MarketingActCondition;
 import com.newland.beecode.domain.report.MarketingActSummary;
 import com.newland.beecode.exception.AppException;
@@ -87,7 +88,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 					MarketingAct act = actDao.findUniqueByProperty("actNo", actNo);
 					String newName=act.getActNo().toString()+System.currentTimeMillis();
 					Customer _customer=new Customer();
-					this.checkService.checkCustomerFile(file, newName, _customer, bizNo);
+					this.checkService.checkCustomerFile(file, newName, _customer, act);
 					_customer.setActNo(act.getActNo());
 					_customer.setOldName(file.getOriginalFilename());
 					_customer.setNewName(newName);
@@ -107,9 +108,28 @@ public class MarketingActServiceImpl implements MarketingActService {
 				coupon.setAcctMobile(customer.getMobile());
 				coupon.setAcctName(customer.getName());
 				coupon.setAcctNo(customer.getAccount());
-				if(act.getBizNo().equals(Coupon.BIZ_TYPE_VOUCHER)){
-					BigDecimal backAmount = act.getBackRate().multiply(customer.getAmount()).setScale(2,BigDecimal.ROUND_HALF_UP);
-					coupon.setBackAmount(act.getMaxAmount().min(backAmount));
+				if (act.getImportType().equals(MarketingAct.IMPORT_TYPE_EXCEL)) {
+					if (act.getBizNo().equals(Coupon.BIZ_TYPE_VOUCHER)) {
+						coupon.setBackAmount(customer.getBackAmount());
+					}
+					if (act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)) {
+						coupon.setRebateRate(customer.getRebaterate());
+					}
+					if (act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)) {
+						coupon.setExchangeName(customer.getExchangeName());
+						coupon.setExchangeAmount(customer.getExchangeAmount());
+					}
+				}else{
+					if (act.getBizNo().equals(Coupon.BIZ_TYPE_VOUCHER)) {
+						coupon.setBackAmount(act.getBackRate());
+					}
+					if (act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)) {
+						coupon.setRebateRate(act.getRebateRate());
+					}
+					if (act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)) {
+						coupon.setExchangeName(act.getExchangeName());
+						coupon.setExchangeAmount(act.getAmount());
+					}
 				}
 				coupon.setMarketingAct(act);
 				coupon.setCouponStatus(Coupon.STATUS_VALID);
@@ -152,8 +172,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 			throw new AppException(ErrorsCode.BIZ_STARDATE_AFTER_ENDDATE,"");
 		}
 		this.checkService.checkCodeCheck(act);
-		Set<Partner> partners=this.checkService.partnerCheck(partnerFile,String.valueOf(System.currentTimeMillis()));
-		act.setPartners(partners);
+		Set<Terminal> terminals=this.checkService.partnerCheck(partnerFile,String.valueOf(System.currentTimeMillis()));
+		act.setTerminals(terminals);
 		act.setGenTime(new Date());
 		act.setActStatus(MarketingAct.STATUS_WAIT_ADD_CUSTOMER);
 		act.setMmsSending(MarketingAct.MMS_SENDING_NO);
@@ -166,7 +186,16 @@ public class MarketingActServiceImpl implements MarketingActService {
 	public void appendMmsContent(MarketingAct act)throws AppException{
 		act.getMmsTemplate().checkNum();
 		MarketingAct _act=this.actDao.get(act.getActNo());
-		_act.setMmsTemplate(act.getMmsTemplate());
+		if(_act.getMmsTemplate()==null){
+			_act.setMmsTemplate(new MmsTemplate());
+		}
+		_act.getMmsTemplate().setCardBefore(act.getMmsTemplate().getCardBefore());
+		_act.getMmsTemplate().setCouponIdBefore(act.getMmsTemplate().getCouponIdBefore());
+		_act.getMmsTemplate().setEnding(act.getMmsTemplate().getEnding());
+		_act.getMmsTemplate().setPeriodBefore(act.getMmsTemplate().getPeriodBefore());
+		_act.getMmsTemplate().setValueBefore(act.getMmsTemplate().getValueBefore());
+		_act.getMmsTemplate().setTitle1(act.getMmsTemplate().getTitle1());
+		_act.getMmsTemplate().setTitle2(act.getMmsTemplate().getTitle2());
 		_act.setMmsTitle(act.getMmsTitle());
 		this.actDao.update(_act);
 	}
@@ -238,14 +267,6 @@ public class MarketingActServiceImpl implements MarketingActService {
 		}
 		MarketingAct act = this.findByActNo(marketingAct.getActNo());
 		act.setActName(marketingAct.getActName());
-		if(partners!=null){
-			Set<Partner> partnerSet=new HashSet<Partner>();
-			for(Long partnerId:partners){
-				Partner partner=this.partnerService.findById(partnerId);
-				partnerSet.add(partner);
-			}
-			act.setPartners(partnerSet);
-		}	
 		act.setStartDate(marketingAct.getStartDate());
 		act.setEndDate(marketingAct.getEndDate());
 		act.setTimes(marketingAct.getTimes());	
@@ -399,6 +420,11 @@ public class MarketingActServiceImpl implements MarketingActService {
     		return this.smsSendInvokeService;
     	}
     }
+	@Override
+	public void shutdownMarketingAct(Long actNo) throws AppException {
+		this.actDao.excuteByHQL("update MarketingAct m set m.actStatus=? where m.actNo=?", MarketingAct.STATUS_CLOSED,actNo);
+		
+	}
 
 
 

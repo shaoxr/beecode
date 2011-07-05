@@ -166,8 +166,28 @@ public class Coupon {
 	
 	@Column
 	private BigDecimal backAmount;
+	@Column
+	private String exchangeName;
+	@Column
+	private BigDecimal exchangeAmount;
 	
 	
+
+	public String getExchangeName() {
+		return exchangeName;
+	}
+
+	public void setExchangeName(String exchangeName) {
+		this.exchangeName = exchangeName;
+	}
+
+	public BigDecimal getExchangeAmount() {
+		return exchangeAmount;
+	}
+
+	public void setExchangeAmount(BigDecimal exchangeAmount) {
+		this.exchangeAmount = exchangeAmount;
+	}
 
 	public BigDecimal getBackAmount() {
 		return backAmount;

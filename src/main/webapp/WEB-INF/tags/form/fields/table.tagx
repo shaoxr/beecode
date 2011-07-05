@@ -36,6 +36,9 @@
 	<jsp:directive.attribute name="delete" type="java.lang.Boolean"
 		required="false"
 		description="Include 'delete' link into table (default true)" />
+	<jsp:directive.attribute name="shutdown" type="java.lang.Boolean"
+		required="false"
+		description="Include 'delete' link into table (default true)" />	
 	<jsp:directive.attribute name="append" type="java.lang.Boolean"
 		required="false"
 		description="Include 'delete' link into table (default true)" />
@@ -76,6 +79,9 @@
 		<c:if test="${empty append}">
 			<c:set var="append" value="false" />
 		</c:if>
+		<c:if test="${empty shutdown}">
+			<c:set var="shutdown" value="false" />
+		</c:if>
 
 		<spring:message
 			code="label_${fn:toLowerCase(fn:substringAfter(id,'_'))}"
@@ -108,6 +114,9 @@
 						<th></th>
 					</c:if>
 					<c:if test="${invalid}">
+						<th></th>
+					</c:if>
+					<c:if test="${shutdown}">
 						<th></th>
 					</c:if>
 				</tr>
@@ -248,6 +257,37 @@
 								title="${fn:escapeXml(invalid_label)}" type="image"
 								value="${fn:escapeXml(invalid_label)}"
 								onclick="return confirm('${invalid_confirm_msg}');" />
+							<c:if test="${not empty param.page}">
+								<input name="page" type="hidden"
+									value="${fn:escapeXml(param.page)}" />
+							</c:if>
+							<c:if test="${not empty param.size}">
+								<input name="size" type="hidden"
+									value="${fn:escapeXml(param.size)}" />
+							</c:if>
+							<input name="query" type="hidden" value="${query}" />
+						</form:form></td>
+					</c:if>
+				<c:if test="${shutdown}">
+						<td><spring:url
+							value="${path}/shutdown/${item[typeIdFieldName]}"
+							var="shutdown_form_url" /> <spring:url
+							value="/resources/images/delete.png" var="shutdown_image_url" /> <form:form
+							action="${fn:escapeXml(shutdown_form_url)}" method="POST">
+							<spring:message arguments="${typeName}[${item[typeIdFieldName]}]"
+								code="entity_shutdown" var="shutdown_label" />
+							<c:set var="shutdown_confirm_msg">
+								<spring:escapeBody javaScriptEscape="true">
+									<spring:message
+										arguments="${typeName}[${item[typeIdFieldName]}]"
+										code="entity_shutdown_confirm" />
+								</spring:escapeBody>
+							</c:set>
+							<input alt="${fn:escapeXml(shutdown_label)}" class="image"
+								src="${fn:escapeXml(shutdown_image_url)}"
+								title="${fn:escapeXml(shutdown_label)}" type="image"
+								value="${fn:escapeXml(shutdown_label)}"
+								onclick="return confirm('${shutdown_confirm_msg}');" />
 							<c:if test="${not empty param.page}">
 								<input name="page" type="hidden"
 									value="${fn:escapeXml(param.page)}" />

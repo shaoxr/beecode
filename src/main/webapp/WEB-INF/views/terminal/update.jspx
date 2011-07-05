@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <form:update id="fu_com_newland_beecode_domain_partner_terminal" modelAttribute="terminal" path="/terminal" z="fpioqBoVRSLXKYN/Vuenzhm2HCA=">
+        <field:input field="name" id="c_com_newland_beecode_domain_Partner_terminal_name" required="true" z="user-managed"/>
+        <field:input field="terminalNo" id="c_com_newland_beecode_domain_Partner_terminal_no" required="true"  z="user-managed"/>
+        <field:select field="partner.id" id="c_com_newland_beecode_domain_Partner" itemValue="id" itemLabel="partnerName" items="${partners}" path="/partners" required="true" z="10abxlZqDLa7n1Wvs1o/oQRqEcg="/>
+    </form:update>
+    
+</div>

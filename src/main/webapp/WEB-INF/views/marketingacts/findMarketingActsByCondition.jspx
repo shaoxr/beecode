@@ -3,15 +3,13 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:find finderName="ByCondition" id="c_com_newland_beecode_domain_MarketingAct" path="/marketingacts" z="uQvOariY7UCY7nnpMbpIahApMc4=">
-        <field:datetime disableFormBinding="true" dateTimePattern="${date_format}"  field="minEndDate" id="f_com_newland_beecode_domain_MarketingAct_minEndTime"/>
-        <field:datetime disableFormBinding="true" dateTimePattern="${date_format}"  field="maxEndDate" id="f_com_newland_beecode_domain_MarketingAct_maxEndTime"/>
         <field:select disableFormBinding="true" headerKey="99999" headerValue="全部" field="marketingCatalog" id="c_com_newland_beecode_domain_marketingcatalog" itemValue="id" itemLabel="catalogName" items="${marketingCatalogs}"  path="/marketingCatalog"/>
         <field:selectBlank  disableFormBinding="true" headerKey="99999" headerValue="全部" field="actNo" id="c_com_newland_beecode_domain_marketingact" itemValue="actNo" itemLabel="actName" items="${marketingsBlank}"  path="/marketingCatalogs"/>
         <field:select disableFormBinding="true" field="bizNo" id="c_com_newland_beecode_domain_marketingact_businesstype" itemValue="key" itemLabel="value" items="${bizTypes}" multiple="false" path=""/>
         <field:select disableFormBinding="true" headerKey="99999" headerValue="全部" field="actStatus" id="c_com_newland_beecode_domain_marketingact_actstatusdesc" itemValue="key" itemLabel="value" items="${marketingstatusList}"  path=""/>
     </form:find>
     <page:list id="pl_com_newland_beecode_domain_MarketingAct" items="${marketingacts}" z="sFCbrOVGxWJl4YkClga8MCMB8GE=">
-        <table:table data="${marketingacts}"  id="label_com_newland_beecode_domain_MarketingAct" path="/marketingacts" update="true" delete="false" append="true" appendpath="appendCustomer" invalid="true" create="false" typeIdFieldName="actNo" z="user-managed">
+        <table:table data="${marketingacts}" shutdown="true" id="label_com_newland_beecode_domain_MarketingAct" path="/marketingacts" update="true" delete="false" append="true" appendpath="appendCustomer"  create="false" typeIdFieldName="actNo" z="user-managed">
             <table:column id="c_com_newland_beecode_domain_MarketingAct_actName" property="actName" z="GnYCjbtwHcjvxbxNMAn0j6eJmmM="/>
             <table:column id="c_com_newland_beecode_domain_MarketingAct_businesstype" pattern="dictView" className="BUSINESS_TYPE" property="bizNo" z="6V2aJ3KqDBApsVzK7EPL4fYFfZc="/>
             <table:column id="c_com_newland_beecode_domain_MarketingAct_startDate" property="startDate" z="ycv72nkx9eKie1sUGfK7Hy/MfiU="/>

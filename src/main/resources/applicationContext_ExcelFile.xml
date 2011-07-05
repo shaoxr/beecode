@@ -28,6 +28,16 @@
                     <property name="align"><value>center</value></property>
                 </bean>
                 <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>终端名称</value></property>
+                    <property name="path"><value>terminalName</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>终端号</value></property>
+                    <property name="path"><value>terminalNo</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
                     <property name="name"><value>礼券编号</value></property>
                     <property name="path"><value>couponId</value></property>
                     <property name="align"><value>center</value></property>
@@ -43,7 +53,13 @@
                     <property name="align"><value>center</value></property>
                 </bean>
                 <bean class="com.newland.utils.CellDefine">
-                    <property name="name"><value>礼券价值</value></property>
+                    <property name="name"><value>兑换物品</value></property>
+                    <property name="path"><value>exchangeName</value></property>
+                    <property name="align"><value>center</value></property>
+                    <property name="count"><value>true</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>兑换价值</value></property>
                     <property name="path"><value>cost</value></property>
                     <property name="align"><value>center</value></property>
                     <property name="count"><value>true</value></property>
@@ -91,6 +107,21 @@
                     <property name="align"><value>center</value></property>
                 </bean>
                 <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>商户号</value></property>
+                    <property name="path"><value>partnerNo</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>终端名称</value></property>
+                    <property name="path"><value>terminalName</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>终端号</value></property>
+                    <property name="path"><value>terminalNo</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
                     <property name="name"><value>礼券类型</value></property>
                     <property name="path"><value>bizName</value></property>
                     <property name="align"><value>center</value></property>
@@ -127,13 +158,13 @@
         <property name="cellList">
         	<list>
         	   <bean class="com.newland.utils.CellDefine">
-                    <property name="name"><value>商户名称</value></property>
-                    <property name="path"><value>partnerName</value></property>
+                    <property name="name"><value>终端名</value></property>
+                    <property name="path"><value>name</value></property>
                     <property name="align"><value>center</value></property>
                 </bean>
                 <bean class="com.newland.utils.CellDefine">
-                    <property name="name"><value>商户编号</value></property>
-                    <property name="path"><value>partnerNo</value></property>
+                    <property name="name"><value>终端编号</value></property>
+                    <property name="path"><value>terminalNo</value></property>
                     <property name="align"><value>center</value></property>
                 </bean>
         	</list>

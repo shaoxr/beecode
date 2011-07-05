@@ -51,8 +51,8 @@ public class PartnerServiceImpl implements PartnerService {
 		if(_partner!=null){
 			throw new AppException(ErrorsCode.BIZ_PARTNER_NAME_EXITS,"");
 		}
-		PartnerCatalog partnerCatalog=this.partnerCatalogDao.get(partner.getPartnerCatalog().getId());
-		partner.setPartnerCatalog(partnerCatalog);
+		//PartnerCatalog partnerCatalog=this.partnerCatalogDao.get(partner.getPartnerCatalog().getId());
+		//partner.setPartnerCatalog(partnerCatalog);
 		this.partnerDao.save(partner);
 		
 	}
