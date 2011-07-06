@@ -3,6 +3,7 @@ package com.newland.beecode.service;
 import java.util.List;
 
 import com.newland.beecode.domain.Terminal;
+import com.newland.beecode.exception.AppException;
 
 /**
  * @author shaoxr:
@@ -11,7 +12,7 @@ import com.newland.beecode.domain.Terminal;
  */
 public interface TerminalService {
 	
-	public Terminal save(Terminal terminal);
+	public Terminal save(Terminal terminal)throws AppException;
 	
 	public Terminal findById(Long id);
 	
@@ -19,9 +20,9 @@ public interface TerminalService {
 	
 	public long countTerminals();
 	
-	public void delete(Long id);
+	public void delete(Long id)throws AppException;
 	
-	public void update(Terminal terminal);
+	public void update(Terminal terminal)throws AppException;
 	
 	public List<Terminal> findByPartnerEntries(Long id,Integer fist,Integer size);
 	

@@ -240,9 +240,23 @@ public class ErrorsCode {
 	 */
 	public static final String BIZ_PARTNER_EXCEL_BLANK="BIZ.PARTNER.011";
 	/**
-	 * 该商户已经参与活动，无法删除，
+	 * 该商户已经绑定终端，无法删除，
 	 */
 	public static final String BIZ_PARTNER_DO_NOT_DELETE="BIZ.PARTNER.012";
+	
+	
+	/**
+	 * 终端号已经存在
+	 */
+	public static final String BIZ_PARTNER_TERMINAL_NO_EXITS="BIZ.PARTNER.TERMINAL.000";
+	/**
+	 * 终端名已经存在
+	 */
+	public static final String BIZ_PARTNER_TERMINAL_NAME_EXITS="BIZ.PARTNER.TERMINAL.001";
+	/**
+	 * 该终端已经参与活动，无法删除
+	 */
+	public static final String BIZ_PARTNER_TERMINAL_DO_NOT_DELETE="BIZ.PARTNER.TERMINAL.002";
 	
 	
 	/**
