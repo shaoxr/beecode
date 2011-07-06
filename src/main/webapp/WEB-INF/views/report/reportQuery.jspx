@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<div xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+<div xmlns:forms="http://www.springframework.org/tags/form"  xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:form="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    <form:find finderName="ByCondition" id="ff_com_newland_beecode_domain_MarketingAct_report_detail" path="/report/detail" z="uQvOariY7UCY7nnpMbpIahApMc4=">
+    <form:find finderName="ByCondition" id="ff_com_newland_beecode_domain_MarketingAct_report_detail" path="/report/query" z="uQvOariY7UCY7nnpMbpIahApMc4=">
         <field:datetime disableFormBinding="true" dateTimePattern="${date_format}"  field="minEndDate" id="f_com_newland_beecode_domain_MarketingAct_report_minEndTime" required="true"/>
         <field:datetime disableFormBinding="true" dateTimePattern="${date_format}"  field="maxEndDate" id="f_com_newland_beecode_domain_MarketingAct_report_maxEndTime" required="true"/>
      <field:select disableFormBinding="true" field="marketingCatalogId" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_marketingcatalog" itemValue="id" itemLabel="catalogName" items="${marketingCatalogs}" multiple="false" path="/marketingCatalogs"/>
      <field:selectBlank disableFormBinding="true" field="actNo" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_marketingact_actname" itemValue="actNo" itemLabel="actName" items="${actList}" multiple="false" path="/businesstypes"/>
-    <field:select disableFormBinding="true" field="partnerCatalogId" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_partner_partnercatalog" itemValue="id" itemLabel="catalogName" items="${partnerCatalogs}" multiple="false" path="/partnerCatalogs" />
-     <field:selectBlank disableFormBinding="true" field="parterNo" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_partner_plural" itemValue="partnerNo" itemLabel="partnerName" items="${parterList}" multiple="false" path="/businesstypes" />
+    <field:select disableFormBinding="true" field="partnerId" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_partner" itemValue="id" itemLabel="partnerName" items="${partners}" multiple="false" path="/partners" />
+     <field:selectBlank disableFormBinding="true" field="terminalNo" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_partner_terminal" itemValue="terminalNo" itemLabel="name" items="${terminalList}" multiple="false" path="/terminal" />
+    <input type="hidden" name="reportType" value="2"></input>
     </form:find>
+    
     <c:if test="${emptyNo}">
      <div> ${minEndDate}到${maxEndDate}</div>
     </c:if>
@@ -28,11 +30,14 @@
     </page:list>
     </div>
      <c:if test="${emptyNo}">
-       <form action="/beecode/report/detailExcel" >
+       <form action="/beecode/report/excel" >
           <input type="hidden" name="minEndDate" value="${minEndDate}"/>
           <input type="hidden" name="maxEndDate" value="${maxEndDate}"/>
+          <input type="hidden" name="marketingCatalogId"  value="${marketingCatalogId}"/>
+          <input type="hidden" name="partnerId" value="${partnerId}"/>
           <input type="hidden" name="actNo"  value="${actNo}"/>
-          <input type="hidden" name="parterNo" value="${parterNo}"/>
+          <input type="hidden" name="terminalNo" value="${terminalNo}"/>
+          <input type="hidden" name="reportType" value="2"></input>
           <input type="submit" value="Excel下载"  style="height: 25px; "/>
        </form>
        
@@ -59,14 +64,14 @@
 				}
 			})
 			
-			dojo.connect(dijit.byId("_partnerCatalogId_id"), "onChange", function(evt) {
-				if(dijit.byId("_partnerCatalogId_id").value!='99999'){
-					var url='../ajax/partner?id='+dijit.byId("_partnerCatalogId_id");
-					var obj=dijit.byId("_parterNo_id");
+			dojo.connect(dijit.byId("_partnerId_id"), "onChange", function(evt) {
+				if(dijit.byId("_partnerId_id").value!='99999'){
+					var url='../ajax/partner?id='+dijit.byId("_partnerId_id");
+					var obj=dijit.byId("_terminalNo_id");
 					send(url,obj);
 				}else{
-					dijit.byId("_parterNo_id").store=dataStore;
-					dijit.byId("_parterNo_id").attr("displayedValue", "全部");
+					dijit.byId("_terminalNo_id").store=dataStore;
+					dijit.byId("_terminalNo_id").attr("displayedValue", "全部");
 				}
 			})
 		});

@@ -56,7 +56,47 @@ public class Customer {
 	 */
 	@Transient
 	private BigDecimal amount;
+	@Transient
+	private String exchangeName;
+	@Transient
+	private BigDecimal exchangeAmount;
+	@Transient
+	private BigDecimal rebaterate;
+	@Transient
+	private BigDecimal backAmount;
 	
+	public String getExchangeName() {
+		return exchangeName;
+	}
+
+	public void setExchangeName(String exchangeName) {
+		this.exchangeName = exchangeName;
+	}
+
+	public BigDecimal getExchangeAmount() {
+		return exchangeAmount;
+	}
+
+	public void setExchangeAmount(BigDecimal exchangeAmount) {
+		this.exchangeAmount = exchangeAmount;
+	}
+
+	public BigDecimal getRebaterate() {
+		return rebaterate;
+	}
+
+	public void setRebaterate(BigDecimal rebaterate) {
+		this.rebaterate = rebaterate;
+	}
+
+	public BigDecimal getBackAmount() {
+		return backAmount;
+	}
+
+	public void setBackAmount(BigDecimal backAmount) {
+		this.backAmount = backAmount;
+	}
+
 	public BigDecimal getAmount() {
 		return amount;
 	}

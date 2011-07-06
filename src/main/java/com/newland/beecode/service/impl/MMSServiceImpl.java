@@ -31,7 +31,7 @@ public class MMSServiceImpl implements MMSService{
     
 	public String[] sendMMS(SendParam mp) throws Exception{
 		MMSLocator client=new MMSLocator();
-		String resp=client.getMMSSoap().sendMMS(this.baseService.getMMSUserName(), this.baseService.getMMSPassword(), 
+		String resp=client.getMMSSoap().sendMMS("GD-zynn", "zn1922", 
 				mp.getTitle(), mp.getMobile(),mp.getContent() , SEND_TYPE_GATEWAY);
 		
 		String[] strs={resp,resp.substring(resp.length()-8, resp.length()-1)};
@@ -46,7 +46,13 @@ public class MMSServiceImpl implements MMSService{
 	@Override
 	public String sendMMSByMontnets(SendParam mp) throws Exception {
 		CustomerMmsLocator customer=new CustomerMmsLocator();
-		return customer.getCustomerMmsSoap().sendMms(this.baseService.getMMSUserName(), this.baseService.getMMSPassword(), mp.getMobile(), mp.getBase64Content(), mp.getTitle());
+		String resp=null;
+		try {
+			resp= customer.getCustomerMmsSoap().sendMms(this.baseService.getMMSUserName(), this.baseService.getMMSPassword(), mp.getMobile(), mp.getBase64Content(), mp.getTitle());
+		} catch (Exception e) {
+			resp= customer.getCustomerMmsSoap().sendMms(this.baseService.getMMSUserName(), this.baseService.getMMSPassword(), mp.getMobile(), mp.getBase64Content(), mp.getTitle());
+		}
+		return resp;
 	}
 	@Override
 	public String getBalanceByMontnets() throws AppException {

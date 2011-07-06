@@ -18,6 +18,7 @@ import org.hibernate.annotations.Parameter;
 public class Partner {
 	
 	public static final int PARTNER_NO_LENGTH=16;
+	public static final Long ALL_LONG=new Long(99999);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGen")

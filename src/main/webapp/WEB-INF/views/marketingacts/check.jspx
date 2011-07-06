@@ -20,7 +20,7 @@
         <c:if test="${marketingAct.bizNo eq '01'}">
            <field:input disabled="true" readonly="true" field="rebateRate" id="c_com_newland_beecode_domain_MarketingAct_rebateRate" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="/>
         </c:if>
-         <field:select disableFormBinding="true" id="s_com_newland_beecode_domain_MarketingAct_partners" itemLabel="allName" itemValue="partnerNo" multiple="true" disabled="true" items="${marketingAct.partners}" field="partner" path=""></field:select>
+         <field:select disableFormBinding="true" id="s_com_newland_beecode_domain_MarketingAct_partners" itemLabel="allName" itemValue="terminalNo" multiple="true" disabled="true" items="${marketingAct.terminals}" field="partner" path=""></field:select>
          <field:display field="mmsTemplate" id="s_com_newland_beecode_domain_marketingact_mmscontent"  object="${marketingAct}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
     </form:check>
     <page:list id="pl_com_newland_beecode_domain_MarketingAct_customer_checked" items="${customersChecked}" z="sFCbrOVGxWJl4YkClga8MCMB8GE=">

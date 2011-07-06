@@ -34,7 +34,6 @@ public class PartnerCatalogController extends BaseController{
 	public String create(@Valid PartnerCatalog partnerCatalog,Model model){
 		try {
             this.partnerCatalogService.save(partnerCatalog);
-			model.addAttribute("partnercatalogs", this.partnerCatalogService.findAll());
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";

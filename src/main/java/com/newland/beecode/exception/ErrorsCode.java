@@ -164,6 +164,25 @@ public class ErrorsCode {
 	 */
 	public static final String BIZ_CUSTOMER_AMOUNT_NOT_NUMBER="BIZ.027";
 	/**
+	 * 客户资料检查，兑换物品名称为空
+	 */
+	public static final String BIZ_CUSTOMER_EXCHANGE_NAME_NULL="BIZ.035";
+	
+	public static final String BIZ_CUSTOMER_EXCHANGE_AMOUNT_NULL="BIZ.028";
+	
+	public static final String BIZ_CUSTOMER_EXCHANGE_AMOUNT_NOT_NUMBER="BIZ.029";
+	
+	public static final String BIZ_CUSTOMER_REBATE_RATE_NULL="BIZ.030";
+	
+	public static final String BIZ_CUSTOMER_REBATE_RATE_NOT_NUMBER="BIZ.031";
+	
+	public static final String BIZ_CUSTOMER_REBATE_RATE_ERROR="BIZ.032";
+	
+	public static final String BIZ_CUSTOMER_BACKAMOUNT_NULL="BIZ.033";
+	
+	public static final String BIZ_CUSTOMER_BACKAMOUNT_ERROR="BIZ.034";
+	
+	/**
 	 * 商户类别名称已经存在
 	 */
 	public static final String BIZ_PARTNERCATALOG_NAME_EXITS="BIZ.PARTNERCATALOG.001";
@@ -221,9 +240,33 @@ public class ErrorsCode {
 	 */
 	public static final String BIZ_PARTNER_EXCEL_BLANK="BIZ.PARTNER.011";
 	/**
-	 * 该商户已经参与活动，无法删除，
+	 * 该商户已经绑定终端，无法删除，
 	 */
 	public static final String BIZ_PARTNER_DO_NOT_DELETE="BIZ.PARTNER.012";
+	
+	
+	/**
+	 * 终端号已经存在
+	 */
+	public static final String BIZ_PARTNER_TERMINAL_NO_EXITS="BIZ.PARTNER.TERMINAL.000";
+	/**
+	 * 终端名已经存在
+	 */
+	public static final String BIZ_PARTNER_TERMINAL_NAME_EXITS="BIZ.PARTNER.TERMINAL.001";
+	/**
+	 * 该终端已经参与活动，无法删除
+	 */
+	public static final String BIZ_PARTNER_TERMINAL_DO_NOT_DELETE="BIZ.PARTNER.TERMINAL.002";
+	
+	
+	/**
+	 * EXCEL终端编号不能为空或者格式有错
+	 */
+	public static final String BIZ_TERMINAL_EXCEL_TERMINALNO_ERROR="BIZ.TERMINAL.000";
+	/**
+	 * 商户不存在
+	 */
+	public static final String BIZ_TERMINAL_EXCEL_NOT_EXITS="BIZ.TERMINAL.001";
 	
 	
 	
@@ -251,6 +294,10 @@ public class ErrorsCode {
 	 * *必须要跟在数字后面
 	 */
 	public static final String BIZ_MARKETINGACT_CHECK_CODE_ORDER_ERROR="BIZ.MARKETINGACT.004";
+	/**
+	 * 字数超过280
+	 */
+	public static final String BIZ_MARKETINGACT_MMS_CONTENT_NUM_OVER="BIZ.MARKETINGACT.005";
 	
 	
 	
@@ -322,6 +369,10 @@ public class ErrorsCode {
 	 * 彩信网络连接异常，请检查网络
 	 */
 	public static final String BIZ_MMS_CONNECT_ERROR="BIZ.MMS.005";
+	/**
+	 * 彩信用户名或者密码
+	 */
+	public static final String BIZ_MMS_NAME_ERROR="BIZ.MMS.006";
 	
 	
 	
@@ -346,6 +397,10 @@ public class ErrorsCode {
 	 * 短信网络连接异常，请检查网络
 	 */
 	public static final String BIZ_SMS_CONNECT_ERROR="BIZ.SMS.005";
+	/**
+	 * 短信用户名或密码错误
+	 */
+	public static final String BIZ_SMS_NAME_ERROR="BIZ.SMS.006";
 	
 	
 	

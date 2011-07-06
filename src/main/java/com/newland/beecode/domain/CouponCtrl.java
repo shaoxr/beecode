@@ -77,11 +77,6 @@ public class CouponCtrl {
     @DateTimeFormat(style = "S-")
     private Date checkDate;
     /**
-     * 兑换物品价值
-     */
-    @Column
-    private BigDecimal amount;
-    /**
      * 折扣率
      */
     @Column
@@ -102,7 +97,16 @@ public class CouponCtrl {
      */
     @Column
     private BigDecimal originalAmount;
-
+    /**
+     * 兑换物品
+     */
+    @Column
+    private String exchangeName;
+    /**
+     * 兑换物品金额
+     */
+    @Column
+    private BigDecimal exchangeAmount;
 
 	/**
      * 业务代码
@@ -124,14 +128,6 @@ public class CouponCtrl {
 	public void setBackAmount(BigDecimal backAmount) {
 		this.backAmount = backAmount;
 	}
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
 
     public String getBatchNo() {
         return batchNo;
@@ -249,6 +245,21 @@ public class CouponCtrl {
 
 	public void setId(Long id) {
 			this.id = id;
+	}
+	public String getExchangeName() {
+		return exchangeName;
+	}
+
+	public void setExchangeName(String exchangeName) {
+		this.exchangeName = exchangeName;
+	}
+
+	public BigDecimal getExchangeAmount() {
+		return exchangeAmount;
+	}
+
+	public void setExchangeAmount(BigDecimal exchangeAmount) {
+		this.exchangeAmount = exchangeAmount;
 	}
     
     

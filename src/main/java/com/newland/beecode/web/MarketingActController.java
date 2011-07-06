@@ -103,7 +103,12 @@ public class MarketingActController extends BaseController{
 	}
 	@RequestMapping(value="appendMmsContent",method = RequestMethod.POST)
 	public String appendMmsContent(@Valid MarketingAct marketingAct,Model model, HttpServletRequest request){
-		this.marketingActService.appendMmsContent(marketingAct);
+		try {
+			this.marketingActService.appendMmsContent(marketingAct);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
 		return "redirect:/marketingacts/appendCustomer/"+ encodeUrlPathSegment(marketingAct.getActNo().toString(),
 				request)+"?form";
 	}
@@ -283,6 +288,23 @@ public class MarketingActController extends BaseController{
 		
 		return "redirect:/marketingacts?"+query;
 	}
+	@RequestMapping(value = "/shutdown/{actNo}", method = RequestMethod.POST)
+	public String shutdown(@PathVariable("actNo") Long actNo,
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "size", required = false) Integer size,
+			@RequestParam(value = "query", required = false) String query,
+			Model model,HttpServletRequest request)  {
+		try {
+			marketingActService.shutdownMarketingAct(actNo);
+			model.addAttribute("page", (page == null) ? "1" : page.toString());
+			model.addAttribute("size", (size == null) ? "10" : size.toString());
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		
+		return "redirect:/marketingacts?"+query;
+	}
     
 	@RequestMapping(value = "/find/check", method = RequestMethod.GET)
 	public String findMarketingAct4Check(Model model,
@@ -383,8 +405,6 @@ public class MarketingActController extends BaseController{
 	@RequestMapping(params = { "find=ByCondition" }, method=RequestMethod.GET)
 	public String findMarketingActsByCondition(
 			@RequestParam("bizNo") String bizNo,
-			@RequestParam("minEndDate") @org.springframework.format.annotation.DateTimeFormat(style = "M-") Date minEndDate,
-			@RequestParam("maxEndDate") @org.springframework.format.annotation.DateTimeFormat(style = "M-") Date maxEndDate,
 			@RequestParam("actStatus") Integer actStatus, 
 			@RequestParam("marketingCatalog") String marketingCatalog,
 			@RequestParam("actNo") Long actNo,Model model,
@@ -400,8 +420,6 @@ public class MarketingActController extends BaseController{
 			MarketingActCondition mac=new MarketingActCondition();
 			mac.setMarketingCatalogId(new Long(marketingCatalog)); 
 			mac.setBizNo(bizNo);
-			mac.setStartGenDate(minEndDate);
-			mac.setEndGenDate(maxEndDate);
 			mac.setActStatus(actStatus);
 			mac.setActNo(actNo);
 			List<MarketingAct> marketingActs=this.marketingActService.findByCondition(mac,(page-1)*size,size);
@@ -449,6 +467,10 @@ public class MarketingActController extends BaseController{
 	@ModelAttribute("marketingstatusList")
 	public Collection<Dictionary> populateMarketingstatusList() {
             return dictView.getSelectModelCollection(MarketingAct.DICT_KEY_NAME);
+	}
+	@ModelAttribute("valueTypes")
+	public Collection<Dictionary> populateValueTypes() {
+            return dictView.getSelectModelCollection("IMPORT_TYPE");
 	}
 
 }

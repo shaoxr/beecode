@@ -1,5 +1,6 @@
 package com.newland.beecode.service.impl;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -28,12 +29,14 @@ import com.newland.beecode.domain.Customer;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.SendList;
 import com.newland.beecode.domain.Partner;
+import com.newland.beecode.domain.Terminal;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.exception.ExcelException;
 import com.newland.beecode.service.CheckService;
 import com.newland.beecode.service.FileService;
 import com.newland.beecode.service.PartnerService;
+import com.newland.beecode.service.TerminalService;
 @Service("checkService")
 public class CheckServiceImpl implements CheckService{
 	@Autowired
@@ -42,6 +45,8 @@ public class CheckServiceImpl implements CheckService{
 	private FileService fileService;
 	@Autowired
 	private PartnerService partnerService;
+	@Autowired
+	private TerminalService terminalService;
 	
 	public static boolean isNumeric(String str){ 
 	    Pattern pattern = Pattern.compile("[0-9]*"); 
@@ -51,8 +56,21 @@ public class CheckServiceImpl implements CheckService{
 		Pattern pattern = Pattern.compile("([0-9]+)|([0-9]+.[0-9]+)");	
 		return pattern.matcher(str).matches(); 
 	}
+	private static final int NAME=0;
+	
+	private static final int MOBILE=1;
+	
+	private static final int ACCOUNT=2;
+	
+	private static final int EXCHANGE_NAME=3;
+	
+	private static final int EXCHANGE_AMOUNT=4;
+	
+	private static final int REBATE_RATE=5;
+	
+	private static final int BACK_AMOUNT=6;
 	@Override
-	public String checkCustomerFile(MultipartFile file, String fileName,Customer customer,String bizNo)throws ExcelException, AppException {
+	public String checkCustomerFile(MultipartFile file, String fileName,Customer customer,MarketingAct act)throws ExcelException, AppException {
 		StringBuffer tempError = new StringBuffer();
 		try {
 			this.fileService.storeFile(file,fileName);
@@ -72,45 +90,74 @@ public class CheckServiceImpl implements CheckService{
 			String nameError;
 			String mobileError;
 			String accountError;
-			String amountError;
+			String exchangeNameError;
+			String exchangeAmountError;
+			String rebaterateError;
+			String backAmountError;
 			int errorCount=0;
 			ArrayList<String> mobileList = new ArrayList<String>();
 			for (int j = 1; j <= sheet.getLastRowNum(); j++) {
 				int i=0;
 				row = sheet.getRow(j);
-				HSSFCell name = row.getCell(i++);
+				HSSFCell name = row.getCell(NAME);
 				nameError="";
 				if(name==null || name.toString().equals("")){
 					nameError=messageSource.getMessage(ErrorsCode.BIZ_COUSTMER_NAME_NULL, null, Locale.CHINA);
 				}
-				HSSFCell mobile = row.getCell(i++);
+				HSSFCell mobile = row.getCell(MOBILE);
 				mobileError="";
 				if(mobile==null || mobile.toString().equals("")||mobile.toString().length()!=11 ||!isNumeric(mobile.toString())){
 					mobileError=messageSource.getMessage(ErrorsCode.BIZ_COUSTMER_MOBILE_ERROR, null, Locale.CHINA);
 				}
 				accountError="";
-				HSSFCell account = row.getCell(i++);
+				HSSFCell account = row.getCell(ACCOUNT);
 				if(account!=null && !account.toString().equals("")){
 					if(!isNumeric(account.toString())){
 						accountError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_ACCOUNT_NOT_NUMBER, null, Locale.CHINA);
-					}
-					if((account.toString().length()!=16 && account.toString().length()!=19)){
+					}else if((account.toString().length()!=16 && account.toString().length()!=19)){
 						accountError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_ACCOUNT_LENGTH_ERROR, null, Locale.CHINA);
 					}
 				}
-				amountError="";
-				if(bizNo!=null && bizNo.equals(Coupon.BIZ_TYPE_VOUCHER)){				
-					HSSFCell amount = row.getCell(i++);
-							
-					if(amount==null || amount.toString().equals("")){
-						amountError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_AMOUNT_NULL, null, Locale.CHINA);						
-					}else{
-						if(!isIntegerOrFloat(amount.toString())){
-							amountError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_AMOUNT_NOT_NUMBER, null, Locale.CHINA);
+				backAmountError="";
+				exchangeNameError="";
+				exchangeAmountError="";
+				rebaterateError="";
+				if(act.getImportType().equals(MarketingAct.IMPORT_TYPE_EXCEL)){
+				  if(act.getBizNo().equals(Coupon.BIZ_TYPE_VOUCHER)){				
+						HSSFCell backAmount = row.getCell(BACK_AMOUNT);
+						if (backAmount == null || backAmount.toString().trim().equals("")) {
+							backAmountError = messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_BACKAMOUNT_NULL, null,Locale.CHINA);
+						} else {
+							if (!isIntegerOrFloat(backAmount.toString())) {
+								backAmountError = messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_BACKAMOUNT_ERROR,null, Locale.CHINA);
+							}
 						}
-					}
-				}
-				if(nameError!="" || mobileError!="" ||accountError!="" || amountError!=""){
+				  }
+				  if(act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)){
+					
+						HSSFCell exchangeName=row.getCell(EXCHANGE_NAME);
+						if(exchangeName==null || exchangeName.toString().trim().equals("")){
+							exchangeNameError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXCHANGE_NAME_NULL, null, Locale.CHINA);
+						}
+						HSSFCell exchangeAmount=row.getCell(EXCHANGE_AMOUNT);
+						if(exchangeAmount==null ||exchangeAmount.toString().trim().equals("")){
+							exchangeAmountError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXCHANGE_AMOUNT_NULL, null, Locale.CHINA);
+						}else if(!isIntegerOrFloat(exchangeAmount.toString())){
+							exchangeAmountError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXCHANGE_AMOUNT_NOT_NUMBER, null, Locale.CHINA);
+						}
+				  }
+				  if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
+					    HSSFCell rebaterate=row.getCell(REBATE_RATE);
+					    if(rebaterate==null || rebaterate.toString().trim().equals("")){
+					    	rebaterateError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_REBATE_RATE_NULL, null, Locale.CHINA);
+					    }else if(!isIntegerOrFloat(rebaterate.toString())){
+					    	rebaterateError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_REBATE_RATE_NOT_NUMBER, null, Locale.CHINA);
+					    }else if(new Long(rebaterate.toString())>=1 ||new Long(rebaterate.toString())<=0){
+					    	rebaterateError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_REBATE_RATE_ERROR, null, Locale.CHINA);
+					    }
+				  }
+			   }
+				if(nameError!="" || mobileError!="" ||accountError!="" || exchangeNameError!="" || exchangeAmountError!="" || rebaterateError!="" || backAmountError!=""){
 					errorCount++;
 					tempError.append("<tr><td>" + (j+1) + "</td><td>");
 					tempError.append(nameError);
@@ -119,12 +166,24 @@ public class CheckServiceImpl implements CheckService{
 					tempError.append("</td><td>");
 					tempError.append(accountError);
 					tempError.append("</td><td>");
-					tempError.append(amountError);
+					tempError.append(exchangeNameError);
+					tempError.append("</td><td>");
+					tempError.append(exchangeAmountError);
+					tempError.append("</td><td>");
+					tempError.append(rebaterateError);
+					tempError.append("</td><td>");
+					tempError.append(backAmountError);
 					tempError.append("</td></tr>");
 				}
 				if(errorCount>=20){
 					tempError.append("<tr><td>..........</td><td>");
 					tempError.append("..........");
+					tempError.append("</td><td>");
+					tempError.append("...........");
+					tempError.append("</td><td>");
+					tempError.append("...........");
+					tempError.append("</td><td>");
+					tempError.append("...........");
 					tempError.append("</td><td>");
 					tempError.append("...........");
 					tempError.append("</td><td>");
@@ -172,7 +231,10 @@ public class CheckServiceImpl implements CheckService{
 				HSSFCell name = row.getCell(i++);
 				HSSFCell mobile = row.getCell(i++);
 				HSSFCell account = row.getCell(i++);
-				HSSFCell amount = row.getCell(i++);
+				HSSFCell exchangeName = row.getCell(i++);
+				HSSFCell exchangeAmount = row.getCell(i++);
+				HSSFCell rabaterate = row.getCell(i++);
+				HSSFCell backAmount = row.getCell(i++);
 				customer.setName(name.toString());
 				customer.setMobile(mobile.toString());
 				if(account==null ||account.toString().equals("")){
@@ -180,11 +242,17 @@ public class CheckServiceImpl implements CheckService{
 				}else{
 					customer.setAccount(account.toString());
 				}
-				if(amount==null ||amount.toString().equals("")){
-					//customer.setAccount("****************");
-				}else{
-					BigDecimal val = new BigDecimal(amount.toString());
-					customer.setAmount(val);
+				if(exchangeName!=null && exchangeName.toString().equals("")){
+					customer.setExchangeName(exchangeName.toString());
+				}
+				if(exchangeAmount!=null && exchangeAmount.toString().trim().equals("")){
+					customer.setExchangeAmount(new BigDecimal(exchangeAmount.toString()));
+				}
+				if(rabaterate!=null && rabaterate.toString().trim().equals("")){
+					customer.setRebaterate(new BigDecimal(rabaterate.toString()));
+				}
+				if(backAmount!=null && backAmount.toString().trim().equals("")){
+					customer.setBackAmount(new BigDecimal(backAmount.toString()));
 				}
 				
 				list.add(customer);
@@ -198,18 +266,18 @@ public class CheckServiceImpl implements CheckService{
 	
 	@Override
 	@Transactional
-	public Set<Partner> partnerCheck(MultipartFile file, String fileName)
+	public Set<Terminal> partnerCheck(MultipartFile file, String fileName)
 			throws AppException {
 		StringBuffer tempError = new StringBuffer();
-		Set<Partner> partnerSet=new HashSet<Partner>();
+		Set<Terminal> terminals=new HashSet<Terminal>();
 		try {
 			this.fileService.storeFile(file,fileName);
 			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(this.fileService.getPath(fileName)));
 			HSSFWorkbook wb = new HSSFWorkbook(fs);
 			HSSFSheet sheet = wb.getSheet("partner");
 			HSSFRow row;
-			String partnerNameError;
-			String partnerNoError;
+			String terminalNameError;
+			String terminalNoError;
 			long errorCount=0;
 			if(sheet==null){
 				throw new ExcelException("",messageSource.getMessage(ErrorsCode.BIZ_PARTNER_SHEET_NOT_FOUND, null, Locale.CHINA));
@@ -221,30 +289,30 @@ public class CheckServiceImpl implements CheckService{
 				int i=0;
 				row = sheet.getRow(j);
 				HSSFCell name = row.getCell(i++);
-				partnerNameError="";
+				terminalNameError="";
 				if(name==null || name.toString().equals("")){
-					partnerNameError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NAME_NULL, null, Locale.CHINA);
+					terminalNameError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NAME_NULL, null, Locale.CHINA);
 				}
-				HSSFCell partnerNo = row.getCell(i++);
-				partnerNoError="";
-				Partner partner= null;
-				if(partnerNo==null || partnerNo.toString().equals("")){
-					partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PARTNERNO_ERROR, null, Locale.CHINA);
+				HSSFCell terminalNo = row.getCell(i++);
+				terminalNoError="";
+				Terminal terminal= null;
+				if(terminalNo==null || terminalNo.toString().equals("")){
+					terminalNoError=messageSource.getMessage(ErrorsCode.BIZ_TERMINAL_EXCEL_TERMINALNO_ERROR, null, Locale.CHINA);
 				}else{
-					partner=this.partnerService.findByPartnerNo(partnerNo.toString());
-					if(partner==null){
-						partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NOT_EXITS, null, Locale.CHINA);
+					terminal=this.terminalService.findByTerminalNo(terminalNo.toString());
+					if(terminal==null){
+						terminalNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NOT_EXITS, null, Locale.CHINA);
 					}else{
-						partnerSet.add(partner);
+						terminals.add(terminal);
 					}
 				}
 				
-				if(partnerNoError!="" || partnerNameError!=""){
+				if(terminalNoError!="" || terminalNameError!=""){
 					errorCount++;
 					tempError.append("<tr><td>" + (j+1) + "</td><td>");
-					tempError.append(partnerNameError);
+					tempError.append(terminalNameError);
 					tempError.append("</td><td>");
-					tempError.append(partnerNoError);
+					tempError.append(terminalNoError);
 					tempError.append("</td></tr>");
 				}
 				if(errorCount>=20){
@@ -260,7 +328,7 @@ public class CheckServiceImpl implements CheckService{
 			}
 			if(errorCount==0){
 				//return messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PASS, new Object[]{sheet.getLastRowNum()}, Locale.CHINA);
-				return partnerSet;
+				return terminals;
 			}
 			throw new ExcelException("",tempError.toString());
 			
@@ -342,6 +410,68 @@ public class CheckServiceImpl implements CheckService{
 		}
 		//act.setCheckCode(sb.toString());
 		
+	}
+	@Override
+	public List<Customer> newland(File file) {
+		List<String> mobiles=null;
+		try {
+			//this.checkCustomerFile(file, fileName);
+			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
+			HSSFWorkbook wb = new HSSFWorkbook(fs);
+			HSSFSheet sheet = wb.getSheet("customer");
+			HSSFRow row;
+			List<Customer> list=new ArrayList<Customer>();
+			Customer customer;
+			mobiles=new ArrayList<String>();
+			for (int j = 0; j <= sheet.getLastRowNum(); j++) {
+				int i=0;
+				customer=new Customer();
+				row = sheet.getRow(j);
+				HSSFCell mobile = row.getCell((short) i++);
+				mobile.setCellType(HSSFCell.CELL_TYPE_STRING);
+				//customer.setMobile(mobile.toString());
+				//list.add(customer);
+				if(mobile!=null && mobile.toString().length()==11 && mobile.toString().indexOf("1")==0){
+					if(!mobiles.contains(mobile.toString())){
+						customer.setMobile(mobile.toString());
+						mobiles.add(mobile.toString());
+						list.add(customer);
+					}
+					
+				}
+				
+			}
+			System.out.println(list.size()+">>>>>>>>");
+			POIFSFileSystem fs2 = new POIFSFileSystem(new FileInputStream("e:/name12.xls"));
+			HSSFWorkbook wb2 = new HSSFWorkbook(fs2);
+			HSSFSheet sheet2 = wb2.getSheet("customer");
+			HSSFRow row2;
+			for (int j = 0; j <= sheet2.getLastRowNum(); j++) {
+				int i=0;
+				customer=new Customer();
+				row2 = sheet2.getRow(j);
+				HSSFCell mobile = row2.getCell((short) i++);
+				mobile.setCellType(HSSFCell.CELL_TYPE_STRING);
+				//customer.setMobile(mobile.toString());
+				//list.add(customer);
+				if(mobile!=null && mobile.toString().length()==11 && mobile.toString().indexOf("1")==0){
+					System.out.println(mobile.toString()+"aaaaaa"+j);
+					if(!mobiles.contains(mobile.toString())){
+						customer.setMobile(mobile.toString());
+						mobiles.add(mobile.toString());
+						list.add(customer);
+					}
+					
+				}
+				
+			}
+			
+			System.out.println(list.size()+""+mobiles.size());
+			return list;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

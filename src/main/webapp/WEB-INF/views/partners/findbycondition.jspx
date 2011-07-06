@@ -3,18 +3,19 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <form:find finderName="ByCondition" id="c_com_newland_beecode_domain_Partner" path="/partners" z="uQvOariY7UCY7nnpMbpIahApMc4=">
-        <field:select disableFormBinding="true" field="partnerCatalogId" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_partner_partnercatalog" itemValue="id" itemLabel="catalogName" items="${partnercatalogs}" multiple="false" path="/partnerCatalogs" />
+        <field:select disableFormBinding="true" field="partnerId" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_partner" itemValue="id" itemLabel="partnerName" items="${partners}" multiple="false" path="/partners" />
     </form:find>
-    <page:list id="pl_com_newland_beecode_domain_Partner" items="${partners}" z="9AK+68cosEEmUb95ZM2mPgcQr3k=">
-        <table:table data="${partners}" delete="false" create="false" id="l_com_newland_beecode_domain_Partner" path="/partners" update="false" z="X2fixvMipqo42xKNycdTlM2+UW0=">
-            <table:column id="c_com_newland_beecode_domain_Partner_partnerNo" maxLength="15" property="partnerNo" z="user-managed"/>
-            <table:column id="c_com_newland_beecode_domain_Partner_partnerName" property="partnerName" z="KtnPFm0ZKsAKJPnPYeuDerWg3Pc="/>
-            <table:column id="c_com_newland_beecode_domain_Partner_partnerCatalog" property="partnerCatalog" itemLabel="catalogName" z="x3hXPmEfEbWRJwFLtORzsezYkmg=" maxLength="50"/>
+    <page:list id="pl_com_newland_beecode_domain_Partner" items="${terminals}" z="9AK+68cosEEmUb95ZM2mPgcQr3k=">
+        <table:table data="${terminals}"  create="false" id="l_com_newland_beecode_domain_Partner" path="/terminal"  z="X2fixvMipqo42xKNycdTlM2+UW0=">
+            <table:column id="c_com_newland_beecode_domain_Partner_partnername" property="partner" itemLabel="partnerName" z="x3hXPmEfEbWRJwFLtORzsezYkmg=" maxLength="50"/>
+            <table:column id="c_com_newland_beecode_domain_Partner_partnerNo" property="partner" itemLabel="partnerNo" z="x3hXPmEfEbWRJwFLtORzsezYkmg=" maxLength="50"/>
+            <table:column id="c_com_newland_beecode_domain_Partner_terminal_name" property="name" z="KtnPFm0ZKsAKJPnPYeuDerWg3Pc="/>
+            <table:column id="c_com_newland_beecode_domain_Partner_terminal_no"  property="terminalNo" z="user-managed"/>
         </table:table>
     </page:list>
       <c:if test="${maxPages>0}">
        <form action="/beecode/partners/excelExport" >
-          <input type="hidden" name="partnerCatalogId" value="${partnerCatalogId}"/>
+          <input type="hidden" name="partnerId" value="${partnerId}"/>
           <input type="submit" value="Excel导出"  style="height: 25px; "/>
        </form>
       </c:if> 

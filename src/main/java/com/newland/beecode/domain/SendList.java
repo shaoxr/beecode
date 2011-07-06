@@ -48,6 +48,9 @@ public class SendList {
 	@Column
 	private Integer sendStatus;
 	@Column
+	private String message;
+
+	@Column
 	private Date submitTime;
 	@Column
 	private Date endTime;
@@ -129,6 +132,12 @@ public class SendList {
 	public void setActName(String actName) {
 		this.actName = actName;
 	}
-	
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
 
 }

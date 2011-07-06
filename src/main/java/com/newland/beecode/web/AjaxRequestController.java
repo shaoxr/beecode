@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.Partner;
+import com.newland.beecode.domain.Terminal;
 import com.newland.beecode.domain.condition.SelectForm;
 import com.newland.beecode.service.MarketingActService;
 import com.newland.beecode.service.PartnerService;
+import com.newland.beecode.service.TerminalService;
 
 @RequestMapping("/ajax")
 @Controller
@@ -27,6 +29,8 @@ public class AjaxRequestController extends BaseController{
     private MarketingActService marketingActService;
     @Autowired
     private PartnerService partnerService;
+    @Autowired
+    private TerminalService terminalService;
 	@RequestMapping(value="/marketingAct", method=RequestMethod.GET)
 	public void getMarketingAct(@RequestParam Long id,Model model,HttpServletResponse response){
 		try {
@@ -51,15 +55,14 @@ public class AjaxRequestController extends BaseController{
 	@RequestMapping(value="/partner", method=RequestMethod.GET)
 	public void getPartner(@RequestParam Long id,Model model,HttpServletResponse response){
 		try {
-			List<Partner> list=this.partnerService.findByCatalog(id);
+			List<Terminal> list=this.terminalService.findByPartner(id);
 			List<SelectForm> list2=new ArrayList<SelectForm>();
-			for (Partner partner :list){
+			for (Terminal terminal :list){
 				SelectForm sf=new SelectForm();
-				sf.setName(partner.getPartnerName());
-				sf.setValue(partner.getPartnerNo());
+				sf.setName(terminal.getName());
+				sf.setValue(terminal.getTerminalNo());
 				list2.add(sf);
 			}
-			
 			JSONObject obj=new JSONObject();
 			obj.accumulate("items", list2.toArray());
 			obj.accumulate("label", "name");

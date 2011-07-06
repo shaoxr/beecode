@@ -56,7 +56,7 @@ public final class MatrixToImageWriter {
     for (int x = 0; x < width; x++) {
       for (int y = 0; y < height; y++) {
     		  if(imd!=null  && imd.getRGB(x, y)!=-1){
-    				  image.setRGB(x, y, matrix.get(x, y) ? GREY : GREY);
+    				  image.setRGB(x, y, matrix.get(x, y) ? imd.getRGB(x, y) : WHITE);
     			  
     		  }else{
     			  image.setRGB(x, y, matrix.get(x, y) ? BLACK : WHITE);

@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
+import com.newland.beecode.exception.AppException;
+import com.newland.beecode.exception.ErrorsCode;
 import com.newland.utils.NewlandUtil;
 @Entity
 public class MmsTemplate {
@@ -126,6 +128,12 @@ public class MmsTemplate {
 		}
 		return content;
 		
+	}
+	public void  checkNum()throws AppException{
+		int num=this.title1.length()+this.title2.length()+this.cardBefore.length()+this.couponIdBefore.length()+this.ending.length()+this.periodBefore.length();
+		if(num>280){
+			throw new AppException(ErrorsCode.BIZ_BARCODE_GEN_ERROR,"");
+		}
 	}
 	
 	

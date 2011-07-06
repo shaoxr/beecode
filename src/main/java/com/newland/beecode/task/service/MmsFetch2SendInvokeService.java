@@ -56,7 +56,7 @@ public class MmsFetch2SendInvokeService implements SendInvokeService {
 			} else {
 				respstatus.setRespStatus(RespStatus.RESP_ERROR);
 				respstatus.setRespDesc(resp);
-				logger.debug("send error error code:"+resp+";mobile:" + sp.getMobile());
+				logger.debug("send error! error code:"+resp+";mobile:" + sp.getMobile());
 			}
 		} catch (Exception e) {
 			respstatus.setRespStatus(RespStatus.RESP_ERROR);

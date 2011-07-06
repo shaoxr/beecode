@@ -9,9 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.newland.beecode.dao.MarketingActDao;
 import com.newland.beecode.dao.PartnerCatalogDao;
 import com.newland.beecode.dao.PartnerDao;
+import com.newland.beecode.dao.TerminalDao;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.PartnerCatalog;
+import com.newland.beecode.domain.Terminal;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.PartnerService;
@@ -22,10 +24,9 @@ public class PartnerServiceImpl implements PartnerService {
 
     @Resource(name = "partnerDao")
     private PartnerDao partnerDao;
-    @Resource(name = "partnerCatalogDao")
-    private PartnerCatalogDao partnerCatalogDao;
+    
     @Autowired
-    private MarketingActDao marketingActDao;
+	private TerminalDao terminalDao;
 
 
 	@Override
@@ -51,8 +52,8 @@ public class PartnerServiceImpl implements PartnerService {
 		if(_partner!=null){
 			throw new AppException(ErrorsCode.BIZ_PARTNER_NAME_EXITS,"");
 		}
-		PartnerCatalog partnerCatalog=this.partnerCatalogDao.get(partner.getPartnerCatalog().getId());
-		partner.setPartnerCatalog(partnerCatalog);
+		//PartnerCatalog partnerCatalog=this.partnerCatalogDao.get(partner.getPartnerCatalog().getId());
+		//partner.setPartnerCatalog(partnerCatalog);
 		this.partnerDao.save(partner);
 		
 	}
@@ -75,8 +76,13 @@ public class PartnerServiceImpl implements PartnerService {
 	@Override
 	@Transactional
 	public void delete(Long id) throws AppException{
-		List<MarketingAct> acts=this.marketingActDao.find("select  act from MarketingAct act join act.partners as ps where ps.id=?", id);
-		if(acts.size()>0){
+		//List<MarketingAct> acts=this.marketingActDao.find("select  act from MarketingAct act join act.partners as ps where ps.id=?", id);
+		//if(acts.size()>0){
+		//	throw new AppException(ErrorsCode.BIZ_PARTNER_DO_NOT_DELETE,"");
+		//}
+		
+		List<Terminal> terminals=this.terminalDao.findByProperty("partner.id", id);
+		if(terminals.size()>0){
 			throw new AppException(ErrorsCode.BIZ_PARTNER_DO_NOT_DELETE,"");
 		}
 		this.partnerDao.delete(id);
@@ -92,11 +98,9 @@ public class PartnerServiceImpl implements PartnerService {
 			throw new AppException(ErrorsCode.BIZ_PARTNER_NAME_EXITS,"");
 		}
 		partners=this.partnerDao.find("from Partner p where  p.partnerNo=? and p.id<>?",partner.getPartnerNo(),partner.getId());
-		PartnerCatalog partnerCatalog=this.partnerCatalogDao.get(partner.getPartnerCatalog().getId());
 		if(partners.size()>0){
 			throw new AppException(ErrorsCode.BIZ_PARTNER_NO_EXITS,"");
 		}
-		partner.setPartnerCatalog(partnerCatalog);
 		this.partnerDao.update(partner);
 		
 	}

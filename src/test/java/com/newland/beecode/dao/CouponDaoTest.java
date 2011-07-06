@@ -1,16 +1,20 @@
 package com.newland.beecode.dao;
 
+import java.io.File;
 import java.util.List;
 
 import javax.annotation.Resource;
 
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.CouponCtrl;
+import com.newland.beecode.domain.Customer;
 import com.newland.beecode.domain.condition.CouponCondition;
+import com.newland.beecode.service.CheckService;
 
 
 
@@ -21,22 +25,28 @@ public class CouponDaoTest extends AbstractJUnit4SpringContextTests{
 	
 	@Resource(name = "couponCtlDao")
     private CouponCtrlDao ctrlDao;
+	@Autowired
+	private CheckService checkService;
 	
 	@Test
 	public void testFindByCondition(){
-		List<CouponCtrl> list = ctrlDao.findByProperty("serialNo","3d4a56c8-a1a9-4690-8130-cf7635066a75");
+		File file =new File("e:/names.xls");
+		File file12=new File("e:/names12.xls");
+		List<Customer> list=this.checkService.newland(file);
 		System.out.println(list.size());
-		for (CouponCtrl coupontCtrl : list) {
-        	System.out.println(coupontCtrl.getBatchNo()+":");
-        	System.out.println(coupontCtrl.getDeviceNo()+":");
-        	System.out.println(coupontCtrl.getPartnerNo()+":");
-        	System.out.println(coupontCtrl.getTraceNo()+":");
-        	System.out.println(coupontCtrl.getVoidFlag().equals(CouponCtrl.VOID_FLAG_NORMAL));
-        }
-		CouponCtrl c =ctrlDao.findUniqueByProperty("traceNo", "000107");
-		System.out.println(c.getSerialNo());
-		List<CouponCtrl> ctrls = ctrlDao.find("from CouponCtrl o where o.serialNo=? and o.batchNo=? and o.deviceNo=? and o.partnerNo=? and o.traceNo=? and o.voidFlag=? ", 
-	    		"","","","","",CouponCtrl.VOID_FLAG_NORMAL);
+		for(Customer c:list){
+			Coupon coupon=new Coupon();
+			coupon.setAcctMobile(c.getMobile());
+			coupon.setMmsStatus(0);
+           // this.couponDao.save(coupon);
+		}
+		Coupon coupon=new Coupon();
+		coupon.setAcctMobile("18606060518");
+		coupon.setMmsStatus(0);
+       // this.couponDao.save(coupon); 
+		
+            
+
 		}
 	
 	

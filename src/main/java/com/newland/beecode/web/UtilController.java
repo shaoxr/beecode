@@ -22,6 +22,7 @@ import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.SendList;
+import com.newland.beecode.domain.Terminal;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.exception.ExcelException;
 import com.newland.beecode.service.CheckService;
@@ -68,8 +69,8 @@ public class UtilController extends BaseController{
 			Model model){
 		String fileName=String.valueOf(System.currentTimeMillis());
 		try {
-			 Set<Partner> partners=this.checkService.partnerCheck(file, fileName);
-			 model.addAttribute(ErrorsCode.MESSAGE, messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PASS, new Object[]{partners.size()}, Locale.CHINA));
+			 Set<Terminal> terminals=this.checkService.partnerCheck(file, fileName);
+			 model.addAttribute(ErrorsCode.MESSAGE, messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PASS, new Object[]{terminals.size()}, Locale.CHINA));
 		} catch (Exception e) {
 			if(e instanceof ExcelException){
 				model.addAttribute(ErrorsCode.MESSAGE,e.getMessage());

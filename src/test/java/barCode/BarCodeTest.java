@@ -18,12 +18,13 @@ import com.newland.beecode.service.BarCodeService;
 public class BarCodeTest extends AbstractJUnit4SpringContextTests{
 	@Autowired
 	private BarCodeService barCodeService;
+	
 	@Test
 	public void genTest(){
 		for(int i=0;i<10;i++){
 			System.out.println(Math.random());
 		}
-		this.barCodeService.genCode("http://218.66.48.231:3000/suboer/index.html", "suboer");
+		this.barCodeService.genCode("http://218.66.48.231:3000/suboer/index.html", "119");
 		//this.barCodeService.genCode("MEBKM:TITLE:Welcome to Newland!;URL:http\\://www.newland.com.cn;;", "002");
 	}
 	

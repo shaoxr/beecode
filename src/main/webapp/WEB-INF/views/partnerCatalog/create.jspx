@@ -5,7 +5,8 @@
     
     
     <form:create id="fc_com_newland_beecode_domain_PartnerCatalog" modelAttribute="partnerCatalog" path="/partnerCatalog" render="${empty dependencies}" z="DwcrHmazYQXHu4ENsS3R4NCenO8=">
-        <field:input field="catalogName" id="c_com_newland_beecode_domain_PartnerCatalog_catalogName" required="true" z="user-managed"/>
+        <field:input field="catalogName" id="c_com_newland_beecode_domain_Partner_partnerName" required="true" z="user-managed"/>
+        <field:input field="catalogNo" id="c_com_newland_beecode_domain_Partner_partnerNo" required="true" z="user-managed"/>
         
     </form:create>
     <form:dependency dependencies="${dependencies}" id="d_com_newland_beecode_domain_PartnerCatalog" render="${not empty dependencies}" z="zm28tO9Y/Yb7/YP0NmsNZCyplMc="/>

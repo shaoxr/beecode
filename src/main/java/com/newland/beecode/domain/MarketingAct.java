@@ -127,6 +127,10 @@ public class MarketingAct {
 	 * 不绑定银行卡
 	 */
 	public static final String BIND_CARD_NO = "0";
+	
+	public static final Integer IMPORT_TYPE_GLOBAL=1;
+	
+	public static final Integer IMPORT_TYPE_EXCEL=2;
 
 	public MarketingAct() {
 		amount = new BigDecimal(0);
@@ -204,8 +208,8 @@ public class MarketingAct {
 	private String bizNo;
 
 	@ManyToMany
-	@JoinTable(name="marketing_act_partners",joinColumns=@JoinColumn(name="marketing_act"),inverseJoinColumns=@JoinColumn(name="partners"))
-    private Set<Partner> partners = new HashSet<Partner>();
+	@JoinTable(name="marketing_act_terminal",joinColumns=@JoinColumn(name="marketing_act"),inverseJoinColumns=@JoinColumn(name="terminal"))
+    private Set<Terminal> terminals = new HashSet<Terminal>();
 
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name = "marketing_catalog")
@@ -246,6 +250,9 @@ public class MarketingAct {
 	
 	@Column
 	private BigDecimal backRate;
+	@Column
+	private Integer importType;
+
 	/**
 	 * 兑换物名称
 	 */
@@ -468,12 +475,13 @@ public class MarketingAct {
 		this.operNo = operNo;
 	}
 
-	public Set<Partner> getPartners() {
-		return partners;
+
+	public Set<Terminal> getTerminals() {
+		return terminals;
 	}
 
-	public void setPartners(Set<Partner> partners) {
-		this.partners = partners;
+	public void setTerminals(Set<Terminal> terminals) {
+		this.terminals = terminals;
 	}
 
 	public BigDecimal getRebateRate() {
@@ -544,5 +552,12 @@ public class MarketingAct {
 
 	public void setExchangeName(String exchangeName) {
 		this.exchangeName = exchangeName;
+	}
+	public Integer getImportType() {
+		return importType;
+	}
+
+	public void setImportType(Integer importType) {
+		this.importType = importType;
 	}
 }

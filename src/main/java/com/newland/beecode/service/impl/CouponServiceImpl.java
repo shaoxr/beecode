@@ -22,6 +22,7 @@ import com.newland.beecode.domain.SendList;
 import com.newland.beecode.domain.MsStatus;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.Partner;
+import com.newland.beecode.domain.Terminal;
 import com.newland.beecode.domain.report.ReportForm;
 import com.newland.beecode.domain.report.ReportResult;
 import com.newland.beecode.exception.AppException;
@@ -89,9 +90,9 @@ public class CouponServiceImpl implements CouponService {
         }
 
         boolean hasPartner = false;
-        for (Iterator<Partner> it = coupon.getMarketingAct().getPartners().iterator(); it.hasNext();) {
-            Partner partner = it.next();
-            if (partner.getPartnerNo().equals(req.getPartnerNo())) {
+        for (Iterator<Terminal> it = coupon.getMarketingAct().getTerminals().iterator(); it.hasNext();) {
+        	Terminal terminal = it.next();
+            if (terminal.getTerminalNo().equals(req.getDeviceNo())) {
                 hasPartner = true;
                 break;
             }
@@ -184,13 +185,14 @@ public class CouponServiceImpl implements CouponService {
         ctrl.setBusinessType(req.getBizType());
         ctrl.setEncodeVersion("2");
         if(coupon.getBusinessType().equals(Coupon.BIZ_TYPE_EXCHANGE)){
-        	ctrl.setAmount(coupon.getMarketingAct().getAmount());
+        	ctrl.setExchangeAmount(coupon.getExchangeAmount());
+        	ctrl.setExchangeName(coupon.getExchangeName());
         }else{
         	if(coupon.getBusinessType().equals(Coupon.BIZ_TYPE_VOUCHER)){
         		ctrl.setBackAmount(req.getBackAmount().min(req.getOriginalAmount()));
         	}
-        	ctrl.setAmount(req.getAmount());
         }
+        ctrl.setRebateRate(coupon.getRebateRate());
         ctrl.setOriginalAmount(req.getOriginalAmount());
         ctrl.setOffAmount(req.getOffAmount());
         ctrl.setBatchNo(req.getBatchNo());
@@ -312,12 +314,18 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	@Override
-	public ReportResult reportCount(ReportForm reportForm) {
+	public ReportResult reportCount(ReportForm reportForm)throws AppException {
+		if(reportForm.getStartDate().after(reportForm.getEndDate())){
+			throw new AppException(ErrorsCode.BIZ_STARDATE_AFTER_ENDDATE,"");
+		}
 		return this.couponDao.reportCount(reportForm);
 	}
 
 	@Override
-	public ReportResult reportDetail(ReportForm reportForm) {
+	public ReportResult reportDetail(ReportForm reportForm)throws AppException{
+		if(reportForm.getStartDate().after(reportForm.getEndDate())){
+			throw new AppException(ErrorsCode.BIZ_STARDATE_AFTER_ENDDATE,"");
+		}
 		return this.couponDao.reportDetail(reportForm);
 	}
 

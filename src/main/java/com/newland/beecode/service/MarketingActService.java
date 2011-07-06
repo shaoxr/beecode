@@ -26,6 +26,8 @@ public interface MarketingActService {
 	 */
 	public void invalidMarketingAct(Long actNo)throws AppException;
 	
+	public void shutdownMarketingAct(Long actNo)throws AppException;
+	
 	/**
 	 * 添加营销客户
 	 * @param actNo
@@ -36,7 +38,7 @@ public interface MarketingActService {
 	 * 增加短信/彩信 内容
 	 * @param act
 	 */
-	public void appendMmsContent(MarketingAct act);
+	public void appendMmsContent(MarketingAct act)throws AppException;
 	/**
 	 * genCode
 	 * @param coupon

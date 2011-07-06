@@ -21,6 +21,12 @@ public class PartnerSummaryItem {
 	 */
 	private String partnerName;
 	
+	private String partnerNo;
+	
+	private String terminalName;
+	
+	private String terminalNo;
+	
 	/**
 	 * 活动名称
 	 */
@@ -141,5 +147,28 @@ public class PartnerSummaryItem {
 
 	public void setBizNo(String bizNo) {
 		this.bizNo = bizNo;
+	}
+	public String getPartnerNo() {
+		return partnerNo;
+	}
+
+	public void setPartnerNo(String partnerNo) {
+		this.partnerNo = partnerNo;
+	}
+
+	public String getTerminalName() {
+		return terminalName;
+	}
+
+	public void setTerminalName(String terminalName) {
+		this.terminalName = terminalName;
+	}
+
+	public String getTerminalNo() {
+		return terminalNo;
+	}
+
+	public void setTerminalNo(String terminalNo) {
+		this.terminalNo = terminalNo;
 	}
 }

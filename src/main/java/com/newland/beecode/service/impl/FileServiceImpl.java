@@ -202,7 +202,7 @@ public class FileServiceImpl implements FileService{
 	}
 	@Override
 	public  byte[] getZIPByte(Long couponId) throws AppException{
-			File files[] = {new File(this.baseService.getFilePath()+TEXT_PATH+couponId+".txt"),new File(this.baseService.getFilePath()+IMAGE_PATH+couponId+".gif"),new File(this.baseService.getFilePath()+SMIL_PATH+"beecode.smil")};
+			File files[] = {new File(this.baseService.getFilePath()+TEXT_PATH+"newland"+".txt"),new File(this.baseService.getFilePath()+IMAGE_PATH+couponId+".gif"),new File(this.baseService.getFilePath()+SMIL_PATH+"beecode.smil")};
 			return this.getZIPByte(files);
 	}
 	
@@ -401,6 +401,7 @@ public class FileServiceImpl implements FileService{
      */
 	@Override
 	public String extractMms(MultipartFile file) throws AppException {
+		System.out.println("extractMms");
 		String path=this.baseService.getFilePath()+MMS_SEND_EXTRACT +this.getRandomPath();
 		this.extract(file, path);
 		return path;
@@ -574,6 +575,7 @@ public class FileServiceImpl implements FileService{
 	}
 	@Override
 	public String extractSms(MultipartFile file) throws AppException {
+		System.out.println("extractSms");
 		String path=this.baseService.getFilePath()+SMS_SEND_EXTRACT + this.getRandomPath();
 		extract(file,path);
 		return path;
@@ -605,6 +607,7 @@ public class FileServiceImpl implements FileService{
 		}
 	}
 	private synchronized String getRandomPath(){
+		System.out.println(">>>>>>>>>>gen file name");
 		return System.currentTimeMillis()+"";
 	}
 	public FileInputStream getRespStatus(SendList sendList,List<RespStatus> respStatuss)throws AppException{

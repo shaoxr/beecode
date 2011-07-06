@@ -18,8 +18,7 @@
     <page:list id="pl_com_newland_beecode_domain_Coupon" items="${coupons}" z="U3nb+I8gG2r3o6O8Ze3fZUqBX6Y=">
         <table:table data="${coupons}" id="l_com_newland_beecode_domain_Coupon" create="false" delete="false" update="false" path="/coupons" typeIdFieldName="couponId" z="oBvvnLmWEga+9B/QZ6xe4rGD43w=">
             <table:column id="c_com_newland_beecode_domain_MarketingAct_actName" property="marketingAct" itemLabel="actName"/>
-            <table:column id="c_com_newland_beecode_domain_Coupon_cuoponId" property="couponId" maxLength="18" >
-            </table:column>
+            <table:column id="c_com_newland_beecode_domain_Coupon_cuoponId" property="couponId" maxLength="18"/>
             <table:column id="c_com_newland_beecode_domain_marketingact_acctname" maxLength="20" property="acctName" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
             <table:column id="c_com_newland_beecode_domain_Coupon_acctMobile" maxLength="20" property="acctMobile" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
             <table:column id="c_com_newland_beecode_domain_Coupon_cuoponStatus" property="couponStatus" pattern="dictView" className="COUPON_STATUS" z="ku2jC2WhvM+Uz28v4qfL1cwun1g="/>

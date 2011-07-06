@@ -24,9 +24,9 @@
         <field:display field="times" id="s_com_newland_beecode_domain_Coupon_times" object="${coupon}" z="oggOKeBzQI7nzNPX9DvJiT5yWjs="/>
          <field:display field="remainTimes" id="s_com_newland_beecode_domain_Coupon_remainTimes" object="${coupon}" z="uCyI1oxgWZ5Us8LA47NfOjGZQSU="/>
     	<field:display field="mmsStatus" id="s_com_newland_beecode_domain_coupon_mmsstatus" pattern="dictView" className="COUPON_MMS_STATUS" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
-    	<field:display field="mmsDesc" id="s_com_newland_beecode_domain_coupon_mmsstatus_desc" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
+    	<field:display field="mmsDesc" id="s_com_newland_beecode_domain_coupon_mmsstatus_desc" object="${coupon}" />
     	<field:display field="smsStatus" id="s_com_newland_beecode_domain_coupon_smsstatus" pattern="dictView" className="COUPON_MMS_STATUS" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
-    	<field:display field="smsDesc" id="s_com_newland_beecode_domain_coupon_smsstatus_desc" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
+    	<field:display field="smsDesc" id="s_com_newland_beecode_domain_coupon_smsstatus_desc" object="${coupon}" />
     </page:show>
     <!--<c:if test="${coupon.couponStatus == 1}">
    		<util:panel title="重新生成礼券" id="cancel" openPane="false">
