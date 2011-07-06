@@ -63,6 +63,7 @@ public class AjaxRequestController extends BaseController{
 			JSONObject obj=new JSONObject();
 			obj.accumulate("items", list2.toArray());
 			obj.accumulate("label", "name");
+			obj.accumulate("identifier", "value");
 			response.getWriter().write(obj.toString());
 		} catch (Exception e) {
 			this.getMessage(e);
