@@ -16,10 +16,10 @@ public class BarCodeFormat {
 		if(act.getBizNo().equals(Coupon.BIZ_TYPE_VOUCHER)){
 			sb.append(NewlandUtil.formatBigDecimal(coupon.getBackAmount(), 10));
 		}else if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
-			sb.append(NewlandUtil.formatBigDecimal(act.getRebateRate(), 2));
+			sb.append(NewlandUtil.formatBigDecimal(coupon.getRebateRate(), 2));
 			sb.append(NewlandUtil.formatBigDecimal(act.getMaxAmount(), 8));
 		}else{
-			sb.append(NewlandUtil.formatBigDecimal(act.getRebateRate(), 10));
+			sb.append(NewlandUtil.formatBigDecimal(coupon.getRebateRate(), 10));
 		}
 		sb.append(NewlandUtil.dataToString(act.getEndDate(), "yyyyMMddHHmm"));
 		sb.append(coupon.getSerialNo());

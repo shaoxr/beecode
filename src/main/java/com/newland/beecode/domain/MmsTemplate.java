@@ -120,9 +120,9 @@ public class MmsTemplate {
 		String account_4=coupon.getAcctNo().substring(coupon.getAcctNo().length()-4, coupon.getAcctNo().length());
 		content=content.replaceAll(MmsTemplate.ACCOUNT_4, account_4);
 		if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
-			content=content.replaceAll(MmsTemplate.VALUE, act.getRebateRate().toString());
+			content=content.replaceAll(MmsTemplate.VALUE, coupon.getRebateRate().toString());
 		}else if(act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)){
-			content=content.replaceAll(MmsTemplate.VALUE, act.getExchangeName());
+			content=content.replaceAll(MmsTemplate.VALUE, coupon.getExchangeName());
 		}else{
 			content=content.replaceAll(MmsTemplate.VALUE,coupon.getBackAmount().toString());
 		}
