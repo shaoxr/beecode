@@ -28,15 +28,17 @@
             <menu:item id="i_partner_list" messageCode="global_menu_list" url="/partners" z="lbpoRNR4iI77PzeiPBiRRca9fgQ="/>
             <menu:item id="i_partner_terminal_new" messageCode="global_menu_new" url="/terminal?form" z="4xjV01xDZ9Kh11CbimGNrPY2LQw="/>
 			<menu:item id="i_partner_terminal_list" messageCode="global_menu_list" url="/terminal" z="lbpoRNR4iI77PzeiPBiRRca9fgQ="/>
+			<menu:item id="i_partner_import"  url="/partners/excelimport?form" />
 			<menu:item id="i_partner_export"  url="/partners?find=ByCondition&amp;form" />
 		</menu:category>
 		<menu:category id="c_marketing_catalog" >
 		     <menu:item id="id_marketingcatalog_new"  messageCode="global_menu_new" url="/marketingCatalog?form"/>
 			 <menu:item id="id_marketingcatalog_list" messageCode="global_menu_list" url="/marketingCatalog"/>
 		</menu:category>
-		<menu:category id="c_marketingact" z="VqJ9tX6fahxI0ELApiUXlEbJC5I=">
+		<menu:category id="c_marketingact" z="VqJ9tX6fahxI0ELApiUXlEbJC5I="><!--
 		    <menu:item id="id_marketingact_customer"  url="/util/checkcustomer?form"/>
 		    <menu:item id="id_marketingact_partner"  url="/util/checkpartner?form"/>
+		    -->
 			<menu:item id="id_marketingact_new" messageCode="global_menu_new" url="/marketingacts?form"/>
 			<menu:item id="fi_marketingact_manager"  url="/marketingacts?find=ByCondition&amp;form" z="user-managed"/>
 			<!--  menu:item id="id_marketingact_append" messageCode="global_menu_append" url="/marketingacts/find/append?find=ByCondition&amp;form"/>-->

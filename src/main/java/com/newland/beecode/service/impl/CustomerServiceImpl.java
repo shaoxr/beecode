@@ -46,7 +46,6 @@ public class CustomerServiceImpl implements CustomerService{
 	}
 
 	@Override
-	@Transactional
 	public void genCustomerList(MarketingAct act) {
 		List<Customer> unChcek= this.customerDao.find("from Customer c where c.actNo=? and fileStatus=?", act.getActNo(),Customer.CUSTOMER_STATUS_UNCHECK);
 		

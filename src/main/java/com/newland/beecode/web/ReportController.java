@@ -112,7 +112,7 @@ public class ReportController extends BaseController{
 			model.addAttribute("terminalNo",terminalNo);
 			model.addAttribute("partnerId",partnerId);
 			
-			if(maxPages==0){
+			if(maxPages>0){
 				model.addAttribute("emptyNo",true);
 			}
 		} catch (Exception e) {
@@ -125,7 +125,7 @@ public class ReportController extends BaseController{
 		return "report/detail"; 
     }
 	
-	@RequestMapping(value={"/Excel"}, method = RequestMethod.GET)
+	@RequestMapping(value={"/excel"}, method = RequestMethod.GET)
 	public String reportDetailExcel (
 			@RequestParam("minEndDate") @org.springframework.format.annotation.DateTimeFormat(style = "M-") Date minGenTime,
 			@RequestParam("maxEndDate") @org.springframework.format.annotation.DateTimeFormat(style = "M-") Date maxGenTime,

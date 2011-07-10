@@ -22,4 +22,8 @@
 		<put-attribute name="body"
 			value="/WEB-INF/views/partners/statistics.jspx" />
 	</definition>
+	<definition extends="default" name="partners/import">
+		<put-attribute name="body"
+			value="/WEB-INF/views/partners/import.jspx" />
+	</definition>
 </tiles-definitions>

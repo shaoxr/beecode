@@ -9,18 +9,32 @@
         <field:datetime disabled="true" dateTimePattern="${date_format}" field="endDate" id="c_com_newland_beecode_domain_MarketingAct_endDate" required="true" z="user-managed"/>
         <field:textarea disabled="true" field="actDetail" id="c_com_newland_beecode_domain_MarketingAct_actDetail" required="true" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>
         <field:display field="bindCard" id="s_com_newland_beecode_domain_marketingact_checkCard" pattern="dictView" className="BIND_CARD" object="${marketingAct}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
-        <c:if test="${marketingAct.bindCard eq '1'}">
-          <field:textarea disabled="true" field="checkCode" id="s_com_newland_beecode_domain_marketingact_bindcard_detail"  z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
+        <c:if test="${marketingact.bindCard eq '1'}">
+          <field:textarea  field="marketingact.checkCode" id="c_com_newland_beecode_domain_MarketingAct_bindcard_detail" disabled="true" required="false" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>
         </c:if>
-         <field:display field="bizNo" id="s_com_newland_beecode_domain_marketingact_businesstype" pattern="dictView" className="BUSINESS_TYPE" object="${marketingAct}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
-        <field:input disabled="true" readonly="true" field="times" id="c_com_newland_beecode_domain_MarketingAct_times" required="true" validationMessageCode="field_invalid_integer" z="t6HH8qJDiogoSsgcDZi6CHlFSe8="/>
-        <c:if test="${marketingAct.bizNo eq '00'}">
-           <field:input disabled="true" readonly="true" field="amount" id="c_com_newland_beecode_domain_MarketingAct_amount" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="/>
-        </c:if>
+        <field:display field="bizNo" id="s_com_newland_beecode_domain_marketingact_businesstype" pattern="dictView" className="BUSINESS_TYPE" object="${marketingAct}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
+       <field:display field="times" id="s_com_newland_beecode_domain_MarketingAct_times" object="${marketingAct}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
+       <field:display field="importType" id="s_com_newland_beecode_domain_marketingact_value_type" object="${marketingAct}" pattern="dictView" className="IMPORT_TYPE" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        <c:if test="${marketingAct.importType eq '2' }">
         <c:if test="${marketingAct.bizNo eq '01'}">
-           <field:input disabled="true" readonly="true" field="rebateRate" id="c_com_newland_beecode_domain_MarketingAct_rebateRate" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="/>
+          <field:display field="rebateRate" id="s_com_newland_beecode_domain_MarketingAct_rebateRate" object="${marketingAct}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+          <field:display field="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${marketingAct}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        </c:if>
+        <c:if test="${marketingAct.bizNo eq '00'}">
+          <field:display field="amount" id="s_com_newland_beecode_domain_MarketingAct_amount" object="${marketingAct}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+          <field:display field="exchangeName" id="c_com_newland_beecode_domain_MarketingAct_exchangeName"  object="${marketingAct}" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
+        </c:if>
+        <c:if test="${marketingAct.bizNo eq '02'}">
+          <field:display field="backRate" id="s_com_newland_beecode_domain_marketingact_backAmount" object="${marketingAct}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        </c:if>
+        </c:if>
+        <c:if test="${marketingAct.importType eq '1' }">
+          <c:if test="${marketingAct.bizNo eq '01'}">
+            <field:display field="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${marketingAct}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        </c:if>
         </c:if>
          <field:select disableFormBinding="true" id="s_com_newland_beecode_domain_MarketingAct_partners" itemLabel="allName" itemValue="terminalNo" multiple="true" disabled="true" items="${marketingAct.terminals}" field="partner" path=""></field:select>
+         <field:display  field="mmsTitle" id="s_com_newland_beecode_domain_MarketingAct_mmsTitle" object="${marketingAct}" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
          <field:display field="mmsTemplate" id="s_com_newland_beecode_domain_marketingact_mmscontent"  object="${marketingAct}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
     </form:check>
     <page:list id="pl_com_newland_beecode_domain_MarketingAct_customer_checked" items="${customersChecked}" z="sFCbrOVGxWJl4YkClga8MCMB8GE=">

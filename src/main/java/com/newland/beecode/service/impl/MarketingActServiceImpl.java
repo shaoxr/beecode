@@ -28,8 +28,10 @@ import com.newland.beecode.domain.condition.MarketingActCondition;
 import com.newland.beecode.domain.report.MarketingActSummary;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
+import com.newland.beecode.exception.ExcelException;
 import com.newland.beecode.service.BarCodeService;
 import com.newland.beecode.service.CheckService;
+import com.newland.beecode.service.CouponService;
 import com.newland.beecode.service.CustomerService;
 import com.newland.beecode.service.FileService;
 import com.newland.beecode.service.MarketingActService;
@@ -67,6 +69,8 @@ public class MarketingActServiceImpl implements MarketingActService {
 	@Autowired
 	private CustomerService customerService;
 	@Autowired
+	private CouponService couponService;
+	@Autowired
 	private SendService sendService;
 	@Resource(name="smsSendInvokeService")
 	private SendInvokeService smsSendInvokeService;
@@ -85,15 +89,15 @@ public class MarketingActServiceImpl implements MarketingActService {
 	}
     @Transactional(rollbackFor=Exception.class)
 	public void append(Long actNo, MultipartFile file, String bizNo) throws AppException {
-					MarketingAct act = actDao.findUniqueByProperty("actNo", actNo);
-					String newName=act.getActNo().toString()+System.currentTimeMillis();
-					Customer _customer=new Customer();
-					this.checkService.checkCustomerFile(file, newName, _customer, act);
-					_customer.setActNo(act.getActNo());
-					_customer.setOldName(file.getOriginalFilename());
-					_customer.setNewName(newName);
-					_customer.setFileStatus(Customer.CUSTOMER_STATUS_UNCHECK);
-					_customer=this.customerService.saveOrUpdate(_customer);
+						MarketingAct act = actDao.findUniqueByProperty("actNo", actNo);
+						String newName=act.getActNo().toString()+System.currentTimeMillis();
+						Customer _customer=new Customer();
+						this.checkService.checkCustomerFile(file, newName, _customer, act);
+						_customer.setActNo(act.getActNo());
+						_customer.setOldName(file.getOriginalFilename());
+						_customer.setNewName(newName);
+						_customer.setFileStatus(Customer.CUSTOMER_STATUS_UNCHECK);
+						_customer=this.customerService.saveOrUpdate(_customer);
 				
 		
 	}
@@ -135,7 +139,6 @@ public class MarketingActServiceImpl implements MarketingActService {
 				coupon.setCouponStatus(Coupon.STATUS_VALID);
 				coupon.setSerialNo(UuidHelper.generateUUID());
 				coupon.setBusinessType(act.getBizNo());
-				coupon.setRebateRate(act.getRebateRate());
 				coupon.setTimes(act.getTimes());
 				coupon.setRemainTimes(act.getTimes());
 				coupon.setGenTime(new Date());
@@ -424,6 +427,47 @@ public class MarketingActServiceImpl implements MarketingActService {
 	public void shutdownMarketingAct(Long actNo) throws AppException {
 		this.actDao.excuteByHQL("update MarketingAct m set m.actStatus=? where m.actNo=?", MarketingAct.STATUS_CLOSED,actNo);
 		
+	}
+	@Override
+	public void mmsOpen(Long actNo) {
+		this.actDao.excuteByHQL("update MarketingAct m set m.mmsSending=? where m.actNo=?", MarketingAct.MMS_SENDING_NO,actNo);
+		
+	}
+	@Override
+	@Transactional
+	public void updatePartner(Long actNo, MultipartFile partnerFile)
+			throws AppException {
+		Set<Terminal> terminals=this.checkService.partnerCheck(partnerFile, String.valueOf(System.currentTimeMillis()));
+		MarketingAct act=this.findByActNo(actNo);
+		act.setTerminals(terminals);
+		this.actDao.saveOrUpdate(act);
+		
+	}
+	@Override
+	@Transactional(readOnly=true)
+	public MarketingAct show(Long actNo) throws AppException {
+		MarketingAct act =findByActNo(actNo);
+		act.setMsStatus(couponService.findMSStatus(actNo));
+		if (act.getActStatus() > MarketingAct.STATUS_BEFORE_GIVE) {
+			MarketingActSummary marketingSummary = this.marketingSummary(actNo);
+			act.setSummary(marketingSummary);
+		}
+		this.customerService.genCustomerList(act);
+		return act;
+	}
+	@Override
+	@Transactional(readOnly=true)
+	public MarketingAct appendCustomerForm(Long actNo)  {
+		MarketingAct marketingAct=this.findByActNo(actNo);
+		this.customerService.genCustomerList(marketingAct);
+		return marketingAct;
+	}
+	@Override
+	@Transactional(readOnly=true)
+	public MarketingAct sendForm(Long actNo) throws AppException {
+		MarketingAct act=this.findByActNo(actNo);
+		act.setMsStatus(this.couponService.findMSStatus(actNo));
+		return act;
 	}
 
 

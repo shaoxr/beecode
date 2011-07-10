@@ -122,6 +122,7 @@ public class MmsTemplate {
 		if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
 			content=content.replaceAll(MmsTemplate.VALUE, coupon.getRebateRate().toString());
 		}else if(act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)){
+			System.out.println(coupon.getExchangeName());
 			content=content.replaceAll(MmsTemplate.VALUE, coupon.getExchangeName());
 		}else{
 			content=content.replaceAll(MmsTemplate.VALUE,coupon.getBackAmount().toString());

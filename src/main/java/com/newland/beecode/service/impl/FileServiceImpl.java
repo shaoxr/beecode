@@ -33,6 +33,7 @@ import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.RespStatus;
 import com.newland.beecode.domain.SendList;
+import com.newland.beecode.domain.Terminal;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.BaseService;
@@ -642,33 +643,93 @@ public class FileServiceImpl implements FileService{
 			FileWriter fw=new FileWriter(file);
 			fw.write("活动类别："+act.getMarketingCatalog().getCatalogName());
 			fw.write("\r\n");
+			fw.write("\r\n");
 			fw.write("活动标题："+act.getActName());
 			fw.write("\r\n");
-			fw.write("活动开始时间："+act.getStartDate());
 			fw.write("\r\n");
-			fw.write("活动截止时间："+act.getEndDate());
+			fw.write("开始时间："+act.getStartDate());
+			fw.write("\r\n");
+			fw.write("\r\n");
+			fw.write("截止时间："+act.getEndDate());
+			fw.write("\r\n");
 			fw.write("\r\n");
 			fw.write("活动详情："+act.getActDetail());
 			fw.write("\r\n");
-			Dictionary dictionary = (Dictionary) dictViewDao.findUnique("from Dictionary where className=? and key=?", "BIND_CARD",act.getBindCard());
-			fw.write("卡检查："+dictionary.getValue());
 			fw.write("\r\n");
+			Dictionary dictionary = (Dictionary) dictViewDao.findUnique("from Dictionary where className=? and key=?", "BIND_CARD",act.getBindCard());
+			fw.write("卡检查  ："+dictionary.getValue());
+			fw.write("\r\n");
+			fw.write("\r\n");
+			if(act.getBindCard().equals(MarketingAct.BIND_CARD_YES)){
+				fw.write("卡规则  :"+act.getCheckCode());
+				fw.write("\r\n");
+				fw.write("\r\n");
+			}
+			
 			dictionary = (Dictionary) dictViewDao.findUnique("from Dictionary where className=? and key=?", "BUSINESS_TYPE",act.getBizNo());
 			fw.write("礼券类型 :"+dictionary.getValue());
 			fw.write("\r\n");
-			fw.write("卡规则 :"+act.getCheckCode());
 			fw.write("\r\n");
-			
 			fw.write("可用次数："+act.getTimes());
 			fw.write("\r\n");
-			fw.write("礼券价值："+act.getAmount());
 			fw.write("\r\n");
-			fw.write("兑换物品："+act.getExchangeName());
+			dictionary = (Dictionary) dictViewDao.findUnique("from Dictionary where className=? and key=?", "IMPORT_TYPE",act.getImportType().toString());
+			fw.write("导入类型："+dictionary.getValue());
 			fw.write("\r\n");
+			fw.write("\r\n");
+			if(act.getImportType().equals(MarketingAct.IMPORT_TYPE_GLOBAL)){
+				if(act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)){
+					fw.write("礼券价值："+act.getAmount());
+					fw.write("\r\n");
+					fw.write("\r\n");
+					fw.write("兑换物品："+act.getExchangeName());
+					fw.write("\r\n");
+					fw.write("\r\n");
+				}
+				if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
+					fw.write("折扣率   ："+act.getRebateRate());
+					fw.write("\r\n");
+					fw.write("\r\n");
+					fw.write("上限额度："+act.getMaxAmount());
+					fw.write("\r\n");
+					fw.write("\r\n");
+				}
+				if(act.getBizNo().equals(Coupon.BIZ_TYPE_VOUCHER)){
+					fw.write("返还金额："+act.getBackRate());
+					fw.write("\r\n");
+					fw.write("\r\n");
+				}
+			}else{
+				if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
+					fw.write("上限额度："+act.getMaxAmount());
+					fw.write("\r\n");
+					fw.write("\r\n");
+				}
+			}
+			
 			dictionary = (Dictionary) dictViewDao.findUnique("from Dictionary where className=? and key=?", "ACT_STATUS",String.valueOf(act.getActStatus()));
-			fw.write("活动状态:"+dictionary.getValue());
+			fw.write("活动状态: "+dictionary.getValue());
+			fw.write("\r\n");
+			fw.write("\r\n");
+			
+			fw.write("合作商户: ");
+			int i=0;
+			for(Terminal terminal:act.getTerminals()){
+				if(i==0){
+					fw.write(terminal.getAllName());
+				}else{
+					fw.write("          "+terminal.getAllName());
+				}
+				
+				fw.write("\r\n");
+				i++;
+			}
+			fw.write("\r\n");
+			fw.write("发送标题："+act.getMmsTitle());
+			fw.write("\r\n");
 			fw.write("\r\n");
 			fw.write("发送内容：\r\n"+act.getMmsTemplate());
+			fw.write("\r\n");
 			fw.write("\r\n");
 			fw.close();
 			fis= new FileInputStream(file);
@@ -690,7 +751,7 @@ public class FileServiceImpl implements FileService{
 			String readerStr=null;
 			Integer readType=new Integer(reader.readLine());
 			if(!readType.equals(type)){
-				throw new AppException("","");
+				throw new AppException(ErrorsCode.BIZ_MMS_RESP_FILE_ERROR,"");
 			}
 			act.setActNo(new Long(reader.readLine()));
 			Coupon coupon =null;

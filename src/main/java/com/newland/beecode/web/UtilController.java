@@ -2,6 +2,7 @@ package com.newland.beecode.web;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -26,6 +27,7 @@ import com.newland.beecode.domain.Terminal;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.exception.ExcelException;
 import com.newland.beecode.service.CheckService;
+import com.newland.beecode.service.CouponService;
 import com.newland.beecode.service.FileService;
 import com.newland.beecode.service.MarketingActService;
 
@@ -38,6 +40,8 @@ public class UtilController extends BaseController{
 	private FileService fileService;
 	@Autowired
 	private MessageSource messageSource;
+	@Autowired
+	private CouponService couponService;
 	@Autowired
 	private MarketingActService marketingActService;
 	@RequestMapping(value={"checkcustomer"},params = "form", method = RequestMethod.GET)
@@ -138,6 +142,55 @@ public class UtilController extends BaseController{
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			logger.error("", e);
 			return "prompt";
+		}
+		return null;
+		
+	}
+	@RequestMapping(value={"singledownloadmmszip"},method = RequestMethod.POST)
+	public String singledownLoadMMSZip(
+			@RequestParam(value = "couponId") Long couponId,
+			@RequestParam(value = "msType") Integer msType,
+			Model model,HttpServletRequest request, HttpServletResponse response){
+		
+		try {
+			List<Coupon> coupons=new ArrayList<Coupon>();
+			Coupon coupon=this.couponService.findByCoupon(couponId);
+			coupons.add(coupon);
+			MarketingAct act =coupon.getMarketingAct();
+			if(msType.equals(SendList.MS_TYPE_MMS)){
+				response.setHeader("Content-disposition", "attachment; filename="
+						+ "mms.zip");
+			}else{
+				response.setHeader("Content-disposition", "attachment; filename="
+						+ "sms.zip");
+			}
+			
+			response
+					.setHeader("Cache-Control",
+							"must-revalidate, post-check=0, pre-check=0,private, max-age=0");
+			response.setHeader("Content-Type", "application/octet-stream");
+			response.setHeader("Content-Type", "application/force-download");
+			response.setHeader("Pragma", "public");
+			response.setHeader("Cache-Control",
+					"must-revalidate, post-check=0, pre-check=0");
+			if(msType.equals(SendList.MS_TYPE_MMS)){
+				this.fileService.genGetMMSzips(act,coupons,response);
+			}else{
+				this.fileService.genGetSMSzips(act,coupons,response);
+			}
+			
+			response.getOutputStream().close();
+			
+		} catch (Throwable e) {
+			try {
+				response.getOutputStream().close();
+			} catch (IOException e1) {
+				
+			}
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			logger.error("", e);
+			return "prompt";
+			
 		}
 		return null;
 		

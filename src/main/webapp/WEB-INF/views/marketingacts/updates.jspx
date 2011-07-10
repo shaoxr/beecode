@@ -10,16 +10,25 @@
         <field:display field="actStatus" id="s_com_newland_beecode_domain_MarketingAct_actStatusDesc" pattern="dictView" className="ACT_STATUS"  object="${marketingAct}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
         <field:display field="bizNo" id="s_com_newland_beecode_domain_marketingact_businesstype" pattern="dictView" className="BUSINESS_TYPE" object="${marketingAct}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
         <field:number field="times" id="c_com_newland_beecode_domain_MarketingAct_times" required="true" validationMessageCode="field_invalid_integer" z="t6HH8qJDiogoSsgcDZi6CHlFSe8="/>        
+        <field:display field="importType" id="s_com_newland_beecode_domain_marketingact_value_type" object="${marketingAct}" pattern="dictView" className="IMPORT_TYPE" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        <c:if test="${marketingAct.importType eq '2' }">
         <c:if test="${marketingAct.bizNo eq '00'}">
           	<field:number field="amount" decimalMax="999999" decimalMin="0" id="c_com_newland_beecode_domain_MarketingAct_amount" required="true" validationMessageCode="field_invalid_number" />
         	<field:input  field="exchangeName" id="c_com_newland_beecode_domain_MarketingAct_exchangeName"  required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
         </c:if>
         <c:if test="${marketingAct.bizNo eq '01'}">
         	<field:number  field="rebateRate" decimalMax="1" decimalMin="0" id="c_com_newland_beecode_domain_MarketingAct_rebateRate" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="/>
+            <field:number field="maxAmount" decimalMax="999999" decimalMin="0" id="c_com_newland_beecode_domain_MarketingAct_maxAmount" required="true" validationMessageCode="field_invalid_number" />    
         </c:if>
         <c:if test="${marketingAct.bizNo eq '02'}">
-        	<field:number decimalMax="1" decimalMin="0" id="c_com_newland_beecode_domain_MarketingAct_backRate" field="backRate" required="true" validationMessageCode="field_invalid_number"></field:number>
+        	<field:number  id="c_com_newland_beecode_domain_marketingact_backAmount" field="backRate" required="true" validationMessageCode="field_invalid_number"></field:number>
         	<field:number field="maxAmount" decimalMax="999999" decimalMin="0" id="c_com_newland_beecode_domain_MarketingAct_maxAmount" required="true" validationMessageCode="field_invalid_number" />    
+        </c:if>
+        </c:if>
+        <c:if test="${marketingAct.importType eq '1' }">
+        <c:if test="${marketingAct.bizNo eq '01'}">
+            <field:number field="maxAmount" decimalMax="999999" decimalMin="0" id="c_com_newland_beecode_domain_MarketingAct_maxAmount" required="true" validationMessageCode="field_invalid_number" />    
+        </c:if>
         </c:if>
         <field:select field="bindCard"  id="c_com_newland_beecode_domain_marketingact_checkCard"  itemValue="key" itemLabel="value" items="${checkCards}" multiple="false" path="/businesstypes" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>  
         <field:textarea  field="checkCode" id="c_com_newland_beecode_domain_MarketingAct_bindcard_detail" required="false" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>

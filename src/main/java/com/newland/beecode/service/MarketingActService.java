@@ -86,4 +86,14 @@ public interface MarketingActService {
 	
 	public void sendOne(Long couponId,Integer msType)throws AppException;
 	
+	public void mmsOpen(Long actNo);
+	
+	public void updatePartner(Long actNo,MultipartFile partnerFile)throws AppException;
+	
+	public MarketingAct show(Long actNo)throws AppException;
+	
+	public MarketingAct appendCustomerForm(Long actNo);
+	
+	public MarketingAct sendForm(Long actNo)throws AppException;
+	
 }

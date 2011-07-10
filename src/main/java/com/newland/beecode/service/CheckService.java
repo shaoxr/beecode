@@ -29,5 +29,7 @@ public interface CheckService {
 	
 	public List<Customer> newland(File file);
 	
+	public Set<Terminal> partnerImport(MultipartFile file,String fileName)throws AppException;
+	
 	
 }

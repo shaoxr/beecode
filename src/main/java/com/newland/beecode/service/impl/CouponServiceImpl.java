@@ -92,6 +92,7 @@ public class CouponServiceImpl implements CouponService {
         boolean hasPartner = false;
         for (Iterator<Terminal> it = coupon.getMarketingAct().getTerminals().iterator(); it.hasNext();) {
         	Terminal terminal = it.next();
+        	System.out.println(terminal.getTerminalNo()+":"+req.getDeviceNo());
             if (terminal.getTerminalNo().equals(req.getDeviceNo())) {
                 hasPartner = true;
                 break;
@@ -238,20 +239,20 @@ public class CouponServiceImpl implements CouponService {
         } else {
             coupon.setAcctMobile(mobile);
         }
-        if(cp.getBusinessType().equals(Coupon.BIZ_TYPE_VOUCHER)&&cp.getBackAmount()!=null){
-        	coupon.setBackAmount(cp.getBackAmount());
-        }
+        coupon.setAcctName(cp.getAcctName());
         coupon.setCheckCode(cp.getCheckCode());
         coupon.setMarketingAct(act);
         coupon.setCouponStatus(Coupon.STATUS_VALID);
         coupon.setSerialNo(UuidHelper.generateUUID());
-        coupon.setBusinessType(act.getBizNo());
-        coupon.setRebateRate(act.getRebateRate());
+        coupon.setBusinessType(cp.getBusinessType());
+        coupon.setRebateRate(cp.getRebateRate());
+        coupon.setExchangeAmount(cp.getExchangeAmount());
+        coupon.setExchangeName(cp.getExchangeName());
+        coupon.setBackAmount(cp.getBackAmount());
         coupon.setTimes(act.getTimes());
         coupon.setRemainTimes(cp.getRemainTimes());
         coupon.setGenTime(new Date());
         
-        coupon.setAcctName(cp.getAcctName());
         coupon.setMmsStatus(0);
         coupon.setSmsStatus(0);
         couponDao.save(coupon);

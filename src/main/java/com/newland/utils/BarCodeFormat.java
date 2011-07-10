@@ -1,5 +1,7 @@
 package com.newland.utils;
 
+import java.math.BigDecimal;
+
 import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.MarketingAct;
 
@@ -19,7 +21,7 @@ public class BarCodeFormat {
 			sb.append(NewlandUtil.formatBigDecimal(coupon.getRebateRate(), 2));
 			sb.append(NewlandUtil.formatBigDecimal(act.getMaxAmount(), 8));
 		}else{
-			sb.append(NewlandUtil.formatBigDecimal(coupon.getRebateRate(), 10));
+			sb.append(NewlandUtil.formatBigDecimal(new BigDecimal("0"), 10));
 		}
 		sb.append(NewlandUtil.dataToString(act.getEndDate(), "yyyyMMddHHmm"));
 		sb.append(coupon.getSerialNo());
