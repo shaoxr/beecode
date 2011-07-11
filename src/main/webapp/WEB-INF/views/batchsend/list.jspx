@@ -3,14 +3,13 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <page:list id="pl_com_newland_beecode_domain_mmssendlist" items="${mmsSendLists}" z="H3iBEjI5CrcVzP2ZEnqcYrLvQTw=">
-        <table:filetable download="false"  statusdownload="true" statusdownloadpath="mmsStatusDownload" typeIdFieldName="id" data="${mmsSendLists}" show="false" create="false" id="l_com_newland_beecode_domain_mmssendlist" path="/marketingCatalog" update="false" delete="false" z="j361QMCgOxvZwTRQFC+vsmYEURM=">
+        <table:filetable download="false"  statusdownload="false" statusdownloadpath="mmsStatusDownload" typeIdFieldName="id" data="${mmsSendLists}" show="true" create="false" id="l_com_newland_beecode_domain_mmssendlist" path="/batchsend" update="false" delete="false" z="j361QMCgOxvZwTRQFC+vsmYEURM=">
             <table:column id="c_com_newland_beecode_domain_smssendlist_id" property="id" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
             <table:column id="c_com_newland_beecode_domain_marketingact_actname" property="actName" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
             <table:column id="c_com_newland_beecode_domain_smssendlist_type" property="msType" pattern="dictView" className="MS_TYPE" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
             <table:column id="c_com_newland_beecode_domain_mmssendlist_count" property="totalCount" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
             <table:column id="c_com_newland_beecode_domain_mmssendlist_success" property="successCount" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
             <table:column id="c_com_newland_beecode_domain_mmssendlist_send_status" property="sendStatus" pattern="dictView" className="MMS_SEND_LIST_STATUS" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
-            <table:column id="c_com_newland_beecode_domain_mmssendlist_success" property="message" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
             <table:column  pattern="yyyy-MM-dd HH:mm:ss" id="c_com_newland_beecode_domain_mmssendlist_submitTime" property="submitTime" z="Haw+F8umbMirRpxbBGmJ4nw1PcM="/>
             <table:column  pattern="yyyy-MM-dd HH:mm:ss" id="c_com_newland_beecode_domain_mmssendlist_endTime" property="endTime" z="6UGQz71NYPKazPiz6Eko6VUlTwQ="/>
         </table:filetable>

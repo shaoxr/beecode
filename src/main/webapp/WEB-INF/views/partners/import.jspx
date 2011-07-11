@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:form="http://www.springframework.org/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:spring="http://www.springframework.org/tags" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <util:panel id="title" title="商户终端导入">
+      <form:form action="excelimport" method="post" enctype="multipart/form-data">
+         <div><label>商户终端文件:</label> <input type="file" style="width: 200px; height: 25px;" id="file" name="partnerFile" dojoType="dijit.form.ValidationTextBox" required="true"/></div><br />
+         <input type="submit" value="导入"/>
+      </form:form>
+    </util:panel>
+    <c:if test="${!empty message}">
+     <util:panel id="title" title="提示信息">
+    <p>
+      <table>
+             ${message}
+      </table>
+    </p>
+    </util:panel>
+    </c:if>
+    <c:if test="${!empty success_message}">
+     <util:panel id="title" title="提示信息">
+    <p>
+             成功添加${message}个商户终端
+    </p>
+    </util:panel>
+    </c:if>
+</div>

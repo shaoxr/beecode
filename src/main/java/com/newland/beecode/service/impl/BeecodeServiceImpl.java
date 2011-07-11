@@ -48,7 +48,7 @@ public class BeecodeServiceImpl implements BeecodeService {
 			req.setTxnTime(new Date());
 			Coupon coupon=this.couponService.consumeCoupon(req);
 			reqMap.put(7, ErrorsCode.POSP_RIGHT);
-			reqMap.put(10, coupon.getMarketingAct().getExchangeName());
+			reqMap.put(10, coupon.getExchangeName());
 		} catch (Exception e) {
 			if(e instanceof AppException){
 				reqMap.put(7, this.convertCode(((AppException) e).getCode()));

@@ -21,4 +21,8 @@
 		<put-attribute name="body"
 			value="/WEB-INF/views/batchsend/sendCount.jspx" />
 	</definition>
+	<definition extends="default" name="batchsend/show">
+		<put-attribute name="body"
+			value="/WEB-INF/views/batchsend/show.jspx" />
+	</definition>
 </tiles-definitions>

@@ -262,11 +262,11 @@ public class ErrorsCode {
 	/**
 	 * EXCEL终端编号不能为空或者格式有错
 	 */
-	public static final String BIZ_TERMINAL_EXCEL_TERMINALNO_ERROR="BIZ.TERMINAL.000";
+	public static final String BIZ_TERMINAL_EXCEL_TERMINALNO_ERROR="BIZ.PARTNER.TERMINAL.003";
 	/**
 	 * 商户不存在
 	 */
-	public static final String BIZ_TERMINAL_EXCEL_NOT_EXITS="BIZ.TERMINAL.001";
+	public static final String BIZ_TERMINAL_EXCEL_NOT_EXITS="BIZ.PARTNER.TERMINAL.004";
 	
 	
 	
@@ -373,6 +373,21 @@ public class ErrorsCode {
 	 * 彩信用户名或者密码
 	 */
 	public static final String BIZ_MMS_NAME_ERROR="BIZ.MMS.006";
+	/**
+	 * 彩信发送出错,文件格式有误
+	 */
+	public static final String BIZ_MMS_SEND_ERROR_FILE="BIZ.MMS.007";
+	/**
+	 * 彩信发送成功
+	 */
+	public static final String BIZ_MMS_SEND_SUCCESS="BIZ.MMS.008";
+	/**
+	 * 更新彩信/短信文件时出错，文件格式不对
+	 */
+	public static  final String BIZ_MMS_RESP_FILE_ERROR="BIZ.MMS.RESP.000";
+	
+	
+	
 	
 	
 	
@@ -401,6 +416,10 @@ public class ErrorsCode {
 	 * 短信用户名或密码错误
 	 */
 	public static final String BIZ_SMS_NAME_ERROR="BIZ.SMS.006";
+	/**
+	 * 短信发送时出错,文件格式有误
+	 */
+	public static final String BIZ_SMS_SEND_ERROR="BIZ.SMS.007";
 	
 	
 	

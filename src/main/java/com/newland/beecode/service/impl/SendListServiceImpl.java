@@ -1,6 +1,7 @@
 package com.newland.beecode.service.impl;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -45,8 +46,11 @@ public class SendListServiceImpl implements SendListService{
 	private RespStatusDao respStatusDao;
 	@Resource(name="mmsFetch2SendInvokeService")
 	private SendInvokeService mmsFetch2SendInvokeService;
+	@Resource(name="smsFetch2SendInvokeService")
+	private SendInvokeService smsFetch2SendInvokeService;
 	@Autowired
 	private MessageSource messageSource;
+	
 	@Override
 	public SendList saveOrUpdate(SendList mmsSendList) {
 		return sendListDao.saveOrUpdate(mmsSendList);
@@ -67,7 +71,7 @@ public class SendListServiceImpl implements SendListService{
 	@Override
 	public void sendOver(Long id) {
 		long successCount=this.respStatusDao.findLong("select count(*) from RespStatus r where r.respStatus=? and r.mmsSendListId=?", RespStatus.RESP_SUCCESS,id);
-		sendListDao.excuteByHQL("update SendList m set m.sendStatus=?,m.successCount=?,m.endTime=? where m.id=?",SmsSendList.STATUS_SENDED,successCount,new Date(),id);
+		sendListDao.excuteByHQL("update SendList m set  m.sendStatus=?,m.successCount=?,m.endTime=? where m.id=?",SmsSendList.STATUS_SENDED,successCount,new Date(),id);
 		
 	}
 	@Override
@@ -103,9 +107,12 @@ public class SendListServiceImpl implements SendListService{
 					mmsSendList.setActName(act.getActName());
 					mmsSendList.setActNo(act.getActNo());
 					mmsSendList=saveOrUpdate(mmsSendList);
-					sendService.send(coupons, act, mmsFetch2SendInvokeService, mmsSendList.getId(), dirName);
+					
+					//sendService.send(coupons, act, mmsFetch2SendInvokeService, mmsSendList.getId(), dirName);
+					sendService.differenceSend(coupons, act, mmsSendList.getId(), dirName);
 				} catch (AppException e) {
-					String message=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_SHEET_NOT_FIND, null, Locale.CHINA);
+					e.printStackTrace();
+					String message=messageSource.getMessage(ErrorsCode.BIZ_MMS_SEND_ERROR_FILE, null, Locale.CHINA);
 					sendListDao.excuteByHQL("update SendList s set s.message=? where s.id=?", message,mmsSendList.getId());
 				}
 			}

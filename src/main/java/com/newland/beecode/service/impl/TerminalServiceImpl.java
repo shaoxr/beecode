@@ -1,11 +1,13 @@
 package com.newland.beecode.service.impl;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.newland.beecode.dao.MarketingActDao;
 import com.newland.beecode.dao.PartnerDao;
@@ -64,7 +66,7 @@ public class TerminalServiceImpl implements TerminalService{
 
 	@Override
 	public void delete(Long id) throws AppException{
-		List<MarketingAct> acts=this.marketingActDao.find("select  act from MarketingAct act join act.terminals as t where t.id=? and act.actStatus<=?", id,MarketingAct.STATUS_AFTER_GIVE);
+		List<MarketingAct> acts=this.marketingActDao.find("select  act from MarketingAct act join act.terminals as t where t.id=? and act.actStatus<=? ", id,MarketingAct.STATUS_AFTER_GIVE);
 		if(acts.size()>0){
 			throw new AppException(ErrorsCode.BIZ_PARTNER_TERMINAL_DO_NOT_DELETE,"");
 		}
@@ -112,6 +114,14 @@ public class TerminalServiceImpl implements TerminalService{
 	@Override
 	public Terminal findByTerminalNo(String terminalNo) {
 		return this.terminalDao.findUniqueByProperty("terminalNo", terminalNo);
+	}
+
+	@Override
+	public void save(Set<Terminal> terminals) {
+		for(Terminal terminal :terminals){
+			this.terminalDao.saveOrUpdate(terminal);
+		}
+		
 	}
 
 }

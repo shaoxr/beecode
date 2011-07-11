@@ -77,6 +77,18 @@ public class BatchSendController extends BaseController{
 		return "batchsend/smsSendForm";
     	
     }
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public String show(Model model,@PathVariable("id") Long id){
+		SendList sendList=this.sendListService.findById(id);
+		model.addAttribute("sendList", sendList);
+		return "batchsend/show";
+	}
+	@RequestMapping(value = "sendover", method = RequestMethod.POST)
+	public String sendOver(Model model,@RequestParam("id") Long  id){
+		this.sendListService.sendOver(id);
+		return "redirect:/batchsend/"+id;
+	}
+	
 	@RequestMapping(value={"smsSendByzip"},method = RequestMethod.POST)
 	 public String smsSendByzip(@RequestParam(value = "file", required = true) MultipartFile file,
 	    		Model model){

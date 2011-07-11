@@ -9,18 +9,30 @@
         <field:display date="true" dateTimePattern="${date_format}" field="endDate" id="s_com_newland_beecode_domain_MarketingAct_endDate" object="${marketingact}" z="user-managed"/>
          <field:textarea field="marketingact.actDetail" disabled="true" id="s_com_newland_beecode_domain_MarketingAct_actDetail"  z="2WpcBBhBZTaSRmjsEBwZd8QbPos="/>
         <field:display date="true" dateTimePattern="${datetime_format}" field="genTime" id="s_com_newland_beecode_domain_MarketingAct_genTime" object="${marketingact}" z="user-managed"/>
+        <field:display field="bindCard" id="s_com_newland_beecode_domain_marketingact_checkCard" pattern="dictView" className="BIND_CARD" object="${marketingact}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
+        <c:if test="${marketingact.bindCard eq '1'}">
+          <field:textarea  field="marketingact.checkCode" id="c_com_newland_beecode_domain_MarketingAct_bindcard_detail" disabled="true" required="false" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>
+        </c:if>
         <field:display field="bizNo" id="s_com_newland_beecode_domain_marketingact_businesstype" pattern="dictView" className="BUSINESS_TYPE" object="${marketingact}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
         <field:display field="times" id="s_com_newland_beecode_domain_MarketingAct_times" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
+        <field:display field="importType" id="s_com_newland_beecode_domain_marketingact_value_type" object="${marketingact}" pattern="dictView" className="IMPORT_TYPE" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        <c:if test="${marketingact.importType eq '2' }">
         <c:if test="${marketingact.bizNo eq '01'}">
           <field:display field="rebateRate" id="s_com_newland_beecode_domain_MarketingAct_rebateRate" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+          <field:display field="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
         </c:if>
         <c:if test="${marketingact.bizNo eq '00'}">
           <field:display field="amount" id="s_com_newland_beecode_domain_MarketingAct_amount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
           <field:display field="exchangeName" id="c_com_newland_beecode_domain_MarketingAct_exchangeName"  object="${marketingact}" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
         </c:if>
         <c:if test="${marketingact.bizNo eq '02'}">
-          <field:display field="backRate" id="s_com_newland_beecode_domain_MarketingAct_backRate" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
-          <field:display field="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+          <field:display field="backRate" id="s_com_newland_beecode_domain_marketingact_backAmount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        </c:if>
+        </c:if>
+        <c:if test="${marketingact.importType eq '1' }">
+          <c:if test="${marketingact.bizNo eq '01'}">
+            <field:display field="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+          </c:if>
         </c:if>
         <field:display field="actStatus" pattern="dictView" className="ACT_STATUS" id="s_com_newland_beecode_domain_MarketingAct_actStatusDesc" object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
         <!--  field:display field="partners" id="s_com_newland_beecode_domain_MarketingAct_partners" object="${marketingact}" z="+bo3mVX7w04Ps2EgE3Ju7ydfBis="/>
@@ -64,11 +76,11 @@
         </form>
         <br/>
          
-        --><form action="/beecode/util/downloadsmszip" method="post">
+        <form action="/beecode/util/downloadsmszip" method="post">
           <input type="hidden" value="${marketingact.actNo}" name="actNo"/>
              <c:choose>
                 <c:when test="${marketingact.smsSending eq '0'}">
-                  <input type="submit" value="短信内容发送" />
+                  <input type="submit" value="短信内容提取" />
                   <p>一次最多发送5000条</p>
                 </c:when>
                 <c:otherwise>
@@ -76,12 +88,13 @@
                 </c:otherwise>
           </c:choose>
         </form>
+        -->
         <br/>
         <form action="/beecode/util/downloadmmszip" method="post">
           <input type="hidden" value="${marketingact.actNo}" name="actNo"/>
             <c:choose>
                 <c:when test="${marketingact.mmsSending eq '0'}">
-                  <input type="submit" value="彩信 内容发送" />
+                  <input type="submit" value="彩信内容提取" />
                   <p>一次最多只能提出5000个</p>
                 </c:when>
                 <c:otherwise>
@@ -94,11 +107,17 @@
         <form action="../../coupons/sendover" method="post">
           <input type="hidden" value="${marketingact.actNo}" name="actNo"/>
           <c:if test="${marketingact.smsSending eq '0' and marketingact.mmsSending eq '0'}">
-            <input type="submit" value="发放结束" />
+            <input type="submit" value="发放结束  开放活动" />
             </c:if>
         </form>
       </util:panel>
       </c:if>
+      <util:panel id="open" title="彩信开启">
+        <form action="../../coupons/mmsopen" method="post">
+          <input type="hidden" value="${marketingact.actNo}" name="actNo"/>
+          <input type="submit" value="彩信开启" />
+        </form>
+      </util:panel>
     </page:show>
     
 </div>

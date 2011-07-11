@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,11 +18,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.newland.beecode.domain.MarketingCatalog;
 import com.newland.beecode.domain.Partner;
 import com.newland.beecode.domain.PartnerCatalog;
+import com.newland.beecode.domain.Terminal;
+import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
+import com.newland.beecode.exception.ExcelException;
+import com.newland.beecode.service.CheckService;
 import com.newland.beecode.service.PartnerCatalogService;
 import com.newland.beecode.service.PartnerService;
 import com.newland.beecode.service.TerminalService;
@@ -41,6 +47,8 @@ public class PartnerController extends BaseController{
     private ExportExcelTemplateService  partnerExcelService;
     @Autowired
     private TerminalService terminalService;
+    @Autowired
+    private CheckService checkService;
     
 	@RequestMapping(params = "form", method = RequestMethod.GET)
 	public String create(Model model){
@@ -137,6 +145,38 @@ public class PartnerController extends BaseController{
 		} 
 		
 		return null;
+	}
+	@RequestMapping(value="/excelimport",method = RequestMethod.POST)
+	public String excelimport(@RequestParam(value = "partnerFile", required = true) MultipartFile partnerFile,
+			Model model,HttpServletRequest request, HttpServletResponse response){
+		Set<Terminal> terminals=null;
+		try {
+			terminals= this.checkService.partnerImport(partnerFile, System.currentTimeMillis()+"");
+			for(Terminal terminal:terminals){
+				System.out.println(terminal.getName());
+			}
+			this.terminalService.save(terminals);
+			
+		} catch (Exception e) {
+			 if(e instanceof ExcelException){
+			    	/**
+			    	 * excel检查结果，直接获取message
+			    	 */
+			    	model.addAttribute(ErrorsCode.MESSAGE, e.getMessage());
+			    	return "partners/import";
+			    }else{
+			    	model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			    	return "prompt";
+			    }
+		}
+		System.out.println("aaaaaaaaaaaaaa");
+		model.addAttribute("success_message", terminals.size());
+		return "partners/import";
+	}
+	@RequestMapping(value="/excelimport",params = "form",method = RequestMethod.GET)
+	public String excelimportForm(
+			Model model,HttpServletRequest request, HttpServletResponse response){
+		return "partners/import";
 	}
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String delete(@PathVariable("id") Long id,

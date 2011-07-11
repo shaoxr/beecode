@@ -119,12 +119,38 @@ public class MarketingActController extends BaseController{
 				request)+"?form";
 		
 	}
-	@RequestMapping(value="appendCustomer/{actNo}",params="form", method = RequestMethod.GET)
-	public String appendCustomerForm(@PathVariable("actNo") Long actNo,Model model){
+	@RequestMapping(value="updatePartner/{actNo}", method = RequestMethod.GET)
+	public String updatePartnerForm(@PathVariable("actNo") Long actNo,Model model){
+		MarketingAct marketingAct=this.marketingActService.findByActNo(actNo);
+		model.addAttribute("marketingAct",marketingAct);
+		return "marketingacts/updatepartner";
+	}
+	@RequestMapping(value="updatePartner", method = RequestMethod.POST)
+	public String updatePartner(@RequestParam("actNo") Long actNo,
+			@RequestParam(value = "partnerFile", required = true) MultipartFile partnerFile,
+			Model model, HttpServletRequest request){
 		try {
 			MarketingAct marketingAct=this.marketingActService.findByActNo(actNo);
 			model.addAttribute("marketingAct",marketingAct);
-			this.customerService.genCustomerList(marketingAct);
+			this.marketingActService.updatePartner(actNo, partnerFile);
+		} catch (Exception e) {
+			if(e instanceof ExcelException){
+				/**
+				 * excel检查结果，直接获取message
+				 */
+				model.addAttribute(ErrorsCode.MESSAGE, e.getMessage());
+				return "promptExcel";
+			}
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		return "redirect:/marketingacts/updatePartner/"+actNo;
+	}
+	@RequestMapping(value="appendCustomer/{actNo}",params="form", method = RequestMethod.GET)
+	public String appendCustomerForm(@PathVariable("actNo") Long actNo,Model model){
+		try {
+			MarketingAct marketingAct=this.marketingActService.appendCustomerForm(actNo);
+			model.addAttribute("marketingAct",marketingAct);
 			model.addAttribute("customersChecked",marketingAct.getCheckedCustomers());
 			model.addAttribute("customersUn",marketingAct.getUnCheckCustomers());
 		} catch (Exception e) {
@@ -152,8 +178,7 @@ public class MarketingActController extends BaseController{
 			    	return "prompt";
 			    }
 		}
-		MarketingAct marketingAct=this.marketingActService.findByActNo(actNo);
-		this.customerService.genCustomerList(marketingAct);
+		MarketingAct marketingAct=this.marketingActService.appendCustomerForm(actNo);
 		model.addAttribute("customersChecked",marketingAct.getCheckedCustomers());
 		model.addAttribute("customersUn",marketingAct.getUnCheckCustomers());
 		model.addAttribute("marketingAct",marketingAct);
@@ -214,14 +239,15 @@ public class MarketingActController extends BaseController{
 	public String show(@PathVariable("actNo") Long actNo, Model model) {
 		try {
 			addDateTimeFormatPatterns(model);
-			MarketingAct act = this.marketingActService.findByActNo(actNo);
+			/*MarketingAct act = this.marketingActService.findByActNo(actNo);
 			act.setMsStatus(this.couponService.findMSStatus(actNo));
 			if (act.getActStatus() > MarketingAct.STATUS_BEFORE_GIVE) {
 				MarketingActSummary marketingSummary = this.marketingActService.marketingSummary(actNo);
 				act.setSummary(marketingSummary);
 				model.addAttribute("statistics",true);
 			}
-			this.customerService.genCustomerList(act);
+			this.customerService.genCustomerList(act);*/
+			MarketingAct act=this.marketingActService.show(actNo);
 			model.addAttribute("customersChecked",act.getCheckedCustomers());
 			model.addAttribute("customersUn",act.getUnCheckCustomers());
 			model.addAttribute("marketingact", act);
@@ -337,8 +363,7 @@ public class MarketingActController extends BaseController{
 			Model model) {
 		try {
 			addDateTimeFormatPatterns(model);
-			MarketingAct act=this.marketingActService.findByActNo(actNo);
-			this.customerService.genCustomerList(act);
+			MarketingAct act=this.marketingActService.show(actNo);
 			model.addAttribute("marketingAct",act);
 			model.addAttribute("customersChecked",act.getCheckedCustomers());
 			model.addAttribute("customersUn",act.getUnCheckCustomers());

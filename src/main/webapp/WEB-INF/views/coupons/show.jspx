@@ -13,10 +13,12 @@
         <field:display itemLabel="bizNo" field="marketingAct"  id="s_com_newland_beecode_domain_Coupon_businessType" pattern="dictView" className="BUSINESS_TYPE"  object="${coupon}" z="wNn/7w3P0hjGnVPbZAEcFpMVNDg="/>
         <field:display field="couponStatus" id="s_com_newland_beecode_domain_Coupon_cuoponStatus" pattern="dictView"  className="COUPON_STATUS" object="${coupon}" z="3YPr2hh6UwwNN+S/2Wx/pKnHMAQ="/>
         <c:if test="${coupon.businessType=='00'}">
-          <field:display itemLabel="amount" field="marketingAct" id="s_com_newland_beecode_domain_MarketingAct_amount" object="${coupon}" z="KvHSAJyVpzfMAoE0IVI5flSdvC4="/>
+          <field:display field="exchangeAmount" id="s_com_newland_beecode_domain_MarketingAct_amount" object="${coupon}" z="KvHSAJyVpzfMAoE0IVI5flSdvC4="/>
+          <field:display  field="exchangeName" id="s_com_newland_beecode_domain_MarketingAct_exchangeName" object="${coupon}" z="KvHSAJyVpzfMAoE0IVI5flSdvC4="/>
         </c:if>
         <c:if test="${coupon.businessType=='01'}">
           <field:display field="rebateRate" id="s_com_newland_beecode_domain_Coupon_rebateRate" object="${coupon}" z="KvHSAJyVpzfMAoE0IVI5flSdvC4="/>
+          <field:display field="marketingAct" itemLabel="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${coupon}" z="KvHSAJyVpzfMAoE0IVI5flSdvC4="/>
         </c:if>
         <c:if test="${coupon.businessType=='02'}">
           <field:display field="backAmount" id="s_com_newland_beecode_domain_marketingact_backAmount" object="${coupon}" z="KvHSAJyVpzfMAoE0IVI5flSdvC4="/>
@@ -28,7 +30,7 @@
     	<field:display field="smsStatus" id="s_com_newland_beecode_domain_coupon_smsstatus" pattern="dictView" className="COUPON_MMS_STATUS" object="${coupon}" z="/jvLfUUNWXC4tZY4vcMCZAUtKsk="/>
     	<field:display field="smsDesc" id="s_com_newland_beecode_domain_coupon_smsstatus_desc" object="${coupon}" />
     </page:show>
-    <!--<c:if test="${coupon.couponStatus == 1}">
+    <c:if test="${coupon.couponStatus == 1}">
    		<util:panel title="重新生成礼券" id="cancel" openPane="false">
 	   		<spring:url value="/coupons/reversal/${coupon.couponId}" var="url"></spring:url>
 	   		<form method="post" action="${url}">
@@ -37,16 +39,18 @@
 	   		</form>
    		</util:panel>
    		<util:panel title="重新发送短信" id="cancel2" openPane="false">
-	   		<spring:url value="/coupons/resend/${coupon.couponId}?msType=0" var="url"></spring:url>
-	   		<form method="post" action="${url}">
+	   		<form action="/beecode/util/singledownloadmmszip" method="post">
+	   		<input  type="hidden" value="${coupon.couponId}" name="couponId"/>
+	   		<input  type="hidden" value="0" name="msType"/>
 	   		<input type="submit" value="重新发送短信" onclick="javascript:return window.confirm('请确认重新发送短信！');"/>
 	   		</form>
    		</util:panel>
    		<util:panel title="重新发送彩信" id="cancel3" openPane="false">
-	   		<spring:url value="/coupons/resend/${coupon.couponId}?msType=1" var="url"></spring:url>
-	   		<form method="post" action="${url}">
+	   		<form action="/beecode/util/singledownloadmmszip" method="post">
+	   		<input  type="hidden" value="${coupon.couponId}" name="couponId"/>
+	   		<input  type="hidden" value="1" name="msType"/>
 	   		<input type="submit" value="重新发送彩信" onclick="javascript:return window.confirm('请确认重新发送彩信！');"/>
 	   		</form>
    		</util:panel>
    	</c:if>
---></div>
+  </div>

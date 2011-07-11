@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.newland.beecode.dao.TerminalDao;
 import com.newland.beecode.domain.Coupon;
 import com.newland.beecode.domain.Customer;
 import com.newland.beecode.domain.MarketingAct;
@@ -47,6 +48,8 @@ public class CheckServiceImpl implements CheckService{
 	private PartnerService partnerService;
 	@Autowired
 	private TerminalService terminalService;
+	@Autowired
+	private TerminalDao terminalDao;
 	
 	public static boolean isNumeric(String str){ 
 	    Pattern pattern = Pattern.compile("[0-9]*"); 
@@ -152,7 +155,7 @@ public class CheckServiceImpl implements CheckService{
 					    	rebaterateError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_REBATE_RATE_NULL, null, Locale.CHINA);
 					    }else if(!isIntegerOrFloat(rebaterate.toString())){
 					    	rebaterateError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_REBATE_RATE_NOT_NUMBER, null, Locale.CHINA);
-					    }else if(new Long(rebaterate.toString())>=1 ||new Long(rebaterate.toString())<=0){
+					    }else if(new Double(rebaterate.toString())>=1 ||new Double(rebaterate.toString())<=0){
 					    	rebaterateError=messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_REBATE_RATE_ERROR, null, Locale.CHINA);
 					    }
 				  }
@@ -211,6 +214,7 @@ public class CheckServiceImpl implements CheckService{
 		} catch (IOException e) {
 			throw new AppException(ErrorsCode.BIZ_CUSTOMER_FILE_UPLOAD_ERROR,"");
 		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
 			throw new AppException(ErrorsCode.BIZ_CUSTOMER_FILE_UPLOAD_ERROR,"");
 		}
 	}
@@ -242,16 +246,16 @@ public class CheckServiceImpl implements CheckService{
 				}else{
 					customer.setAccount(account.toString());
 				}
-				if(exchangeName!=null && exchangeName.toString().equals("")){
+				if(exchangeName!=null && !exchangeName.toString().equals("")){
 					customer.setExchangeName(exchangeName.toString());
 				}
-				if(exchangeAmount!=null && exchangeAmount.toString().trim().equals("")){
+				if(exchangeAmount!=null && !exchangeAmount.toString().trim().equals("")){
 					customer.setExchangeAmount(new BigDecimal(exchangeAmount.toString()));
 				}
-				if(rabaterate!=null && rabaterate.toString().trim().equals("")){
+				if(rabaterate!=null && !rabaterate.toString().trim().equals("")){
 					customer.setRebaterate(new BigDecimal(rabaterate.toString()));
 				}
-				if(backAmount!=null && backAmount.toString().trim().equals("")){
+				if(backAmount!=null && !backAmount.toString().trim().equals("")){
 					customer.setBackAmount(new BigDecimal(backAmount.toString()));
 				}
 				
@@ -301,13 +305,13 @@ public class CheckServiceImpl implements CheckService{
 				}else{
 					terminal=this.terminalService.findByTerminalNo(terminalNo.toString());
 					if(terminal==null){
-						terminalNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NOT_EXITS, null, Locale.CHINA);
+						terminalNoError=messageSource.getMessage(ErrorsCode.BIZ_TERMINAL_EXCEL_NOT_EXITS, null, Locale.CHINA);
 					}else{
 						terminals.add(terminal);
 					}
 				}
 				
-				if(terminalNoError!="" || terminalNameError!=""){
+				if(terminalNoError!="" || terminalNameError!="" ){
 					errorCount++;
 					tempError.append("<tr><td>" + (j+1) + "</td><td>");
 					tempError.append(terminalNameError);
@@ -472,6 +476,111 @@ public class CheckServiceImpl implements CheckService{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	@Override
+	public Set<Terminal> partnerImport(MultipartFile file,String fileName) throws AppException {
+		StringBuffer tempError = new StringBuffer();
+		Set<Terminal> terminals=new HashSet<Terminal>();
+		try {
+			this.fileService.storeFile(file,fileName);
+			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(this.fileService.getPath(fileName)));
+			HSSFWorkbook wb = new HSSFWorkbook(fs);
+			HSSFSheet sheet = wb.getSheet("partner");
+			HSSFRow row;
+			String terminalNameError;
+			String terminalNoError;
+			String partnerNameError;
+			String partnerNoError;
+			long errorCount=0;
+			if(sheet==null){
+				throw new ExcelException("",messageSource.getMessage(ErrorsCode.BIZ_PARTNER_SHEET_NOT_FOUND, null, Locale.CHINA));
+			}
+			if(sheet.getLastRowNum()<1){
+				throw new ExcelException("",messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_BLANK, null, Locale.CHINA));
+			}
+			for (int j = 1; j <= sheet.getLastRowNum(); j++) {
+				int i=0;
+				row = sheet.getRow(j);
+				HSSFCell partnerName = row.getCell(i++);
+				partnerNameError="";
+				if(partnerName==null || partnerName.toString().equals("")){
+					partnerNameError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NAME_NULL, null, Locale.CHINA);
+				}
+				HSSFCell partnerNo = row.getCell(i++);
+				partnerNoError="";
+				if(partnerNo==null || partnerNo.toString().equals("")){
+					partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PARTNERNO_ERROR, null, Locale.CHINA);
+				}
+				Partner partner=this.partnerService.findByPartnerNo(partnerNo.toString());
+				if(partner==null){
+					partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NOT_EXITS, null, Locale.CHINA);
+				}
+				HSSFCell name = row.getCell(i++);
+				System.out.println(name);
+				terminalNameError="";
+				if(name==null || name.toString().equals("")){
+					terminalNameError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NAME_NULL, null, Locale.CHINA);
+				}
+				List<Terminal> _terminals =this.terminalDao.find("from Terminal t where t.name=?", name.toString());
+				if(_terminals.size()>0){
+					terminalNameError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_TERMINAL_NAME_EXITS, null, Locale.CHINA);
+				}
+				HSSFCell terminalNo = row.getCell(i++);
+				terminalNoError="";
+				Terminal terminal= null;
+				if(terminalNo==null || terminalNo.toString().equals("")){
+					terminalNoError=messageSource.getMessage(ErrorsCode.BIZ_TERMINAL_EXCEL_TERMINALNO_ERROR, null, Locale.CHINA);
+				}else{
+					terminal=this.terminalService.findByTerminalNo(terminalNo.toString());
+					if(terminal!=null){
+						terminalNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_TERMINAL_NO_EXITS, null, Locale.CHINA);
+					}
+				}
+				
+				if(terminalNoError!="" || terminalNameError!="" || partnerNameError!="" || partnerNoError!=""){
+					errorCount++;
+					tempError.append("<tr><td>" + (j+1) + "</td><td>");
+					tempError.append(partnerNameError);
+					tempError.append("</td><td>");
+					tempError.append(partnerNoError);
+					tempError.append("</td><td>");
+					tempError.append(terminalNameError);
+					tempError.append("</td><td>");
+					tempError.append(terminalNoError);
+					tempError.append("</td></tr>");
+				}else{
+					Terminal terminal_=new Terminal();
+					terminal_.setName(name.toString());
+					terminal_.setTerminalNo(terminalNo.toString());
+					terminal_.setPartner(partner);
+					terminals.add(terminal_);
+				}
+				if(errorCount>=20){
+					tempError.append("<tr><td>......</td><td>");
+					tempError.append("..........");
+					tempError.append("</td><td>");
+					tempError.append("...........");
+					tempError.append("</td><td>");
+					tempError.append("...........");
+					tempError.append("</td><td>");
+					tempError.append("...........");
+					tempError.append("</td></tr>");
+					break;
+				}
+				
+				//tempError.append("</td></tr>");
+			}
+			if(errorCount==0){
+				//return messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_PASS, new Object[]{sheet.getLastRowNum()}, Locale.CHINA);
+				return terminals;
+			}
+			throw new ExcelException("",tempError.toString());
+			
+		} catch (IOException e) {
+			throw new AppException(ErrorsCode.BIZ_PARTNER_EXCEL_FILE_UPLOAD_ERROR,"");
+		} catch (IllegalArgumentException e) {
+			throw new AppException(ErrorsCode.BIZ_PARTNER_EXCEL_FILE_UPLOAD_ERROR,"");
+		}
 	}
 
 }

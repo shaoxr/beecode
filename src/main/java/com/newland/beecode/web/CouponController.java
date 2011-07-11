@@ -178,8 +178,7 @@ public class CouponController extends BaseController{
 			Model model) {
 		try {
 			addDateTimeFormatPatterns(model);
-			MarketingAct act=this.marketingActService.findByActNo(actNo);
-			act.setMsStatus(this.couponService.findMSStatus(actNo));
+			MarketingAct act=this.marketingActService.sendForm(actNo);
 			model.addAttribute("marketingact", act);
 			
 			model.addAttribute("itemId", actNo);
@@ -253,6 +252,11 @@ public class CouponController extends BaseController{
 		return "coupons/sendCount";
     	
     }
+	@RequestMapping(value = "/mmsopen", method = RequestMethod.POST)
+	public String mmsOpen(Model model,@RequestParam(value = "actNo") Long actNo){
+		this.marketingActService.mmsOpen(actNo);
+		return "redirect:/coupons/send/"+actNo;
+	}
 	@ModelAttribute("marketingCatalogs")
 	public Collection<MarketingCatalog> populateMarketingCatalogs() {
 		return this.marketingCatalogService.findAll();

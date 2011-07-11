@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div  xmlns:form="http://www.springframework.org/tags/form" xmlns:util="urn:jsptagdir:/WEB-INF/tags/util" xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:field="urn:jsptagdir:/WEB-INF/tags/form/fields"  xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields"  xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:jsp="http://java.sun.com/JSP/Page" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    <page:show update="false" create="false" delete="false" list="false" id="ps_com_newland_beecode_domain_MarketingAct" object="${marketingAct}" path="/marketingacts">
+        <field:display  field="catalogName" id="s_com_newland_beecode_domain_MarketingCatalog" object="${marketingAct.marketingCatalog}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI=" />
+        <field:display field="actName" id="s_com_newland_beecode_domain_MarketingAct_actName" object="${marketingAct}" z="N2AT8RRrpG1JlcPMLYHJy8rvCnI="/>
+        <field:select disableFormBinding="true" id="s_com_newland_beecode_domain_MarketingAct_partners" itemLabel="allName" itemValue="id" multiple="true" disabled="true" items="${marketingAct.terminals}" field="partner" path=""></field:select>
+    </page:show>
+     <util:panel id="title" title="商户修改">
+      <form:form action="/beecode/marketingacts/updatePartner" method="post" enctype="multipart/form-data">
+         <div><label>商户文件:</label> <input type="file" style="width: 200px; height: 25px;" id="file" name="partnerFile" dojoType="dijit.form.ValidationTextBox" required="true"/></div><br />
+         <input type="hidden" value="${marketingAct.actNo}" name="actNo"></input>
+         <div id="submitDiv"><input type="submit" value="修改" id="submit"/></div>
+      </form:form>
+    </util:panel>
+    <c:if test="${!empty message}">
+     <util:panel id="title" title="提示信息">
+    <p>
+     <table>
+      ${message}
+      </table>
+    </p>
+    </util:panel>
+    </c:if>
+  
+</div>

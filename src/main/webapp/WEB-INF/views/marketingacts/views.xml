@@ -55,5 +55,9 @@
   		<put-attribute name="body" 
   			value="/WEB-INF/views/marketingacts/mmsContent.jspx" /> 
   	</definition>
+  	<definition extends="default" name="marketingacts/updatepartner">
+  		<put-attribute name="body" 
+  			value="/WEB-INF/views/marketingacts/updatePartner.jspx" /> 
+  	</definition>
 		
 </tiles-definitions>

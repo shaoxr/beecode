@@ -38,7 +38,10 @@
 		description="Include 'delete' link into table (default true)" />
 	<jsp:directive.attribute name="shutdown" type="java.lang.Boolean"
 		required="false"
-		description="Include 'delete' link into table (default true)" />	
+		description="Include 'delete' link into table (default true)" />
+	<jsp:directive.attribute name="updatePartner" type="java.lang.Boolean"
+		required="false"
+		description="Include 'delete' link into table (default true)" />
 	<jsp:directive.attribute name="append" type="java.lang.Boolean"
 		required="false"
 		description="Include 'delete' link into table (default true)" />
@@ -82,6 +85,9 @@
 		<c:if test="${empty shutdown}">
 			<c:set var="shutdown" value="false" />
 		</c:if>
+		<c:if test="${empty updatePartner}">
+			<c:set var="updatePartner" value="false" />
+		</c:if>
 
 		<spring:message
 			code="label_${fn:toLowerCase(fn:substringAfter(id,'_'))}"
@@ -114,6 +120,9 @@
 						<th></th>
 					</c:if>
 					<c:if test="${invalid}">
+						<th></th>
+					</c:if>
+					<c:if test="${updatePartner}">
 						<th></th>
 					</c:if>
 					<c:if test="${shutdown}">
@@ -267,6 +276,22 @@
 							</c:if>
 							<input name="query" type="hidden" value="${query}" />
 						</form:form></td>
+					</c:if>
+					<c:if test="${updatePartner}">
+						<td><spring:url
+							value="${path}/updatePartner/${item[typeIdFieldName]}"
+							var="update_form_url">
+							<spring:param name="form" />
+						</spring:url> <spring:url value="/resources/images/update.png"
+							var="update_image_url" /> <spring:message
+							arguments="${typeName}[${item[typeIdFieldName]}]"
+							code="entity_update_partner" var="update_partner_label" /> <a
+							href="${fn:escapeXml(update_form_url)}"
+							alt="${fn:escapeXml(update_partner_label)}"
+							title="${fn:escapeXml(update_partner_label)}"> <img
+							alt="${fn:escapeXml(update_partner_label)}" class="image"
+							src="${fn:escapeXml(update_image_url)}"
+							title="${fn:escapeXml(update_partner_label)}" /> </a></td>
 					</c:if>
 				<c:if test="${shutdown}">
 						<td><spring:url

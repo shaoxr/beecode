@@ -128,9 +128,9 @@ public class MarketingAct {
 	 */
 	public static final String BIND_CARD_NO = "0";
 	
-	public static final Integer IMPORT_TYPE_GLOBAL=1;
+	public static final Integer IMPORT_TYPE_GLOBAL=2;
 	
-	public static final Integer IMPORT_TYPE_EXCEL=2;
+	public static final Integer IMPORT_TYPE_EXCEL=1;
 
 	public MarketingAct() {
 		amount = new BigDecimal(0);

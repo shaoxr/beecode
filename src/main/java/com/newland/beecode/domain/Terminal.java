@@ -35,6 +35,9 @@ public class Terminal {
 	@JoinColumn(name="partner")
 	private Partner partner;
 	
+	private Integer version;
+	
+
 	@Transient
     private String allName;
 	
@@ -72,6 +75,13 @@ public class Terminal {
 
 	public void setPartner(Partner partner) {
 		this.partner = partner;
+	}
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
 	}
 
 
