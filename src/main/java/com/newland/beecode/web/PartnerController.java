@@ -152,9 +152,6 @@ public class PartnerController extends BaseController{
 		Set<Terminal> terminals=null;
 		try {
 			terminals= this.checkService.partnerImport(partnerFile, System.currentTimeMillis()+"");
-			for(Terminal terminal:terminals){
-				System.out.println(terminal.getName());
-			}
 			this.terminalService.save(terminals);
 			
 		} catch (Exception e) {
@@ -169,7 +166,6 @@ public class PartnerController extends BaseController{
 			    	return "prompt";
 			    }
 		}
-		System.out.println("aaaaaaaaaaaaaa");
 		model.addAttribute("success_message", terminals.size());
 		return "partners/import";
 	}

@@ -6,6 +6,9 @@
       <form:form action="excelimport" method="post" enctype="multipart/form-data">
          <div><label>商户终端文件:</label> <input type="file" style="width: 200px; height: 25px;" id="file" name="partnerFile" dojoType="dijit.form.ValidationTextBox" required="true"/></div><br />
          <input type="submit" value="导入"/>
+         <br/>
+         <div><br/><a href="/beecode/template/partner.xls">商户终端模板下载</a>
+        <br/></div>
       </form:form>
     </util:panel>
     <c:if test="${!empty message}">

@@ -36,7 +36,7 @@ public class OperServiceImpl implements OperService{
 	@Override
 	public void save(Oper oper,Long[] roles) {
 		oper.setRoles(this.genRoles(roles));
-		oper.setOperPwd(passwordEncoder.encodePassword(oper.getOperPwd(), null));
+		//oper.setOperPwd(passwordEncoder.encodePassword(oper.getOperPwd(), null));
 		this.operDao.save(oper);		
 	}
 	
@@ -74,10 +74,10 @@ public class OperServiceImpl implements OperService{
 
 		oper.setRoles(this.genRoles(roles));
 		
-		String oldPwd = operDao.get(oper.getOperNo()).getOperPwd();
-		if(!oper.getOperPwd().equals(oldPwd)){
-			oper.setOperPwd(passwordEncoder.encodePassword(oper.getOperPwd(), null));
-		}
+		//String oldPwd = operDao.get(oper.getOperNo()).getOperPwd();
+		//if(!oper.getOperPwd().equals(oldPwd)){
+		//	oper.setOperPwd(passwordEncoder.encodePassword(oper.getOperPwd(), null));
+		//}
 		this.operDao.saveOrUpdate(oper);
 		
 	}

@@ -516,15 +516,17 @@ public class CheckServiceImpl implements CheckService{
 					partnerNoError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NOT_EXITS, null, Locale.CHINA);
 				}
 				HSSFCell name = row.getCell(i++);
-				System.out.println(name);
 				terminalNameError="";
+				List<Terminal> _terminals ;
 				if(name==null || name.toString().equals("")){
 					terminalNameError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_EXCEL_NAME_NULL, null, Locale.CHINA);
+				}else{
+					_terminals=this.terminalDao.find("from Terminal t where t.name=?", name.toString());
+					if(_terminals.size()>0){
+						terminalNameError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_TERMINAL_NAME_EXITS, null, Locale.CHINA);
+					}
 				}
-				List<Terminal> _terminals =this.terminalDao.find("from Terminal t where t.name=?", name.toString());
-				if(_terminals.size()>0){
-					terminalNameError=messageSource.getMessage(ErrorsCode.BIZ_PARTNER_TERMINAL_NAME_EXITS, null, Locale.CHINA);
-				}
+				
 				HSSFCell terminalNo = row.getCell(i++);
 				terminalNoError="";
 				Terminal terminal= null;
