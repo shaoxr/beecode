@@ -7,7 +7,7 @@
         <field:datetime disableFormBinding="true" dateTimePattern="${date_format}" required="false" field="minGenTime" id="f_com_newland_beecode_domain_Coupon_minGenTime"/>
         <field:datetime disableFormBinding="true" dateTimePattern="${date_format}" required="false" field="maxGenTime" id="f_com_newland_beecode_domain_Coupon_maxGenTime"/>
          -->
-        <field:select disableFormBinding="true" field="marketingCatalogId" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_marketingcatalog" itemValue="id" itemLabel="catalogName" items="${marketingCatalogs}" multiple="false" path="/marketingCatalogs"/>
+        <field:select disableFormBinding="true" field="marketingCatalogId" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_marketingcatalog" itemValue="id" itemLabel="catalogName" items="${marketingCatalogs}" multiple="false" path="/marketingCatalog"/>
         <field:selectBlank disableFormBinding="true" field="actNo" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_marketingact_actname" itemValue="actNo" itemLabel="actName" items="${actList}" multiple="false" path="/businesstypes"/>
         <field:number disableFormBinding="true" field="couponId" validationMessageCode="field_invalid_integer" id="c_com_newland_beecode_domain_Coupon_cuoponId"/>
         <field:input disableFormBinding="true" field="mobile" id="c_com_newland_beecode_domain_Coupon_acctMobile" max="16"/>

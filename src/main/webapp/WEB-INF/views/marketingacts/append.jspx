@@ -9,7 +9,7 @@
     </page:show>
     <form:append id="fu_com_newland_beecode_domain_MarketingAct" idField="actNo" modelAttribute="marketingAct" path2="/marketingacts/submit2check" path="/marketingacts/appendCustomer" z="kcVVh3Dr4Hohbg3mh1Yc7660eGY=">
         <div><label>客户列表:</label> <input type="file" style="width: 200px; height: 25px;" id="file" name="customerFile" dojoType="dijit.form.ValidationTextBox" required="true" /></div><br />
-        <div><a href="/beecode/template/template.xls">客户资料模板下载</a>
+        <div><br/><a href="/beecode/template/template.xls">客户资料模板下载</a>
         <br/></div>
     </form:append>
     <c:if test="${!empty message}">
