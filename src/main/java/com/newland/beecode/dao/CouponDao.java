@@ -80,7 +80,6 @@ public class CouponDao extends BaseDao<Coupon,Long> {
         List<ConsumeDetail> result = new ArrayList<ConsumeDetail>();
         for (Iterator<Object[]> it = list.iterator(); it.hasNext();) {
             Object[] obj = (Object[]) it.next();
-
             ConsumeDetail cd = new ConsumeDetail();
             cd.setCheckDay((Date) obj[0]);
             cd.setActName((String) obj[1]);
