@@ -2,8 +2,8 @@
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
         <bean id="detailExcelService" class="com.newland.beecode.service.impl.XPathExcelTemplateService">
-        <property name="title"><value>礼券兑换详细报表</value></property>
-        <property name="sheetName"><value>礼券兑换详细报表</value></property>
+        <property name="title"><value>详细报表</value></property>
+        <property name="sheetName"><value>详细报表</value></property>
         <property name="countLine"><value>总计</value></property>
         <property name="cellList">
         	<list>
@@ -45,6 +45,11 @@
                 <bean class="com.newland.utils.CellDefine">
                     <property name="name"><value>客户手机</value></property>
                     <property name="path"><value>acctMobile</value></property>
+                    <property name="align"><value>center</value></property>
+                </bean>
+                <bean class="com.newland.utils.CellDefine">
+                    <property name="name"><value>客户卡号</value></property>
+                    <property name="path"><value>acctNo</value></property>
                     <property name="align"><value>center</value></property>
                 </bean>
                 <bean class="com.newland.utils.CellDefine">
@@ -91,8 +96,8 @@
         </property>
     </bean>
     <bean id="countExcelService" class="com.newland.beecode.service.impl.XPathExcelTemplateService">
-        <property name="title"><value>礼券兑换统计报表</value></property>
-        <property name="sheetName"><value>礼券兑换统计报表</value></property>
+        <property name="title"><value>统计报表</value></property>
+        <property name="sheetName"><value>统计报表</value></property>
         <property name="countLine"><value>总计</value></property>
         <property name="cellList">
         	<list>

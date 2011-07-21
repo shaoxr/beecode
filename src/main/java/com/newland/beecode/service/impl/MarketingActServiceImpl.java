@@ -120,7 +120,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 						coupon.setRebateRate(customer.getRebaterate());
 					}
 					if (act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)) {
-						coupon.setExchangeName(customer.getExchangeName());
+						coupon.setExchangeName(customer.getExchangeName()+act.getSuffix());
 						coupon.setExchangeAmount(customer.getExchangeAmount());
 					}
 				}else{
@@ -206,7 +206,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 	@Transactional
 	public void invalidMarketingAct(Long actNo)throws AppException {
             MarketingAct act = actDao.findUniqueByProperty("actNo", actNo);
-            if (act.getActStatus().equals(MarketingAct.STATUS_BEFORE_RECHECK) || act.getActStatus().equals(MarketingAct.STATUS_WAIT_ADD_CUSTOMER)) {
+            if (act.getActStatus().equals(MarketingAct.STATUS_CLOSED) ) {
 				act.setActStatus(MarketingAct.STAUS_DELETE);
 				actDao.update(act);
 			} else {
@@ -424,8 +424,18 @@ public class MarketingActServiceImpl implements MarketingActService {
     	}
     }
 	@Override
+	@Transactional
 	public void shutdownMarketingAct(Long actNo) throws AppException {
-		this.actDao.excuteByHQL("update MarketingAct m set m.actStatus=? where m.actNo=?", MarketingAct.STATUS_CLOSED,actNo);
+		MarketingAct act=this.findByActNo(actNo);
+		if(act.getActStatus().equals(MarketingAct.STAUS_DELETE)){
+			throw new AppException(ErrorsCode.BIZ_INVALID_NOT_DO,"");
+		}
+		if(act.getActStatus().equals(MarketingAct.STATUS_WAIT_ADD_CUSTOMER) || act.getActStatus().equals(MarketingAct.STATUS_BEFORE_RECHECK)){
+			this.actDao.delete(act);
+		}else{
+			this.actDao.excuteByHQL("update MarketingAct m set m.actStatus=? where m.actNo=?", MarketingAct.STATUS_CLOSED,actNo);
+		}
+		
 		
 	}
 	@Override
@@ -452,13 +462,20 @@ public class MarketingActServiceImpl implements MarketingActService {
 			MarketingActSummary marketingSummary = this.marketingSummary(actNo);
 			act.setSummary(marketingSummary);
 		}
+		if(act.getActStatus()>=MarketingAct.STATUS_BEFORE_GIVE || act.getActStatus()==MarketingAct.STATUS_APPEND_CUSTOMER){
+			List<Coupon> coupons=this.couponDao.findByProperty("marketingAct.actNo", actNo);
+			act.setExContent(this.fileService.getTextContent(coupons.get(0).getCouponId().toString()));
+		}
 		this.customerService.genCustomerList(act);
 		return act;
 	}
 	@Override
 	@Transactional(readOnly=true)
-	public MarketingAct appendCustomerForm(Long actNo)  {
+	public MarketingAct appendCustomerForm(Long actNo) throws AppException {
 		MarketingAct marketingAct=this.findByActNo(actNo);
+		if(marketingAct.getActStatus().equals(MarketingAct.STATUS_CLOSED) ||marketingAct.getActStatus().equals(MarketingAct.STAUS_DELETE) ){
+			throw new AppException(ErrorsCode.BIZ_INVALID_OR_SHUT_DOWN_NOT_DO,"");
+		}
 		this.customerService.genCustomerList(marketingAct);
 		return marketingAct;
 	}
@@ -467,6 +484,38 @@ public class MarketingActServiceImpl implements MarketingActService {
 	public MarketingAct sendForm(Long actNo) throws AppException {
 		MarketingAct act=this.findByActNo(actNo);
 		act.setMsStatus(this.couponService.findMSStatus(actNo));
+		List<Coupon> coupons=this.couponDao.findByProperty("marketingAct.actNo", actNo);
+		act.setExContent(this.fileService.getTextContent(coupons.get(0).getCouponId().toString()));
+		return act;
+	}
+	@Override
+	public List<MarketingAct> findByCatalogForReport(Long id) {
+		return this.actDao.find("from MarketingAct act where act.actStatus<>? and act.marketingCatalog.id=?", MarketingAct.STAUS_DELETE,id);
+	}
+	@Override
+	public void reOpenMarketingAct(Long actNo) throws AppException {
+		this.actDao.excuteByHQL("update MarketingAct m set m.actStatus=? where m.actNo=?", MarketingAct.STATUS_AFTER_GIVE,actNo);
+		
+	}
+	@Override
+	@Transactional
+	public void extendEndDate(MarketingAct act) throws AppException {
+		MarketingAct _act=this.findByActNo(act.getActNo());
+		_act.setEndDate(act.getEndDate());
+		this.actDao.update(_act);
+		
+	}
+	@Override
+	public void reOpenToSendMarketingAct(Long actNo) throws AppException {
+		this.actDao.excuteByHQL("update MarketingAct m set m.actStatus=? where m.actNo=?", MarketingAct.STATUS_BEFORE_GIVE,actNo);
+		
+	}
+	@Override
+	public MarketingAct updatePartnerForm(Long actNo) throws AppException {
+		MarketingAct act=this.findByActNo(actNo);
+		if(act.getActStatus().equals(MarketingAct.STATUS_CLOSED) ||act.getActStatus().equals(MarketingAct.STAUS_DELETE) ){
+			throw new AppException(ErrorsCode.BIZ_INVALID_OR_SHUT_DOWN_NOT_DO,"");
+		}
 		return act;
 	}
 

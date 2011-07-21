@@ -11,6 +11,7 @@
         <div><label>客户列表:</label> <input type="file" style="width: 200px; height: 25px;" id="file" name="customerFile" dojoType="dijit.form.ValidationTextBox" required="true" /></div><br />
         <div><br/><a href="/beecode/template/template.xls">客户资料模板下载</a>
         <br/></div>
+        <div>一个excel最多5000个客户</div>
     </form:append>
     <c:if test="${!empty message}">
      <util:panel id="title" title="提示信息">

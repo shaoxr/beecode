@@ -41,21 +41,21 @@ public class SendList {
 	@Column
 	public Long id;
 	@Column
-	private Long totalCount;
+	private Long totalCount=new Long(0);
 	
 	@Column
-	private Long successCount;
+	private Long successCount=new Long(0);
 	@Column
 	private Integer sendStatus;
 	@Column
-	private String message;
+	private String message="...";
 
 	@Column
 	private Date submitTime;
 	@Column
 	private Date endTime;
 	@Column
-	private String actName;
+	private String actName="...";
 	@Column
 	private Integer msType;
 	@Column

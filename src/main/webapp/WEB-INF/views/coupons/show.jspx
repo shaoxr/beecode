@@ -4,6 +4,7 @@
     <jsp:output omit-xml-declaration="yes"/>
     <page:show id="ps_com_newland_beecode_domain_Coupon" create="false" delete="false" update="false" list="false"  object="${coupon}" path="/coupons" z="sE4D5Fogz4UDSgJgKxHAtkJ3Fi4=">
         <field:display itemLabel="actName" field="marketingAct" id="s_com_newland_beecode_domain_marketingact_actname" object="${coupon}" z="OTcnwH7tegAJoH6kVS3HbkOYLg8="/>
+        <field:display field="marketingAct" itemLabel="actStatus" id="s_com_newland_beecode_domain_MarketingAct_actStatusDesc" pattern="dictView" className="ACT_STATUS"  object="${coupon}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
         <field:display dateTimePattern="${datetime_format}" field="genTime" id="s_com_newland_beecode_domain_Coupon_genTime" object="${coupon}" z="hShHq2kchPDI9PWyY7E3ZhG/ttA="/>
         <field:display field="acctName" id="s_com_newland_beecode_domain_marketingact_acctname" object="${coupon}" z="OTcnwH7tegAJoH6kVS3HbkOYLg8="/>
         <field:display field="acctMobile" id="s_com_newland_beecode_domain_Coupon_acctMobile" object="${coupon}" z="EcdgK+BplWi0jzBP+urBZxOTj20="/>

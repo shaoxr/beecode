@@ -2,24 +2,31 @@ package com.newland.beecode.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Transient;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Parameter;
 
 /**
  * @author shaoxr:
- * @version 2011-7-3 下午02:19:49
+ * @version 2011-7-16 上午11:14:39
  * 
  */
 @Entity
-public class Terminal {
+public class SysParam {
+	
+	public static final String SEND_MGR_NAME="SEND_MGR";
+	/**
+	 * 电信号码自动转短信
+	 */
+	public static final String SEND_MGR_DX_SMS="1";
+	/**
+	 * 电信号码正常发彩信
+	 */
+	public static final String SEND_MGR_DX_MMS="2";
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGen")
@@ -27,24 +34,17 @@ public class Terminal {
 	@Column
     private Long id;
 	@Column
-	private String name;
+	private String paramName;
 	@Column
-	private String terminalNo;
+	private String paramValue;
+	@Column
+	private String paramKey;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="partner")
-	private Partner partner;
-	@Column
-	private Integer version;
 	
 
-	@Transient
-    private String allName;
-	
-	public String getAllName(){
-		return this.partner.getPartnerName()+"---"+this.getName();
-	}
-
+	@Version
+    @Column(name = "version")
+    private Integer version; 
 	public Long getId() {
 		return id;
 	}
@@ -53,29 +53,22 @@ public class Terminal {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getParamName() {
+		return paramName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setParamName(String paramName) {
+		this.paramName = paramName;
 	}
 
-	public String getTerminalNo() {
-		return terminalNo;
+	public String getParamValue() {
+		return paramValue;
 	}
 
-	public void setTerminalNo(String terminalNo) {
-		this.terminalNo = terminalNo;
+	public void setParamValue(String paramValue) {
+		this.paramValue = paramValue;
 	}
 
-	public Partner getPartner() {
-		return partner;
-	}
-
-	public void setPartner(Partner partner) {
-		this.partner = partner;
-	}
 	public Integer getVersion() {
 		return version;
 	}
@@ -83,6 +76,12 @@ public class Terminal {
 	public void setVersion(Integer version) {
 		this.version = version;
 	}
+	public String getParamKey() {
+		return paramKey;
+	}
 
+	public void setParamKey(String paramKey) {
+		this.paramKey = paramKey;
+	}
 
 }

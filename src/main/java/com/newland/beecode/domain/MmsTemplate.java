@@ -1,5 +1,7 @@
 package com.newland.beecode.domain;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -120,9 +122,8 @@ public class MmsTemplate {
 		String account_4=coupon.getAcctNo().substring(coupon.getAcctNo().length()-4, coupon.getAcctNo().length());
 		content=content.replaceAll(MmsTemplate.ACCOUNT_4, account_4);
 		if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
-			content=content.replaceAll(MmsTemplate.VALUE, coupon.getRebateRate().toString());
+			content=content.replaceAll(MmsTemplate.VALUE, coupon.getRebateRate().multiply(new BigDecimal(10)).toString());
 		}else if(act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)){
-			System.out.println(coupon.getExchangeName());
 			content=content.replaceAll(MmsTemplate.VALUE, coupon.getExchangeName());
 		}else{
 			content=content.replaceAll(MmsTemplate.VALUE,coupon.getBackAmount().toString());

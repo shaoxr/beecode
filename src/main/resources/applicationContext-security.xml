@@ -16,6 +16,7 @@
 		<intercept-url pattern="/buisnesstypes/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/marketingacts/**" access="hasRole('ROLE_BUSINESS') or hasRole('ROLE_CHECK')" />
 		<intercept-url pattern="/opers/**" access="hasRole('ROLE_ADMIN')" />
+		<intercept-url pattern="/sysparam/**" access="hasRole('ROLE_SEND')" />
 		<intercept-url pattern="/organizations/**" access="hasRole('ROLE_ADMIN')" />
 		<intercept-url pattern="/partners/**" access="hasRole('ROLE_BUSINESS')" />
 		<intercept-url pattern="/roleses/**" access="hasRole('ROLE_ADMIN')" />

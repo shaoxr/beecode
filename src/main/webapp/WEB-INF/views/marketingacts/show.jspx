@@ -30,6 +30,9 @@
         </c:if>
         </c:if>
         <c:if test="${marketingact.importType eq '1' }">
+          <c:if test="${marketingact.bizNo eq '00'}">
+            <field:display field="suffix" id="s_com_newland_beecode_domain_MarketingAct_suffix" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        </c:if>
           <c:if test="${marketingact.bizNo eq '01'}">
             <field:display field="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
         </c:if>
@@ -38,6 +41,8 @@
         <field:select disableFormBinding="true" id="s_com_newland_beecode_domain_MarketingAct_partners" itemLabel="allName" itemValue="id" multiple="true" disabled="true" items="${marketingact.terminals}" field="partner" path=""></field:select>
         <field:display  field="mmsTitle" id="s_com_newland_beecode_domain_MarketingAct_mmsTitle" object="${marketingact}" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
         <field:display field="mmsTemplate" id="s_com_newland_beecode_domain_marketingact_mmscontent"  object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
+        <field:display field="exContent" id="s_com_newland_beecode_domain_marketingact_excontent"  object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
+        
         <field:display field="msStatus" itemLabel="totalCount" id="s_com_newland_beecode_domain_MarketingAct_couponsum" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
         <field:display field="msStatus" itemLabel="MMSSuccessCount" id="s_com_newland_beecode_domain_marketingact_mms_sendsum" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
         <field:display field="msStatus" itemLabel="SMSSuccessCount" id="s_com_newland_beecode_domain_marketingact_sms_sendsum" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
@@ -66,5 +71,27 @@
           <input type="submit" value="活动导出word"/>
         </form>
       </util:panel>
+      <c:if test="${marketingact.actStatus eq '9'}">
+      <util:panel id="reOpen" title="重新开放活动">
+        <form action="reopen" method="post">
+          <input name="actNo" type="hidden" value="${marketingact.actNo}"/>
+          <input type="submit" value="重新开放"/>
+        </form>
+      </util:panel>
+      </c:if>
+      <c:if test="${marketingact.actStatus eq '7'}">
+      <util:panel id="reOpenToSend" title="重新 发放彩信">
+        <form action="reopentosend" method="post">
+          <input name="actNo" type="hidden" value="${marketingact.actNo}"/>
+          <input type="submit" value="重新发放彩信"/>
+        </form>
+      </util:panel>
+      </c:if>
+      <c:if test="${marketingact.actStatus eq '7'}">
+      <form:update next="false" id="fu_com_newland_beecode_domain_MarketingAct_extend" idField="actNo" modelAttribute="marketingact" path="/marketingacts/extend" z="kcVVh3Dr4Hohbg3mh1Yc7660eGY=">
+        <field:datetime dateTimePattern="${date_format}" disabled="true" field="startDate" id="c_com_newland_beecode_domain_MarketingAct_startDate" required="true" z="f55n8FxO61VcBD3GNwWJrrEsFDg="/>
+        <field:datetime dateTimePattern="${date_format}" field="endDate" id="c_com_newland_beecode_domain_MarketingAct_endDate" required="true" z="K+8B/MhbkEv3d+ATO5wDa18HjPY="/>
+      </form:update>
+     </c:if> 
     
 </div>

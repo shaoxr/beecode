@@ -36,6 +36,16 @@ public class ConsumeDetail {
 	private String  couponId;
 	
 	private String  acctMobile;
+	
+	private String acctNo;
+	public String getAcctNo() {
+		return acctNo;
+	}
+
+	public void setAcctNo(String acctNo) {
+		this.acctNo = acctNo;
+	}
+
 	public BigDecimal getBackAmount() {
 		return backAmount;
 	}

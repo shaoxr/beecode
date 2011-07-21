@@ -75,7 +75,7 @@ public class CouponServiceImpl implements CouponService {
                     "Request id=[" + req.getCouponId() + "],serialNo=["
                     + req.getSerialNo() + "] expired.");
         }
-        if (coupon.getMarketingAct().getEndDate().getTime() < new Date().getTime()
+        if ((coupon.getMarketingAct().getEndDate().getTime()+24*60*60*1000) < new Date().getTime()
                 || coupon.getMarketingAct().getStartDate().getTime() > new Date().getTime()) {
             throw new AppException(ErrorsCode.ERR_COUPON_EXPIRED,
                     "Request id=[" + req.getCouponId() + "],serialNo=["
@@ -83,7 +83,8 @@ public class CouponServiceImpl implements CouponService {
         }
 
         // 检查活动状态过期或关闭
-        if (coupon.getMarketingAct().getActStatus().equals(MarketingAct.STATUS_CLOSED) == true) {
+        if (coupon.getMarketingAct().getActStatus().equals(MarketingAct.STATUS_CLOSED) == true ||
+        		coupon.getMarketingAct().getActStatus().equals(MarketingAct.STAUS_DELETE) == true) {
             throw new AppException(ErrorsCode.ERR_COUPON_INVALID,
                     "Request id=[" + req.getCouponId() + "],serialNo=["
                     + req.getSerialNo() + "] invalid.");
@@ -92,7 +93,6 @@ public class CouponServiceImpl implements CouponService {
         boolean hasPartner = false;
         for (Iterator<Terminal> it = coupon.getMarketingAct().getTerminals().iterator(); it.hasNext();) {
         	Terminal terminal = it.next();
-        	System.out.println(terminal.getTerminalNo()+":"+req.getDeviceNo());
             if (terminal.getTerminalNo().equals(req.getDeviceNo())) {
                 hasPartner = true;
                 break;
@@ -186,9 +186,11 @@ public class CouponServiceImpl implements CouponService {
         ctrl.setBusinessType(req.getBizType());
         ctrl.setEncodeVersion("2");
         if(coupon.getBusinessType().equals(Coupon.BIZ_TYPE_EXCHANGE)){
+        	ctrl.setAcctNo(coupon.getAcctNo());
         	ctrl.setExchangeAmount(coupon.getExchangeAmount());
         	ctrl.setExchangeName(coupon.getExchangeName());
         }else{
+        	ctrl.setAcctNo(req.getCheckCode());
         	if(coupon.getBusinessType().equals(Coupon.BIZ_TYPE_VOUCHER)){
         		ctrl.setBackAmount(req.getBackAmount().min(req.getOriginalAmount()));
         	}

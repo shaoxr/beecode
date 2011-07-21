@@ -196,7 +196,7 @@ public class XPathExcelTemplateService implements ExcelService {
 		//    	统计行
 		if (this.countLine != null) {
 			String str[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
-					"K", "L", "M", "N", "O" };
+					"K", "L", "M", "N", "O" ,"P","Q"};
 			for (short i = 0; i < cellList.size(); i++) {
 				CellDefine cellDefine = (CellDefine) cellList.get(i);
 				HSSFCell cell = row.createCell(i);

@@ -105,8 +105,8 @@ public class SendServiceImpl implements SendService {
 			List<List<Coupon>> couponss=checkMobile(couponList);
 			List<Coupon> DXCoupons=couponss.get(0);
 			List<Coupon> UNDXCoupons=couponss.get(1);
-			this.heartDetect(SendList.MS_TYPE_SMS,DXCoupons.size());
-			this.heartDetect(SendList.MS_TYPE_MMS, UNDXCoupons.size());
+			//this.heartDetect(SendList.MS_TYPE_SMS,DXCoupons.size());
+			//this.heartDetect(SendList.MS_TYPE_MMS, UNDXCoupons.size());
 			final ThreadPoolExecutor threadPool =ThreadPoolFactory.newThreadPool(couponList.size());
 			for(Coupon coupon:DXCoupons){
 				SendParam sp=new SendParam();
@@ -173,6 +173,7 @@ public class SendServiceImpl implements SendService {
 		}
 	}
 	public void sendOne(Coupon coupon,final MarketingAct act,final SendInvokeService sendInvokeService,final Long sendListId,String dir)throws AppException{
+		try {
 		SendParam sp=new SendParam();
 		if(sendInvokeService.getMsType().equals(SendList.MS_TYPE_SMS)){
 			
@@ -189,11 +190,13 @@ public class SendServiceImpl implements SendService {
 			sp.setMobile(coupon.getAcctMobile());
 			sp.setCouponId(coupon.getCouponId());
 		}
-		try {
+		
 			sendInvokeService.sendRun(sp);
-			sendInvokeService.sendOver(act.getActNo(), sendListId);
 		} catch (Exception e) {
+			
 			throw new AppException(ErrorsCode.BIZ_MS_SEND_ERROR,"",e);
+		}finally{
+			sendInvokeService.sendOver(act.getActNo(), sendListId);
 		}
 	}
 	private void heartDetect(Integer msType,long size)throws AppException{

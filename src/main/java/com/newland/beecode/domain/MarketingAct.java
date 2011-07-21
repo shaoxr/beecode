@@ -175,13 +175,13 @@ public class MarketingAct {
 	private String checkCode;
 
 	@Column
-	private BigDecimal rebateRate;
+	private BigDecimal rebateRate =new BigDecimal(0);
 
 	/**
 	 * 兑换券价值
 	 */
 	@Column
-	private BigDecimal amount;
+	private BigDecimal amount =new BigDecimal(0);
 
 	@Column
 	private Integer actStatus;
@@ -246,10 +246,10 @@ public class MarketingAct {
 	private Integer smsSending;
 	
 	@Column
-	private BigDecimal maxAmount;
+	private BigDecimal maxAmount=new BigDecimal(0);
 	
 	@Column
-	private BigDecimal backRate;
+	private BigDecimal backRate=new BigDecimal(0);
 	@Column
 	private Integer importType;
 
@@ -261,6 +261,13 @@ public class MarketingAct {
 
 	@Transient
 	private MsStatus msStatus;
+	@Transient
+	private String exContent="...";
+	/**
+	 * 兑换物品后缀
+	 */
+	@Column
+	private String suffix;
 	
 	@Transient
 	private List<Customer> unCheckCustomers;
@@ -274,7 +281,13 @@ public class MarketingAct {
 	public void setUnCheckCustomers(List<Customer> unCheckCustomers) {
 		this.unCheckCustomers = unCheckCustomers;
 	}
+	public String getSuffix() {
+		return suffix;
+	}
 
+	public void setSuffix(String suffix) {
+		this.suffix = suffix;
+	}
 	public List<Customer> getCheckedCustomers() {
 		return checkedCustomers;
 	}
@@ -559,5 +572,12 @@ public class MarketingAct {
 
 	public void setImportType(Integer importType) {
 		this.importType = importType;
+	}
+	public String getExContent() {
+		return exContent;
+	}
+
+	public void setExContent(String exContent) {
+		this.exContent = exContent;
 	}
 }

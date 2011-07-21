@@ -402,7 +402,6 @@ public class FileServiceImpl implements FileService{
      */
 	@Override
 	public String extractMms(MultipartFile file) throws AppException {
-		System.out.println("extractMms");
 		String path=this.baseService.getFilePath()+MMS_SEND_EXTRACT +this.getRandomPath();
 		this.extract(file, path);
 		return path;
@@ -576,7 +575,6 @@ public class FileServiceImpl implements FileService{
 	}
 	@Override
 	public String extractSms(MultipartFile file) throws AppException {
-		System.out.println("extractSms");
 		String path=this.baseService.getFilePath()+SMS_SEND_EXTRACT + this.getRandomPath();
 		extract(file,path);
 		return path;
@@ -608,7 +606,6 @@ public class FileServiceImpl implements FileService{
 		}
 	}
 	private synchronized String getRandomPath(){
-		System.out.println(">>>>>>>>>>gen file name");
 		return System.currentTimeMillis()+"";
 	}
 	public FileInputStream getRespStatus(SendList sendList,List<RespStatus> respStatuss)throws AppException{
@@ -700,6 +697,11 @@ public class FileServiceImpl implements FileService{
 					fw.write("\r\n");
 				}
 			}else{
+				if(act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)){
+					fw.write("礼品后缀："+act.getSuffix());
+					fw.write("\r\n");
+					fw.write("\r\n");
+				}
 				if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
 					fw.write("上限额度："+act.getMaxAmount());
 					fw.write("\r\n");

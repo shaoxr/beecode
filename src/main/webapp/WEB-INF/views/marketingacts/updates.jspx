@@ -25,6 +25,9 @@
         </c:if>
         </c:if>
         <c:if test="${marketingAct.importType eq '1' }">
+        <c:if test="${marketingAct.bizNo eq '00'}">
+            <field:input field="suffix" id="s_com_newland_beecode_domain_MarketingAct_suffix"  z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        </c:if>
         <c:if test="${marketingAct.bizNo eq '01'}">
             <field:number field="maxAmount" decimalMax="999999" decimalMin="0" id="c_com_newland_beecode_domain_MarketingAct_maxAmount" required="true" validationMessageCode="field_invalid_number" />    
         </c:if>

@@ -1,13 +1,14 @@
 package com.newland.beecode.service.impl;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,13 @@ import com.newland.beecode.domain.MsStatus;
 import com.newland.beecode.domain.RespStatus;
 import com.newland.beecode.domain.SmsSendList;
 import com.newland.beecode.domain.SendList;
+import com.newland.beecode.domain.SysParam;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.FileService;
 import com.newland.beecode.service.SendListService;
 import com.newland.beecode.service.SendService;
+import com.newland.beecode.service.SysParamService;
 import com.newland.beecode.task.service.SendInvokeService;
 
 /**
@@ -36,6 +39,7 @@ import com.newland.beecode.task.service.SendInvokeService;
  */
 @Service(value="sendListService")
 public class SendListServiceImpl implements SendListService{
+	protected Log logger = LogFactory.getLog(this.getClass());
 	@Autowired
 	private SendService sendService;
 	@Autowired
@@ -50,6 +54,8 @@ public class SendListServiceImpl implements SendListService{
 	private SendInvokeService smsFetch2SendInvokeService;
 	@Autowired
 	private MessageSource messageSource;
+	@Autowired
+	private SysParamService sysParamService;
 	
 	@Override
 	public SendList saveOrUpdate(SendList mmsSendList) {
@@ -92,34 +98,66 @@ public class SendListServiceImpl implements SendListService{
 		return msStatus;
 	}
 	@Override
-	public void send(final MultipartFile file) throws AppException {
+	public void send(final MultipartFile file,final Integer msType) throws AppException {
 		new Thread(){
 			public void run() {
 				SendList mmsSendList=new SendList();
 				try {
+					mmsSendList.setSubmitTime(new Date());
+					mmsSendList.setSendStatus(SendList.STATUS_SENDING);
+					mmsSendList.setMsType(msType);
+					mmsSendList=saveOrUpdate(mmsSendList);
 					String dirName=fileService.extractMms(file);
 					List<Coupon> coupons=fileService.getCoupon(dirName);
-					MarketingAct act=fileService.getActFile(dirName, SendList.MS_TYPE_MMS);
+					MarketingAct act=fileService.getActFile(dirName, msType);
 					mmsSendList.setTotalCount(new Long(coupons.size()));
 					mmsSendList.setSubmitTime(new Date());
 					mmsSendList.setSendStatus(SendList.STATUS_SENDING);
-					mmsSendList.setMsType(SendList.MS_TYPE_MMS);
+					mmsSendList.setMsType(msType);
 					mmsSendList.setActName(act.getActName());
 					mmsSendList.setActNo(act.getActNo());
 					mmsSendList=saveOrUpdate(mmsSendList);
+					if(msType.equals(SendList.MS_TYPE_MMS)){
+						if(sysParamService.findBykey(SysParam.SEND_MGR_NAME).getParamValue().equals(SysParam.SEND_MGR_DX_SMS)){
+							if(coupons.size()==1){
+								sendService.sendOne(coupons.get(0), act, smsFetch2SendInvokeService, mmsSendList.getId(), dirName);
+							}else{
+								sendService.differenceSend(coupons, act, mmsSendList.getId(), dirName);
+							}
+						}else{
+							if(coupons.size()==1){
+								sendService.sendOne(coupons.get(0), act, mmsFetch2SendInvokeService, mmsSendList.getId(), dirName);
+							}else{
+								sendService.send(coupons, act, mmsFetch2SendInvokeService, mmsSendList.getId(), dirName);
+							}
+						}
+						
+						
+					}else{
+						if(coupons.size()==1){
+							sendService.sendOne(coupons.get(0), act, smsFetch2SendInvokeService, mmsSendList.getId(), dirName);
+						}else{
+							sendService.send(coupons, act, smsFetch2SendInvokeService, mmsSendList.getId(), dirName);
+						}
+						
+					}
 					
-					//sendService.send(coupons, act, mmsFetch2SendInvokeService, mmsSendList.getId(), dirName);
-					sendService.differenceSend(coupons, act, mmsSendList.getId(), dirName);
-				} catch (AppException e) {
-					e.printStackTrace();
-					String message=messageSource.getMessage(ErrorsCode.BIZ_MMS_SEND_ERROR_FILE, null, Locale.CHINA);
-					sendListDao.excuteByHQL("update SendList s set s.message=? where s.id=?", message,mmsSendList.getId());
+				} catch (Exception e) {
+					logger.error("", e);
+					String message="";
+					if(e instanceof AppException){
+						message=messageSource.getMessage(((AppException)e).getCode(), null, Locale.CHINA);
+					}else{
+						message=messageSource.getMessage(ErrorsCode.BIZ_MMS_SEND_ERROR_FILE, null, Locale.CHINA);
+					}
+					sendListDao.excuteByHQL("update SendList s set s.sendStatus=?,s.message=? where s.id=?",SmsSendList.STATUS_SENDED, message,mmsSendList.getId());
 				}
 			}
 		}.start();
 		
 		
 	}
+
 	
 	
 

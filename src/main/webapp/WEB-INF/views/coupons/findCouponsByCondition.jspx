@@ -16,8 +16,9 @@
         <field:select disableFormBinding="true" field="smsStatus" headerKey="99999" headerValue="全部" id="f_com_newland_beecode_domain_coupon_smsstatus" itemValue="key" itemLabel="value" items="${mmsstatusList}" multiple="false" path="" />
     </form:find>
     <page:list id="pl_com_newland_beecode_domain_Coupon" items="${coupons}" z="U3nb+I8gG2r3o6O8Ze3fZUqBX6Y=">
-        <table:table data="${coupons}" id="l_com_newland_beecode_domain_Coupon" create="false" delete="false" update="false" path="/coupons" typeIdFieldName="couponId" z="oBvvnLmWEga+9B/QZ6xe4rGD43w=">
+        <table:table data="${coupons}" tipFieldName="couponId" id="l_com_newland_beecode_domain_Coupon" create="false" delete="false" update="false" path="/coupons" typeIdFieldName="couponId" z="oBvvnLmWEga+9B/QZ6xe4rGD43w=">
             <table:column id="c_com_newland_beecode_domain_MarketingAct_actName" property="marketingAct" itemLabel="actName"/>
+            <table:column id="c_com_newland_beecode_domain_MarketingAct_actStatus" pattern="dictView" className="ACT_STATUS" property="marketingAct" itemLabel="actStatus" z="6V2aJ3KqDBApsVzK7EPL4fYFfZc="/>
             <table:column id="c_com_newland_beecode_domain_Coupon_cuoponId" property="couponId" maxLength="18"/>
             <table:column id="c_com_newland_beecode_domain_marketingact_acctname" maxLength="20" property="acctName" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>
             <table:column id="c_com_newland_beecode_domain_Coupon_acctMobile" maxLength="20" property="acctMobile" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>

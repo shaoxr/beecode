@@ -76,7 +76,7 @@ public class ErrorsCode {
 	 */
 	public static final String MESSAGE="message";
 	/**
-	 * 活动已经审核无法作废 
+	 * 活动未关闭，无法作废
 	 */
 	public static final String BIZ_MARKETACT_DONOT_DELETE="BIZ.006";
 	/**
@@ -163,10 +163,7 @@ public class ErrorsCode {
 	 * 客户资料检查，金额格式不对(包含非数字)
 	 */
 	public static final String BIZ_CUSTOMER_AMOUNT_NOT_NUMBER="BIZ.027";
-	/**
-	 * 客户资料检查，兑换物品名称为空
-	 */
-	public static final String BIZ_CUSTOMER_EXCHANGE_NAME_NULL="BIZ.035";
+	
 	
 	public static final String BIZ_CUSTOMER_EXCHANGE_AMOUNT_NULL="BIZ.028";
 	
@@ -181,6 +178,23 @@ public class ErrorsCode {
 	public static final String BIZ_CUSTOMER_BACKAMOUNT_NULL="BIZ.033";
 	
 	public static final String BIZ_CUSTOMER_BACKAMOUNT_ERROR="BIZ.034";
+	/**
+	 * 客户资料检查，兑换物品名称为空
+	 */
+	public static final String BIZ_CUSTOMER_EXCHANGE_NAME_NULL="BIZ.035";
+	
+	/**
+	 * 活动已经作废，无法完成此操作
+	 */
+	public static final String BIZ_INVALID_NOT_DO="BIZ.036";
+	/**
+	 *活动已经关闭或者作废，无法完成此操作
+	 */
+	public static final String BIZ_INVALID_OR_SHUT_DOWN_NOT_DO="BIZ.037";
+	/**
+	 * 客户数超过5000
+	 */
+	public static final String BIZ_CUSTOMER_ROW_OVER="BIZ.038";
 	
 	/**
 	 * 商户类别名称已经存在

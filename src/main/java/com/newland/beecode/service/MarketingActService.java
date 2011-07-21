@@ -28,6 +28,12 @@ public interface MarketingActService {
 	
 	public void shutdownMarketingAct(Long actNo)throws AppException;
 	
+	public void reOpenMarketingAct(Long actNo)throws AppException;
+	
+	public void reOpenToSendMarketingAct(Long actNo)throws AppException;
+	
+	public void extendEndDate(MarketingAct act)throws AppException;
+	
 	/**
 	 * 添加营销客户
 	 * @param actNo
@@ -48,6 +54,8 @@ public interface MarketingActService {
 	public void genTxtFile(Coupon coupon,MarketingAct marketingAct)throws AppException;
 	
 	public List<MarketingAct> findByCatalog(Long id);
+	
+	public List<MarketingAct> findByCatalogForReport(Long id);
 	
 	public MarketingAct findByActNo(Long actNo);
 	
@@ -92,7 +100,9 @@ public interface MarketingActService {
 	
 	public MarketingAct show(Long actNo)throws AppException;
 	
-	public MarketingAct appendCustomerForm(Long actNo);
+	public MarketingAct appendCustomerForm(Long actNo)throws AppException;
+	
+	public MarketingAct updatePartnerForm(Long actNo)throws AppException;
 	
 	public MarketingAct sendForm(Long actNo)throws AppException;
 	

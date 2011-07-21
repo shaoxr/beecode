@@ -13,5 +13,6 @@ public interface SendService {
 	public void send(List<Coupon> couponList,MarketingAct act,SendInvokeService sendInvokeService,Long sendListId,String dir) throws AppException;
 	
 	public void sendOne(Coupon coupon,MarketingAct act, SendInvokeService sendInvokeService) throws AppException;
+	public void sendOne(Coupon coupon,final MarketingAct act,final SendInvokeService sendInvokeService,final Long sendListId,String dir)throws AppException;
 	public  void differenceSend(List<Coupon> couponList,final MarketingAct act,final Long sendListId,String dir) throws AppException;
 }

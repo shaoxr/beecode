@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
+    <jsp:directive.page contentType="text/html;charset=UTF-8"/>
+    <jsp:output omit-xml-declaration="yes"/>
+    
+<page:list id="pl_com_newland_beecode_domain_sysparam" items="${sysparams}" z="i346yd2UzE1gpevvvduTcGeHDt4=">
+        <table:table data="${sysparams}" id="l_com_newland_beecode_domain_sysparam" path="/sysparam" show="false" update="true" delete="false" z="ccaHs64Fsv/dMKIcbPSVXG0k+qg=">
+            <table:column  id="c_com_newland_beecode_domain_sysparam_name" property="paramName" z="NOm7CCFFOUL3GYu3UCEkALQYEYE="/>
+            <table:column  id="c_com_newland_beecode_domain_sysparam_value" property="paramValue" className="${paramKey}" pattern="dictView" z="NOm7CCFFOUL3GYu3UCEkALQYEYE="/>
+        </table:table>
+    </page:list>
+</div>

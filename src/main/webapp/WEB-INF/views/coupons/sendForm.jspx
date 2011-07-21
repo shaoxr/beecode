@@ -30,6 +30,9 @@
         </c:if>
         </c:if>
         <c:if test="${marketingact.importType eq '1' }">
+          <c:if test="${marketingact.bizNo eq '00'}">
+            <field:display field="suffix" id="s_com_newland_beecode_domain_MarketingAct_suffix" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+          </c:if>
           <c:if test="${marketingact.bizNo eq '01'}">
             <field:display field="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${marketingact}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
           </c:if>
@@ -39,6 +42,7 @@
         -->
         <field:select disableFormBinding="true" id="s_com_newland_beecode_domain_MarketingAct_partners" itemLabel="allName" itemValue="terminalNo" multiple="true" disabled="true" items="${marketingact.terminals}" field="partner" path=""></field:select>
        <field:display field="mmsTemplate" id="s_com_newland_beecode_domain_marketingact_mmscontent"  object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
+        <field:display field="exContent" id="s_com_newland_beecode_domain_marketingact_excontent"  object="${marketingact}" z="pG+CRDLOO4q9r5oeV2nTNb70G4o="/>
         <field:display field="msStatus" itemLabel="totalCount" id="s_com_newland_beecode_domain_MarketingAct_couponsum" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
         <field:display field="msStatus" itemLabel="MMSSuccessCount" id="s_com_newland_beecode_domain_marketingact_mms_sendsum" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
         <field:display field="msStatus" itemLabel="SMSSuccessCount" id="s_com_newland_beecode_domain_marketingact_sms_sendsum" object="${marketingact}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
@@ -106,18 +110,23 @@
         <br/>
         <form action="../../coupons/sendover" method="post">
           <input type="hidden" value="${marketingact.actNo}" name="actNo"/>
-          <c:if test="${marketingact.smsSending eq '0' and marketingact.mmsSending eq '0'}">
+          <c:if test="${ marketingact.mmsSending eq '0'}">
             <input type="submit" value="发放结束  开放活动" />
             </c:if>
+            
         </form>
       </util:panel>
-      </c:if>
+      <c:if test="${ marketingact.mmsSending eq '1'}">
       <util:panel id="open" title="彩信开启">
         <form action="../../coupons/mmsopen" method="post">
           <input type="hidden" value="${marketingact.actNo}" name="actNo"/>
           <input type="submit" value="彩信开启" />
+          <div>在彩信提取过程中，出现错误，可以使用次功能</div>
         </form>
       </util:panel>
+      </c:if>
+      </c:if>
+      
     </page:show>
     
 </div>

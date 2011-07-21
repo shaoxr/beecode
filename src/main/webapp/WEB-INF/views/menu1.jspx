@@ -21,6 +21,9 @@
     <menu:category id="c_msmanager" z="rs8zfmLS6SJZoIvFFQfrlrSaJVU=">
 			<menu:item id="c_msmanager_balance" url="/msManager/balance" z="3pwVBouHLA1zzuNbxsmScZYd3Ow="/>
 	</menu:category>
+	<menu:category id="c_sysparam" z="rs8zfmLS6SJZoIvFFQfrlrSaJVU=">
+			<menu:item id="c_sysparam" url="/sysparam" z="3pwVBouHLA1zzuNbxsmScZYd3Ow="/>
+	</menu:category>
     </sec:authorize>
     <sec:authorize ifAnyGranted="ROLE_BUSINESS">
         <menu:category id="c_partner" >

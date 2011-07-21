@@ -167,7 +167,7 @@ public class OperController extends BaseController{
 		try {
 			this.operService.delete(operNo);
 			model.addAttribute("page", (page == null) ? "1" : page.toString());
-			model.addAttribute("size", (size == null) ? "10" : size.toString());
+			model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";

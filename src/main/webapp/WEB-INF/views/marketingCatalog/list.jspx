@@ -3,7 +3,7 @@
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
     <page:list id="pl_com_newland_beecode_domain_MarketingCatalog" items="${marketingCatalogs}" z="H3iBEjI5CrcVzP2ZEnqcYrLvQTw=">
-        <table:table data="${marketingCatalogs}" id="l_com_newland_beecode_domain_MarketingCatalog" path="/marketingCatalog" update="true" delete="true" z="j361QMCgOxvZwTRQFC+vsmYEURM=">
+        <table:table tipFieldName="catalogName" data="${marketingCatalogs}" id="l_com_newland_beecode_domain_MarketingCatalog" path="/marketingCatalog" update="true" delete="true" z="j361QMCgOxvZwTRQFC+vsmYEURM=">
             <table:column id="c_com_newland_beecode_domain_MarketingCatalog_catalogName" property="catalogName" z="jmGw8nQqaX9JKdjxG3G+c7kTOs4="/>
             <table:column  pattern="yyyy-MM-dd" id="c_com_newland_beecode_domain_MarketingCatalog_createTime" property="createTime" z="Haw+F8umbMirRpxbBGmJ4nw1PcM="/>
             <table:column  pattern="yyyy-MM-dd" id="c_com_newland_beecode_domain_MarketingCatalog_updateTime" property="updateTime" z="6UGQz71NYPKazPiz6Eko6VUlTwQ="/>

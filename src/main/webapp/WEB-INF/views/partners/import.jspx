@@ -23,7 +23,7 @@
     <c:if test="${!empty success_message}">
      <util:panel id="title" title="提示信息">
     <p>
-             成功添加${message}个商户终端
+             成功添加${success_message}个商户终端
     </p>
     </util:panel>
     </c:if>

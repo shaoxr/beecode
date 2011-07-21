@@ -121,8 +121,13 @@ public class MarketingActController extends BaseController{
 	}
 	@RequestMapping(value="updatePartner/{actNo}", method = RequestMethod.GET)
 	public String updatePartnerForm(@PathVariable("actNo") Long actNo,Model model){
-		MarketingAct marketingAct=this.marketingActService.findByActNo(actNo);
-		model.addAttribute("marketingAct",marketingAct);
+		try {
+			MarketingAct marketingAct=this.marketingActService.updatePartnerForm(actNo);
+			model.addAttribute("marketingAct",marketingAct);
+		} catch (AppException e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
 		return "marketingacts/updatepartner";
 	}
 	@RequestMapping(value="updatePartner", method = RequestMethod.POST)
@@ -178,10 +183,15 @@ public class MarketingActController extends BaseController{
 			    	return "prompt";
 			    }
 		}
-		MarketingAct marketingAct=this.marketingActService.appendCustomerForm(actNo);
-		model.addAttribute("customersChecked",marketingAct.getCheckedCustomers());
-		model.addAttribute("customersUn",marketingAct.getUnCheckCustomers());
-		model.addAttribute("marketingAct",marketingAct);
+		try {
+			MarketingAct marketingAct=this.marketingActService.appendCustomerForm(actNo);
+			model.addAttribute("customersChecked",marketingAct.getCheckedCustomers());
+			model.addAttribute("customersUn",marketingAct.getUnCheckCustomers());
+			model.addAttribute("marketingAct",marketingAct);
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+	    	return "prompt";
+		}
 		return "marketingacts/appendcustomer";
 	}
 	@RequestMapping(value="submit2check", method = RequestMethod.POST)
@@ -286,6 +296,19 @@ public class MarketingActController extends BaseController{
 		return "redirect:/marketingacts/appendMmsContent/"+ encodeUrlPathSegment(marketingAct.getActNo().toString(),
 				request)+"?form";
 	}
+	@RequestMapping(value="extend",method=RequestMethod.PUT)
+	public String extend( MarketingAct marketingAct,
+			Model model,
+			HttpServletRequest request){
+		try{
+			this.marketingActService.extendEndDate(marketingAct);
+		}catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		//return "redirect:marketingacts/"+marketingAct.getActNo();
+		return "redirect:/marketingacts/"+marketingAct.getActNo();
+	}
 
 	/**
 	 * 作废指令，仅在审核状态的营销活动可以作废
@@ -306,7 +329,7 @@ public class MarketingActController extends BaseController{
 		try {
 			marketingActService.invalidMarketingAct(actNo);
 			model.addAttribute("page", (page == null) ? "1" : page.toString());
-			model.addAttribute("size", (size == null) ? "10" : size.toString());
+			model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
@@ -323,13 +346,39 @@ public class MarketingActController extends BaseController{
 		try {
 			marketingActService.shutdownMarketingAct(actNo);
 			model.addAttribute("page", (page == null) ? "1" : page.toString());
-			model.addAttribute("size", (size == null) ? "10" : size.toString());
+			model.addAttribute("size", (size == null) ? PaginationHelper.PAGE_SIZE : size.toString());
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			return "prompt";
 		}
 		
 		return "redirect:/marketingacts?"+query;
+	}
+	@RequestMapping(value = "reopen", method = RequestMethod.POST)
+	public String reopen(@RequestParam(value = "actNo", required = false) Long actNo,
+			Model model,HttpServletRequest request)  {
+		try {
+			marketingActService.reOpenMarketingAct(actNo);
+			
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		
+		return "redirect:/marketingacts/"+actNo;
+	}
+	@RequestMapping(value = "reopentosend", method = RequestMethod.POST)
+	public String reOpenToSend(@RequestParam(value = "actNo", required = false) Long actNo,
+			Model model,HttpServletRequest request)  {
+		try {
+			marketingActService.reOpenToSendMarketingAct(actNo);
+			
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		
+		return "redirect:/marketingacts/"+actNo;
 	}
     
 	@RequestMapping(value = "/find/check", method = RequestMethod.GET)

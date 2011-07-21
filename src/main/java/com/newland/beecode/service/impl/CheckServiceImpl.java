@@ -86,6 +86,9 @@ public class CheckServiceImpl implements CheckService{
 			if(sheet.getLastRowNum()<1){
 				throw new ExcelException("",messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_BLANK, null, Locale.CHINA));
 			}
+			if(sheet.getLastRowNum()>5000){
+				throw new ExcelException("",messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_ROW_OVER, new Object[]{sheet.getLastRowNum()}, Locale.CHINA));
+			}
 			if(customer!=null){
 				customer.setCount(sheet.getLastRowNum());
 			}
@@ -194,17 +197,17 @@ public class CheckServiceImpl implements CheckService{
 					tempError.append("</td><td></td></tr>");
 					break;
 				}
-				if(nameError=="" && mobileError==""){
-					/*if(mobileList.contains(mobile.toString())){
+				/*if(nameError=="" && mobileError==""){
+					if(mobileList.contains(mobile.toString())){
 						
 						errorCount++;
 						tempError.append("<tr><td>" + (j+1) + "</td><td>");
 						tempError.append(messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA));
 						tempError.append("</td><td></td><td></td><td></td></tr>");
 						//return messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_EXITS, new Object[]{mobile.toString()}, Locale.CHINA);
-					}*/
+					}
 					mobileList.add( mobile.toString());
-				}
+				}*/
 			}
 			if(errorCount==0){
 				return messageSource.getMessage(ErrorsCode.BIZ_CUSTOMER_PASS, new Object[]{sheet.getLastRowNum()}, Locale.CHINA);
@@ -239,6 +242,7 @@ public class CheckServiceImpl implements CheckService{
 				HSSFCell exchangeAmount = row.getCell(i++);
 				HSSFCell rabaterate = row.getCell(i++);
 				HSSFCell backAmount = row.getCell(i++);
+				
 				customer.setName(name.toString());
 				customer.setMobile(mobile.toString());
 				if(account==null ||account.toString().equals("")){
@@ -247,6 +251,7 @@ public class CheckServiceImpl implements CheckService{
 					customer.setAccount(account.toString());
 				}
 				if(exchangeName!=null && !exchangeName.toString().equals("")){
+					
 					customer.setExchangeName(exchangeName.toString());
 				}
 				if(exchangeAmount!=null && !exchangeAmount.toString().trim().equals("")){

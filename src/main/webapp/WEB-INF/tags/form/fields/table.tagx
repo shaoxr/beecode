@@ -21,6 +21,9 @@
 	<jsp:directive.attribute name="typeIdFieldName" type="java.lang.String"
 		required="false"
 		description="The identifier field name for the type (defaults to 'id')" />
+	<jsp:directive.attribute name="tipFieldName" type="java.lang.String"
+		required="false"
+		description="The identifier field name for the type (defaults to 'id')" />
 	<jsp:directive.attribute name="show" type="java.lang.Boolean"
 		required="false"
 		description="Include 'show' link into table (default true)" />
@@ -66,11 +69,11 @@
 		<c:if test="${empty typeIdFieldName}">
 			<c:set var="typeIdFieldName" value="id" />
 		</c:if>
+		<c:if test="${empty tipFieldName}">
+			<c:set var="tipFieldName" value="id" />
+		</c:if>
 		<c:if test="${empty show}">
 			<c:set var="show" value="true" />
-		</c:if>
-		<c:if test="${empty invalid}">
-			<c:set var="invalid" value="false" />
 		</c:if>
 		<c:if test="${empty update}">
 			<c:set var="update" value="true" />
@@ -82,11 +85,15 @@
 		<c:if test="${empty append}">
 			<c:set var="append" value="false" />
 		</c:if>
+		
+		<c:if test="${empty updatePartner}">
+			<c:set var="updatePartner" value="false" />
+		</c:if>
 		<c:if test="${empty shutdown}">
 			<c:set var="shutdown" value="false" />
 		</c:if>
-		<c:if test="${empty updatePartner}">
-			<c:set var="updatePartner" value="false" />
+		<c:if test="${empty invalid}">
+			<c:set var="invalid" value="false" />
 		</c:if>
 
 		<spring:message
@@ -177,7 +184,7 @@
 						<td><spring:url value="${path}/${item[typeIdFieldName]}"
 							var="show_form_url" /> <spring:url
 							value="/resources/images/show.png" var="show_image_url" /> <spring:message
-							arguments="${typeName}[${item[typeIdFieldName]}]"
+							arguments="${typeName}[${item[tipFieldName]}]"
 							code="entity_show" var="show_label" /> <a
 							href="${fn:escapeXml(show_form_url)}"
 							alt="${fn:escapeXml(show_label)}"
@@ -192,7 +199,7 @@
 							<spring:param name="form" />
 						</spring:url> <spring:url value="/resources/images/update.png"
 							var="update_image_url" /> <spring:message
-							arguments="${typeName}[${item[typeIdFieldName]}]"
+							arguments="${typeName}[${item[tipFieldName]}]"
 							code="entity_update" var="update_label" /> <a
 							href="${fn:escapeXml(update_form_url)}"
 							alt="${fn:escapeXml(update_label)}"
@@ -208,7 +215,7 @@
 							<spring:param name="form" />
 						</spring:url> <spring:url value="/resources/images/update.png"
 							var="update_image_url" /> <spring:message
-							arguments="${typeName}[${item[typeIdFieldName]}]"
+							arguments="${typeName}[${item[tipFieldName]}]"
 							code="entity_append" var="append_label" /> <a
 							href="${fn:escapeXml(update_form_url)}"
 							alt="${fn:escapeXml(append_label)}"
@@ -222,12 +229,12 @@
 							var="delete_form_url" /> <spring:url
 							value="/resources/images/delete.png" var="delete_image_url" /> <form:form
 							action="${fn:escapeXml(delete_form_url)}" method="DELETE">
-							<spring:message arguments="${typeName}[${item[typeIdFieldName]}]"
+							<spring:message arguments="${typeName}[${item[tipFieldName]}]"
 								code="entity_delete" var="delete_label" />
 							<c:set var="delete_confirm_msg">
 								<spring:escapeBody javaScriptEscape="true">
 									<spring:message
-										arguments="${typeName}[${item[typeIdFieldName]}]"
+										arguments="${typeName}[${item[tipFieldName]}]"
 										code="entity_delete_confirm" />
 								</spring:escapeBody>
 							</c:set>
@@ -246,37 +253,7 @@
 							</c:if>
 						</form:form></td>
 					</c:if>
-					<c:if test="${invalid}">
-						<td><spring:url
-							value="${path}/invalid/${item[typeIdFieldName]}"
-							var="invalid_form_url" /> <spring:url
-							value="/resources/images/delete.png" var="delete_image_url" /> <form:form
-							action="${fn:escapeXml(invalid_form_url)}" method="POST">
-							<spring:message arguments="${typeName}[${item[typeIdFieldName]}]"
-								code="entity_invalid" var="invalid_label" />
-							<c:set var="invalid_confirm_msg">
-								<spring:escapeBody javaScriptEscape="true">
-									<spring:message
-										arguments="${typeName}[${item[typeIdFieldName]}]"
-										code="entity_invalid_confirm" />
-								</spring:escapeBody>
-							</c:set>
-							<input alt="${fn:escapeXml(invalid_label)}" class="image"
-								src="${fn:escapeXml(delete_image_url)}"
-								title="${fn:escapeXml(invalid_label)}" type="image"
-								value="${fn:escapeXml(invalid_label)}"
-								onclick="return confirm('${invalid_confirm_msg}');" />
-							<c:if test="${not empty param.page}">
-								<input name="page" type="hidden"
-									value="${fn:escapeXml(param.page)}" />
-							</c:if>
-							<c:if test="${not empty param.size}">
-								<input name="size" type="hidden"
-									value="${fn:escapeXml(param.size)}" />
-							</c:if>
-							<input name="query" type="hidden" value="${query}" />
-						</form:form></td>
-					</c:if>
+					
 					<c:if test="${updatePartner}">
 						<td><spring:url
 							value="${path}/updatePartner/${item[typeIdFieldName]}"
@@ -284,7 +261,7 @@
 							<spring:param name="form" />
 						</spring:url> <spring:url value="/resources/images/update.png"
 							var="update_image_url" /> <spring:message
-							arguments="${typeName}[${item[typeIdFieldName]}]"
+							arguments="${typeName}[${item[tipFieldName]}]"
 							code="entity_update_partner" var="update_partner_label" /> <a
 							href="${fn:escapeXml(update_form_url)}"
 							alt="${fn:escapeXml(update_partner_label)}"
@@ -299,12 +276,12 @@
 							var="shutdown_form_url" /> <spring:url
 							value="/resources/images/delete.png" var="shutdown_image_url" /> <form:form
 							action="${fn:escapeXml(shutdown_form_url)}" method="POST">
-							<spring:message arguments="${typeName}[${item[typeIdFieldName]}]"
+							<spring:message arguments="${typeName}[${item[tipFieldName]}]"
 								code="entity_shutdown" var="shutdown_label" />
 							<c:set var="shutdown_confirm_msg">
 								<spring:escapeBody javaScriptEscape="true">
 									<spring:message
-										arguments="${typeName}[${item[typeIdFieldName]}]"
+										arguments="${typeName}[${item[tipFieldName]}]"
 										code="entity_shutdown_confirm" />
 								</spring:escapeBody>
 							</c:set>
@@ -324,12 +301,43 @@
 							<input name="query" type="hidden" value="${query}" />
 						</form:form></td>
 					</c:if>
+					<c:if test="${invalid}">
+						<td><spring:url
+							value="${path}/invalid/${item[typeIdFieldName]}"
+							var="invalid_form_url" /> <spring:url
+							value="/resources/images/delete.png" var="delete_image_url" /> <form:form
+							action="${fn:escapeXml(invalid_form_url)}" method="POST">
+							<spring:message arguments="${typeName}[${item[tipFieldName]}]"
+								code="entity_invalid" var="invalid_label" />
+							<c:set var="invalid_confirm_msg">
+								<spring:escapeBody javaScriptEscape="true">
+									<spring:message
+										arguments="${typeName}[${item[tipFieldName]}]"
+										code="entity_invalid_confirm" />
+								</spring:escapeBody>
+							</c:set>
+							<input alt="${fn:escapeXml(invalid_label)}" class="image"
+								src="${fn:escapeXml(delete_image_url)}"
+								title="${fn:escapeXml(invalid_label)}" type="image"
+								value="${fn:escapeXml(invalid_label)}"
+								onclick="return confirm('${invalid_confirm_msg}');" />
+							<c:if test="${not empty param.page}">
+								<input name="page" type="hidden"
+									value="${fn:escapeXml(param.page)}" />
+							</c:if>
+							<c:if test="${not empty param.size}">
+								<input name="size" type="hidden"
+									value="${fn:escapeXml(param.size)}" />
+							</c:if>
+							<input name="query" type="hidden" value="${query}" />
+						</form:form></td>
+					</c:if>
 				</tr>
 
 				<c:set value="${lineNumber + 1}" var="lineNumber" />
 			</c:forEach>
 			<tr class="footer">
-				<td colspan="10"><c:if test="${empty create or create}">
+				<td colspan="15"><c:if test="${empty create or create}">
 					<span class="new"> <spring:url value="/${path}"
 						var="create_url">
 						<spring:param name="form" />

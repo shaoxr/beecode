@@ -9,7 +9,7 @@
         <field:select disableFormBinding="true" headerKey="99999" headerValue="全部" field="actStatus" id="c_com_newland_beecode_domain_marketingact_actstatusdesc" itemValue="key" itemLabel="value" items="${marketingstatusList}"  path=""/>
     </form:find>
     <page:list id="pl_com_newland_beecode_domain_MarketingAct" items="${marketingacts}" z="sFCbrOVGxWJl4YkClga8MCMB8GE=">
-        <table:table data="${marketingacts}" updatePartner="true" shutdown="true" id="label_com_newland_beecode_domain_MarketingAct" path="/marketingacts" update="true" delete="false" append="true" appendpath="appendCustomer"  create="false" typeIdFieldName="actNo" z="user-managed">
+        <table:table data="${marketingacts}" tipFieldName="actName" updatePartner="true" shutdown="true" id="label_com_newland_beecode_domain_MarketingAct" path="/marketingacts" update="true" invalid="true" delete="false" append="true" appendpath="appendCustomer"  create="false" typeIdFieldName="actNo" z="user-managed">
             <table:column id="c_com_newland_beecode_domain_MarketingAct_actName" property="actName" z="GnYCjbtwHcjvxbxNMAn0j6eJmmM="/>
             <table:column id="c_com_newland_beecode_domain_MarketingAct_businesstype" pattern="dictView" className="BUSINESS_TYPE" property="bizNo" z="6V2aJ3KqDBApsVzK7EPL4fYFfZc="/>
             <table:column id="c_com_newland_beecode_domain_MarketingAct_startDate" property="startDate" z="ycv72nkx9eKie1sUGfK7Hy/MfiU="/>

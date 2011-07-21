@@ -31,7 +31,7 @@
           <spring:message code="button_check_pass" var="pass_button" />
           <spring:message code="button_check_fail" var="fail_button" />
           <input id="proceed_pass" type="submit" value="${fn:escapeXml(pass_button)}" onclick="dojo.byId('actStatus').value='5';"/>
-          <input id="proceed_fail" type="submit" value="${fn:escapeXml(fail_button)}" onclick="dojo.byId('actStatus').value='3';"/>
+          <!--  input id="proceed_fail" type="submit" value="${fn:escapeXml(fail_button)}" onclick="dojo.byId('actStatus').value='3';"/>-->
         </div>
         <spring:message code="check_loading" var="check_loading" />
         <div id="tip" style="display: none;"><img src="/beecode/resources/images/loading.gif"/>${fn:escapeXml(check_loading)}</div>

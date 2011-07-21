@@ -29,6 +29,9 @@
         </c:if>
         </c:if>
         <c:if test="${marketingAct.importType eq '1' }">
+        <c:if test="${marketingAct.bizNo eq '00'}">
+            <field:display field="suffix" id="s_com_newland_beecode_domain_MarketingAct_suffix" object="${marketingAct}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
+        </c:if>
           <c:if test="${marketingAct.bizNo eq '01'}">
             <field:display field="maxAmount" id="s_com_newland_beecode_domain_MarketingAct_maxAmount" object="${marketingAct}" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
         </c:if>

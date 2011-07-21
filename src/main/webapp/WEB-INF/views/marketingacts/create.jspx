@@ -14,6 +14,7 @@
          <field:select field="importType"  id="c_com_newland_beecode_domain_marketingact_value_type"  itemValue="key" itemLabel="value" items="${valueTypes}" multiple="false" path="" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>
         <field:number field="rebateRate" decimalMax="0.999" decimalMin="0" id="c_com_newland_beecode_domain_MarketingAct_rebateRate" required="true" validationMessageCode="field_invalid_number" />
         <field:number field="amount" decimalMax="999999" decimalMin="0" id="c_com_newland_beecode_domain_MarketingAct_amount" required="true" validationMessageCode="field_invalid_number" />
+        <field:input  field="suffix" id="c_com_newland_beecode_domain_MarketingAct_suffix"  required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
         <field:input  field="exchangeName" id="c_com_newland_beecode_domain_MarketingAct_exchangeName"  required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
         <field:number decimalMax="999999" decimalMin="0" id="c_com_newland_beecode_domain_marketingact_backAmount" field="backRate" required="true" validationMessageCode="field_invalid_number" z="bmYyrRKNid87poTPUHcCqMcJ6s0="></field:number>
         <field:number field="maxAmount" decimalMax="999999" decimalMin="0" id="c_com_newland_beecode_domain_MarketingAct_maxAmount" required="true" validationMessageCode="field_invalid_number" />
@@ -27,46 +28,59 @@
   		   dojo.byId("_maxAmount_id").value="0";
   		   dojo.byId("_exchangeName_id").value="1";
   		   dojo.byId("_amount_id").value="0";
+  		    dojo.byId("_suffix_id").value="0";
+        
   		   dojo.byId("_c_com_newland_beecode_domain_marketingact_backAmount_id").style.display="none";
   		   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_rebateRate_id").style.display="none";
   		   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_maxAmount_id").style.display="none";
+  		   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_suffix_id").style.display="none";
+  		   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_amount_id").style.display="none";
+		   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_exchangeName_id").style.display="none";
         }
-	   dojo.addOnLoad(function(){
-		  init();
-		  
-		   dojo.connect(dijit.byId("_bizNo_id"), "onChange", function(evt) {
-			   if(dijit.byId("_bizNo_id").value=="00"){
+        function change(){
+        	
+        	if(dijit.byId("_bizNo_id").value=="00"){
+				   init();
+				   if(dijit.byId("_importType_id").value=="1"){
+					   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_suffix_id").style.display="";
+				   }else{
+					   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_amount_id").style.display="";
+					   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_exchangeName_id").style.display="";
+				   }
 				   
-				   dojo.byId("_rebateRate_id").value="0";
-				   dojo.byId("_backRate_id").value="0";
-				   dojo.byId("_maxAmount_id").value="0";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_amount_id").style.display="";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_exchangeName_id").style.display="";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_rebateRate_id").style.display="none";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_maxAmount_id").style.display="none";
-				   dojo.byId("_c_com_newland_beecode_domain_marketingact_backAmount_id").style.display="none";
+				   
 			   }else if(dijit.byId("_bizNo_id").value=="01"){
-				   dojo.byId("_amount_id").value="0";
-				   dojo.byId("_backRate_id").value="0";
-				   dojo.byId("_maxAmount_id").value="0";
-				   dojo.byId("_exchangeName_id").value="1";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_amount_id").style.display="none";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_rebateRate_id").style.display="";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_maxAmount_id").style.display="";
-				   dojo.byId("_c_com_newland_beecode_domain_marketingact_backAmount_id").style.display="none";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_exchangeName_id").style.display="none";
+				   init();
+				   
+				   if(dijit.byId("_importType_id").value=="1"){
+					   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_maxAmount_id").style.display="";
+				   }else{
+					   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_rebateRate_id").style.display="";
+					   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_maxAmount_id").style.display="";
+				   }
 			   }else{
-				   dojo.byId("_amount_id").value="0";
-				   dojo.byId("_rebateRate_id").value="0";
-				   dojo.byId("_exchangeName_id").value="1";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_amount_id").style.display="none";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_rebateRate_id").style.display="none";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_exchangeName_id").style.display="none";
-				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_maxAmount_id").style.display="none";
-				   dojo.byId("_c_com_newland_beecode_domain_marketingact_backAmount_id").style.display="";
+				   init();
+				   
+				   if(dijit.byId("_importType_id").value=="1"){
+					   
+				   }else{
+					   dojo.byId("_c_com_newland_beecode_domain_marketingact_backAmount_id").style.display="";
+				   }
 				 
 				   
 			   }
+        }
+        
+	   dojo.addOnLoad(function(){
+		  init();
+		  dojo.byId("_c_com_newland_beecode_domain_MarketingAct_amount_id").style.display="";
+		  dojo.byId("_c_com_newland_beecode_domain_MarketingAct_exchangeName_id").style.display="";
+		  
+		   dojo.connect(dijit.byId("_bizNo_id"), "onChange", function(evt) {
+			   change();
+		   });
+		   dojo.connect(dijit.byId("_importType_id"), "onChange", function(evt) {
+			   change();
 		   });
 		   dojo.connect(dijit.byId("_bindCard_id"), "onChange", function(evt) {
 			   if(dijit.byId("_bindCard_id").value=="1"){

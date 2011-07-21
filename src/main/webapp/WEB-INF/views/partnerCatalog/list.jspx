@@ -4,7 +4,7 @@
     <jsp:output omit-xml-declaration="yes"/>
     
 <page:list id="pl_com_newland_beecode_domain_PartnerCatalog" items="${partnercatalogs}" z="i346yd2UzE1gpevvvduTcGeHDt4=">
-        <table:table data="${partnercatalogs}" id="l_com_newland_beecode_domain_PartnerCatalog" path="/partnerCatalog" update="true" delete="true" z="ccaHs64Fsv/dMKIcbPSVXG0k+qg=">
+        <table:table tipFieldName="catalogName" data="${partnercatalogs}" id="l_com_newland_beecode_domain_PartnerCatalog" path="/partnerCatalog" update="true" delete="true" z="ccaHs64Fsv/dMKIcbPSVXG0k+qg=">
             <table:column  id="c_com_newland_beecode_domain_Partner_partnerName" property="catalogName" z="NOm7CCFFOUL3GYu3UCEkALQYEYE="/>
             <table:column  id="c_com_newland_beecode_domain_Partner_partnerNo" property="catalogNo" z="NOm7CCFFOUL3GYu3UCEkALQYEYE="/>
             <table:column  property="createTime" id="c_com_newland_beecode_domain_partnercatalog_createdate" pattern="yyyy-MM-dd" z="NOm7CCFFOUL3GYu3UCEkALQYEYE="/>

@@ -3,6 +3,8 @@ package com.newland.beecode.service;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.newland.beecode.domain.Terminal;
 import com.newland.beecode.exception.AppException;
 
@@ -34,5 +36,7 @@ public interface TerminalService {
 	public Terminal findByTerminalNo(String terminalNo);
 	
 	public void save(Set<Terminal> terminals);
+	
+	public int importTerminal(MultipartFile partnerFile)throws AppException;
 
 }

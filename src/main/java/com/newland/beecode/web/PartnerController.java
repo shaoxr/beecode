@@ -150,9 +150,11 @@ public class PartnerController extends BaseController{
 	public String excelimport(@RequestParam(value = "partnerFile", required = true) MultipartFile partnerFile,
 			Model model,HttpServletRequest request, HttpServletResponse response){
 		Set<Terminal> terminals=null;
+		int count=0;
 		try {
-			terminals= this.checkService.partnerImport(partnerFile, System.currentTimeMillis()+"");
-			this.terminalService.save(terminals);
+			//terminals= this.checkService.partnerImport(partnerFile, System.currentTimeMillis()+"");
+			//this.terminalService.save(terminals);
+			count=this.terminalService.importTerminal(partnerFile);
 			
 		} catch (Exception e) {
 			 if(e instanceof ExcelException){
@@ -166,7 +168,7 @@ public class PartnerController extends BaseController{
 			    	return "prompt";
 			    }
 		}
-		model.addAttribute("success_message", terminals.size());
+		model.addAttribute("success_message", count);
 		return "partners/import";
 	}
 	@RequestMapping(value="/excelimport",params = "form",method = RequestMethod.GET)

@@ -28,7 +28,7 @@ public interface SendListService {
 	 */
 	public void sendOver(Long id);
 	
-	public void send(MultipartFile file)throws AppException;
+	public void send(MultipartFile file,Integer msType)throws AppException;
 	
 	public MsStatus findSendCount();
 

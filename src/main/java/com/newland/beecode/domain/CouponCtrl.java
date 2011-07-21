@@ -42,7 +42,10 @@ public class CouponCtrl {
      */
     @Column
     private String serialNo;
-    /**
+    @Column
+    private String acctNo;
+
+	/**
      * 终端流水号
      */
     @Column
@@ -260,6 +263,13 @@ public class CouponCtrl {
 
 	public void setExchangeAmount(BigDecimal exchangeAmount) {
 		this.exchangeAmount = exchangeAmount;
+	}
+	public String getAcctNo() {
+		return acctNo;
+	}
+
+	public void setAcctNo(String acctNo) {
+		this.acctNo = acctNo;
 	}
     
     

@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.newland.beecode.domain.Coupon;
+import com.newland.beecode.domain.MarketingAct;
 import com.newland.beecode.domain.report.ConsumeDetail;
 import com.newland.beecode.domain.report.PartnerSummaryItem;
 import com.newland.beecode.domain.report.ReportForm;
@@ -34,10 +35,10 @@ public class CouponDao extends BaseDao<Coupon,Long> {
         StringBuffer CountBuf = new StringBuffer();
         StringBuffer whereBuf=new StringBuffer();
         buf.append("select ctrl.check_day, act.act_name, pt.partner_name ,pt.partner_no,t.name,t.terminal_no,cp.coupon_id,cp.acct_mobile, "
-                + "ctrl.rebate_rate,ctrl.exchange_name,abs(ctrl.exchange_amount) ,act.biz_no, (ctrl.original_amount-ctrl.off_amount),ctrl.original_amount,ctrl.back_amount ");
+                + "ctrl.rebate_rate,ctrl.exchange_name,abs(ctrl.exchange_amount) ,act.biz_no, (ctrl.original_amount-ctrl.off_amount),ctrl.original_amount,ctrl.back_amount,ctrl.acct_no ");
         whereBuf.append(" from coupon_ctrl ctrl,partner pt,coupon cp,marketing_act act,terminal t ");
         whereBuf.append(" where ctrl.device_no=t.terminal_no and t.partner=pt.id  and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
-        whereBuf.append("  and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
+        whereBuf.append("  and (not ctrl.void_flag ='0' or ctrl.void_flag is null) and act.act_status<>"+MarketingAct.STAUS_DELETE.intValue());
         CountBuf.append("select count(*) ");
         buf=buf.append(whereBuf);
         CountBuf.append(whereBuf);
@@ -97,6 +98,7 @@ public class CouponDao extends BaseDao<Coupon,Long> {
             cd.setRebateAmount((BigDecimal) obj[12]);
             cd.setOriginalAmount((BigDecimal) obj[13]);
             cd.setBackAmount((BigDecimal) obj[14]);
+            cd.setAcctNo((String) obj[15]);
             result.add(cd);
         }
         rr.setResultList(result);
@@ -112,7 +114,7 @@ public class CouponDao extends BaseDao<Coupon,Long> {
         countBuf.append(" select count(*) ");
         whereBuf.append(" from coupon_ctrl ctrl,partner pt,coupon cp,marketing_act act,terminal t ");
         whereBuf.append(" where ctrl.device_no=t.terminal_no and t.partner=pt.id   and ctrl.coupon_id=cp.coupon_id and  cp.marketing_act=act.act_no ");
-        whereBuf.append("  and (not ctrl.void_flag ='0' or ctrl.void_flag is null)");
+        whereBuf.append("  and (not ctrl.void_flag ='0' or ctrl.void_flag is null) and act.act_status<>"+ MarketingAct.STAUS_DELETE.intValue());
 
         buf.append(whereBuf);
         countBuf.append(whereBuf);

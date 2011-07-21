@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.newland.beecode.dao.MarketingActDao;
 import com.newland.beecode.dao.PartnerDao;
@@ -18,6 +19,7 @@ import com.newland.beecode.domain.PartnerCatalog;
 import com.newland.beecode.domain.Terminal;
 import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
+import com.newland.beecode.service.CheckService;
 import com.newland.beecode.service.TerminalService;
 
 /**
@@ -33,6 +35,8 @@ public class TerminalServiceImpl implements TerminalService{
 	private PartnerDao partnerDao;
 	@Autowired
     private MarketingActDao marketingActDao;
+	@Autowired
+	private CheckService checkService;
 
 	@Override
 	public Terminal save(Terminal terminal)throws AppException {
@@ -66,7 +70,7 @@ public class TerminalServiceImpl implements TerminalService{
 
 	@Override
 	public void delete(Long id) throws AppException{
-		List<MarketingAct> acts=this.marketingActDao.find("select  act from MarketingAct act join act.terminals as t where t.id=? and act.actStatus<=? ", id,MarketingAct.STATUS_AFTER_GIVE);
+		List<MarketingAct> acts=this.marketingActDao.find("select  act from MarketingAct act join act.terminals as t where t.id=? and act.actStatus<>? ", id,MarketingAct.STAUS_DELETE);
 		if(acts.size()>0){
 			throw new AppException(ErrorsCode.BIZ_PARTNER_TERMINAL_DO_NOT_DELETE,"");
 		}
@@ -100,6 +104,9 @@ public class TerminalServiceImpl implements TerminalService{
 
 	@Override
 	public long countTerminalByPartner(Long id) {
+		if(Partner.ALL_LONG.equals(id)){
+			return this.terminalDao.findLong("select count(*) from Terminal t");
+		}
 		return this.terminalDao.findLong("select count(*) from Terminal t where t.partner.id=?", id);
 	}
 
@@ -122,6 +129,14 @@ public class TerminalServiceImpl implements TerminalService{
 			this.terminalDao.saveOrUpdate(terminal);
 		}
 		
+	}
+
+	@Override
+	@Transactional
+	public int importTerminal(MultipartFile partnerFile) throws AppException {
+		Set<Terminal> terminals= this.checkService.partnerImport(partnerFile, System.currentTimeMillis()+"");
+		this.save(terminals);
+		return terminals.size();
 	}
 
 }

@@ -81,7 +81,6 @@ public class DepotPosProtocolHandler extends IoHandlerAdapter {
 		
 		Map m,resultMap=null;
 		String transType = (String)msg.getField(_TLV_TRANS_TYPE_KEY).getValue();
-			System.out.println(transType+"-------------------------->");
 			m = TLVMappingUtils.fieldMapIntoMapForTLV(msg);
 			resultMap = invokeService.txn(m, transType);
 			TLVMappingUtils.mapIntoFieldMapForTLV(resultMap, msg);

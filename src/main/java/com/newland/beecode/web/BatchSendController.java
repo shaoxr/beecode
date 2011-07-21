@@ -53,13 +53,18 @@ public class BatchSendController extends BaseController{
 	
 	@RequestMapping(value={"mmsSendByzip"},method = RequestMethod.POST)
     public String mmsSendByzip(@RequestParam(value = "file", required = true) MultipartFile file,
+    		@RequestParam(value = "msType", required = true) Integer msType,
     		Model model){
 		  try {
-			  this.sendListService.send(file);
-			model.addAttribute(ErrorsCode.MESSAGE, ErrorsCode.BIZ_MMS_SUBMIT_SUCCESS);
+			  this.sendListService.send(file,msType);
+			  if(msType.equals(SendList.MS_TYPE_MMS)){
+				  model.addAttribute(ErrorsCode.MESSAGE, ErrorsCode.BIZ_MMS_SUBMIT_SUCCESS);
+			  }else{
+				  model.addAttribute(ErrorsCode.MESSAGE, ErrorsCode.BIZ_SMS_SUBMIT_SUCCESS);
+			  }
+			
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			logger.error("", e);
 			return "prompt";
 		}
 		return "batchsend/tip";
@@ -105,7 +110,7 @@ public class BatchSendController extends BaseController{
 				sendList.setActName(act.getActName());
 				sendList=this.sendListService.saveOrUpdate(sendList);
 				this.sendService.send(coupons, act, this.smsFetch2SendInvokeService, sendList.getId(), dirName);
-				model.addAttribute(ErrorsCode.MESSAGE, ErrorsCode.BIZ_SMS_SUBMIT_SUCCESS);
+				
 			} catch (Exception e) {
 				model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 				logger.error("", e);

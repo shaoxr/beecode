@@ -50,7 +50,7 @@ public class MmsFetch2SendInvokeService implements SendInvokeService {
 		try {
 			String resp = this.mmsService.sendMMSByMontnets(sp);
 			if (resp.length() > 10) {
-				logger.debug("send success mobile:" + sp.getMobile());
+				logger.debug("send success mobile:" + sp.getMobile()+"couponId:"+sp.getCouponId());
 				respstatus.setRespStatus(RespStatus.RESP_SUCCESS);
 				respstatus.setRespDesc(resp);
 			} else {
