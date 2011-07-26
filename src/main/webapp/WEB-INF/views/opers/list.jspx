@@ -2,8 +2,8 @@
 <div xmlns:jsp="http://java.sun.com/JSP/Page" xmlns:page="urn:jsptagdir:/WEB-INF/tags/form" xmlns:table="urn:jsptagdir:/WEB-INF/tags/form/fields" version="2.0">
     <jsp:directive.page contentType="text/html;charset=UTF-8"/>
     <jsp:output omit-xml-declaration="yes"/>
-    <page:list id="pl_com_newland_beecode_domain_Oper" items="${opers}" z="sAoUqERkN++o3PE6HwjyqXNELpw=">
-        <table:table data="${opers}"  id="l_com_newland_beecode_domain_Oper" path="/opers" typeIdFieldName="operNo" z="user-managed">
+    <page:list id="pl_com_newland_beecode_domain_Oper" items="${opers}"  z="sAoUqERkN++o3PE6HwjyqXNELpw=">
+        <table:table data="${opers}"  id="l_com_newland_beecode_domain_Oper" tipFieldName="operName" path="/opers" typeIdFieldName="operNo" z="user-managed">
             <table:column id="c_com_newland_beecode_domain_Oper_operName" property="operName" z="e6FAUmi4AOf0xz50xHQBV0oXEJ4="/>
             <table:column id="c_com_newland_beecode_domain_Oper_enabled" property="enabled" z="DPTRtiNoK0nxfW0xhllZsHBP49g="/>
         </table:table>
