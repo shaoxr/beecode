@@ -178,21 +178,23 @@ public class MarketingActController extends BaseController{
 			    	 * excel检查结果，直接获取message
 			    	 */
 			    	model.addAttribute(ErrorsCode.MESSAGE, e.getMessage());
+			    	try {
+						MarketingAct marketingAct=this.marketingActService.appendCustomerForm(actNo);
+						model.addAttribute("marketingAct",marketingAct);
+						model.addAttribute("customersChecked",marketingAct.getCheckedCustomers());
+						model.addAttribute("customersUn",marketingAct.getUnCheckCustomers());
+					} catch (Exception e1) {
+						model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+				    	return "prompt";
+					}
+			    	return "marketingacts/appendcustomer";
 			    }else{
 			    	model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
 			    	return "prompt";
 			    }
 		}
-		try {
-			MarketingAct marketingAct=this.marketingActService.appendCustomerForm(actNo);
-			model.addAttribute("customersChecked",marketingAct.getCheckedCustomers());
-			model.addAttribute("customersUn",marketingAct.getUnCheckCustomers());
-			model.addAttribute("marketingAct",marketingAct);
-		} catch (Exception e) {
-			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-	    	return "prompt";
-		}
-		return "marketingacts/appendcustomer";
+		return "redirect:/marketingacts/appendCustomer/"+ encodeUrlPathSegment(actNo.toString(),
+				request)+"?form";
 	}
 	@RequestMapping(value="submit2check", method = RequestMethod.POST)
 	public String submit2check(@RequestParam("actNo") Long actNo,Model model, HttpServletRequest request){

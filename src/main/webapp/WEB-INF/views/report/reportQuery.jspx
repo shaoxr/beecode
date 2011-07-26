@@ -17,7 +17,7 @@
     </c:if>
     <div style="float: none;">
     <page:list id="c_com_newland_beecode_domain_MarketingAct_report" items="${rptDetail}" z="U3nb+I8gG2r3o6O8Ze3fZUqBX6Y=" >
-        <table:table data="${rptDetail}" id="l_com_newland_beecode_domain_Coupon" create="false" delete="false" update="false" path="/report" show="false">
+        <table:table data="${rptDetail}" id="l_com_newland_beecode_domain_Coupon" tipFieldName="actName" create="false" delete="false" update="false" path="/report" show="false">
             <table:column id="c_com_newland_beecode_domain_marketingact_checkDay" property="checkDay" maxLength="18"/>
             <table:column id="c_com_newland_beecode_domain_marketingact_actname" property="actName" maxLength="21" z="Pi2IMxFd9QnYwb7EBMbiZ2ud/lo="/>
             <table:column id="c_com_newland_beecode_domain_partner_partnername" maxLength="20" property="parterName" z="jZUP8sSXi1H9tGhtWIJbE4rgxcQ="/>

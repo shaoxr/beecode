@@ -3,6 +3,8 @@ package com.newland.beecode.service.impl;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import com.newland.utils.NewlandUtil;
+
 /**
  * 礼券验证请求类
  * @author Jason
@@ -182,11 +184,12 @@ public class CouponCheckRequest {
 
 	public void setCouponString(String couponString) {
 		if(couponString!=null){
-			if(couponString.trim().length()==36){
-				this.setSerialNo(couponString);
-			}else {
+			if(NewlandUtil.isNumeric(couponString)){
 				this.setCouponId(new Long(couponString));
+			}else{
+				this.setSerialNo(couponString);
 			}
+			
 		}
 		this.couponString = couponString;
 	}

@@ -57,19 +57,31 @@ public class BatchSendController extends BaseController{
     		Model model){
 		  try {
 			  this.sendListService.send(file,msType);
+			
+		} catch (Exception e) {
+			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
+			return "prompt";
+		}
+		return "redirect:/batchsend/tip?msType="+msType.intValue();
+    	
+    }
+	@RequestMapping(value={"tip"},method = RequestMethod.GET)
+    public String tip(
+    		@RequestParam(value = "msType", required = true) Integer msType,
+    		Model model){
+		  
+			  
 			  if(msType.equals(SendList.MS_TYPE_MMS)){
 				  model.addAttribute(ErrorsCode.MESSAGE, ErrorsCode.BIZ_MMS_SUBMIT_SUCCESS);
 			  }else{
 				  model.addAttribute(ErrorsCode.MESSAGE, ErrorsCode.BIZ_SMS_SUBMIT_SUCCESS);
 			  }
 			
-		} catch (Exception e) {
-			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
-			return "prompt";
-		}
+		
 		return "batchsend/tip";
     	
     }
+	
 	@RequestMapping(value={"mmsSendForm"},params="form",method = RequestMethod.GET)
     public String mmsSendByzipForm(
     		Model model){

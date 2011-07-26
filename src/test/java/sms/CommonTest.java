@@ -16,15 +16,7 @@ public class CommonTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		//System.out.println(NewlandUtil.formatBigDecimal(new BigDecimal(0.75),10));
-		BigDecimal b=new BigDecimal(100.01);
-		BigDecimal a=new BigDecimal(100.010);
-		System.out.println(b.equals(a));
-		
-		System.out.println("aaaabbbb".indexOf("a"));
-		
-		String m="123456789";
-		System.out.println(m.substring(m.length()-4, m.length()));
+		System.out.println(NewlandUtil.isNumeric("1"));
 	}
 
 }

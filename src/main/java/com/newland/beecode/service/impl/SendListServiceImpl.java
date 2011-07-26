@@ -119,11 +119,12 @@ public class SendListServiceImpl implements SendListService{
 					mmsSendList=saveOrUpdate(mmsSendList);
 					if(msType.equals(SendList.MS_TYPE_MMS)){
 						if(sysParamService.findBykey(SysParam.SEND_MGR_NAME).getParamValue().equals(SysParam.SEND_MGR_DX_SMS)){
-							if(coupons.size()==1){
-								sendService.sendOne(coupons.get(0), act, smsFetch2SendInvokeService, mmsSendList.getId(), dirName);
+							/*if(coupons.size()==1){
+								sendService.sendOne(coupons.get(0), act, mmsFetch2SendInvokeService, mmsSendList.getId(), dirName);
 							}else{
 								sendService.differenceSend(coupons, act, mmsSendList.getId(), dirName);
-							}
+							}*/
+							sendService.differenceSend(coupons, act, mmsSendList.getId(), dirName);
 						}else{
 							if(coupons.size()==1){
 								sendService.sendOne(coupons.get(0), act, mmsFetch2SendInvokeService, mmsSendList.getId(), dirName);
