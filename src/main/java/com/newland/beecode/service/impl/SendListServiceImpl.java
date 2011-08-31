@@ -98,7 +98,7 @@ public class SendListServiceImpl implements SendListService{
 		return msStatus;
 	}
 	@Override
-	public void send(final MultipartFile file,final Integer msType) throws AppException {
+	public void send(final String  tempFileName,final Integer msType) throws AppException {
 		new Thread(){
 			public void run() {
 				SendList mmsSendList=new SendList();
@@ -107,7 +107,8 @@ public class SendListServiceImpl implements SendListService{
 					mmsSendList.setSendStatus(SendList.STATUS_SENDING);
 					mmsSendList.setMsType(msType);
 					mmsSendList=saveOrUpdate(mmsSendList);
-					String dirName=fileService.extractMms(file);
+					;
+					String dirName=fileService.extractMms(tempFileName);
 					List<Coupon> coupons=fileService.getCoupon(dirName);
 					MarketingAct act=fileService.getActFile(dirName, msType);
 					mmsSendList.setTotalCount(new Long(coupons.size()));

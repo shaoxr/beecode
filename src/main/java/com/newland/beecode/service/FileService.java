@@ -22,6 +22,8 @@ public interface FileService {
 	
 	public void storeFile(MultipartFile file, String fileName)  throws AppException;
 	
+	public String storeFile(MultipartFile file)throws AppException;
+	
 	public FileReader getActFile(String fileName)  throws AppException;
 	
 	public String getTextContent(String fileName,String dir) throws AppException;
@@ -40,7 +42,7 @@ public interface FileService {
 	
 	public File getCustomerFile(String fileName) throws AppException;
 	
-	public String extractMms(MultipartFile file) throws AppException;
+	public String extractMms(String tempFileName) throws AppException;
 	
 	public List<Coupon> getCoupon(String dir) throws AppException;
 	
@@ -48,7 +50,7 @@ public interface FileService {
 	
 	public String getImagePath();
 	public void genGetSMSzips(MarketingAct act,List<Coupon> coupon,HttpServletResponse response) throws AppException;
-	public String extractSms(MultipartFile file) throws AppException;
+	public String extractSms(String tempFileName) throws AppException;
 	
 	public FileInputStream getRespStatus(SendList sendList,List<RespStatus> respStatuss)throws AppException;
 	public List<Coupon> getCouponsByRespStatus(MarketingAct act,MultipartFile file, Integer type)throws AppException;

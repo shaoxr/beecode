@@ -56,7 +56,8 @@ public class BatchSendController extends BaseController{
     		@RequestParam(value = "msType", required = true) Integer msType,
     		Model model){
 		  try {
-			  this.sendListService.send(file,msType);
+			  String fileName=this.fileService.storeFile(file);
+			  this.sendListService.send(fileName,msType);
 			
 		} catch (Exception e) {
 			model.addAttribute(ErrorsCode.MESSAGE, this.getMessage(e));
@@ -106,7 +107,7 @@ public class BatchSendController extends BaseController{
 		return "redirect:/batchsend/"+id;
 	}
 	
-	@RequestMapping(value={"smsSendByzip"},method = RequestMethod.POST)
+	/*@RequestMapping(value={"smsSendByzip"},method = RequestMethod.POST)
 	 public String smsSendByzip(@RequestParam(value = "file", required = true) MultipartFile file,
 	    		Model model){
 			  try {
@@ -130,7 +131,7 @@ public class BatchSendController extends BaseController{
 			}
 			return "batchsend/tip";
 	    	
-	    }
+	    }*/
 	@RequestMapping(value={"list"},method = RequestMethod.GET)
 	public String list(
 			@RequestParam(value = "page", required = false) Integer page, 

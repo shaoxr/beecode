@@ -192,6 +192,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		if(_act.getMmsTemplate()==null){
 			_act.setMmsTemplate(new MmsTemplate());
 		}
+		_act.getMmsTemplate().setType(act.getMmsTemplate().getType());
 		_act.getMmsTemplate().setCardBefore(act.getMmsTemplate().getCardBefore());
 		_act.getMmsTemplate().setCouponIdBefore(act.getMmsTemplate().getCouponIdBefore());
 		_act.getMmsTemplate().setEnding(act.getMmsTemplate().getEnding());
@@ -275,6 +276,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		act.setTimes(marketingAct.getTimes());	
 		act.setActDetail(marketingAct.getActDetail());
 		act.setBindCard(marketingAct.getBindCard());
+		act.setSelfCard(marketingAct.getSelfCard());
 		//act.setMmsTemplate(marketingAct.getMmsTemplate());
 		if(marketingAct.getBindCard().equals(MarketingAct.BIND_CARD_YES)){
 			this.checkService.checkCodeCheck(marketingAct);
@@ -283,6 +285,7 @@ public class MarketingActServiceImpl implements MarketingActService {
 		if(act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)){
 			act.setAmount(marketingAct.getAmount());
 			act.setExchangeName(marketingAct.getExchangeName());
+			act.setSuffix(marketingAct.getSuffix());
 		}
 		else if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
 			act.setRebateRate(marketingAct.getRebateRate());

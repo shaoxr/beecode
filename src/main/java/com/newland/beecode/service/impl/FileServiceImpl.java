@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.intensoft.base.Dictionary;
@@ -38,6 +39,7 @@ import com.newland.beecode.exception.AppException;
 import com.newland.beecode.exception.ErrorsCode;
 import com.newland.beecode.service.BaseService;
 import com.newland.beecode.service.FileService;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
  * @author shaoxr:
@@ -95,6 +97,12 @@ public class FileServiceImpl implements FileService{
 		} catch (IOException e) {
 			throw new AppException(ErrorsCode.BIZ_IO_EXCEPTION,"",e);
 		}
+	}
+	@Override
+	public String storeFile(MultipartFile file) throws AppException {
+		String fileName=this.getRandomPath();
+		this.storeFile(file, fileName);
+		return fileName;
 	}
 
 	public FileReader getActFile(String fileName)  throws AppException{
@@ -401,9 +409,9 @@ public class FileServiceImpl implements FileService{
      * 解压批量彩信zip
      */
 	@Override
-	public String extractMms(MultipartFile file) throws AppException {
+	public String extractMms(String tempFileName) throws AppException {
 		String path=this.baseService.getFilePath()+MMS_SEND_EXTRACT +this.getRandomPath();
-		this.extract(file, path);
+		this.extract(tempFileName, path);
 		return path;
 	}
 
@@ -574,16 +582,17 @@ public class FileServiceImpl implements FileService{
 		
 	}
 	@Override
-	public String extractSms(MultipartFile file) throws AppException {
+	public String extractSms(String  tempFileName) throws AppException {
 		String path=this.baseService.getFilePath()+SMS_SEND_EXTRACT + this.getRandomPath();
-		extract(file,path);
+		extract(tempFileName,path);
 		return path;
 	}
 	
-	private void extract(MultipartFile file,String path)throws AppException{
+	private void extract(String tempFileName,String path)throws AppException{
 		File dir;
-		try {
-				ZipInputStream in = new ZipInputStream(file.getInputStream());
+		try {   
+			    
+				ZipInputStream in = new ZipInputStream(new FileInputStream(new File(baseService.getFilePath()+TEMP + tempFileName)));
 				dir= new File(path);
 				dir.mkdir();
 				ZipEntry entry = null;
@@ -631,6 +640,7 @@ public class FileServiceImpl implements FileService{
 	}
 
 	@Override
+	@Transactional
 	public FileInputStream getActInfomation(MarketingAct act)throws AppException{
 		FileInputStream fis=null;
 		File file=null;
@@ -662,6 +672,10 @@ public class FileServiceImpl implements FileService{
 				fw.write("\r\n");
 				fw.write("\r\n");
 			}
+			dictionary = (Dictionary) dictViewDao.findUnique("from Dictionary where className=? and key=?", "SELF_CARD",act.getSelfCard());
+			fw.write("持卡人  ："+dictionary.getValue());
+			fw.write("\r\n");
+			fw.write("\r\n");
 			
 			dictionary = (Dictionary) dictViewDao.findUnique("from Dictionary where className=? and key=?", "BUSINESS_TYPE",act.getBizNo());
 			fw.write("礼券类型 :"+dictionary.getValue());
@@ -781,4 +795,6 @@ public class FileServiceImpl implements FileService{
 		
 		return coupons;
 	}
+
+	
 }

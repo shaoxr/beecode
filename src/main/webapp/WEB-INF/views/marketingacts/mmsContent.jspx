@@ -5,6 +5,33 @@
     <form:appendmmscontent pre="true" prepath="/marketingacts/appendMmsContentPre" id="fu_com_newland_beecode_domain_MarketingAct" idField="actNo" modelAttribute="marketingAct" path="/marketingacts/appendMmsContent" z="kcVVh3Dr4Hohbg3mh1Yc7660eGY=">
          <field:input  field="actName" id="c_com_newland_beecode_domain_MarketingAct_actName" max="30" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
          <field:input  field="mmsTitle" id="c_com_newland_beecode_domain_MarketingAct_mmsTitle" max="20" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
-        <field:mmsinput model="mmsTemplate"  id="c_com_newland_beecode_domain_MarketingAct_mmsContent" max="20" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
+         <field:select  field="mmsTemplate.type"  id="c_com_newland_beecode_domain_MarketingAct_templatetype"  itemValue="key" itemLabel="value" items="${templateTypes}" multiple="false" path="/businesstypes" required="true" z="G4xDYIVl8qjfeTbVxNrDfG1b0fs="/>
+         <field:mmsinput model="mmsTemplate"  id="c_com_newland_beecode_domain_MarketingAct_mmsContent" max="20" required="true" z="ZbaJEFNlxY/83Z6MsqYJx/P0jcg="/>
     </form:appendmmscontent>
+    <script>
+    dojo.addOnLoad(function(){
+    	   change();
+    	dojo.connect(dijit.byId("_mmsTemplate.type_id"), "onChange", function(evt) {
+    		change();
+    	});
+    	
+    });
+    function change(){
+    	if(dijit.byId("_mmsTemplate.type_id").value=="1"){
+			  
+			dojo.byId("_c_com_newland_beecode_domain_MarketingAct_mmsContent_id").style.display="block";
+			   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_mmsContent_id_1_1").style.display="block";
+			   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_mmsContent_id_1_2").style.display="block";
+			   
+			}else{
+				dojo.byId("_c_com_newland_beecode_domain_MarketingAct_mmsContent_id_1_2").style.display="none";
+				   dojo.byId("_c_com_newland_beecode_domain_MarketingAct_mmsContent_id").style.display="none";
+					  dojo.byId("_c_com_newland_beecode_domain_MarketingAct_mmsContent_id_1_1").style.display="none";
+				   dojo.byId("_mmsTemplate_title1_id").value="0";
+		  		   dojo.byId("_mmsTemplate_title2_id").value="0";
+		  		    dojo.byId("_mmsTemplate_cardBefore_id_2").value="0";
+		   }
+    }
+    
+    </script>
 </div>

@@ -16,7 +16,7 @@ import com.newland.beecode.exception.ErrorsCode;
 import com.newland.utils.NewlandUtil;
 @Entity
 public class MmsTemplate {
-	public static final String NAME="XXXname";
+	public static final String NAME="NAME";
 	
 	public static final String START_DATE="SYYYY-MM-DD";
 	
@@ -26,7 +26,11 @@ public class MmsTemplate {
 	
 	public static final String COUPONID="XXXXXXXXXXXX";
 	
-	public static final String ACCOUNT_4="XXXXcard";
+	public static final String ACCOUNT_4="CARD";
+	
+	public static final String TEMPLATE_TYPE_1="1";
+	
+	public static final String TEMPLATE_TYPE_2="2";
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tableGen")
 	@GenericGenerator(name = "tableGen", strategy = "org.hibernate.id.MultipleHiLoPerTableGenerator", parameters = { @Parameter(name = "max_lo", value = "0") })
@@ -46,7 +50,15 @@ public class MmsTemplate {
 	private String periodBefore;
     @Column
 	private String ending;
+    @Column
+    private String type;
 	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -97,11 +109,15 @@ public class MmsTemplate {
 	}
 	public String toString(){
 		StringBuffer buf=new StringBuffer();
-		buf.append(this.getTitle1());
-		buf.append(MmsTemplate.NAME);
-		buf.append(this.getTitle2());
-		buf.append(this.getCardBefore());
-		buf.append(MmsTemplate.ACCOUNT_4);
+		if(TEMPLATE_TYPE_1.equals(this.type)){
+			buf.append(this.getTitle1());
+			buf.append(MmsTemplate.NAME);
+			buf.append(this.getTitle2());
+			buf.append(this.getCardBefore());
+			buf.append(MmsTemplate.ACCOUNT_4);
+		}
+
+		
 		buf.append(this.getValueBefore());
 		buf.append(MmsTemplate.VALUE);
 		buf.append(this.getCouponIdBefore());
@@ -115,12 +131,16 @@ public class MmsTemplate {
 	}
 	public static String genCustomerContent(Coupon coupon,MarketingAct act){
 		String content=act.getMmsTemplate().toString();
+		if(TEMPLATE_TYPE_1.equals(act.getMmsTemplate().getType())){
+			content=content.replaceAll(MmsTemplate.NAME, coupon.getAcctName());
+			String account_4=coupon.getAcctNo().substring(coupon.getAcctNo().length()-4, coupon.getAcctNo().length());
+			content=content.replaceAll(MmsTemplate.ACCOUNT_4, account_4);
+		}
+		
 		content=content.replaceAll(MmsTemplate.COUPONID, coupon.getCouponId().toString());
 		content=content.replaceAll(MmsTemplate.START_DATE,NewlandUtil.dataToString(act.getStartDate(), "yyyy-MM-dd"));
 		content=content.replaceAll(MmsTemplate.END_DATE,NewlandUtil.dataToString(act.getEndDate(), "yyyy-MM-dd"));
-		content=content.replaceAll(MmsTemplate.NAME, coupon.getAcctName());
-		String account_4=coupon.getAcctNo().substring(coupon.getAcctNo().length()-4, coupon.getAcctNo().length());
-		content=content.replaceAll(MmsTemplate.ACCOUNT_4, account_4);
+		
 		if(act.getBizNo().equals(Coupon.BIZ_TYPE_DISCOUNT)){
 			content=content.replaceAll(MmsTemplate.VALUE, coupon.getRebateRate().multiply(new BigDecimal(10)).toString());
 		}else if(act.getBizNo().equals(Coupon.BIZ_TYPE_EXCHANGE)){

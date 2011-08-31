@@ -48,6 +48,7 @@ public class SendServiceImpl implements SendService {
 		
 		try {
 			//this.heartDetect(sendInvokeService.getMsType(), couponList.size());
+			this.connectTest();
 			final long time=System.currentTimeMillis();
 			final ThreadPoolExecutor threadPool =ThreadPoolFactory.newThreadPool(couponList.size());
 			if(sendInvokeService.getMsType().equals(SendList.MS_TYPE_MMS)){
@@ -101,6 +102,7 @@ public class SendServiceImpl implements SendService {
 	public  void differenceSend(List<Coupon> couponList,final MarketingAct act,final Long sendListId,String dir) throws AppException {
 		try {
 			//this.heartDetect(sendInvokeService.getMsType(), couponList.size());
+			this.connectTest();
 			final long time=System.currentTimeMillis();
 			List<List<Coupon>> couponss=checkMobile(couponList);
 			List<Coupon> DXCoupons=couponss.get(0);
@@ -216,6 +218,9 @@ public class SendServiceImpl implements SendService {
 					throw new AppException(ErrorsCode.BIZ_SMS_LACK_OF_BALANCE,"");
 				}
 		}
+	}
+	private void connectTest()throws AppException{
+		this.mmsService.getBalanceByMontnets();
 	}
 
 	private List<List<Coupon>> checkMobile(List<Coupon> coupons){

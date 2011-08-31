@@ -115,7 +115,7 @@ public class PartnerSummaryItem {
 	}
 
 	public BigDecimal getExchangeAmount() {
-		if(exchangeAmount.compareTo(new BigDecimal(0))==0)
+		if(exchangeAmount!=null && exchangeAmount.compareTo(new BigDecimal(0))==0)
 			return null;
 		return exchangeAmount;
 	}

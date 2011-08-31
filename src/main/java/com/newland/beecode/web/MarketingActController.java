@@ -548,5 +548,13 @@ public class MarketingActController extends BaseController{
 	public Collection<Dictionary> populateValueTypes() {
             return dictView.getSelectModelCollection("IMPORT_TYPE");
 	}
+	@ModelAttribute("selfCards")
+	public Collection<Dictionary> populateSelfCards() {
+            return dictView.getSelectModelCollection("SELF_CARD");
+	}
+	@ModelAttribute("templateTypes")
+	public Collection<Dictionary> populateTemplateType() {
+            return dictView.getSelectModelCollection("TEMPLATE_TYPE");
+	}
 
 }

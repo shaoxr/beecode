@@ -131,6 +131,14 @@ public class MarketingAct {
 	public static final Integer IMPORT_TYPE_GLOBAL=2;
 	
 	public static final Integer IMPORT_TYPE_EXCEL=1;
+	/**
+	 * 限定本人卡
+	 */
+	public static final String SELF_CARD_YES="1";
+	/**
+	 * 不限定本人卡
+	 */
+	public static final String SELF_CARD_NO="0";
 
 	public MarketingAct() {
 		amount = new BigDecimal(0);
@@ -273,7 +281,17 @@ public class MarketingAct {
 	private List<Customer> unCheckCustomers;
 	@Transient
 	private List<Customer> checkedCustomers;
+	@Column
+	private String selfCard;
 	
+	public String getSelfCard() {
+		return selfCard;
+	}
+
+	public void setSelfCard(String selfCard) {
+		this.selfCard = selfCard;
+	}
+
 	public List<Customer> getUnCheckCustomers() {
 		return unCheckCustomers;
 	}

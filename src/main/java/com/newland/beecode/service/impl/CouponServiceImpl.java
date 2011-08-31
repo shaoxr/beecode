@@ -132,7 +132,7 @@ public class CouponServiceImpl implements CouponService {
         		}
     		}
     		
-			if (!coupon.getAcctNo().equals(Coupon.DEFAULT_CARD)) {
+			if (!coupon.getAcctNo().equals(Coupon.DEFAULT_CARD) && coupon.getMarketingAct().getSelfCard().equals(MarketingAct.SELF_CARD_YES)) {
 					if (!coupon.getAcctNo().equals(req.getCheckCode())) {
 						throw new AppException(
 								ErrorsCode.ERR_COUPON_CARD_NOT_USE,

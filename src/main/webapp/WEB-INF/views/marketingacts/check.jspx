@@ -12,6 +12,7 @@
         <c:if test="${marketingact.bindCard eq '1'}">
           <field:textarea  field="marketingact.checkCode" id="c_com_newland_beecode_domain_MarketingAct_bindcard_detail" disabled="true" required="false" z="8IajJ1fNMyTMV2NartCmwtfF6NE="/>
         </c:if>
+        <field:display field="selfCard" id="s_com_newland_beecode_domain_marketingact_selfCard" pattern="dictView" className="SELF_CARD" object="${marketingAct}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
         <field:display field="bizNo" id="s_com_newland_beecode_domain_marketingact_businesstype" pattern="dictView" className="BUSINESS_TYPE" object="${marketingAct}" z="EobFRObuL92xhV+pvqvfPtkYXok="/>
        <field:display field="times" id="s_com_newland_beecode_domain_MarketingAct_times" object="${marketingAct}" z="zihItKae7sHbCHXKyYcNiwpvOTY="/>
        <field:display field="importType" id="s_com_newland_beecode_domain_marketingact_value_type" object="${marketingAct}" pattern="dictView" className="IMPORT_TYPE" z="JC4LSmcB9hvcYEXTXDYQTqePD18="/>
